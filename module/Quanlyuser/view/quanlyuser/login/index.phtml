@@ -1,0 +1,76 @@
+<?php
+/* @var $form Quanlyuser\Form\LoginForm */
+$form = $this->form;
+
+$form->setAttribute('action', $this->url('quanlyuser', array(
+    'controller' => 'Login',
+    'action' => 'index'
+)));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+
+<?php
+
+
+
+
+echo $this->formElementErrors($form->get('remenber'));
+?>
+
+<div class="lock-header">
+	<!-- BEGIN LOGO -->
+	<a class="center" id="logo" href="index.html"> <img class="center"
+		alt="logo" src="public/img/logo.png">
+	</a>
+	<!-- END LOGO -->
+</div>
+<div class="login-wrap">
+	<div class="metro single-size red">
+		<div class="locked">
+			<i class="icon-lock"></i> <span>Login</span>
+		</div>
+	</div>
+	<div class="metro double-size green">
+
+		<div class="input-append lock-input">
+					<?php echo $this->formElement($form->get('MaUser'));?>
+					
+				</div>
+    <?php echo $this->formElementErrors($form->get('MaUser'));?>
+	</div>
+	<div class="metro double-size yellow">
+
+		<div class="input-append lock-input">
+					<?php echo $this->formElement($form->get('MatKhau'));?>
+				</div>
+				<?php echo $this->formElementErrors($form->get('MatKhau'));?>
+
+	</div>
+	<div class="metro single-size terques login">
+
+		<button type="submit" class="btn login-btn">
+					<?php echo $this->formElement($form->get('submit'));?> <i
+				class=" icon-long-arrow-right"></i>
+		</button>
+
+	</div>
+
+	<div class="login-footer">
+	
+	
+		<div class="pull-left">
+				<?php echo $this->formElement($form->get('remenber'));?>
+				<?php echo $this->formLabel($form->get('remenber'));?>
+			</div>
+			
+			
+		<div class="forgot-hint pull-right">
+			<a id="forget-password" class="" href="javascript:;">Forgot Password?</a>
+		</div>
+	</div>
+</div>
+
+
+<?php echo $this->form()->closeTag();?>

@@ -1,0 +1,34 @@
+<?php
+/* @var $nav Zend\Navigation */
+$nav = $this->navigation('navigation');
+
+?>
+<ul class="sidebar-menu">
+
+<?php foreach ($nav->getcontainer() as $page): ?>
+
+    <li
+    <?php echo ($page->isActive() ? 'class="sub-menu active"' : 'class="sub-menu"'); ?>>
+    		<a href="<?php echo $page->getHref(); ?>"><span><?php echo $page->getLabel(); ?></span></a>
+    
+    <?php if(!empty($page->pages)): ?>
+
+            <ul class="sub">
+            <?php foreach ($page->pages as $subpage): ?>
+            <li <?php echo ($subpage->isActive() ? 'class="active"' : ''); ?> >
+            <a
+            	href="<?php echo $subpage->getHref(); ?>"><?php echo $subpage->getLabel(); ?>
+            </a>
+            </li>
+            <?php endforeach; ?>
+            </ul>
+
+    <?php endif; ?>
+    </li>
+    <?php endforeach; ?>
+
+</ul>
+
+
+
+<?php echo $this->content;?>

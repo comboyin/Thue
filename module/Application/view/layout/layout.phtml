@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+
+
+<?php
+use Application\Entity\user;
+/* @var $user user */
+$user = $this->identity();
+?>
+
+<head>
+<meta charset="utf-8" />
+<title>Ứng dụng quản lý thuế</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="" name="description" />
+<meta content="Mosaddek" name="author" />
+
+<?php
+
+echo $this->headLink(array(
+    'rel' => 'shortcut icon',
+    'type' => 'image/vnd.microsoft.icon',
+    'href' => $this->basePath() . '/public' . '/img/favicon.ico'
+))
+
+
+    ->prependStylesheet($this->basePath() . '/public/' . 'assets/bootstrap-dialog/bootstrap-dialog.min.css')
+    ->prependStylesheet($this->basePath() . '/public/' . 'assets/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css')
+    ->prependStylesheet($this->basePath() . '/public/' . 'assets/bootstrap-datepicker/css/datepicker.css')
+    ->prependStylesheet($this->basePath() . '/public/' . 'css/style-default.css')
+    ->prependStylesheet($this->basePath() . '/public/' . 'css/style-responsive.css')
+    ->prependStylesheet($this->basePath() . '/public/' . 'css/style.css')
+    ->prependStylesheet($this->basePath() . '/public/' . 'assets/font-awesome/css/font-awesome.css')
+    ->prependStylesheet($this->basePath() . '/public/' . 'assets/bootstrap/css/bootstrap-responsive.min.css')
+    ->prependStylesheet($this->basePath() . '/public/' . 'assets/bootstrap/css/bootstrap.min.css')?>
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="fixed-top">
+	<!-- BEGIN HEADER -->
+	<div id="header" class="navbar navbar-inverse navbar-fixed-top">
+		<!-- BEGIN TOP NAVIGATION BAR -->
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<!--BEGIN SIDEBAR TOGGLE-->
+				<div class="sidebar-toggle-box hidden-phone">
+					<div class="icon-reorder tooltips" data-placement="right"
+						data-original-title="Toggle Navigation"></div>
+				</div>
+				<!--END SIDEBAR TOGGLE-->
+				<!-- BEGIN LOGO -->
+				<a class="brand" href="#" style="color: white; font-size: 16px">
+                   <?php echo $user->getCoquanthue()->getTenGoi();?>
+
+               </a>
+				<!-- END LOGO -->
+				<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+				<a class="btn btn-navbar collapsed" id="main_menu_trigger"
+					data-toggle="collapse" data-target=".nav-collapse"> <span
+					class="icon-bar"></span> <span class="icon-bar"></span> <span
+					class="icon-bar"></span> <span class="arrow"></span>
+				</a>
+				<!-- END RESPONSIVE MENU TOGGLER -->
+				<!-- END  NOTIFICATION -->
+				<div class="top-nav ">
+					<ul class="nav pull-right top-menu">
+						<!-- BEGIN USER LOGIN DROPDOWN -->
+						<li class="dropdown"><a href="#" class="dropdown-toggle"
+							data-toggle="dropdown"> <span class="username"><?php echo $user->getTenUser();?></span>
+								<b class="caret"></b>
+						</a>
+							<ul class="dropdown-menu extended logout">
+								<li><a href="#"><i class="icon-user"></i>Thông tin cá nhân</a></li>
+								<li><a href="#"><i class="icon-cog"></i>Cài đặt</a></li>
+								<li><a
+									href="<?php echo $this->url('quanlyuser',array('controller'=>'Login','action'=>'logout'))?>"><i
+										class="icon-key"></i> Đăng xuất</a></li>
+							</ul></li>
+						<!-- END USER LOGIN DROPDOWN -->
+					</ul>
+					<!-- END TOP NAVIGATION MENU -->
+				</div>
+			</div>
+		</div>
+		<!-- END TOP NAVIGATION BAR -->
+	</div>
+	<!-- END HEADER -->
+	<!-- BEGIN CONTAINER -->
+	<div id="container" class="row-fluid">
+		<!-- BEGIN SIDEBAR -->
+		<div class="sidebar-scroll">
+			<div id="sidebar" class="nav-collapse collapse">
+
+				<!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+				<div class="navbar-inverse">
+					<form class="navbar-search visible-phone">
+						<input type="text" class="search-query" placeholder="Search" />
+					</form>
+				</div>
+				<!-- END RESPONSIVE QUICK SEARCH FORM -->
+
+
+
+				<!-- BEGIN SIDEBAR MENU -->
+        <?php
+        /* @var $nav Zend\Navigation */
+        $nav = $this->navigation('navigation');
+        ?>
+         <ul class="sidebar-menu">
+             <?php foreach ($nav->getcontainer() as $page): ?>
+                  <li
+						<?php echo ($page->isActive() ? 'class="sub-menu active"' : 'class="sub-menu"'); ?>>
+						<a class="" href="<?php echo $page->getHref(); ?>"> <span><?php echo $page->getLabel(); ?></span>
+                          <?php if(!empty($page->pages)): ?>
+                            <span class="arrow open"></span>
+                          <?php endif;?>
+
+                      </a>
+                  <?php if(!empty($page->pages)): ?>
+                        <?php
+                    $display = 'none';
+                    
+                    foreach ($page->pages as $subpage) {
+                        // Nếu có item active sẽ sổ menu xuống
+                        // biến $dislay sẽ là cờ hiệu.
+                        if ($subpage->isActive()) {
+                            $display = 'block';
+                        }
+                    }
+                    ?>
+                      <ul class="sub" style="display: <?php echo $display;?>;">
+                          <?php foreach ($page->pages as $subpage):?>
+                            <li
+								<?php echo $subpage->isActive()?'class="active"':'class=""'?>><a
+								class="" href="<?php echo $subpage->getHref(); ?>">
+                                    <?php echo $subpage->getLabel(); ?>
+                                </a></li>
+                          <?php endforeach;?>
+                      </ul>
+                   <?php endif;?>
+                   </li>
+               <?php endforeach;?>
+          </ul>
+				<!-- END SIDEBAR MENU -->
+
+
+
+
+			</div>
+		</div>
+		<!-- END SIDEBAR -->
+		<!-- BEGIN PAGE -->
+		<div id="main-content">
+			<!-- BEGIN PAGE CONTAINER-->
+			<div class="container-fluid">
+				<div class="row-fluid">
+					<div class="span12">
+						<!-- BEGIN THEME CUSTOMIZER-->
+						<div id="theme-change" class="hidden-phone">
+							<i class="icon-cogs"></i> <span class="settings"> <span
+								class="text">Theme Color:</span> <span class="colors"> <span
+									class="color-default" data-style="default"></span> <span
+									class="color-green" data-style="green"></span> <span
+									class="color-gray" data-style="gray"></span> <span
+									class="color-purple" data-style="purple"></span> <span
+									class="color-red" data-style="red"></span>
+							</span>
+							</span>
+						</div>
+						<!-- END THEME CUSTOMIZER-->
+
+					</div>
+				</div>
+				<!-- END PAGE HEADER-->
+				<!-- BEGIN PAGE CONTENT-->
+            <?php echo $this->content;?>
+
+
+                        <!-- cho no vao layout  -->
+            
+            <div id="DialogTable" style="width: 800px; margin-left: -400px;"
+            	class="modal hide fade in" tabindex="-1" role="dialog"
+            	aria-labelledby="myModalLabel1" aria-hidden="false"
+            	style="display: block;">
+            	<div class="modal-header">
+            		<button type="button" class="close" data-dismiss="modal"
+            			aria-hidden="true">×</button>
+            		<h3 id="myModalLabel1">...</h3>
+            	</div>
+            	<div class="modal-body">
+            		<p>Body goes here...</p>
+            	</div>
+            	<div class="modal-footer">
+            		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            		<button class="btn btn-primary" id="DialogTable_btnOK">OK</button>
+            	</div>
+            </div>
+
+            <!-- END PAGE CONTENT-->
+			</div>
+			<!-- END PAGE CONTAINER-->
+		</div>
+		<!-- END PAGE -->
+	</div>
+	<!-- END CONTAINER -->
+
+	<!-- BEGIN FOOTER -->
+	<div id="footer">2015 &copy; ỨNG DỤNG QUẢN LÝ THUẾ</div>
+	<!-- END FOOTER -->
+
+
+	<!--BEGIN script cho tat ca cac trang -->
+	<!-- BEGIN JAVASCRIPTS -->
+
+	<!-- Load javascripts at bottom, this will reduce page load time -->
+        <?php
+        
+        echo $this->headScript()
+            ->prependFile($this->basePath() . '/public/' . 'myjs/MyLib.js') 
+            ->prependFile($this->basePath() . '/public/' . 'assets/bootstrap-dialog/bootstrap-dialog.min.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/data-tables/DT_bootstrap.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/data-tables/jquery.dataTables.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/uniform/jquery.uniform.min.js')
+            ->prependFile($this->basePath() . '/public/' . 'js/common-scripts.js')
+            ->prependFile($this->basePath() . '/public/' . 'js/form-component.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/bootstrap-timepicker/js/bootstrap-timepicker.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/bootstrap-datepicker/js/bootstrap-datepicker.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/jquery-tags-input/jquery.tagsinput.min.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/clockface/js/clockface.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/chosen-bootstrap/chosen/chosen.jquery.min.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js')
+            ->prependFile($this->basePath() . '/public/' . 'js/jquery.blockui.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/bootstrap/js/bootstrap.min.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/jquery-slimscroll/jquery.slimscroll.min.js')
+            ->prependFile($this->basePath() . '/public/' . 'assets/jquery-slimscroll/jquery-ui-1.9.2.custom.min.js')
+            ->prependFile($this->basePath() . '/public/' . 'js/jquery.nicescroll.js')
+            ->prependFile($this->basePath() . '/public/' . 'js/jquery-1.8.3.min.js')
+            ->appendFile($this->basePath() . '/public/' . 'assets/chosen-bootstrap/chosen/chosen.jquery.min.js');
+        ?>
+
+
+
+
+
+   <!--BEGIN script for this page only-->
+
+
+	<!--END script for this page only-->
+
+
+	<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

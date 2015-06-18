@@ -1,0 +1,168 @@
+<?php
+use Application\Entity\dukientruythu;
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Dukientruythu/oTable_Dukientruythu.js');
+
+/* @var $dsDuKienTruyThu dukientruythu */
+
+?>
+
+
+
+<div class="container-fluid">
+
+
+
+
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN THEME CUSTOMIZER-->
+			<!-- END THEME CUSTOMIZER-->
+			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+			<h3 class="page-title">QUẢN LÝ DỰ KIẾN TRUY THU</h3>
+			<ul class="breadcrumb">
+				<!--  <li>
+                           <a href="#">Home</a>
+                           <span class="divider">/</span>
+                       </li>
+                       <li>
+                           <a href="#">Metro Lab</a>
+                           <span class="divider">/</span>
+                       </li> -->
+				<li class="active">Home</li>
+			</ul>
+			<!-- END PAGE TITLE & BREADCRUMB-->
+		</div>
+	</div>
+
+	<!-- BEGIN EDITABLE TABLE widget-->
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN EXAMPLE TABLE widget-->
+
+			<div class="widget purple">
+
+				<div class="widget-title">
+					<h4>Danh sách dự kiến truy thu theo kỳ thuế</h4>
+					<span class="tools"> <a href="javascript:;"
+						class="icon-chevron-down"></a>
+					</span>
+				</div>
+				<div class="widget-body">
+					<div>
+						<form action="#" class="form-horizontal">
+							<div class="control-group">
+							<label class="control-label">Kỳ Thuế: </label>
+							<div class="controls">
+								<div class="input-append date" id="dpMonths"
+									data-date="102/2012" data-date-format="mm/yyyy"
+									data-date-viewmode="years" data-date-minviewmode="months">
+									
+								<input readonly="readonly" class="m-ctrl-medium" type="text" name="KyThue"  id="kythue" >
+
+								 <span class="add-on"> <i class="icon-calendar"> </i></span>
+									<div class="progress progress-striped active"
+										id="progress_kythue"
+										style="width: 219.5px; margin-bottom: 0px; display: none;">
+										<div style="width: 100%;" class="bar"></div>
+									</div>
+								</div>
+								<div id="progess_dpmonths" style="width: 247px; display: none;" class="progress progress-striped progress-danger active">
+                                     <div style="width: 100%;" class="bar"></div>
+                                </div>
+								<p class="help-block"></p>
+							</div>
+						</div>
+						</form>
+						<div class="clearfix">
+							<div class="btn-group">
+
+								<button id="editable-sample_new"
+									class="btn green">
+									Thêm mới <i class="icon-plus"></i>
+								</button>
+								
+								<button style="margin-left: 5px;"  id="xoa_nhieu"
+									class="btn green">
+									Xóa đã chọn <i class="icon-remove"></i>
+								</button>
+
+							</div>
+
+							<div class="btn-group pull-right">
+								<button class="btn dropdown-toggle" data-toggle="dropdown">
+									Tùy chọn <i class="icon-angle-down"></i>
+								</button>
+								<ul class="dropdown-menu pull-right">
+									<!-- <li><a href="#">Print</a></li>
+									<li><a href="#">Save as PDF</a></li>
+									<li><a href="#">Export to Excel</a></li> -->
+								</ul>
+							</div>
+						</div>
+	
+						
+						<div class="space12"></div>
+					<table cellspacing="0" class="table table-striped table-bordered"
+						width="100%" id="editable-sample">
+						<thead>
+							<tr>
+								    <th><input id="check_all" type="checkbox"></th>
+									<th>Mã số thuế (*)</th>
+						            <th>Tên HKD</th>
+									<th>Tiểu Mục (*)</th>
+									<th>Doanh số (*)</th>
+									<th>Tỉ lệ tính thuế (*)</th>
+									<th>Số tiền (*)</th>
+									<th>Trang thái (*)</th>
+									<th>Lý do</th>
+    								<th>Sửa</th>
+    								<th>Xóa</th>
+							</tr>
+						</thead>
+						<tbody id="chitiet">
+										
+										
+										<?php if($dsDuKienTruyThu!=null):?>
+										
+        										
+                                       <?php foreach ($dsDuKienTruyThu as $truythu):?>
+                            <tr class="odd">
+                            
+								<td><input class="check_item" type="checkbox"></td>
+								
+								<td class=" sorting_1"><?php echo $truythu->getNguoinopthue()->getMaSoThue()?></td>
+								<td><?php echo $truythu->getNguoinopthue()->getTenHKD()?></td>
+								<td><?php echo $truythu->getMuclucngansach()->getTieuMuc()?></td>
+								<td><?php echo $truythu->getDoanhSo();?></td>
+								<td><?php echo $truythu->getTiLeTinhThue();?></td>
+								<td><?php echo $truythu->getSoTien()?></td>
+								<td><?php echo $truythu->getTrangThai()?></td>
+								<td><?php echo $truythu->getLyDo()?></td>	
+								<td><a class="edit" href="">Edit</a></td>
+								<td><a class="Delete" href="">Delete</a></td>
+								
+							</tr>
+                                
+                                <?php endforeach;?>
+        										          
+        										
+        										
+										
+										
+										<?php endif;?>		
+  
+							</tbody>
+					</table>
+						
+						
+					</div>
+				</div>
+			</div>
+			<!-- END EXAMPLE TABLE widget-->
+		</div>
+	</div>
+
+
+	<!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
