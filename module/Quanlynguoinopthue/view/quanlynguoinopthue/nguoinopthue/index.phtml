@@ -1,0 +1,168 @@
+<?php
+use Application\Entity\nguoinopthue;
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlynguoinopthue/Nguoinopthue/oTable_IndexNguoiNopThue.js');
+?>
+
+<?php /* @var $dsnnt nguoinopthue */
+?>
+
+<div class="container-fluid">
+	
+
+
+
+
+	<div class="row-fsluid">
+		<div class="span12">
+			<!-- BEGIN THEME CUSTOMIZER-->
+			<!-- END THEME CUSTOMIZER-->
+			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+			<h3 class="page-title">QUẢN LÝ NGƯỜI NỘP THUẾ</h3>
+			<ul class="breadcrumb">
+				<!--  <li>
+                           <a href="#">Home</a>
+                           <span class="divider">/</span>
+                       </li>
+                       <li>
+                           <a href="#">Metro Lab</a>
+                           <span class="divider">/</span>
+                       </li> -->
+				<li class="active">Home</li>
+			</ul>
+			<!-- END PAGE TITLE & BREADCRUMB-->
+		</div>
+	</div>
+
+	<!-- BEGIN EDITABLE TABLE widget-->
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN EXAMPLE TABLE widget-->
+
+			<div class="widget purple">
+
+				<div class="widget-title">
+					<h4>Danh Sách Người Nộp Thuế</h4>
+					<span class="tools"> <a href="javascript:;"
+						class="icon-chevron-down"></a>
+					</span>
+				</div>
+				<div class="widget-body">
+					<div>
+						<form action="#" class="form-horizontal">
+							<div class="control-group">
+								<label class="control-label">Tìm NNT:</label>
+
+								<div class="controls">
+									<input id="kythue" type="text" value="" size="16"
+										class="m-ctrl-medium">
+									<div class="progress progress-striped active"
+										id="progress_tim"
+										style="width: 219.5px; margin-bottom: 0px; display: none;">
+										<div style="width: 100%;" class="bar"></div>
+									</div>
+								</div>
+
+							</div>
+						</form>
+						<div class="clearfix">
+							<div class="btn-group">
+
+								<button onclick="RedirectThem()" id="editable-sample_new"
+									class="btn green">
+									Thêm mới <i class="icon-plus"></i>
+								</button>
+								
+								<button style="margin-left: 5px;" onclick="XoaSelect()" id="editable-sample_new"
+									class="btn green">
+									Xóa đã chọn <i class="icon-remove"></i>
+								</button>
+
+							</div>
+
+							<div class="btn-group pull-right">
+								<button class="btn dropdown-toggle" data-toggle="dropdown">
+									Tùy chọn <i class="icon-angle-down"></i>
+								</button>
+								<ul class="dropdown-menu pull-right">
+									<li><a href="#">Print</a></li>
+									<li><a href="#">Save as PDF</a></li>
+									<li><a href="#">Export to Excel</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="space15"></div>
+						<table  cellspacing="0" class="table table-striped table-bordered"
+							width="100%" id="editable-sample">
+							<thead>
+								<tr>
+									
+                                    <th><input id="check_all" type="checkbox"></th>
+                                    
+									<th>Mã số thuế</th>
+									<th>Ngày cấp MST</th>
+									<th>Tên HKD</th>
+									<th>Số CMND</th>
+									<th>Địa chỉ CT</th>
+									<th>Địa chỉ KD</th>
+									<th>Số GPKD</th>
+									<th>Thời điểm BDKD</th>
+									<th>Ngành</th>
+									<th>Nghề</th>
+									<th>Cán Bộ QL</th>
+									
+									<th>Sửa</th>
+    								<th>Xóa</th>
+								</tr>
+							</thead>
+							<tbody id="chitiet">
+
+									
+										<?php if($dsnnt !=null):?>
+										
+        										
+                                       <?php foreach ($dsnnt  as $nnt):?>
+                                <tr class="odd">
+                            
+								<td><input class="check_item" type="checkbox"></td>
+								
+								<td><?php echo $nnt->getMaSoThue()?></td>
+								<td><?php echo $nnt->getNgayCapMST()?></td>
+								<td><?php echo $nnt->getTenHKD()?></td>
+								<td><?php echo $nnt->getSoCMND();?></td>
+								<td><?php echo $nnt->getDiaChiCT();?></td>
+								<td><?php echo $nnt->getThongtinnnt()[0]->getDiaChiKD()?></td>
+								<td><?php echo $nnt->getSoGPKD()?></td>
+								<td><?php echo $nnt->getThoiDiemBDKD()?></td>
+								
+								<td><?php echo $nnt->getNNTNganhs()[0]->getNganh()->getTenNganh()?></td>
+								
+								<td><?php echo $nnt->getNgheKD()?></td>
+								<td><?php echo $nnt->getUsernnts()[0]->getUser()->getTenUser()?></td>	
+								
+								<td><a class="edit" href="">Edit</a></td>
+								<td><a class="Delete" href="">Delete</a></td>
+								
+							</tr>
+                                
+                                <?php endforeach;?>
+        										          
+        										
+        										
+										
+										
+										<?php endif;?>	
+							
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<!-- END EXAMPLE TABLE widget-->
+		</div>
+	</div>
+
+
+	<!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
