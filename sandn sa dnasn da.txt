@@ -5,12 +5,3 @@ a
 a
 a
 a
-a
-a
-=======
-aaaaaaaaa
-
-
-a
-a
->>>>>>> branch 'master' of https://github.com/comboyin/Thue.git
