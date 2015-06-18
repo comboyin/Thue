@@ -1,1 +1,1 @@
-tao vua suac ai file neay abc
+alert "Hello";
