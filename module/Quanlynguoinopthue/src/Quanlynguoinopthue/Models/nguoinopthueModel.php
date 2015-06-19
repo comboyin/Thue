@@ -293,6 +293,8 @@ class nguoinopthueModel extends baseModel
                 ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                 ->join('nguoinopthue.usernnts', 'usernnts')
                 ->where("usernnts.user = ?1")
+                ->andwhere("usernnts.ThoiGianKetThuc = ?2")
+                ->setParameter(2, "0000-00-00")
                 ->setParameter(1, $user);
             return json_encode($bq->getQuery()->getArrayResult());
         } else 
@@ -301,9 +303,10 @@ class nguoinopthueModel extends baseModel
                     ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
-                    ->where("user.MaCoQuan = ?1")
-                    ->setParameter(1, $user->getCoquanthue()
-                    ->getMaCoQuan());
+                    ->where("user.coquanthue = ?1")
+                    ->andwhere("usernnts.ThoiGianKetThuc = ?2")
+                    ->setParameter(2, "0000-00-00")
+                    ->setParameter(1, $user->getCoquanthue());
                 return json_encode($bq->getQuery()->getArrayResult());
             }
     }

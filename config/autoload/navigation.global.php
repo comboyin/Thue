@@ -50,11 +50,11 @@ return array(
                         'resource' => 'Quanlysothue\Controller\Dukientruythu'
                     ),
                     array(
-                        'label' => 'Dự kiến thuế',
+                        'label' => 'Dự kiến thuế của năm',
                         'route' => 'quanlysothue/default',
-                        'controller' => 'Dukienthue',
+                        'controller' => 'Dukienthuecuanam',
                         'action' => 'index',
-                        'resource' => 'Quanlysothue\Controller\Dukienthue'
+                        'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
                     ),
                     array(
                         'label' => 'Quản lý chứng từ',

@@ -7,7 +7,6 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-
 /**
  * @ORM\Entity
  * @ORM\Table(
@@ -66,7 +65,7 @@ class dukientruythu implements InputFilterAwareInterface
      */
     private $nguoinopthue;
 
-    private  $inputFilter;
+    private $inputFilter;
 
     /**
      *
@@ -361,13 +360,8 @@ class dukientruythu implements InputFilterAwareInterface
                 )
             ]));
             
-            
-            
-            
-            
-            $callback = new Callback([$this, 'validateFloat']);
-            $callback->setMessage('The value is not valid.');
-            
+
+        
             $inputFilter->add($factory->createInput([
                 'name' => 'TiLeTinhThue',
                 'required' => true,
@@ -379,23 +373,23 @@ class dukientruythu implements InputFilterAwareInterface
                         'name' => 'StringTrim'
                     )
                 ),
-                'validators' =>array(
+                'validators' => array(
                     array(
                         'name' => '\Zend\Validator\Step',
                         'options' => array(
-                            'baseValue' => 0.0,
-                            'step'      => 0.1,
+                            'baseValue' => 0.000,
+                            'step' => 0.001
                         )
                     ),
                     array(
                         'name' => '\Zend\I18n\Validator\IsFloat',
                         'options' => array(
                             'min' => 0,
-                            'locale'=>'en'
+                            'locale' => 'en'
                         )
                     )
-                   
                 )
+                
             ]));
             
             $inputFilter->add($factory->createInput([
@@ -429,6 +423,4 @@ class dukientruythu implements InputFilterAwareInterface
         
         return $this->inputFilter;
     }
-    
-
 }

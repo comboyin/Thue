@@ -13,9 +13,34 @@ var EditableTable = function () {
 		init : function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
+			function TinhTien(){
+				doanhso = $("input[name='DoanhSo']").val();
+				tile = $("input[name='TiLeTinhThue']").val();
+				$("input[name='SoTien']").val(parseInt(doanhso*tile));
+			}
 			
+			$("input[name='DoanhSo']").live('blur',function(){
+				if($("input[name='DoanhSo']").val() == '')
+					{
+					$("input[name='DoanhSo']").val(0);
+					}
+			});
 			
+			$("input[name='DoanhSo']").live('keyup',function(){
+				TinhTien();
+			});
 
+			$("input[name='TiLeTinhThue']").live('keyup',function(){
+				TinhTien();
+			});
+			
+			$("input[name='TiLeTinhThue']").live('blur',function(){
+				if($("input[name='TiLeTinhThue']").val() == '')
+					{
+					$("input[name='TiLeTinhThue']").val(1.0);
+					}
+			});
+			
 			$('#dpMonths').datepicker().on('changeDate', function (ev) {
 
 				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
@@ -42,7 +67,7 @@ var EditableTable = function () {
 								data[i]['TrangThai'],
 								data[i]['LyDo'],
 								'<a class="edit" href="">Edit</a>',
-								'<a class="cancel" data-mode="new" href="">Cancel</a>']);
+								'<a class="Delete" href="">Delete</a>']);
 					}
 
 					$("#progess_dpmonths").css(
@@ -155,9 +180,9 @@ var EditableTable = function () {
 					 + aData[5] + '">';
 				
 				jqTds[6].innerHTML = '<input style="width:100px;" name="SoTien" type="text"  value="'
-					 + aData[6] + '">';
+					 + aData[6] + '"disabled>';
 				jqTds[7].innerHTML = '<input style="width:10px;" name="TrangThai" type="text" value="'
-					 + aData[7] + ' ">';
+					 + aData[7] + ' "disabled>';
 				jqTds[8].innerHTML = '<input style="width:230px;" name="LyDo" type="text" value="'
 					 + aData[8] + ' ">';
 
@@ -187,9 +212,9 @@ var EditableTable = function () {
 					 + aData[5] + '">';
 				
 				jqTds[6].innerHTML = '<input style="width:100px;" name="SoTien" type="text"  value="'
-					 + aData[6] + '">';
+					 + aData[6] + '"disabled>';
 				jqTds[7].innerHTML = '<input style="width:10px;" name="TrangThai" type="text" value="'
-					 + aData[7] + ' ">';
+					 + aData[7] + ' "disabled>';
 				jqTds[8].innerHTML = '<input style="width:230px;" name="LyDo" type="text" value="'
 					 + aData[8] + ' ">';
 
@@ -236,10 +261,10 @@ var EditableTable = function () {
 							'',
 							'',
 							'',
-							'',
-							'',
-							'',
-							'',
+							0,
+							'1.0',
+							0,
+							0,
 							'',
 							'<a class="edit" href="">Edit</a>',
 							'<a class="cancel" data-mode="new" href="">Cancel</a>'
