@@ -33,7 +33,26 @@ var EditableTable = function () {
 			//MaSoThue
 			
 			$("input[name='MaSoThue']").on( "keyup", function(e){
-				console.log($("input[name='MaSoThue']").val()) ;
+				var MaSoThue = $("input[name='MaSoThue']").val();
+				if(MaSoThue.length >= 9 && MaSoThue.length<=14)
+					{
+						
+						
+						$("#progress_masothue").css('display','block');
+						$.post('checkmasothue',{MaSoThue:MaSoThue},function(json){
+							if(json.dem==0)
+								{
+								$(".check_ > i").attr('class','icon-ok');
+								}
+							else{
+								$(".check_ > i").attr('class','icon-exclamation-sign');
+								
+							}
+							$("#progress_masothue").css('display','none');
+						},'json');
+						
+						
+					}
 			} );
 		}
 	

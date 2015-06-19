@@ -48,8 +48,17 @@ $user = $this->identity();
                             <!-- Chi nhap so, Lon hon 9 ky tu, nho hon 21 ky tu -->
                             <div class="control-group">
                                 <label class="control-label">Mã Số Thuế (*)</label>
-                                <div class="controls">
+                                <div class="controls input-icon">
                                     <?php echo $this->formelement($form->get('MaSoThue'))?>
+                                    <span  style="display: none"  class="input-success tooltips check_">
+                                         <i class="icon-exclamation-sign"></i>
+                                   </span>
+                                   
+                                    <div id="progress_masothue" style="width: 498px;display: none;" class="progress progress-striped progress-success active">
+                                            <div style="width: 100%;" class="bar"></div>
+                                    </div>
+                                    
+                            
                                     <span class="help-inline"><?php echo $this->formelementerrors($form->get('MaSoThue'))?></span>
                                 </div>
                             </div>
@@ -59,6 +68,7 @@ $user = $this->identity();
                                     <label class="control-label">Ngày cấp MST (*)</label>
                                     <div class="controls">
                                         <?php echo $this->formelement($form->get('NgayCapMST'))?>
+                                        
                                         <span class="help-inline"><?php echo $this->formelementerrors($form->get('NgayCapMST'))?></span>
                                     </div>
                             </div>

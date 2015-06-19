@@ -6,9 +6,6 @@ use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Entity\nguoinopthue;
 use Quanlynguoinopthue\Forms\formNguoiNopThue;
 
-
-
-
 /**
  * NguoinopthueController
  *
@@ -25,20 +22,15 @@ class NguoinopthueController extends baseController
      */
     public function indexAction()
     {
-        
-        
         $request = $this->getRequest();
         $post = $request->getPost();
         
         $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
         
-        $dsnguoinopthue = $nguoinopthueModel->DanhSachByIdentity($this->getUser())->getObj();
+        $dsnguoinopthue = $nguoinopthueModel->DanhSachByIdentity($this->getUser())
+            ->getObj();
         
-        
-        if($post->get("HanhDong")=="xoa")
-        {
-            
-            
+        if ($post->get("HanhDong") == "xoa") {
             
             return array(
                 'dsnnt' => $dsnguoinopthue,
@@ -46,22 +38,17 @@ class NguoinopthueController extends baseController
             );
         }
         
-        
-       
-        
         return array(
             'dsnnt' => $dsnguoinopthue
         );
     }
-    
+
     /**
      * Thêm và sửa
-     *   
-    */
+     */
     public function persitAction()
     {
-        
-    try {
+        try {
             // khởi tạo form
             $form = new formNguoiNopThue();
             /* @var $HanhDongElem Element */
@@ -117,7 +104,7 @@ class NguoinopthueController extends baseController
                             );
                         }
                     }  // NewSua
-                    else 
+else 
                         if ($post->get('HanhDong') == 'NewSua') {
                             // tim
                             
@@ -142,18 +129,45 @@ class NguoinopthueController extends baseController
     // ajax
     public function dsnntbyidentityAction()
     {
-    
         $nntModel = new nguoinopthueModel($this->getEntityManager());
-
+        
         $nnt = $nntModel->getDanhSachByIdentity($this->getUser());
-
+        
         if ($nnt->getKq() == true) {
             echo json_encode($nnt->getObj(), JSON_UNESCAPED_UNICODE);
         } else {
             $data['loi'] = true;
             echo json_encode($data, JSON_UNESCAPED_UNICODE);
         }
+        
+        return $this->response;
+    }
 
+    /**
+     * Kiểm tra mã số thuế có tồn tai khong
+     * return json
+     */
+    public function checkmasothueAction()
+    {
+        $masothue = $this->getRequest()
+            ->getPost()
+            ->get("MaSoThue");
+        
+        $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $masothue);
+        
+        $kq = null;
+        if ($nguoinopthue != null) {
+            $kq= array(
+                'dem'=>1
+            );
+        }
+        else{
+            $kq= array(
+                'dem'=>0
+            );
+        }
+        
+        echo json_encode($kq);
         return $this->response;
     }
 }
