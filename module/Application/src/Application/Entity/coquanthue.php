@@ -59,7 +59,7 @@ class coquanthue
     }
 
  /**
-     * @return the $doithue
+     * @return coquanthue
      */
     public function getDoithue()
     {
@@ -67,7 +67,7 @@ class coquanthue
     }
 
  /**
-     * @return the $chicucthue
+     * @return coquanthue
      */
     public function getChicucthue()
     {

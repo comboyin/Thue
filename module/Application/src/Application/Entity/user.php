@@ -90,7 +90,7 @@ class user implements InputFilterAwareInterface
 
     /**
      *
-     * @return the $TenUser
+     * @return string
      */
     public function getTenUser()
     {

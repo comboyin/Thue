@@ -56,7 +56,7 @@ var EditableTable = function () {
 			if ($("#kythue").val() == "") {
 				var today = new Date();
 				_KyThue = $.datepicker.formatDate("mm/yy", today)
-					$("#kythue").val(_KyThue);
+				$("#kythue").val(_KyThue);
 				$("#dpMonths").datepicker('update', _KyThue);
 
 			}

@@ -6,7 +6,7 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\Callback;
+
 
 /**
  * @ORM\Entity
@@ -66,7 +66,7 @@ class dukientruythu implements InputFilterAwareInterface
      */
     private $nguoinopthue;
 
-    protected $inputFilter;
+    private  $inputFilter;
 
     /**
      *
@@ -430,7 +430,5 @@ class dukientruythu implements InputFilterAwareInterface
         return $this->inputFilter;
     }
     
-    public function validateFloat($value){
-        return (is_numeric($value));
-    }
+
 }
