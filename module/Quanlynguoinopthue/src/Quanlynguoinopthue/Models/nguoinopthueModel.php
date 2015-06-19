@@ -108,11 +108,13 @@ class nguoinopthueModel extends baseModel
                     ->where('user.MaUser = ?1')
                     ->andwhere('usernnts.ThoiGianKetThuc = ?2')
                     ->andwhere('NNTNganhs.ThoiGianKetThuc = ?3')
+                    ->andwhere('thongtinnnt.ThoiGianKetThuc = ?4')
                     ->
                 // ->andWhere('nguoinopthueot in('.$qb->getDQL().')')
                 setParameter(1, $ma)
                     ->setParameter(2, "0000-00-00")
-                    ->setParameter(3, "0000-00-00");
+                    ->setParameter(3, "0000-00-00")
+                    ->setParameter(4, "0000-00-00");
             } else 
                 if ($user->getLoaiUser() == 3) {
                     $qb->select(array(
@@ -136,9 +138,11 @@ class nguoinopthueModel extends baseModel
                         ->where('coquanthue = ?1')
                         ->andwhere('usernnts.ThoiGianKetThuc = ?2')
                         ->andwhere('NNTNganhs.ThoiGianKetThuc = ?3')
+                        ->andwhere('thongtinnnt.ThoiGianKetThuc = ?4')
                         ->setParameter(1, $user->getCoquanthue())
                         ->setParameter(2, "0000-00-00")
-                        ->setParameter(3, "0000-00-00");
+                        ->setParameter(3, "0000-00-00")
+                        ->setParameter(4, "0000-00-00");
                 }
             
             $obj = $qb->getQuery()->getResult();
