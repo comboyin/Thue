@@ -4,6 +4,10 @@ namespace Quanlynguoinopthue\Controller;
 use Application\base\baseController;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Entity\nguoinopthue;
+use Quanlynguoinopthue\Forms\formNguoiNopThue;
+
+
+
 
 /**
  * NguoinopthueController
@@ -57,7 +61,82 @@ class NguoinopthueController extends baseController
     public function persitAction()
     {
         
-        return array();
+    try {
+            // khởi tạo form
+            $form = new formNguoiNopThue();
+            /* @var $HanhDongElem Element */
+            $HanhDongElem = $form->get('HanhDong');
+            if ($this->getRequest()->isGet()) {
+                $HanhDongElem->setAttribute('value', 'Them');
+            }
+            
+            if ($this->getRequest()->isPost()) {
+                
+                $post = $this->getRequest()->getPost();
+                // Sua
+                if ($post->get('HanhDong') == 'Sua') {
+                    $dkt = new dukienthue();
+                    $form->setInputFilter($dkt->getInputFilter());
+                    $form->setData($this->getRequest()
+                        ->getPost());
+                    if ($form->isValid()) {
+                        // Viet ham sua
+                    }
+                } else  // Them
+                    if ($post->get('HanhDong') == 'Them') {
+                        
+                        $dkt = new dukienthue();
+                        
+                        $form->setInputFilter($dkt->getInputFilter());
+                        $form->setData($post);
+                        
+                        if ($form->isValid()) {
+                            
+                            // Viet ham them
+                            // new mucluc
+                            $mucluc = new muclucngansach();
+                            $mucluc->setTieuMuc($post->get('TieuMuc'));
+                            // new nguoinopthue
+                            $nguoinopthue = new nguoinopthue();
+                            $nguoinopthue->setMaSoThue($post->get('MaSoThue'));
+                            
+                            // new dkt
+                            $dkt->setKyThue($post->get('KyThue'));
+                            $dkt->setNguoinopthue($this->getEntityManager()
+                                ->find('Application\Entity\nguoinopthue', $post->get('MaSoThue')));
+                            $dkt->setMuclucngansach($this->getEntityManager()
+                                ->find('Application\Entity\muclucngansach', $post->get('TieuMuc')));
+                            $dkt->setUser($this->getUser());
+                            
+                            $model = new dukienthueModel($this->getEntityManager());
+                            $kq = $model->them($dkt);
+                            
+                            return array(
+                                'kq' => $kq,
+                                'form' => $form
+                            );
+                        }
+                    }  // NewSua
+                    else 
+                        if ($post->get('HanhDong') == 'NewSua') {
+                            // tim
+                            
+                            // setAttr cho form
+                            
+                            // trả form to view
+                            return array(
+                                'form' => $form
+                            );
+                        }
+            }
+            // NewThem
+            // form to view
+            return array(
+                'form' => $form
+            );
+        } catch (\Exception $e) {
+            var_dump($e);
+        }
     }
     
     // ajax

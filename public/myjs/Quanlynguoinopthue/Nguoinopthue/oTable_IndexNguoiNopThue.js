@@ -635,4 +635,5 @@ var EditableTable = function () {
 jQuery(document).ready(function () {
 
 	EditableTable.init();
+	
 });
