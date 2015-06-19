@@ -92,6 +92,10 @@ class nguoinopthueModel extends baseModel
                     'thongtinnnt',
                     'phuong',
                     'coquanthue'
+                    
+                    
+                    
+                    
                 ))
                     ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
