@@ -590,7 +590,10 @@ var EditableTable = function () {
 					var nRow = $(this).parents('tr')[0];
 					var aData = oTable.fnGetData(nRow);
 					_MaSoThue = aData[1].trim();
-					var data = {MaSoThue:_MaSoThue};
+					var data = {
+							HanhDong:'sua',
+							MaSoThue:_MaSoThue
+							};
 					postAndRedirect('persit',data);
 				});
 

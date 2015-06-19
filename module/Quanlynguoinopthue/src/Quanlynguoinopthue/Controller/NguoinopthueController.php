@@ -17,15 +17,32 @@ class NguoinopthueController extends baseController
 {
 
     /**
-     * The default action - show the home page
+     * Load danh sách và Xóa
      */
     public function indexAction()
     {
         
-        $request = $this->get
+        
+        $request = $this->getRequest();
+        $post = $request->getPost();
+        
         $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
         
         $dsnguoinopthue = $nguoinopthueModel->DanhSachByIdentity($this->getUser())->getObj();
+        
+        
+        if($post->get("HanhDong")=="xoa")
+        {
+            
+            
+            
+            return array(
+                'dsnnt' => $dsnguoinopthue,
+                'kq' => $kq
+            );
+        }
+        
+        
        
         
         return array(
@@ -33,9 +50,14 @@ class NguoinopthueController extends baseController
         );
     }
     
+    /**
+     * Thêm và sửa
+     *   
+    */
     public function persitAction()
     {
-        return $this->response;
+        
+        return array();
     }
     
     // ajax
