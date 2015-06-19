@@ -17,7 +17,8 @@ class formNguoiNopThue extends Form
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
                 "required" => "required",
-                'class' => "span6"
+                'class' => "span6",
+                'maxlength'=>"15"
             )
             
         ));
