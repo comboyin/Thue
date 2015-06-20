@@ -17,7 +17,7 @@ class muclucngansach
     private $TieuMuc;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $TenGoi;
 

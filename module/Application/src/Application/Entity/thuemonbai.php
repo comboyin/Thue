@@ -20,10 +20,7 @@ class thuemonbai
      */
     private $Nam;
 
-    /**
-     * @ORM\Column(type="integer",nullable=false)
-     */
-    private $VonKD;
+
 
     /**
      * @ORM\Column(type="integer",nullable=false, options={"default":"0"})
@@ -40,10 +37,7 @@ class thuemonbai
      */
     private $KetSo;
 
-    /**
-     * @ORM\Column(type="string", length=45, nullable=true)
-     */
-    private $SoChungTu;
+
 
 
     /**
@@ -66,13 +60,7 @@ class thuemonbai
         return $this->Nam;
     }
 
- /**
-     * @return the $VonKD
-     */
-    public function getVonKD()
-    {
-        return $this->VonKD;
-    }
+
 
  /**
      * @return the $SoTien
@@ -98,13 +86,7 @@ class thuemonbai
         return $this->KetSo;
     }
 
- /**
-     * @return the $SoChungTu
-     */
-    public function getSoChungTu()
-    {
-        return $this->SoChungTu;
-    }
+
 
  /**
      * @return the $muclucngansach
@@ -130,13 +112,7 @@ class thuemonbai
         $this->Nam = $Nam;
     }
 
- /**
-     * @param field_type $VonKD
-     */
-    public function setVonKD($VonKD)
-    {
-        $this->VonKD = $VonKD;
-    }
+
 
  /**
      * @param field_type $SoTien
@@ -162,13 +138,7 @@ class thuemonbai
         $this->KetSo = $KetSo;
     }
 
- /**
-     * @param field_type $SoChungTu
-     */
-    public function setSoChungTu($SoChungTu)
-    {
-        $this->SoChungTu = $SoChungTu;
-    }
+
 
  /**
      * @param field_type $muclucngansach

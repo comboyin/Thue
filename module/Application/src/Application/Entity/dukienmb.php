@@ -37,10 +37,7 @@ class dukienmb
      */
     private $muclucngansach;
 
-    /**
-     * @ORM\Column(type="integer",nullable=false)
-     */
-    private $VonKD;
+
 
     /**
      * @ORM\Column(type="integer"),nullable=false, options={"default":"0"})
@@ -80,13 +77,6 @@ class dukienmb
         return $this->muclucngansach;
     }
 
- /**
-     * @return the $VonKD
-     */
-    public function getVonKD()
-    {
-        return $this->VonKD;
-    }
 
  /**
      * @return the $SoTien
@@ -136,13 +126,7 @@ class dukienmb
         $this->muclucngansach = $muclucngansach;
     }
 
- /**
-     * @param field_type $VonKD
-     */
-    public function setVonKD($VonKD)
-    {
-        $this->VonKD = $VonKD;
-    }
+
 
  /**
      * @param field_type $SoTien
