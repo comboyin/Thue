@@ -20,15 +20,13 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysot
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 			<h3 class="page-title">QUẢN LÝ DỰ KIẾN TRUY THU</h3>
 			<ul class="breadcrumb">
-				<!--  <li>
-                           <a href="#">Home</a>
-                           <span class="divider">/</span>
+			
+				 <li class="active">
+                           <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Dukientruythu','action'=>'index'));?>">Danh sách dự kiến truy thu theo kỳ thuế</a>
+                           
                        </li>
-                       <li>
-                           <a href="#">Metro Lab</a>
-                           <span class="divider">/</span>
-                       </li> -->
-				<li class="active">Home</li>
+                      
+				
 			</ul>
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>

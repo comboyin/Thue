@@ -38,7 +38,14 @@ var EditableTable = function () {
 						// page values
 						// here
 					],
-					// set the initial value
+					
+					//*************************************
+					"sScrollY": "500px",
+					"sScrollX": "100%",
+					/*"bScrollCollapse": true,*/
+					//*************************************
+					
+					
 					"iDisplayLength" : 5,
 					"sDom" : "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"sPaginationType" : "bootstrap",
@@ -120,6 +127,9 @@ var EditableTable = function () {
 
 				jqTds[9].innerHTML = '<a class="edit" href="">Save edit</a>';
 				jqTds[10].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				
+				
+				oTable.fnAdjustColumnSizing();
 
 			}
 
@@ -152,6 +162,8 @@ var EditableTable = function () {
 
 				jqTds[9].innerHTML = '<a class="edit" href="">Save new</a>';
 				jqTds[10].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				
+				oTable.fnAdjustColumnSizing();
 
 			}
 

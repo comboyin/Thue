@@ -19,6 +19,14 @@ var EditableTable = function () {
                     [5, 15, 20, "All"] // change per page values here
                 ],
                 // set the initial value
+                
+              //*************************************
+				"sScrollY": "350px",
+				"sScrollX": "100%",
+				/*"bScrollCollapse": true,*/
+				//*************************************
+                
+                
                 "iDisplayLength": -1,
                 "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
                 "sPaginationType": "bootstrap",
@@ -36,11 +44,11 @@ var EditableTable = function () {
                 ]
             });
 
-            //jQuery('#editable-sample_wrapper .dataTables_filter input').addClass(" medium"); // modify
+            jQuery('#editable-sample_wrapper .dataTables_filter input').addClass(" medium"); // modify
 																								// table
 																								// search
 																								// input
-            //jQuery('#editable-sample_wrapper .dataTables_length select').addClass(" xsmall"); // modify
+            jQuery('#editable-sample_wrapper .dataTables_length select').addClass(" xsmall"); // modify
 
         }
     }

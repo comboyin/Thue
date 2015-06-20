@@ -44,8 +44,10 @@ var EditableTable = function () {
 			$('#dpMonths').datepicker().on('changeDate', function (ev) {
 
 				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
-
-				$("#progess_dpmonths").css('display', 'block');
+				
+				DialogTable.showPropress();
+				
+				/*$("#progess_dpmonths").css('display', 'block');*/
 
 				//post
 				$.get("dsDKTTJson", {KyThue : _KyThue},
@@ -70,10 +72,10 @@ var EditableTable = function () {
 								'<a class="Delete" href="">Delete</a>']);
 					}
 
-					$("#progess_dpmonths").css(
+					/*$("#progess_dpmonths").css(
 						'display',
-						'none');
-
+						'none');*/
+					DialogTable.hideProgress();
 				}, "json");
 
 			});
@@ -106,7 +108,17 @@ var EditableTable = function () {
 						// page values
 						// here
 					],
-					// set the initial value
+					// new 
+					
+					
+					//*************************************
+					"sScrollY": "350px",
+					"sScrollX": "100%",
+					/*"bScrollCollapse": true,*/
+					//*************************************
+					
+					
+					
 					"iDisplayLength" : 5,
 					"sDom" : "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"sPaginationType" : "bootstrap",
@@ -173,7 +185,7 @@ var EditableTable = function () {
 				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
 					 + aData[3] + ' "disabled><button class="DialogTieuMuc" style="margin:0 20px;margin-top:2px" class="btn btn-success">Chọn</button>';
 
-				jqTds[4].innerHTML = '<input style="width:100px;" name="DoanhSo" type="text"  value="'
+				jqTds[4].innerHTML = '<input style="width:500px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';
 				
 				jqTds[5].innerHTML = '<input style="width:20px;" name="TiLeTinhThue" type="text"  value="'
@@ -188,6 +200,8 @@ var EditableTable = function () {
 
 				jqTds[9].innerHTML = '<a class="edit" href="">Save edit</a>';
 				jqTds[10].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				
+				oTable.fnAdjustColumnSizing();
 
 			}
 
@@ -220,6 +234,8 @@ var EditableTable = function () {
 
 				jqTds[9].innerHTML = '<a class="edit" href="">Save new</a>';
 				jqTds[10].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				
+				oTable.fnAdjustColumnSizing();
 
 			}
 
@@ -780,8 +796,24 @@ var EditableTable = function () {
 				TenHKD = $("input[name='TenHKD']", nRow);
 				
 				
+				DialogTable.showFromUrl('get','danhsachNNT',{},function(){
+					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
+
+					if (checkboxs.length == 1) {
+						var MaSoThueString = $('td', checkboxs[0])[1].textContent;
+						var TenHKDString = $('td', checkboxs[0])[2].textContent;
+						
+						$("#DialogTable").modal("hide");
+						
+						MaSoThue.val(MaSoThueString);
+						TenHKD.val(TenHKDString);
+						
+					} else {
+						alert("Vui lòng chọn ít nhất một !");
+					}
+				});
 				
-				$.get('danhsachNNT', {}, function (json) {
+				/*$.get('danhsachNNT', {}, function (json) {
 
 					DialogTable.show(json, function () {
 					
@@ -800,7 +832,7 @@ var EditableTable = function () {
 							alert("Vui lòng chọn ít nhất một !");
 						}
 					});
-				}, 'json');
+				}, 'json');*/
 
 			});
 
@@ -810,25 +842,22 @@ var EditableTable = function () {
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
 
-
-				$.get('muclucngansach', {}, function (json) {
-
-					DialogTable.show(json, function () {
+				DialogTable.showFromUrl('get','muclucngansach',{}, function () {
 					
-						checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
+					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
-						if (checkboxs.length == 1) {
-							
-							var TieuMucString = $('td', checkboxs[0])[1].textContent;
-							
-							$("#DialogTable").modal("hide");
-							
-							TieuMuc.val(TieuMucString);
-						} else {
-							alert("Vui lòng chọn ít nhất một !");
-						}
-					});
-				}, 'json');
+					if (checkboxs.length == 1) {
+						
+						var TieuMucString = $('td', checkboxs[0])[1].textContent;
+						
+						$("#DialogTable").modal("hide");
+						
+						TieuMuc.val(TieuMucString);
+					} else {
+						alert("Vui lòng chọn ít nhất một !");
+					}
+				});
+				
 
 			});
 

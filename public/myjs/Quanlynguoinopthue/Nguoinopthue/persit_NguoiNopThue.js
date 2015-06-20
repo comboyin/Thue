@@ -33,6 +33,7 @@ var EditableTable = function () {
 			
 			//Quan
 			$("select[name='Quan']").change(function(e){
+				DialogTable.showPropress();
 				$MaCoQuan = $("select[name='Quan']").val();
 				
 				$.get('dsPhuongForQuan',{MaCoQuan:$MaCoQuan},function(json){
@@ -46,7 +47,7 @@ var EditableTable = function () {
 						    }));
 						
 						}
-					
+					DialogTable.hidePropress();
 				},'json');
 			});
 			

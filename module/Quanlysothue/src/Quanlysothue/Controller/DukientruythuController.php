@@ -141,6 +141,7 @@ class DukientruythuController extends baseController
 
     public function suaAction()
     {
+        error_reporting(0);
         try {
             /* @var $request Request */
             /* @var $form Form */

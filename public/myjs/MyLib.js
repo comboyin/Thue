@@ -76,7 +76,7 @@ var DialogTable = (function () {
 			
 			$.each(Json,function(key,value){
 				ChiTietTable += '<tr class="odd">';
-				ChiTietTable += '<td class=" sorting_1"><input class="check_item" type="checkbox"></td>';
+				ChiTietTable += '<td><input class="check_item" type="checkbox"></td>';
 				$.each(value,function(key,value){
 					if(value.date !=null)
 					{
@@ -104,12 +104,16 @@ var DialogTable = (function () {
 			
 			this.oTable = $('#editable-dialog')
 			.dataTable({
+				
 				"aLengthMenu" : [[5, 15, 20, -1],
 					[5, 15, 20, "All"]// change per
 					// page values
 					// here
 				],
 				// set the initial value
+				"sScrollY": "230px",
+				
+				'bScrollCollapse': true,
 				"iDisplayLength" : -1,
 				"sDom" : "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 				"sPaginationType" : "bootstrap",
@@ -129,18 +133,24 @@ var DialogTable = (function () {
 			
 			jQuery('#editable-sample_wrapper .dataTables_filter input')
 			.addClass(" medium"); // modify
-			// table
-			// search
-			// input
+
 			jQuery('#editable-sample_wrapper .dataTables_length select')
 			.addClass(" xsmall"); // modify
-			// table
-			// per
-			// page
-			// dropdown
+		
 			
-			
+			$("#DialogTable tr").live('click',function(){
+				
+				var tbody = $(this).parents('tbody')[0];
+				$('input.check_item:checked',tbody).attr('checked',false);
+				$('input.check_item',this).attr('checked',true);
+				
+			});
+
 		},
+		addHead : function(stringHead){
+			$("#DialogTable h3").html(stringHead);
+		},
+		
 		addData : function(Json){
 			$("#DialogTable > .modal-body").html(this.CreateHTMLTable(Json));
 			this.CreateObjectTable();
@@ -162,13 +172,59 @@ var DialogTable = (function () {
 		},
 		show : function(Json,action)
 		{
+			
 			this.addData(Json);
 			$("#DialogTable").modal("show");
 			// even click
-			$("#DialogTable_btnOK").unbind( "click" )
+			$("#DialogTable_btnOK").unbind( "click" );
 			$("#DialogTable_btnOK").click(action);
 			
+		},
+		//show from url
+		
+		showFromUrl : function(method,url,data,action){
+			$("#DialogTable > .modal-body").html('<div class="progress progress-striped active"> <div style="width: 100%;" class="bar"></div></div>');
+			$("#DialogTable").modal("show");
+			if(method == 'get'){
+				$.get(url,data,function(json){
+					self.addData(json);
+					$("#DialogTable_btnOK").unbind( "click" );
+					$("#DialogTable_btnOK").click(action);
+				},'json');
+			}
+			else
+				{
+				$.post(url,data,function(json){
+					
+					self.addData(json);
+					$("#DialogTable_btnOK").unbind( "click" );
+					$("#DialogTable_btnOK").click(action);
+				},'json');
+				}
+		},
+		showPropress : function(){
+			this.addHead('Vui lòng chờ...');
+			$("#DialogTable > .modal-body").html('<div class="progress progress-striped active"> <div style="width: 100%;" class="bar"></div></div>');
+			$("#DialogTable").modal("show");
+			
+			setTimeout(function(){
+				if($('#DialogTable').hasClass('in')==true)
+					{
+						$('#DialogTable').modal('hide');
+					}
+			}, 3000);
 		}
+		,
+		hidePropress : function(){
+			
+			if($('#DialogTable').hasClass('in')==true)
+			{
+				$('#DialogTable').modal('hide');
+			}
+			
+		}
+		
+		
 
 		//example khai bao 1 doi tuong c
 		/*,
@@ -214,5 +270,10 @@ var DialogTable = (function () {
 	});
 */
 
-
-
+/*var DialogLoading = new BootstrapDialog({
+    message: function(dialogRef){
+        var $message = $('<div class="progress progress-striped active"> <div style="width: 100%;" class="bar"></div></div>');
+        return $message;
+    },
+    closable: false
+});*/
