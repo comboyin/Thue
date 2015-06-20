@@ -193,7 +193,7 @@ var EditableTable = function () {
 			var nEditing = null;
 			$('#editable-sample_new').click(function (e) {
 				//e.preventDefault();
-				
+				DialogTable.showPropress();
 				data = {};
 				getAndRedirect('persit',data);
 				
@@ -599,6 +599,7 @@ var EditableTable = function () {
 
 			$('#editable-sample a.edit').live('click',function (e) {
 					e.preventDefault();
+					DialogTable.showPropress();
 					var nRow = $(this).parents('tr')[0];
 					var aData = oTable.fnGetData(nRow);
 					_MaSoThue = aData[1].trim();
