@@ -107,7 +107,7 @@ class formNguoiNopThue extends Form
                     'disabled' => array(
                         'value' => ' ',
                         'label' => 'Chọn phường...',
-                        'selected' => FALSE,
+                        'selected' => "selected",
                         'disabled' => TRUE
                     )
                 )
@@ -140,7 +140,7 @@ class formNguoiNopThue extends Form
                     'disabled' => array(
                         'value' => ' ',
                         'label' => 'Chọn quận...',
-                        'selected' => FALSE,
+                        'selected' => TRUE,
                         'disabled' => TRUE
                     )
                 )

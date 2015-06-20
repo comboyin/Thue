@@ -7,7 +7,7 @@ return array(
             'orm_default' => array(
                 'object_manager' => 'Doctrine\ORM\EntityManager',
                 // object_repository can be used instead of the object_manager key
-                'identity_class' => 'Application\Entity\User', // 'Application\Entity\User',
+                'identity_class' => 'Application\Entity\user', // 'Application\Entity\User',
                 'identity_property' => 'MaUser', // 'username', // 'email',
                 'credential_property' => 'MatKhau', // 'password',
                 'credential_callable' => function (Application\Entity\user $user, $passwordGiven) { // not only User
@@ -56,7 +56,7 @@ return array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
                 'paths' => array(
-                    __DIR__ . '\\..\\..\\module\\Application\\src\\Application\\Entity'
+                    __DIR__ . '/../../module/Application/src/Application/Entity'
                 )
             ),
             

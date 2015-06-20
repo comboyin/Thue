@@ -30,6 +30,26 @@ var EditableTable = function () {
 		    });
 			$("#dp_ThoiDiemBDKD").datepicker('update', today);
 			
+			
+			//Quan
+			$("select[name='Quan']").change(function(e){
+				$MaCoQuan = $("select[name='Quan']").val();
+				
+				$.get('dsPhuongForQuan',{MaCoQuan:$MaCoQuan},function(json){
+					$("select[name='Phuong']").find('option:not(:first)').remove();
+					for($i=0;$i<json.length;$i++)
+						{
+						
+							$("select[name='Phuong']").append($('<option>', { 
+						        value: json[$i].MaPhuong,
+						        text : json[$i].TenPhuong 
+						    }));
+						
+						}
+					
+				},'json');
+			});
+			
 			//MaSoThue
 			
 			$("input[name='MaSoThue']").on( "keyup", function(e){
