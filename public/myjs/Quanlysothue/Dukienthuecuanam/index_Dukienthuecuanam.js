@@ -809,7 +809,7 @@ var EditableTable = function () {
 
 					
 
-					nEditing = SaveEdit('post', url, data, oTable, nEditing);
+					SaveEdit('post', url, data, oTable, nEditing);
 
 				} else {
 
