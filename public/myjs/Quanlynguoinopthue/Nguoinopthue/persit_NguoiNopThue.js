@@ -13,7 +13,27 @@ var EditableTable = function () {
 	return {
 
 		init : function () {
-			
+			function changeQuan(){
+				DialogTable.showPropress();
+				$MaCoQuan = $("select[name='Quan']").val();
+				
+				$.get('dsPhuongForQuan',{MaCoQuan:$MaCoQuan},function(json){
+					$("select[name='Phuong']").find('option:not(:first)').remove();
+					for($i=0;$i<json.length;$i++)
+						{
+						
+							$("select[name='Phuong']").append($('<option>', { 
+						        value: json[$i].MaPhuong,
+						        text : json[$i].TenPhuong 
+						    }));
+						
+						}
+					DialogTable.hidePropress();
+				},'json');
+			}
+			$(document).on('submit','#formNguoiNopThue',function(){
+				DialogTable.showPropress();
+				});
 			today = $.datepicker.formatDate("dd-mm-yy", new Date());
 			//dp_NgayCapMST
 			$("#dp_NgayCapMST").val(today);
@@ -33,22 +53,7 @@ var EditableTable = function () {
 			
 			//Quan
 			$("select[name='Quan']").change(function(e){
-				DialogTable.showPropress();
-				$MaCoQuan = $("select[name='Quan']").val();
-				
-				$.get('dsPhuongForQuan',{MaCoQuan:$MaCoQuan},function(json){
-					$("select[name='Phuong']").find('option:not(:first)').remove();
-					for($i=0;$i<json.length;$i++)
-						{
-						
-							$("select[name='Phuong']").append($('<option>', { 
-						        value: json[$i].MaPhuong,
-						        text : json[$i].TenPhuong 
-						    }));
-						
-						}
-					DialogTable.hidePropress();
-				},'json');
+				changeQuan();
 			});
 			
 			//MaSoThue

@@ -97,20 +97,7 @@ class NguoinopthueController extends baseController
             }
             $selectNganh->setValueOptions($options);
             
-            // load phuong
-            /* @var $phuongs phuong */
-            $phuongs = $this->getEntityManager()
-                ->getRepository("Application\Entity\phuong")
-                ->findAll();
-            $selectPhuong = $form->get('Phuong');
-            $options = $selectPhuong->getValueOptions();
-            foreach ($phuongs as $phuong) {
-                $items = array();
-                $items['value'] = $phuong->getMaPhuong();
-                $items['label'] = $phuong->getTenPhuong();
-                array_push($options, $items);
-            }
-            $selectPhuong->setValueOptions($options);
+            
             
             if ($this->getRequest()->isGet()) {
                 $HanhDongElem->setAttribute('value', 'Them');
@@ -130,6 +117,29 @@ class NguoinopthueController extends baseController
                     }
                 } else 
                     if ($post->get('HanhDong') == 'Them') {
+                        if($post->get("Quan")!=null){
+                            // load phuong
+                            /* @var $phuongs phuong */
+                            $phuongs = $this->getEntityManager()
+                            ->createQueryBuilder()->select("phuong")
+                            ->from("Application\Entity\phuong", "phuong")
+                            ->join("phuong.coquanthue", 'doithue')
+                            ->join("doithue.chicucthue", "chicucthue")
+                            ->where("chicucthue.MaCoQuan = ?1")
+                            ->setParameter(1, $post->get("Quan"))
+                            ->getQuery()->getResult();
+                            $selectPhuong = $form->get('Phuong');
+                            $options = $selectPhuong->getValueOptions();
+                            foreach ($phuongs as $phuong) {
+                            
+                                $items = array();
+                                $items['value'] = $phuong->getMaPhuong();
+                                $items['label'] = $phuong->getTenPhuong();
+                                array_push($options, $items);
+                            }
+                        }
+                        
+                        $selectPhuong->setValueOptions($options);
                         
                         $nguoinopthue = new nguoinopthue();
                         $form->setInputFilter($nguoinopthue->getInputFilter());
@@ -137,7 +147,9 @@ class NguoinopthueController extends baseController
                             ->getPost());
                         
                         if ($form->isValid()) {
+                           
                             
+                            $selectPhuong->setValueOptions($options);
                             $nguoinopthue->setMaSoThue($post->get("MaSoThue"));
                             $nguoinopthue->setNgayCapMST($post->get("NgayCapMST"));
                             $nguoinopthue->setTenHKD($post->get("TenHKD"));
@@ -149,25 +161,25 @@ class NguoinopthueController extends baseController
                             $nguoinopthue->setNgheKD($post->get("Nghe"));
                             
                             $kq = $nguoinopthueModel->them($nguoinopthue);
+                            if($kq->getKq()==true)
+                            {
+                                $thoidiembdkd = \DateTime::createFromFormat('d-m-Y',$post->get('ThoiDiemBDKD'));
+                                
+                                $nguoinopthueModel->CallPro('in_nnt', array(
+                                    'MST'=>$post->get('MaSoThue'),
+                                    'Ngay'=>$thoidiembdkd->format('Y-m-d'),
+                                    'MN'=>$post->get('Nganh'),
+                                    'MU'=>$this->getUser()->getMaUser(),
+                                    'MP'=>$post->get('Phuong'),
+                                    'DiaChiKD'=>$post->get('DiaChiKD'),
+                                    'ChanLe'=>$post->get('ChanLe'),
+                                    'Hem'=>$post->get('Hem'),
+                                    'SoNha'=>$post->get('SoNha'),
+                                    'SoNhaPhu'=>$post->get('SoNhaPhu'),
+                                    'TenDuong'=>$post->get('TenDuong')
+                                ));
+                            }
                             
-                            $thoidiembdkd = \DateTime::createFromFormat('d-m-Y',$post->get('ThoiDiemBDKD'));
-                            
-                            $nguoinopthueModel->CallPro('in_nnt', array(
-                                'MST'=>$post->get('MaSoThue'),
-                                'Ngay'=>$thoidiembdkd->format('Y-m-d'),
-                                'MN'=>$post->get('Nganh'),
-                                'MU'=>$this->getUser()->getMaUser(),
-                                'MP'=>$post->get('Phuong'),
-                                'DiaChiKD'=>$post->get('DiaChiKD'),
-                                'ChanLe'=>$post->get('ChanLe'),
-                                'Hem'=>$post->get('Hem'),
-                                'SoNha'=>$post->get('SoNha'),
-                                'SoNhaPhu'=>$post->get('SoNhaPhu'),
-                                'TenDuong'=>$post->get('TenDuong')
-                            ));
-                            
-                            $kq->setMessenger('Thêm thành công !');
-                            $kq->setKq(true);
                             return array(
                                 'kq' => $kq,
                                 'form' => $form
