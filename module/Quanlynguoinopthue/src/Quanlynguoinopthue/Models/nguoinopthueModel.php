@@ -58,10 +58,7 @@ class nguoinopthueModel extends baseModel
         // TODO Auto-generated method stub
     }
 
-    public function them($obj)
-    {
-        // TODO Auto-generated method stub
-    }
+
 
     public function xoa($id)
     {

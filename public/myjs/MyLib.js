@@ -210,6 +210,20 @@ var DialogTable = (function() {
 				}, 3000);
 			}
 		},
+		showThongBao : function(head,messenger) {
+			if($('#DialogTable').hasClass('in')!=true){
+				this.addHead(head);
+				$("#DialogTable > .modal-body").html(messenger);
+				$("#DialogTable").modal("show");
+				
+				setTimeout(function(){
+					if($('#DialogTable').hasClass('in')==true)
+						{
+							$('#DialogTable').modal('hide');
+						}
+				}, 1000);
+			}
+		},
 		hidePropress : function() {
 
 			if ($('#DialogTable').hasClass('in') == true) {

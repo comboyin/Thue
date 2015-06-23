@@ -43,7 +43,7 @@ $user = $this->identity();
                         </div>
                         <div class="widget-body">
                             <!-- BEGIN FORM-->
-                            <form action="<?php echo $this->url('quanlynguoinopthue/default',array('controller'=>'nguoinopthue','action'=>'persit')); ?>" class="form-horizontal">
+                            <form method="post" action="<?php echo $this->url('quanlynguoinopthue/default',array('controller'=>'nguoinopthue','action'=>'persit')); ?>" class="form-horizontal">
                             
                             <!-- Chi nhap so, Lon hon 9 ky tu, nho hon 21 ky tu -->
                             <div class="control-group">
@@ -105,9 +105,12 @@ $user = $this->identity();
                                 <label class="control-label">Địa chỉ kinh doanh (*)</label>
                                 <div class="controls">
                                     <?php echo $this->formelement($form->get('DiaChiKD'))?>,
-                                    <?php echo $this->formelement($form->get('Phuong'))?>,
+                                    <select name="Phuong" required="required" class="span2">
+                                        <option value=" " selected="selected" disabled="disabled">Chọn phường...</option>
+                                    </select>,
                                     <?php echo $this->formelement($form->get('Quan'))?>,&nbsp;TP. Hồ Chí Minh
                                 </div>
+                               
                             </div>
                             <div class="control-group">
                                 <div class="controls">
@@ -117,6 +120,7 @@ $user = $this->identity();
                                      <?php echo $this->formelement($form->get('SoNhaPhu'))?>,
                                       <?php echo $this->formelement($form->get('TenDuong'))?>
                                 </div>
+                               
                             </div>
                             
                             <!-- Chi nhap so, Lon hon 9 ky tu, nho hon 21 ky tu -->

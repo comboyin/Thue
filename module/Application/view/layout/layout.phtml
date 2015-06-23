@@ -247,7 +247,17 @@ echo $this->headLink(array(
         ?>
 
 
+    <?php /* @var $kq ketqua */?>
+		<?php if(isset($kq)):?>
+				    
+				     
+		        <script type="text/javascript">
+		         DialogTable.showThongBao('Thông báo',<?php echo "'".$kq->getMessenger()."'";?>)
+		        </script>
+        				     
+				
 
+	   <?php endif;?>
 
 
    <!--BEGIN script for this page only-->
