@@ -45,7 +45,7 @@ var EditableTable = function () {
 
 				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
 				
-				DialogTable.showProgress();
+				DialogTable.showPropress();
 				
 				/*$("#progess_dpmonths").css('display', 'block');*/
 
@@ -75,7 +75,7 @@ var EditableTable = function () {
 					/*$("#progess_dpmonths").css(
 						'display',
 						'none');*/
-					DialogTable.hidePropress();
+					DialogTable.hideProgress();
 				}, "json");
 
 			});
@@ -185,7 +185,7 @@ var EditableTable = function () {
 				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
 					 + aData[3] + ' "disabled><button class="DialogTieuMuc" style="margin:0 20px;margin-top:2px" class="btn btn-success">Chọn</button>';
 
-				jqTds[4].innerHTML = '<input style="width:150px;" name="DoanhSo" type="text"  value="'
+				jqTds[4].innerHTML = '<input style="width:120px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';
 				
 				jqTds[5].innerHTML = '<input style="width:20px;" name="TiLeTinhThue" type="text"  value="'
@@ -778,7 +778,7 @@ var EditableTable = function () {
 
 					
 
-					nEditing = SaveEdit('post', url, data, oTable, nEditing);
+					SaveEdit('post', url, data, oTable, nEditing);
 
 				} else {
 
