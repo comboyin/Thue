@@ -205,6 +205,7 @@ class dukientruythu implements InputFilterAwareInterface
     /**
      *
      * @param field_type $nguoinopthue            
+     *
      */
     public function setNguoinopthue($nguoinopthue)
     {
@@ -360,8 +361,6 @@ class dukientruythu implements InputFilterAwareInterface
                 )
             ]));
             
-
-        
             $inputFilter->add($factory->createInput([
                 'name' => 'TiLeTinhThue',
                 'required' => true,
@@ -389,8 +388,8 @@ class dukientruythu implements InputFilterAwareInterface
                         )
                     )
                 )
-                
-            ]));
+            ]
+            ));
             
             $inputFilter->add($factory->createInput([
                 'name' => 'DoanhSo',

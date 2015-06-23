@@ -25,7 +25,10 @@ abstract class baseModel
         }
       
     }
-    
+    /**
+     * 
+     * @param  $obj
+     * @return \Application\Entity\ketqua  */
     public function them($obj){
         try {
             
@@ -80,7 +83,32 @@ abstract class baseModel
         }
     }
     
-    
+    public function CallPro($namePro,$arr){
+        $pdo = $this->em->getConnection();
+
+        
+        $arrKey = array_keys($arr);
+        $arrParam = array();
+        foreach($arrKey as $v)
+        {
+            $arrParam[$v] = ":".$v;
+        }
+        
+        //print_r($arrParam);
+        //print_r($arrValue);
+        $sql ="CALL ". $namePro;
+        $sql .= " (" . implode(",", $arrParam). ")";
+        
+        
+        $sth = $pdo->prepare($sql);
+        foreach($arrParam as $k=> $v)
+        {
+            $sth->bindParam($v, $arr[$k]);
+        }
+        return $sth->execute();
+        
+    }
+
     
     abstract function xoa($id);
     abstract function sua($id);

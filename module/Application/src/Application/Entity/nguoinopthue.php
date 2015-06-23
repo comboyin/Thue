@@ -6,7 +6,7 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-
+use Doctrine\DBAL\Types\DateType;
 
 /**
  * @ORM\Entity
@@ -31,7 +31,7 @@ class nguoinopthue implements InputFilterAwareInterface
      * @ORM\Column(type="string", length=128, nullable=false)
      */
     private $TenHKD;
-    
+
     /**
      * @ORM\Column(type="string", length=64, nullable=false)
      */
@@ -116,7 +116,7 @@ class nguoinopthue implements InputFilterAwareInterface
      * @ORM\OneToMany(targetEntity="Application\Entity\dukientruythu", mappedBy="nguoinopthue")
      */
     private $dukientruythus;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\truythu", mappedBy="nguoinopthue")
      */
@@ -126,7 +126,9 @@ class nguoinopthue implements InputFilterAwareInterface
      * @ORM\OneToMany(targetEntity="Application\Entity\dukienmb", mappedBy="nguoinopthue")
      */
     private $dukienmbs;
- /**
+
+    /**
+     *
      * @return the $MaSoThue
      */
     public function getMaSoThue()
@@ -134,7 +136,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->MaSoThue;
     }
 
- /**
+    /**
+     *
      * @return the $TenHKD
      */
     public function getTenHKD()
@@ -142,7 +145,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->TenHKD;
     }
 
- /**
+    /**
+     *
      * @return the $SoCMND
      */
     public function getSoCMND()
@@ -150,7 +154,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->SoCMND;
     }
 
- /**
+    /**
+     *
      * @return the $DiaChiCT
      */
     public function getDiaChiCT()
@@ -158,7 +163,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->DiaChiCT;
     }
 
- /**
+    /**
+     *
      * @return the $SoGPKD
      */
     public function getSoGPKD()
@@ -166,8 +172,9 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->SoGPKD;
     }
 
- /**
-  * format d/m/Y
+    /**
+     * format d/m/Y
+     *
      * @return string
      */
     public function getNgayCapMST()
@@ -175,7 +182,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->NgayCapMST->format('d/m/Y');
     }
 
- /**
+    /**
+     *
      * @return string
      */
     public function getThoiDiemBDKD()
@@ -183,7 +191,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->ThoiDiemBDKD->format("d/m/Y");
     }
 
- /**
+    /**
+     *
      * @return the $NgheKD
      */
     public function getNgheKD()
@@ -191,7 +200,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->NgheKD;
     }
 
- /**
+    /**
+     *
      * @return the $chungtus
      */
     public function getChungtus()
@@ -199,7 +209,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->chungtus;
     }
 
- /**
+    /**
+     *
      * @return thongtinnnt
      */
     public function getThongtinnnt()
@@ -207,7 +218,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->thongtinnnt;
     }
 
- /**
+    /**
+     *
      * @return the $thues
      */
     public function getThues()
@@ -215,7 +227,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->thues;
     }
 
- /**
+    /**
+     *
      * @return the $miengiamthue
      */
     public function getMiengiamthue()
@@ -223,7 +236,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->miengiamthue;
     }
 
- /**
+    /**
+     *
      * @return the $ngungnghis
      */
     public function getNgungnghis()
@@ -231,7 +245,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->ngungnghis;
     }
 
- /**
+    /**
+     *
      * @return the $sonos
      */
     public function getSonos()
@@ -239,7 +254,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->sonos;
     }
 
- /**
+    /**
+     *
      * @return the $thuemonbais
      */
     public function getThuemonbais()
@@ -247,7 +263,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->thuemonbais;
     }
 
- /**
+    /**
+     *
      * @return usernnt
      */
     public function getUsernnts()
@@ -255,7 +272,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->usernnts;
     }
 
- /**
+    /**
+     *
      * @return NNTNganh[]
      */
     public function getNNTNganhs()
@@ -263,7 +281,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->NNTNganhs;
     }
 
- /**
+    /**
+     *
      * @return the $dukienthues
      */
     public function getDukienthues()
@@ -271,7 +290,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->dukienthues;
     }
 
- /**
+    /**
+     *
      * @return the $dukientruythus
      */
     public function getDukientruythus()
@@ -279,7 +299,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->dukientruythus;
     }
 
- /**
+    /**
+     *
      * @return the $truythus
      */
     public function getTruythus()
@@ -287,7 +308,8 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->truythus;
     }
 
- /**
+    /**
+     *
      * @return the $dukienmbs
      */
     public function getDukienmbs()
@@ -295,191 +317,211 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->dukienmbs;
     }
 
- /**
-     * @param field_type $MaSoThue
+    /**
+     *
+     * @param field_type $MaSoThue            
      */
     public function setMaSoThue($MaSoThue)
     {
         $this->MaSoThue = $MaSoThue;
     }
 
- /**
-     * @param field_type $TenHKD
+    /**
+     *
+     * @param field_type $TenHKD            
      */
     public function setTenHKD($TenHKD)
     {
         $this->TenHKD = $TenHKD;
     }
 
- /**
-     * @param field_type $SoCMND
+    /**
+     *
+     * @param field_type $SoCMND            
      */
     public function setSoCMND($SoCMND)
     {
         $this->SoCMND = $SoCMND;
     }
 
- /**
-     * @param field_type $DiaChiCT
+    /**
+     *
+     * @param field_type $DiaChiCT            
      */
     public function setDiaChiCT($DiaChiCT)
     {
         $this->DiaChiCT = $DiaChiCT;
     }
 
- /**
-     * @param field_type $SoGPKD
+    /**
+     *
+     * @param field_type $SoGPKD            
      */
     public function setSoGPKD($SoGPKD)
     {
         $this->SoGPKD = $SoGPKD;
     }
 
- /**
-     * @param field_type $NgayCapMST
+    /**
+     *
+     * @param field_type $NgayCapMST            
      */
     public function setNgayCapMST($NgayCapMST)
     {
         $this->NgayCapMST = $NgayCapMST;
     }
 
- /**
-     * @param field_type $ThoiDiemBDKD
+    /**
+     *
+     * @param field_type $ThoiDiemBDKD            
      */
     public function setThoiDiemBDKD($ThoiDiemBDKD)
     {
         $this->ThoiDiemBDKD = $ThoiDiemBDKD;
     }
 
- /**
-     * @param field_type $NgheKD
+    /**
+     *
+     * @param field_type $NgheKD            
      */
     public function setNgheKD($NgheKD)
     {
         $this->NgheKD = $NgheKD;
     }
 
- /**
-     * @param field_type $chungtus
+    /**
+     *
+     * @param field_type $chungtus            
      */
     public function setChungtus($chungtus)
     {
         $this->chungtus = $chungtus;
     }
 
- /**
-     * @param field_type $thongtinnnt
+    /**
+     *
+     * @param field_type $thongtinnnt            
      */
     public function setThongtinnnt($thongtinnnt)
     {
         $this->thongtinnnt = $thongtinnnt;
     }
 
- /**
-     * @param field_type $thues
+    /**
+     *
+     * @param field_type $thues            
      */
     public function setThues($thues)
     {
         $this->thues = $thues;
     }
 
- /**
-     * @param field_type $miengiamthue
+    /**
+     *
+     * @param field_type $miengiamthue            
      */
     public function setMiengiamthue($miengiamthue)
     {
         $this->miengiamthue = $miengiamthue;
     }
 
- /**
-     * @param field_type $ngungnghis
+    /**
+     *
+     * @param field_type $ngungnghis            
      */
     public function setNgungnghis($ngungnghis)
     {
         $this->ngungnghis = $ngungnghis;
     }
 
- /**
-     * @param field_type $sonos
+    /**
+     *
+     * @param field_type $sonos            
      */
     public function setSonos($sonos)
     {
         $this->sonos = $sonos;
     }
 
- /**
-     * @param field_type $thuemonbais
+    /**
+     *
+     * @param field_type $thuemonbais            
      */
     public function setThuemonbais($thuemonbais)
     {
         $this->thuemonbais = $thuemonbais;
     }
 
- /**
-     * @param field_type $usernnts
+    /**
+     *
+     * @param field_type $usernnts            
      */
     public function setUsernnts($usernnts)
     {
         $this->usernnts = $usernnts;
     }
 
- /**
-     * @param field_type $NNTNganhs
+    /**
+     *
+     * @param field_type $NNTNganhs            
      */
     public function setNNTNganhs($NNTNganhs)
     {
         $this->NNTNganhs = $NNTNganhs;
     }
 
- /**
-     * @param field_type $dukienthues
+    /**
+     *
+     * @param field_type $dukienthues            
      */
     public function setDukienthues($dukienthues)
     {
         $this->dukienthues = $dukienthues;
     }
 
- /**
-     * @param field_type $dukientruythus
+    /**
+     *
+     * @param field_type $dukientruythus            
      */
     public function setDukientruythus($dukientruythus)
     {
         $this->dukientruythus = $dukientruythus;
     }
 
- /**
-     * @param field_type $truythus
+    /**
+     *
+     * @param field_type $truythus            
      */
     public function setTruythus($truythus)
     {
         $this->truythus = $truythus;
     }
 
- /**
-     * @param field_type $dukienmbs
+    /**
+     *
+     * @param field_type $dukienmbs            
      */
     public function setDukienmbs($dukienmbs)
     {
         $this->dukienmbs = $dukienmbs;
     }
-    
-    
+
     private $inputFilter;
 
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new \Exception("Not used");
     }
-    
+
     public function getInputFilter()
     {
         if (! $this->inputFilter) {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
-    
+            
             $inputFilter->add($factory->createInput([
                 'name' => 'MaSoThue',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -489,7 +531,7 @@ class nguoinopthue implements InputFilterAwareInterface
                     )
                 ),
                 'validators' => array(
-    
+                    
                     array(
                         'name' => '\Zend\Validator\StringLength',
                         'options' => array(
@@ -498,13 +540,13 @@ class nguoinopthue implements InputFilterAwareInterface
                             'encoding' => 'UTF-8'
                         )
                     )
-   
                 )
-            ]));
-    
+            ]
+            ));
+            
             $inputFilter->add($factory->createInput([
                 'name' => 'NgayCapMST',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -522,10 +564,10 @@ class nguoinopthue implements InputFilterAwareInterface
                     )
                 )
             ]));
-    
+            
             $inputFilter->add($factory->createInput([
                 'name' => 'TenHKD',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -545,10 +587,10 @@ class nguoinopthue implements InputFilterAwareInterface
                     )
                 )
             ]));
-    
+            
             $inputFilter->add($factory->createInput([
                 'name' => 'SoCMND',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -564,14 +606,14 @@ class nguoinopthue implements InputFilterAwareInterface
                             'encoding' => 'UTF-8',
                             'min' => '9',
                             'max' => '9'
+                        )
                     )
-                  )
                 )
             ]));
-    
+            
             $inputFilter->add($factory->createInput([
                 'name' => 'DiaChiCT',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -587,14 +629,14 @@ class nguoinopthue implements InputFilterAwareInterface
                             'encoding' => 'UTF-8',
                             'min' => '4',
                             'max' => '255'
+                        )
                     )
-                  )
                 )
             ]));
-    
+            
             $inputFilter->add($factory->createInput([
                 'name' => 'DiaChiKD',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -619,7 +661,7 @@ class nguoinopthue implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'ChanLe',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -642,7 +684,7 @@ class nguoinopthue implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'Hem',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -654,16 +696,15 @@ class nguoinopthue implements InputFilterAwareInterface
                 'validators' => array(
                     array(
                         'name' => '\Zend\Validator\Digits',
-                        'options' => array(
-                        )
+                        'options' => array()
                     )
-             
                 )
-            ]));
+            ]
+            ));
             
             $inputFilter->add($factory->createInput([
                 'name' => 'SoNha',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -675,16 +716,15 @@ class nguoinopthue implements InputFilterAwareInterface
                 'validators' => array(
                     array(
                         'name' => '\Zend\Validator\Digits',
-                        'options' => array(
-                        )
+                        'options' => array()
                     )
-                     
                 )
-            ]));
+            ]
+            ));
             
             $inputFilter->add($factory->createInput([
                 'name' => 'SoNhaPhu',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -707,7 +747,7 @@ class nguoinopthue implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'TenDuong',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -730,7 +770,7 @@ class nguoinopthue implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'SoGPKD',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -753,7 +793,7 @@ class nguoinopthue implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'ThoiDiemBDKD',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -771,12 +811,12 @@ class nguoinopthue implements InputFilterAwareInterface
                     )
                 )
             ]));
-    
-            //option Nganh
+            
+            // option Nganh
             
             $inputFilter->add($factory->createInput([
                 'name' => 'Nghe',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -796,16 +836,10 @@ class nguoinopthue implements InputFilterAwareInterface
                     )
                 )
             ]));
-    
-
-    
-    
+            
             $this->inputFilter = $inputFilter;
         }
-    
+        
         return $this->inputFilter;
     }
-
-
-
 }

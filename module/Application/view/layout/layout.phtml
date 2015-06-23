@@ -183,10 +183,10 @@ echo $this->headLink(array(
             <?php echo $this->content;?>
 
 
-                        <!-- cho no vao layout  -->
+                        <!-- DialogTable is my dialog  -->
             
             <div id="DialogTable" style="width: 800px; margin-left: -400px;"
-            	class="modal hide fade in" tabindex="-1" role="dialog"
+            	class="modal hide fade" tabindex="-1" role="dialog"
             	aria-labelledby="myModalLabel1" aria-hidden="false"
             	style="display: block;">
             	<div class="modal-header">
@@ -245,8 +245,6 @@ echo $this->headLink(array(
             ->prependFile($this->basePath() . '/public/' . 'js/jquery-1.8.3.min.js')
             ->appendFile($this->basePath() . '/public/' . 'assets/chosen-bootstrap/chosen/chosen.jquery.min.js');
         ?>
-
-
 
 
 
