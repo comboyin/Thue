@@ -181,21 +181,24 @@ var EditableTable = function () {
 				jqTds[1].innerHTML = '<input style="width:80px;" name="masothue" type="text"  value="'
 					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
 				jqTds[2].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
+
 					 + aData[2] + '"disabled>';
+					 
 				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
 					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 20px;margin-top:2px">Tìm</button>';
 
-				jqTds[4].innerHTML = '<input style="width:100px;" name="DoanhSo" type="text"  value="'
+
+				jqTds[4].innerHTML = '<input style="width:120px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';
 				
-				jqTds[5].innerHTML = '<input style="width:20px;" name="TiLeTinhThue" type="text"  value="'
+				jqTds[5].innerHTML = '<input style="width:40px;" name="TiLeTinhThue" type="text"  value="'
 					 + aData[5] + '">';
 				
 				jqTds[6].innerHTML = '<input style="width:100px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '"disabled>';
 				jqTds[7].innerHTML = '<input style="width:10px;" name="TrangThai" type="text" value="'
 					 + aData[7] + ' "disabled>';
-				jqTds[8].innerHTML = '<input style="width:230px;" name="LyDo" type="text" value="'
+				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
 					 + aData[8] + ' ">';
 
 				jqTds[9].innerHTML = '<a class="edit" href="">Save edit</a>';
@@ -213,23 +216,33 @@ var EditableTable = function () {
 				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
 
 				jqTds[1].innerHTML = '<input style="width:80px;" name="masothue" type="text"  value="'
+<<<<<<< HEAD
 					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
 				jqTds[2].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
+=======
+					 + aData[1] + ' "disabled><button class="DialogNNT" style="margin:0 20px;margin-top:2px" class="btn btn-success">Chọn</button>';
+				jqTds[2].innerHTML = '<input style="width:110px;" name="TenHKD" type="text"  value="'
+>>>>>>> branch 'master' of https://github.com/comboyin/Thue.git
 					 + aData[2] + '"disabled>';
+<<<<<<< HEAD
 				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
 					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 20px;margin-top:2px">Tìm</button>';
+=======
+				jqTds[3].innerHTML = '<input style="width:60px;" name="TieuMuc" type="text"   value="'
+					 + aData[3] + ' "disabled><button class="DialogTieuMuc" style="margin:0 13px;margin-top:2px" class="btn btn-success">Chọn</button>';
+>>>>>>> branch 'master' of https://github.com/comboyin/Thue.git
 
-				jqTds[4].innerHTML = '<input style="width:100px;" name="DoanhSo" type="text"  value="'
+				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';
 				
-				jqTds[5].innerHTML = '<input style="width:20px;" name="TiLeTinhThue" type="text"  value="'
+				jqTds[5].innerHTML = '<input style="width:40px;" name="TiLeTinhThue" type="text"  value="'
 					 + aData[5] + '">';
 				
 				jqTds[6].innerHTML = '<input style="width:100px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '"disabled>';
 				jqTds[7].innerHTML = '<input style="width:10px;" name="TrangThai" type="text" value="'
 					 + aData[7] + ' "disabled>';
-				jqTds[8].innerHTML = '<input style="width:230px;" name="LyDo" type="text" value="'
+				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
 					 + aData[8] + ' ">';
 
 				jqTds[9].innerHTML = '<a class="edit" href="">Save new</a>';
