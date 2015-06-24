@@ -1,7 +1,6 @@
 eclipse.preferences.version=1
 encoding//config/autoload/navigation.global.php=UTF-8
 encoding//module/Application/src/Application/Controller/IndexController.php=UTF-8
-encoding//module/Application/src/Application/Models/doithueModel.php=UTF-8
 encoding//module/Application/src/Application/Models/userModel.php=UTF-8
 encoding//module/Application/view/layout/layout.phtml=UTF-8
 encoding//module/Quanlynguoinopthue/src/Quanlynguoinopthue/Controller/IndexController.php=UTF-8

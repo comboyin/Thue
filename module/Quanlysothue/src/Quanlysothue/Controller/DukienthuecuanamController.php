@@ -3,15 +3,12 @@ namespace Quanlysothue\Controller;
 
 use Application\base\baseController;
 use Quanlysothue\Models\dukientruythuModel;
-use Quanlysothue\Froms\FormThemDKDS;
 use Application\Entity\dukientruythu;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
-use Application\Entity\nguoinopthue;
 use Quanlysothue\Froms\formDuKienTruyThu;
 use Application\Entity\ketqua;
 use Zend\Http\Request;
 use Zend\Form\Form;
-use Zend\Form\Element;
 use Quanlysothue\Models\dukienthuecuanamModel;
 /**
  * Quản lý dự kiến thuế của năm 

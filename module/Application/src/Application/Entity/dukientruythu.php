@@ -340,7 +340,7 @@ class dukientruythu implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'LyDo',
-                'required' => true,
+                'required' => false, //true quan trong k dc bo trong
                 'filters' => array(
                     array(
                         'name' => 'StripTags'

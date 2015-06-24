@@ -4,7 +4,6 @@ return array(
         'invokables' => array(
             'Quanlysothue\Controller\Index' => 'Quanlysothue\Controller\IndexController',
             'Quanlysothue\Controller\Dukientruythu' => 'Quanlysothue\Controller\DukientruythuController',
-            'Quanlysothue\Controller\Dukienthue' => 'Quanlysothue\Controller\DukienthueController',
             'Quanlysothue\Controller\Dukienthuecuanam' => 'Quanlysothue\Controller\DukienthuecuanamController',
         ),
     ),
