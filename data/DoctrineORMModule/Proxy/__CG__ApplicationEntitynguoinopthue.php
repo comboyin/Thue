@@ -363,6 +363,17 @@ class nguoinopthue extends \Application\Entity\nguoinopthue implements \Doctrine
     /**
      * {@inheritDoc}
      */
+    public function getNNTNganh()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNNTNganh', array());
+
+        return parent::getNNTNganh();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getDukienthues()
     {
 

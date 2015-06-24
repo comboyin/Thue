@@ -182,8 +182,12 @@ $user = $this->identity();
                             <div class="control-group">
                                 <label class="control-label">Cán Bộ Quản Lý</label>
                                 <div class="controls">
-                                <?php $form->get('CanBoQuanLy')->setAttribute('value', $user->getTenUser())?>
+                                
                                     <?php echo $this->formelement($form->get('CanBoQuanLy'))?>
+                                    
+                                    <?php if($user->getLoaiUser()==3):?>
+                                        <button type="button" id="ChonCBT" class="btn btn-primary"><i class="icon-search icon-white"></i> Tìm</button>
+                                    <?php endif;?>
                                     <span class="help-inline"></span>
                                 </div>
                             </div>
@@ -191,8 +195,10 @@ $user = $this->identity();
                             <div class="control-group">
                                 <label class="control-label">Đội Thuế</label>
                                 <div class="controls">
-                                    <?php $form->get('DoiThue')->setAttribute('value', $user->getCoquanthue()->getTenGoi())?>
+                                    
                                     <?php echo $this->formelement($form->get('DoiThue'))?>
+                                   
+                                    
                                     <span class="help-inline"></span>
                                 </div>
                             </div>

@@ -179,13 +179,13 @@ var EditableTable = function () {
 				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
 
 				jqTds[1].innerHTML = '<input style="width:80px;" name="masothue" type="text"  value="'
-					 + aData[1] + ' "disabled><button class="DialogNNT" style="margin:0 20px;margin-top:2px" class="btn btn-success">Chọn</button>';
+					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
 				jqTds[2].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
 					 + aData[2] + '"disabled>';
 				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="DialogTieuMuc" style="margin:0 20px;margin-top:2px" class="btn btn-success">Chọn</button>';
+					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 20px;margin-top:2px">Tìm</button>';
 
-				jqTds[4].innerHTML = '<input style="width:120px;" name="DoanhSo" type="text"  value="'
+				jqTds[4].innerHTML = '<input style="width:100px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';
 				
 				jqTds[5].innerHTML = '<input style="width:20px;" name="TiLeTinhThue" type="text"  value="'
@@ -213,11 +213,11 @@ var EditableTable = function () {
 				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
 
 				jqTds[1].innerHTML = '<input style="width:80px;" name="masothue" type="text"  value="'
-					 + aData[1] + ' "disabled><button class="DialogNNT" style="margin:0 20px;margin-top:2px" class="btn btn-success">Chọn</button>';
+					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
 				jqTds[2].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
 					 + aData[2] + '"disabled>';
 				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="DialogTieuMuc" style="margin:0 20px;margin-top:2px" class="btn btn-success">Chọn</button>';
+					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 20px;margin-top:2px">Tìm</button>';
 
 				jqTds[4].innerHTML = '<input style="width:100px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';

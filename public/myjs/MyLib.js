@@ -221,7 +221,7 @@ var DialogTable = (function() {
 						{
 							$('#DialogTable').modal('hide');
 						}
-				}, 1000);
+				}, 3000);
 			}
 		},
 		hidePropress : function() {

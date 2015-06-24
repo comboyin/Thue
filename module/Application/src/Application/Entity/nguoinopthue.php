@@ -280,6 +280,27 @@ class nguoinopthue implements InputFilterAwareInterface
     {
         return $this->NNTNganhs;
     }
+    
+    /**
+     * Trả về nntnganh mới nhất
+     * @return NNTNganh|NULL
+     */
+    public function getNNTNganh()
+    {
+        $nntnganhs = $this->getNNTNganhs();
+        if(count($nntnganhs)>0)
+        {
+            
+            foreach ($nntnganhs as $nntnganh){
+                
+                if($nntnganh->getThoiGianKetThuc()  == null){
+                    
+                    return $nntnganh;
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      *

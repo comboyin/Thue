@@ -19,6 +19,12 @@ class ketqua
         );
         return $kq;
     }
+    /**
+     * Nối chuổi mesenger
+     * @param string $stringMess  */
+    public function appentMessenger($stringMess){
+        $this->messenger = $this->messenger.'<br/>'.$stringMess;
+    }
 
     /**
      *
@@ -39,7 +45,11 @@ class ketqua
     }
 
     public function __construct()
-    {}
+    {
+        $this->kq = '';
+        $this->messenger = '';
+        $this->obj = null;
+    }
 
     /**
      *

@@ -5,6 +5,7 @@ namespace Application\base;
 use Application;
 
 use Application\Entity\ketqua;
+use Doctrine\ORM\Mapping\Entity;
 
 abstract class baseModel
 {
@@ -16,7 +17,9 @@ abstract class baseModel
     protected $kq=null;
     
     
-    
+    /**
+     * Khởi tạo với đối số là EntityManager
+     * @param \Doctrine\ORM\EntityManager $em  */
     public function __construct(\Doctrine\ORM\EntityManager $em){
         $this->em = $em;
         if($this->kq==null)
@@ -26,8 +29,8 @@ abstract class baseModel
       
     }
     /**
-     * 
-     * @param  $obj
+     * Thêm 1 obj vào csdl
+     * @param Entity  $obj
      * @return \Application\Entity\ketqua  */
     public function them($obj){
         try {
@@ -46,7 +49,10 @@ abstract class baseModel
             return $kq;
         }
     }
-    
+    /**
+     * Sửa 1 obj trong csdl
+     * @param Entity $obj
+     * @return \Application\Entity\ketqua  */
     public function merge($obj){
         try {
     
@@ -65,6 +71,10 @@ abstract class baseModel
         }
     }
     
+    /**
+     * Xóa 1 obj trong csdl
+     * @param Entity $obj
+     * @return \Application\Entity\ketqua  */
     public function remove($obj){
         try {
     
@@ -84,28 +94,38 @@ abstract class baseModel
     }
     
     public function CallPro($namePro,$arr){
-        $pdo = $this->em->getConnection();
-
-        
-        $arrKey = array_keys($arr);
-        $arrParam = array();
-        foreach($arrKey as $v)
-        {
-            $arrParam[$v] = ":".$v;
+        try {
+            $pdo = $this->em->getConnection();
+            
+            
+            $arrKey = array_keys($arr);
+            $arrParam = array();
+            foreach($arrKey as $v)
+            {
+                $arrParam[$v] = ":".$v;
+            }
+            
+            //print_r($arrParam);
+            //print_r($arrValue);
+            $sql ="CALL ". $namePro;
+            $sql .= " (" . implode(",", $arrParam). ")";
+            
+            
+            $sth = $pdo->prepare($sql);
+            foreach($arrParam as $k=> $v)
+            {
+                $sth->bindParam($v, $arr[$k]);
+            }
+            $sth->execute();
+            $this->kq->setKq(true);
+            return $this->kq;
+        } catch (\Exception $e) {
+            $this->kq->setKq(false);
+            $this->kq->setMessenger($e->getMessage());
+            return $this->kq;
         }
         
-        //print_r($arrParam);
-        //print_r($arrValue);
-        $sql ="CALL ". $namePro;
-        $sql .= " (" . implode(",", $arrParam). ")";
         
-        
-        $sth = $pdo->prepare($sql);
-        foreach($arrParam as $k=> $v)
-        {
-            $sth->bindParam($v, $arr[$k]);
-        }
-        return $sth->execute();
         
     }
 

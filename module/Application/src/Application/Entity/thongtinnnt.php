@@ -59,7 +59,7 @@ class thongtinnnt
     private $ThoiGianBatDau;
     
     /**
-     * @ORM\Column(type="date", nullable=false)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $ThoiGianKetThuc;
 

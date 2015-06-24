@@ -103,15 +103,12 @@ class nguoinopthueModel extends baseModel
                     ->join('thongtinnnt.phuong', 'phuong')
                     ->join('phuong.coquanthue', 'coquanthue')
                     ->where('user.MaUser = ?1')
-                    ->andwhere('usernnts.ThoiGianKetThuc = ?2')
-                    ->andwhere('NNTNganhs.ThoiGianKetThuc = ?3')
-                    ->andwhere('thongtinnnt.ThoiGianKetThuc = ?4')
+                    ->andwhere('usernnts.ThoiGianKetThuc is null')
+                    ->andwhere('NNTNganhs.ThoiGianKetThuc is null')
+                    ->andwhere('thongtinnnt.ThoiGianKetThuc is null')
                     ->
                 // ->andWhere('nguoinopthueot in('.$qb->getDQL().')')
-                setParameter(1, $ma)
-                    ->setParameter(2, "0000-00-00")
-                    ->setParameter(3, "0000-00-00")
-                    ->setParameter(4, "0000-00-00");
+                setParameter(1, $ma);
             } else 
                 if ($user->getLoaiUser() == 3) {
                     $qb->select(array(
@@ -133,13 +130,10 @@ class nguoinopthueModel extends baseModel
                         ->join('thongtinnnt.phuong', 'phuong')
                         ->join('phuong.coquanthue', 'coquanthue')
                         ->where('coquanthue = ?1')
-                        ->andwhere('usernnts.ThoiGianKetThuc = ?2')
-                        ->andwhere('NNTNganhs.ThoiGianKetThuc = ?3')
-                        ->andwhere('thongtinnnt.ThoiGianKetThuc = ?4')
-                        ->setParameter(1, $user->getCoquanthue())
-                        ->setParameter(2, "0000-00-00")
-                        ->setParameter(3, "0000-00-00")
-                        ->setParameter(4, "0000-00-00");
+                        ->andwhere('usernnts.ThoiGianKetThuc is null')
+                        ->andwhere('NNTNganhs.ThoiGianKetThuc is null')
+                        ->andwhere('thongtinnnt.ThoiGianKetThuc is null')
+                        ->setParameter(1, $user->getCoquanthue());
                 }
             
             $obj = $qb->getQuery()->getResult();
@@ -290,8 +284,7 @@ class nguoinopthueModel extends baseModel
                 ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                 ->join('nguoinopthue.usernnts', 'usernnts')
                 ->where("usernnts.user = ?1")
-                ->andwhere("usernnts.ThoiGianKetThuc = ?2")
-                ->setParameter(2, "0000-00-00")
+                ->andwhere("usernnts.ThoiGianKetThuc is null")
                 ->setParameter(1, $user);
             return json_encode($bq->getQuery()->getArrayResult());
         } else 
@@ -301,8 +294,7 @@ class nguoinopthueModel extends baseModel
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
                     ->where("user.coquanthue = ?1")
-                    ->andwhere("usernnts.ThoiGianKetThuc = ?2")
-                    ->setParameter(2, "0000-00-00")
+                    ->andwhere("usernnts.ThoiGianKetThuc is null")
                     ->setParameter(1, $user->getCoquanthue());
                 return json_encode($bq->getQuery()->getArrayResult());
             }

@@ -16,7 +16,6 @@ var EditableTable = function () {
 			function changeQuan(){
 				DialogTable.showPropress();
 				$MaCoQuan = $("select[name='Quan']").val();
-				
 				$.get('dsPhuongForQuan',{MaCoQuan:$MaCoQuan},function(json){
 					$("select[name='Phuong']").find('option:not(:first)').remove();
 					for($i=0;$i<json.length;$i++)
@@ -80,6 +79,27 @@ var EditableTable = function () {
 						
 					}
 			} );
+			
+			$("#ChonCBT").click(function(){
+				console.log('aa');
+				DialogTable.showFromUrl('get','laydanhsachcbt',{},function(){
+					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
+
+					if (checkboxs.length == 1) {
+						var MaSoCBT = $('td', checkboxs[0])[1].textContent;
+						
+						
+						$("#DialogTable").modal("hide");
+						
+						$("input[name='CanBoQuanLy']").val(MaSoCBT);
+						
+						
+					} else {
+						alert("Vui lòng chọn ít nhất một !");
+					}
+				});
+			});
+			
 		}
 	
 		}

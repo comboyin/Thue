@@ -10,6 +10,10 @@ use Zend\Form\Element\Select;
 use Doctrine\ORM\Query\AST\NullIfExpression;
 use Application\Entity\nganh;
 use Application\Entity\phuong;
+use Application\Entity\ketqua;
+use Zend\Form\Form;
+use Zend\Form\Element;
+use Application\Entity\NNTNganh;
 
 /**
  * NguoinopthueController
@@ -56,6 +60,29 @@ class NguoinopthueController extends baseController
         try {
             // khởi tạo form
             $form = new formNguoiNopThue();
+            
+            // phân quyền form trên giao diện
+            if ($this->getUser()->getLoaiUser() == 3) {
+                // element CBQL
+                
+                $form->get('CanBoQuanLy')->setAttribute('required', true);
+                $form->get('CanBoQuanLy')->setAttribute('disabled', null);
+                $form->get('CanBoQuanLy')->setAttribute('class', 'span5');
+                $form->get('CanBoQuanLy')->setAttribute('placeholder', 'Click tìm để chọn cán bộ quản lý');
+                
+                // element doithue
+                
+                $form->get('DoiThue')->setAttribute('value', $this->getUser()
+                    ->getCoquanthue()
+                    ->getTenGoi());
+            } else 
+                if ($this->getUser()->getLoaiUser() == 4) {
+                    $form->get('CanBoQuanLy')->setAttribute('value', $this->getUser()
+                        ->getTenUser());
+                    $form->get('DoiThue')->setAttribute('value', $this->getUser()
+                        ->getCoquanthue()
+                        ->getTenGoi());
+                }
             $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
             /* @var $quans coquanthue */
             $quans = $this->getEntityManager()
@@ -97,8 +124,6 @@ class NguoinopthueController extends baseController
             }
             $selectNganh->setValueOptions($options);
             
-            
-            
             if ($this->getRequest()->isGet()) {
                 $HanhDongElem->setAttribute('value', 'Them');
             }
@@ -117,21 +142,23 @@ class NguoinopthueController extends baseController
                     }
                 } else 
                     if ($post->get('HanhDong') == 'Them') {
-                        if($post->get("Quan")!=null){
+                        if ($post->get("Quan") != null) {
                             // load phuong
                             /* @var $phuongs phuong */
                             $phuongs = $this->getEntityManager()
-                            ->createQueryBuilder()->select("phuong")
-                            ->from("Application\Entity\phuong", "phuong")
-                            ->join("phuong.coquanthue", 'doithue')
-                            ->join("doithue.chicucthue", "chicucthue")
-                            ->where("chicucthue.MaCoQuan = ?1")
-                            ->setParameter(1, $post->get("Quan"))
-                            ->getQuery()->getResult();
+                                ->createQueryBuilder()
+                                ->select("phuong")
+                                ->from("Application\Entity\phuong", "phuong")
+                                ->join("phuong.coquanthue", 'doithue')
+                                ->join("doithue.chicucthue", "chicucthue")
+                                ->where("chicucthue.MaCoQuan = ?1")
+                                ->setParameter(1, $post->get("Quan"))
+                                ->getQuery()
+                                ->getResult();
                             $selectPhuong = $form->get('Phuong');
                             $options = $selectPhuong->getValueOptions();
                             foreach ($phuongs as $phuong) {
-                            
+                                
                                 $items = array();
                                 $items['value'] = $phuong->getMaPhuong();
                                 $items['label'] = $phuong->getTenPhuong();
@@ -147,7 +174,6 @@ class NguoinopthueController extends baseController
                             ->getPost());
                         
                         if ($form->isValid()) {
-                           
                             
                             $selectPhuong->setValueOptions($options);
                             $nguoinopthue->setMaSoThue($post->get("MaSoThue"));
@@ -161,23 +187,32 @@ class NguoinopthueController extends baseController
                             $nguoinopthue->setNgheKD($post->get("Nghe"));
                             
                             $kq = $nguoinopthueModel->them($nguoinopthue);
-                            if($kq->getKq()==true)
-                            {
-                                $thoidiembdkd = \DateTime::createFromFormat('d-m-Y',$post->get('ThoiDiemBDKD'));
+                            if ($kq->getKq() == true) {
+                                $thoidiembdkd = \DateTime::createFromFormat('d-m-Y', $post->get('ThoiDiemBDKD'));
+                                $mauser = $this->getUser()->getMaUser();
+                                if ($this->getUser()->getLoaiUser() == 3) {
+                                    $mauser = $post->get("CanBoQuanLy");
+                                }
                                 
-                                $nguoinopthueModel->CallPro('in_nnt', array(
-                                    'MST'=>$post->get('MaSoThue'),
-                                    'Ngay'=>$thoidiembdkd->format('Y-m-d'),
-                                    'MN'=>$post->get('Nganh'),
-                                    'MU'=>$this->getUser()->getMaUser(),
-                                    'MP'=>$post->get('Phuong'),
-                                    'DiaChiKD'=>$post->get('DiaChiKD'),
-                                    'ChanLe'=>$post->get('ChanLe'),
-                                    'Hem'=>$post->get('Hem'),
-                                    'SoNha'=>$post->get('SoNha'),
-                                    'SoNhaPhu'=>$post->get('SoNhaPhu'),
-                                    'TenDuong'=>$post->get('TenDuong')
+                                $kqCall = $nguoinopthueModel->CallPro('in_nnt', array(
+                                    'MST' => $post->get('MaSoThue'),
+                                    'Ngay' => $thoidiembdkd->format('Y-m-d'),
+                                    'MN' => $post->get('Nganh'),
+                                    'MU' => $mauser,
+                                    'MP' => $post->get('Phuong'),
+                                    'DiaChiKD' => $post->get('DiaChiKD'),
+                                    'ChanLe' => $post->get('ChanLe'),
+                                    'Hem' => $post->get('Hem'),
+                                    'SoNha' => $post->get('SoNha'),
+                                    'SoNhaPhu' => $post->get('SoNhaPhu'),
+                                    'TenDuong' => $post->get('TenDuong')
                                 ));
+                                
+                                if ($kqCall->getKq() == false) {
+                                    $kq->setKq(false);
+                                    $kq->setMessenger("Tiến trình lỗi: " . $kqCall->getMessenger());
+                                    $nguoinopthueModel->remove($nguoinopthue);
+                                }
                             }
                             
                             return array(
@@ -185,7 +220,8 @@ class NguoinopthueController extends baseController
                                 'form' => $form
                             );
                         }
-                    } else if ($post->get('HanhDong') == 'NewSua') {
+                    } else 
+                        if ($post->get('HanhDong') == 'NewSua') {
                             // tim
                             
                             // setAttr cho form
@@ -207,6 +243,158 @@ class NguoinopthueController extends baseController
         }
     }
 
+    public function capnhatHKDAction()
+    {
+        $request = $this->getRequest();
+        
+        $post = $request->getPost();
+        if ($post->get("HanhDong") != null && $post->get("MaSoThue") != null) {
+            /* @var $nguoinopthue nguoinopthue */
+            $nguoinopthue = $this->getEntityManager()->find("Application\Entity\\nguoinopthue", $post->get("MaSoThue"));
+            
+            if ($nguoinopthue != null) {
+                $kq = null;
+                /* @var $nguoinopthueModel nguoinopthueModel */
+                $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
+                
+                if($post->get("HanhDong")=="CapNhatNganh")
+                {
+                    $kq = new ketqua();
+                    
+                    // sửa nntnganh củ
+                    $nntnganhOld = $nguoinopthue->getNNTNganh();
+                    $today = (new \DateTime())->format('Y-m-d');
+                    $nntnganhOld->setThoiGianKetThuc($today);
+                    $kqOld = $nguoinopthueModel->merge($nntnganhOld);
+                    
+                    
+                    // Thêm 1 nntnganh, set thoigianketthuc = null
+                    $nganh = $this->getEntityManager()->find("Application\Entity\\nganh", $post->get('MaNganh'));
+                    $nntnganhNew = new NNTNganh();
+                    $nntnganhNew->setNganh($nganh);
+                    $nntnganhNew->setThoiGianBatDau($today);
+                    $nntnganhNew->setThoiGianKetThuc(null);
+                    $nntnganhNew->setNguoinopthue($nguoinopthue);
+                    $kqNew = $nguoinopthueModel->them($nntnganhNew);
+                    
+                    
+                    
+                    
+                    if($kqNew->getKq()==true && $kqOld->getKq()==true){
+                        $kq->setKq(true);
+                        $kq->appentMessenger("Cập nhật ngành thành công !");
+                        $kq->appentMessenger("Thông tin cập nhật như sau: ");
+                        $kq->appentMessenger('Từ ');
+                        $kq->appentMessenger($nntnganhOld->getNganh()->getMaNganh().' - '.$nntnganhOld->getNganh()->getTenNganh());
+                        $kq->appentMessenger('thành');
+                        $kq->appentMessenger($nntnganhNew->getNganh()->getMaNganh().' - '.$nntnganhNew->getNganh()->getTenNganh());
+                        
+                        //$nguoinopthue = new nguoinopthue();
+                       // $nguoinop = $this->getEntityManager()->find("Application\Entity\\nguoinopthue", $post->get("MaSoThue"));
+                        $nntnganhtest = $this->getEntityManager()->createQueryBuilder()
+                                            ->select("nntnganh")
+                                            ->from("Application\Entity\NNTNganh", "nntnganh")
+                                            ->where("nntnganh.nguoinopthue = ?1")
+                                            ->andWhere("nntnganh.ThoiGianKetThuc is null")
+                                            ->setParameter(1, $nguoinopthue)
+                                                ->getQuery()
+                                                ->getSingleResult();
+                        $nguoinopthue->getNNTNganhs()->add($nntnganhtest);
+                        //$nguoinopthue->setNNTNganhs($nntnganhtest);
+                    }else{
+                        $kq->setKq(false);
+                        $kq->appentMessenger($kqNew->getMessenger());
+                        $kq->appentMessenger($kqOld->getMessenger());
+                    }
+                    
+                    
+                    
+                }
+                else if($post->get("HanhDong")=="CapNhatCanBoQuanLy")
+                {
+                    
+                }
+                else if($post->get("HanhDong")=="CapNhatDiaChoKD")
+                {
+                
+                }
+                
+                else if($post->get("HanhDong")=="CapNhatTTCoBan")
+                {
+                
+                }
+                
+                
+                
+                
+                return array(
+                    'kq' => ($kq==null ? '':$kq),
+                    'nguoinopthue' => $nguoinopthue
+                );
+            }
+        }
+        
+        return $this->redirect()->toRoute("quanlynguoinopthue/default", array(
+            "controller" => "Nguoinopthue",
+            "action" => "index"
+        ));
+    }
+
+    /**
+     * trả về chuổi ajax, danh sách user thuộc đội thuế do đội trưởng quản lý
+     *
+     * @return \Zend\Mvc\Controller\Response
+     */
+    public function laydanhsachcbtAction()
+    {
+        if ($this->getUser()->getLoaiUser() == 3) {
+            
+            $user = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select(array(
+                "user"
+            ))
+                ->from("Application\Entity\user", "user")
+                ->where("user.coquanthue = ?1")
+                ->andWhere("user not in(" . $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select("user1")
+                ->from("Application\Entity\user", "user1")
+                ->where("user1 = ?3")
+                ->getDQL() . ")")
+                ->setParameter(1, $this->getUser()
+                ->getCoquanthue())
+                ->setParameter(3, $this->getUser())
+                ->getQuery()
+                ->getArrayResult();
+            echo json_encode($user);
+        }
+        
+        return $this->response;
+    }
+
+    public function laydanhsachnganhAction()
+    {
+        $MaNganhCu = $this->getRequest()->getQuery()->get("MaNganhCu");
+        
+        $nganhs = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select("nganh")
+            ->from("Application\Entity\\nganh", "nganh")
+            ->where("nganh not in (".$this->getEntityManager()->createQueryBuilder()
+                                    ->select("nganh1")
+                                    ->from("Application\Entity\\nganh", "nganh1")
+                                    ->where("nganh1.MaNganh = ?1")
+                                    
+                                    ->getDQL().")")
+            
+                            ->setParameter(1, $MaNganhCu)
+            ->getQuery()
+            ->getArrayResult();
+        echo json_encode($nganhs);
+        return $this->getResponse();
+    }
+
     public function testAction()
     {
         $model = new nguoinopthueModel($this->getEntityManager());
@@ -214,8 +402,7 @@ class NguoinopthueController extends baseController
             'a' => 123,
             'b' => '',
             'c' => '1221as21d sa'
-        )
-        ));
+        )));
         return $this->response;
     }
     

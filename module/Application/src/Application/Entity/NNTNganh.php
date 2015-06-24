@@ -27,7 +27,7 @@ class NNTNganh
     private $ThoiGianBatDau;
 
     /**
-     * @ORM\Column(type="date", nullable=false)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $ThoiGianKetThuc;
 
@@ -55,15 +55,16 @@ class NNTNganh
      */
     public function getThoiGianBatDau()
     {
-        return $this->ThoiGianBatDau;
+        return $this->ThoiGianBatDau!=null ?$this->ThoiGianBatDau->format('d-m-Y'):null;
     }
 
- /**
-     * @return the $ThoiGianKetThuc
+    /** string datetime d-m-Y
+     * @return string
      */
     public function getThoiGianKetThuc()
     {
-        return $this->ThoiGianKetThuc;
+        return $this->ThoiGianKetThuc!=null ?$this->ThoiGianKetThuc->format('d-m-Y'):null;
+        
     }
 
  /**
@@ -90,20 +91,37 @@ class NNTNganh
         $this->IDNNTNganh = $IDNNTNganh;
     }
 
- /**
+ /**    param: string format Y-m-d
      * @param field_type $ThoiGianBatDau
      */
     public function setThoiGianBatDau($ThoiGianBatDau)
     {
-        $this->ThoiGianBatDau = $ThoiGianBatDau;
+        if($ThoiGianBatDau!=null){
+            $date = \DateTime::createFromFormat("Y-m-d", $ThoiGianBatDau);
+            $this->ThoiGianBatDau = $date;
+        }
+        else{
+            $this->ThoiGianBatDau = $ThoiGianBatDau;
+        }
+        
     }
 
  /**
-     * @param field_type $ThoiGianKetThuc
+  *     param: format Y-m-d
+     * @param string $ThoiGianKetThuc
      */
     public function setThoiGianKetThuc($ThoiGianKetThuc)
     {
-        $this->ThoiGianKetThuc = $ThoiGianKetThuc;
+        
+       
+        
+        if($ThoiGianKetThuc!=null){
+             $date = \DateTime::createFromFormat("Y-m-d", $ThoiGianKetThuc);
+            $this->ThoiGianKetThuc = $date;
+        }
+        else{
+            $this->ThoiGianKetThuc = $ThoiGianKetThuc;
+        }
     }
 
  /**

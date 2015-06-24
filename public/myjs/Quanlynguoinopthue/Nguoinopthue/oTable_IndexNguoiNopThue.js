@@ -604,10 +604,10 @@ var EditableTable = function () {
 					var aData = oTable.fnGetData(nRow);
 					_MaSoThue = aData[1].trim();
 					var data = {
-							HanhDong:'sua',
-							MaSoThue:_MaSoThue
+								HanhDong:'newsua',
+								MaSoThue:_MaSoThue
 							};
-					postAndRedirect('persit',data);
+					postAndRedirect('capnhatHKD',data);
 				});
 
 			
