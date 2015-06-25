@@ -374,6 +374,17 @@ class user extends \Application\Entity\user implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
+    public function getChucVu()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getChucVu', array());
+
+        return parent::getChucVu();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getInputFilter()
     {
 
