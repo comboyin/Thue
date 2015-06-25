@@ -15,7 +15,7 @@ class thongtinngungnghi
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=20)
      */
     private $IDngungnghi;
 

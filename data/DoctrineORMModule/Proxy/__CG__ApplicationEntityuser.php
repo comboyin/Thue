@@ -64,10 +64,10 @@ class user extends \Application\Entity\user implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inputFilter', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MaUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'LoaiUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'Email', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MatKhau', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TrangThai', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'buttoannothues', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernnts', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'coquanthue');
+            return array('__isInitialized__', 'inputFilter', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MaUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'LoaiUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'Email', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MatKhau', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TrangThai', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'buttoannothues', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernnts', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'coquanthue', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernntDangHoatDong');
         }
 
-        return array('__isInitialized__', 'inputFilter', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MaUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'LoaiUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'Email', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MatKhau', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TrangThai', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'buttoannothues', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernnts', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'coquanthue');
+        return array('__isInitialized__', 'inputFilter', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MaUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'LoaiUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'Email', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MatKhau', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TrangThai', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'buttoannothues', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernnts', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'coquanthue', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernntDangHoatDong');
     }
 
     /**
@@ -173,6 +173,17 @@ class user extends \Application\Entity\user implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getUsernntDangHoatDong()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUsernntDangHoatDong', array());
+
+        return parent::getUsernntDangHoatDong();
+    }
+
     /**
      * {@inheritDoc}
      */

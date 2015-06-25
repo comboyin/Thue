@@ -266,16 +266,19 @@ class NguoinopthueController extends baseController
             $formThayDoiDiaChiKDNNT->get("SoNhaPhu")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getSoNhaPhu());
             $formThayDoiDiaChiKDNNT->get("TenDuong")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getTenDuong());
             $formThayDoiDiaChiKDNNT->get("ThoiGianBatDau")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getThoiGianBatDau());
-            // thêm danh sách phường vào select dựa trên Mã quận            
-            $this->addDataInputSelectPhuong($formThayDoiDiaChiKDNNT->get('Phuong'), 
+            // thêm danh sách phường vào select dựa trên Mã quận      
+
+            $selectPhuong = $formThayDoiDiaChiKDNNT->get('Phuong');
+            $this->addDataInputSelectPhuong($selectPhuong, 
                                 $nguoinopthue->getThongtinnnt()
                                             ->getPhuong()
                                             ->getCoquanthue()
                                             ->getChicucthue()
                                             ->getMaCoQuan());
-            $this->addDataInputSelectQuan($formThayDoiDiaChiKDNNT->get('Quan'));
+            $selectQuan = $formThayDoiDiaChiKDNNT->get('Quan');
+            $this->addDataInputSelectQuan($selectQuan);
             $formThayDoiDiaChiKDNNT->get("Phuong")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getPhuong()->getMaPhuong());
-            $formThayDoiDiaChiKDNNT->get("Quan")->setAttribute("value", $nguoinopthue->getThongtinnnt()->get);
+            $formThayDoiDiaChiKDNNT->get("Quan")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getPhuong()->getCoquanthue()->getChicucthue()->getMaCoQuan());
             
             
             
@@ -464,7 +467,8 @@ class NguoinopthueController extends baseController
                     'kq' => ($kq == null ? '' : $kq),
                     'nguoinopthue' => $nguoinopthue,
                     'canbothue' => $nguoinopthue->getCanBoDangQuanLy(),
-                    'formTTCoBanNNT' => $formTTCoBanNNT
+                    'formTTCoBanNNT' => $formTTCoBanNNT,
+                    'formThayDoiDiaChiKDNNT' => $formThayDoiDiaChiKDNNT
                 );
             }
         }

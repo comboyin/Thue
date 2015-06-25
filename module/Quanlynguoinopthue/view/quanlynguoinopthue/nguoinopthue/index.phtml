@@ -115,14 +115,14 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlyngu
 								<td><?php echo $nnt->getTenHKD()?></td>
 								<td><?php echo $nnt->getSoCMND();?></td>
 								<td><?php echo $nnt->getDiaChiCT();?></td>
-								<td><?php echo $nnt->getThongtinnnt()[0]->getDiaChiKD()?></td>
+								<td><?php echo $nnt->getThongtinnnt()->getDiaChiKD()?></td>
 								<td><?php echo $nnt->getSoGPKD()?></td>
 								<td><?php echo $nnt->getThoiDiemBDKD()?></td>
 								
-								<td><?php echo $nnt->getNNTNganhs()[0]->getNganh()->getTenNganh()?></td>
+								<td><?php echo $nnt->getNNTNganh()->getNganh()->getTenNganh()?></td>
 								
 								<td><?php echo $nnt->getNgheKD()?></td>
-								<td><?php echo $nnt->getUsernnts()[0]->getUser()->getTenUser()?></td>	
+								<td><?php echo $nnt->getUsernnt()->getUser()->getTenUser()?></td>	
 								
 								<td><a class="edit" href="">Edit</a></td>
 								<td><a class="Delete" href="">Delete</a></td>

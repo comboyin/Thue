@@ -253,9 +253,9 @@ class nguoinopthue implements InputFilterAwareInterface
      */
     public function getThongtinnnt()
     {
-        foreach ($this->getThongtinnnt() as $thongtinntt){
+        foreach ($this->getThongtinnnts() as $thongtinntt){
             if($thongtinntt->getThoiGianKetThuc()==null){
-                return $thongtinntt->getThoiGianKetThuc();
+                return $thongtinntt;
             }
         }
         return null;
