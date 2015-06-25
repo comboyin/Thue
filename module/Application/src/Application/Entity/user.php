@@ -231,6 +231,16 @@ class user implements InputFilterAwareInterface
     {
         $this->coquanthue = $coquanthue;
     }
+    
+    public function getChucVu(){
+        switch ($this->LoaiUser) {
+            case 1:
+                return "Chi cục trưởng";
+            case 2:
+                return "Chi cục trưởng";
+                        
+        }
+    }
 
     public function getInputFilter()
     {

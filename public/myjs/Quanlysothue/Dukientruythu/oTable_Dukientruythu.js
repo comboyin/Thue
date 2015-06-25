@@ -75,7 +75,7 @@ var EditableTable = function () {
 					/*$("#progess_dpmonths").css(
 						'display',
 						'none');*/
-					DialogTable.hideProgress();
+					DialogTable.hidePropress();
 				}, "json");
 
 			});
@@ -99,7 +99,7 @@ var EditableTable = function () {
 				}
 
 			}
-			
+			// Khởi tạo oTable
 			oTable = $('#editable-sample')
 				.dataTable({
 
@@ -185,7 +185,7 @@ var EditableTable = function () {
 					 + aData[2] + '"disabled>';
 					 
 				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 20px;margin-top:2px">Tìm</button>';
+					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 13px;margin-top:2px">Tìm</button>';
 
 
 				jqTds[4].innerHTML = '<input style="width:120px;" name="DoanhSo" type="text"  value="'
@@ -204,6 +204,7 @@ var EditableTable = function () {
 				jqTds[9].innerHTML = '<a class="edit" href="">Save edit</a>';
 				jqTds[10].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
+				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
 
 			}
@@ -213,24 +214,15 @@ var EditableTable = function () {
 				var jqTds = $('>td', nRow);
 
 				// cansua
-				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
-
 				jqTds[1].innerHTML = '<input style="width:80px;" name="masothue" type="text"  value="'
-<<<<<<< HEAD
 					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
-				jqTds[2].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
-=======
-					 + aData[1] + ' "disabled><button class="DialogNNT" style="margin:0 20px;margin-top:2px" class="btn btn-success">Chọn</button>';
 				jqTds[2].innerHTML = '<input style="width:110px;" name="TenHKD" type="text"  value="'
->>>>>>> branch 'master' of https://github.com/comboyin/Thue.git
+
 					 + aData[2] + '"disabled>';
-<<<<<<< HEAD
-				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 20px;margin-top:2px">Tìm</button>';
-=======
+					 
 				jqTds[3].innerHTML = '<input style="width:60px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="DialogTieuMuc" style="margin:0 13px;margin-top:2px" class="btn btn-success">Chọn</button>';
->>>>>>> branch 'master' of https://github.com/comboyin/Thue.git
+					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 13px;margin-top:2px">Tìm</button>';
+
 
 				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';
@@ -276,6 +268,7 @@ var EditableTable = function () {
 			
 			
 			var nEditing = null;
+			//Thêm 1 dòng mới
 			$('#editable-sample_new').click(
 				function (e) {
 				e.preventDefault();
@@ -538,7 +531,7 @@ var EditableTable = function () {
 			.addClass(" xsmall"); // modify
 
 
-			// cansua
+			// Khai báo chỉ số cột muốn sắp xếp, 'asc' là kiểu 
 			oTable.fnSort([[1, 'asc']]);
 			
 			function XoaNhieuDong(oTable,Rows)
@@ -547,7 +540,8 @@ var EditableTable = function () {
 					oTable.fnDeleteRow(value);
 				});
 			}
-
+			
+			//checkboxs : mảng element checkbox
 			function XoaNhieu(checkboxs, method, url, data, oTable) {
 				BootstrapDialog.confirm({
 					title : 'Cảnh báo',
