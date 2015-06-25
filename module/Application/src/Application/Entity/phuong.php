@@ -59,7 +59,7 @@ class phuong
     }
 
  /**
-     * @return the $coquanthue
+     * @return coquanthue
      */
     public function getCoquanthue()
     {

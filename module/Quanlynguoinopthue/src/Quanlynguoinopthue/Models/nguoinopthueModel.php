@@ -66,7 +66,7 @@ class nguoinopthueModel extends baseModel
     }
 
     /**
-     *
+     * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý
      * @param user $user            
      * @return \Application\Entity\ketqua
      */
@@ -88,11 +88,7 @@ class nguoinopthueModel extends baseModel
                     'nganh',
                     'thongtinnnt',
                     'phuong',
-                    'coquanthue'
-                    
-                    
-                    
-                    
+                    'coquanthue'      
                 ))
                     ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
@@ -106,9 +102,9 @@ class nguoinopthueModel extends baseModel
                     ->andwhere('usernnts.ThoiGianKetThuc is null')
                     ->andwhere('NNTNganhs.ThoiGianKetThuc is null')
                     ->andwhere('thongtinnnt.ThoiGianKetThuc is null')
-                    ->
+                    ->setParameter(1, $ma);
                 // ->andWhere('nguoinopthueot in('.$qb->getDQL().')')
-                setParameter(1, $ma);
+                
             } else 
                 if ($user->getLoaiUser() == 3) {
                     $qb->select(array(
@@ -274,7 +270,7 @@ class nguoinopthueModel extends baseModel
     /**
      *
      * @param user $user            
-     * @return
+     * @return string
      */
     public function dsNNTbyUser($user)
     {

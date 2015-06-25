@@ -14,6 +14,15 @@ use Application\Entity\ketqua;
 use Zend\Form\Form;
 use Zend\Form\Element;
 use Application\Entity\NNTNganh;
+use Application\Entity\user;
+use Doctrine\Common\Collections\ArrayCollection;
+use Application\Entity\usernnt;
+use Quanlynguoinopthue\Forms\formTTCoBanNNT;
+use Quanlynguoinopthue\Forms\ValidationTTCoBanNNT;
+use Quanlynguoinopthue\Forms\formThayDoiDiaChiKDNNT;
+use Application\Models\phuongModel;
+use Application\Models\coquanthueModel;
+use Application\Models\miengiamthueModel;
 
 /**
  * NguoinopthueController
@@ -85,13 +94,8 @@ class NguoinopthueController extends baseController
                 }
             $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
             /* @var $quans coquanthue */
-            $quans = $this->getEntityManager()
-                ->createQueryBuilder()
-                ->select('coquanthue')
-                ->from("Application\Entity\coquanthue", "coquanthue")
-                ->where("coquanthue.chicucthue is null")
-                ->getQuery()
-                ->getResult();
+            $coquanthueModel = new coquanthueModel($this->getEntityManager());
+            $quans = $coquanthueModel->DanhSachChiCucThue();
             
             /* @var $select Select */
             $select = $form->get('Quan');
@@ -145,16 +149,9 @@ class NguoinopthueController extends baseController
                         if ($post->get("Quan") != null) {
                             // load phuong
                             /* @var $phuongs phuong */
-                            $phuongs = $this->getEntityManager()
-                                ->createQueryBuilder()
-                                ->select("phuong")
-                                ->from("Application\Entity\phuong", "phuong")
-                                ->join("phuong.coquanthue", 'doithue')
-                                ->join("doithue.chicucthue", "chicucthue")
-                                ->where("chicucthue.MaCoQuan = ?1")
-                                ->setParameter(1, $post->get("Quan"))
-                                ->getQuery()
-                                ->getResult();
+                            $phuongModel = new phuongModel($this->getEntityManager());
+                            
+                            $phuongs = $phuongModel->DanhSachPhuongThuocQuan($post->get("Quan"));
                             $selectPhuong = $form->get('Phuong');
                             $options = $selectPhuong->getValueOptions();
                             foreach ($phuongs as $phuong) {
@@ -182,8 +179,8 @@ class NguoinopthueController extends baseController
                             $nguoinopthue->setDiaChiCT($post->get("DiaChiKD"));
                             $nguoinopthue->setSoGPKD($post->get("SoGPKD"));
                             $nguoinopthue->setSoCMND($post->get("SoCMND"));
-                            $nguoinopthue->setNgayCapMST(\DateTime::createFromFormat('d-m-Y', $post->get("NgayCapMST")));
-                            $nguoinopthue->setThoiDiemBDKD(\DateTime::createFromFormat('d-m-Y', $post->get("ThoiDiemBDKD")));
+                            $nguoinopthue->setNgayCapMST($post->get("NgayCapMST"));
+                            $nguoinopthue->setThoiDiemBDKD($post->get("ThoiDiemBDKD"));
                             $nguoinopthue->setNgheKD($post->get("Nghe"));
                             
                             $kq = $nguoinopthueModel->them($nguoinopthue);
@@ -251,22 +248,66 @@ class NguoinopthueController extends baseController
         if ($post->get("HanhDong") != null && $post->get("MaSoThue") != null) {
             /* @var $nguoinopthue nguoinopthue */
             $nguoinopthue = $this->getEntityManager()->find("Application\Entity\\nguoinopthue", $post->get("MaSoThue"));
+            //formTTCoBanNNT
+            $formTTCoBanNNT = new formTTCoBanNNT();
+            $formTTCoBanNNT->get("TenHKD")->setAttribute("value", $nguoinopthue->getTenHKD());
+            $formTTCoBanNNT->get("SoCMND")->setAttribute("value", $nguoinopthue->getSoCMND());
+            $formTTCoBanNNT->get("DiaChiCT")->setAttribute("value", $nguoinopthue->getDiaChiCT());
+            $formTTCoBanNNT->get("SoGPKD")->setAttribute("value", $nguoinopthue->getSoGPKD());
+            $formTTCoBanNNT->get("NgayCapMST")->setAttribute("value", $nguoinopthue->getNgayCapMST());
+            $formTTCoBanNNT->get("ThoiDiemBDKD")->setAttribute("value", $nguoinopthue->getThoiDiemBDKD());
+            $formTTCoBanNNT->get("Nghe")->setAttribute("value", $nguoinopthue->getNgheKD());
+            //formThayDoiDiaChiKDNNT
+            $formThayDoiDiaChiKDNNT = new formThayDoiDiaChiKDNNT();
+            $formThayDoiDiaChiKDNNT->get("DiaChiKD")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getDiaChiKD());
+            $formThayDoiDiaChiKDNNT->get("ChanLe")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getChanLe());
+            $formThayDoiDiaChiKDNNT->get("Hem")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getHem());
+            $formThayDoiDiaChiKDNNT->get("SoNha")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getSoNha());
+            $formThayDoiDiaChiKDNNT->get("SoNhaPhu")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getSoNhaPhu());
+            $formThayDoiDiaChiKDNNT->get("TenDuong")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getTenDuong());
+            $formThayDoiDiaChiKDNNT->get("ThoiGianBatDau")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getThoiGianBatDau());
+            // thêm danh sách phường vào select dựa trên Mã quận            
+            $this->addDataInputSelectPhuong($formThayDoiDiaChiKDNNT->get('Phuong'), 
+                                $nguoinopthue->getThongtinnnt()
+                                            ->getPhuong()
+                                            ->getCoquanthue()
+                                            ->getChicucthue()
+                                            ->getMaCoQuan());
+            $this->addDataInputSelectQuan($formThayDoiDiaChiKDNNT->get('Quan'));
+            $formThayDoiDiaChiKDNNT->get("Phuong")->setAttribute("value", $nguoinopthue->getThongtinnnt()->getPhuong()->getMaPhuong());
+            $formThayDoiDiaChiKDNNT->get("Quan")->setAttribute("value", $nguoinopthue->getThongtinnnt()->get);
+            
+            
+            
+
+            
             
             if ($nguoinopthue != null) {
                 $kq = null;
                 /* @var $nguoinopthueModel nguoinopthueModel */
                 $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
                 
-                if($post->get("HanhDong")=="CapNhatNganh")
-                {
+                if ($post->get("HanhDong") == "CapNhatNganh") {
                     $kq = new ketqua();
+                    $MaNganh = $post->get("MaNganh");
+                    $nntnganhOld = $nguoinopthue->getNNTNganh();
+                    
+                    // Kiem tra Mã ngành mới có trùng với mã ngành củ không
+                    if ($nntnganhOld->getNganh()->getMaNganh() == $MaNganh) {
+                        $kq->setKq(false);
+                        $kq->setMessenger("Ngành bạn vừa chọn trùng với ngành hiện tại mà HKD đang kinh doanh !");
+                        return array(
+                            'kq' => ($kq == null ? '' : $kq),
+                            'nguoinopthue' => $nguoinopthue,
+                            'canbothue' => $nguoinopthue->getCanBoDangQuanLy()
+                        );
+                    }
                     
                     // sửa nntnganh củ
-                    $nntnganhOld = $nguoinopthue->getNNTNganh();
+                    
                     $today = (new \DateTime())->format('Y-m-d');
                     $nntnganhOld->setThoiGianKetThuc($today);
                     $kqOld = $nguoinopthueModel->merge($nntnganhOld);
-                    
                     
                     // Thêm 1 nntnganh, set thoigianketthuc = null
                     $nganh = $this->getEntityManager()->find("Application\Entity\\nganh", $post->get('MaNganh'));
@@ -277,59 +318,153 @@ class NguoinopthueController extends baseController
                     $nntnganhNew->setNguoinopthue($nguoinopthue);
                     $kqNew = $nguoinopthueModel->them($nntnganhNew);
                     
-                    
-                    
-                    
-                    if($kqNew->getKq()==true && $kqOld->getKq()==true){
+                    if ($kqNew->getKq() == true && $kqOld->getKq() == true) {
                         $kq->setKq(true);
                         $kq->appentMessenger("Cập nhật ngành thành công !");
                         $kq->appentMessenger("Thông tin cập nhật như sau: ");
                         $kq->appentMessenger('Từ ');
-                        $kq->appentMessenger($nntnganhOld->getNganh()->getMaNganh().' - '.$nntnganhOld->getNganh()->getTenNganh());
+                        $kq->appentMessenger($nntnganhOld->getNganh()
+                            ->getMaNganh() . ' - ' . $nntnganhOld->getNganh()
+                            ->getTenNganh());
                         $kq->appentMessenger('thành');
-                        $kq->appentMessenger($nntnganhNew->getNganh()->getMaNganh().' - '.$nntnganhNew->getNganh()->getTenNganh());
+                        $kq->appentMessenger($nntnganhNew->getNganh()
+                            ->getMaNganh() . ' - ' . $nntnganhNew->getNganh()
+                            ->getTenNganh());
                         
-                        //$nguoinopthue = new nguoinopthue();
-                       // $nguoinop = $this->getEntityManager()->find("Application\Entity\\nguoinopthue", $post->get("MaSoThue"));
-                        $nntnganhtest = $this->getEntityManager()->createQueryBuilder()
-                                            ->select("nntnganh")
-                                            ->from("Application\Entity\NNTNganh", "nntnganh")
-                                            ->where("nntnganh.nguoinopthue = ?1")
-                                            ->andWhere("nntnganh.ThoiGianKetThuc is null")
-                                            ->setParameter(1, $nguoinopthue)
-                                                ->getQuery()
-                                                ->getSingleResult();
+                        // $nguoinopthue = new nguoinopthue();
+                        // $nguoinop = $this->getEntityManager()->find("Application\Entity\\nguoinopthue", $post->get("MaSoThue"));
+                        $nntnganhtest = $this->getEntityManager()
+                            ->createQueryBuilder()
+                            ->select("nntnganh")
+                            ->from("Application\Entity\NNTNganh", "nntnganh")
+                            ->where("nntnganh.nguoinopthue = ?1")
+                            ->andWhere("nntnganh.ThoiGianKetThuc is null")
+                            ->setParameter(1, $nguoinopthue)
+                            ->getQuery()
+                            ->getSingleResult();
                         $nguoinopthue->getNNTNganhs()->add($nntnganhtest);
-                        //$nguoinopthue->setNNTNganhs($nntnganhtest);
-                    }else{
+                        // $nguoinopthue->setNNTNganhs($nntnganhtest);
+                    } else {
                         $kq->setKq(false);
                         $kq->appentMessenger($kqNew->getMessenger());
                         $kq->appentMessenger($kqOld->getMessenger());
                     }
-                    
-                    
-                    
-                }
-                else if($post->get("HanhDong")=="CapNhatCanBoQuanLy")
-                {
-                    
-                }
-                else if($post->get("HanhDong")=="CapNhatDiaChoKD")
-                {
-                
-                }
-                
-                else if($post->get("HanhDong")=="CapNhatTTCoBan")
-                {
-                
-                }
-                
-                
-                
+                } else 
+                    if ($post->get("HanhDong") == "CapNhatCanBoQuanLy") {
+                        $kq = new ketqua();
+                        $MaCanBo = $post->get("MaCanBo");
+                        $UsernntCu = $nguoinopthue->getUsernnt();
+                        
+                        
+                        // Kiem tra Mã ngành mới có trùng với mã ngành củ không
+                        if ($UsernntCu->getUser()->getMaUser() == $MaCanBo) {
+                            $kq->setKq(false);
+                            $kq->setMessenger("Cán bộ bạn vừa chọn trùng với cán bộ hiện tại đang quản lý HKD này !");
+                            return array(
+                                'kq' => ($kq == null ? '' : $kq),
+                                'nguoinopthue' => $nguoinopthue,
+                                'canbothue' => $nguoinopthue->getCanBoDangQuanLy()
+                            );
+                        }
+                        
+                        // sửa $UsernntCu củ
+                        
+                        
+                        $today = (new \DateTime())->format('Y-m-d');
+                        $UsernntCu->setThoiGianKetThuc($today);
+                        $kqOld = $nguoinopthueModel->merge($UsernntCu);
+                        
+                        // Thêm 1 Usernnt, set thoigianketthuc = null
+                        
+                        $user = $this->getEntityManager()->find("Application\Entity\user", $post->get('MaCanBo'));
+                        $UsernntNew = new usernnt();
+                        $UsernntNew->setNguoinopthue($nguoinopthue);
+                        $UsernntNew->setThoiGianBatDau($today);
+                        $UsernntNew->setThoiGianKetThuc(null);
+                        $UsernntNew->setUser($user);
+                        $kqNew = $nguoinopthueModel->them($UsernntNew);
+                        
+                        if ($kqNew->getKq() == true && $kqOld->getKq() == true) {
+                            $kq->setKq(true);
+                            $kq->appentMessenger("Cập nhật cán bộ quản lý thuế thành công !");
+                            
+                            // $nguoinopthue = new nguoinopthue();
+                            // $nguoinop = $this->getEntityManager()->find("Application\Entity\\nguoinopthue", $post->get("MaSoThue"));
+                            $usenntTemp = $this->getEntityManager()
+                                ->createQueryBuilder()
+                                ->select("usernnt")
+                                ->from("Application\Entity\usernnt", "usernnt")
+                                ->join("usernnt.user", 'user')
+                                ->where("usernnt.nguoinopthue = ?1")
+                                ->andWhere("user.MaUser = ?2")
+                                ->andWhere("usernnt.ThoiGianKetThuc is null")
+                                ->setParameter(1, $nguoinopthue)
+                                ->setParameter(2, $MaCanBo)
+                                ->getQuery()
+                                ->getSingleResult();
+                            $nguoinopthue->getUsernnts()->add($usenntTemp);
+                            // $nguoinopthue->setNNTNganhs($nntnganhtest);
+                        } else {
+                            $kq->setKq(false);
+                            $kq->appentMessenger($kqNew->getMessenger());
+                            $kq->appentMessenger($kqOld->getMessenger());
+                        }
+                    } else 
+                        if ($post->get("HanhDong") == "CapNhatDiaChiKD") {
+                            
+       
+                        } 
+
+                        else if ($post->get("HanhDong") == "CapNhatTTCoBan") {
+                                
+                                
+                                $kq= new ketqua();
+                                $TenHKD =$post->get("TenHKD");
+                                $SoCMND =$post->get("SoCMND");
+                                $DiaChiCT = $post->get("DiaChiCT");
+                                $SoGPKD = $post->get("SoGPKD");
+                                $ThoiDiemBDKD = $post->get("ThoiDiemBDKD");
+                                $NgayCapMST = $post->get("NgayCapMST");
+                                $Nghe = $post->get("Nghe");
+                                $valida =  new ValidationTTCoBanNNT();
+                                $formTTCoBanNNT->setInputFilter($valida->getInputFilter());
+                                $formTTCoBanNNT->setData($post);
+                                if($formTTCoBanNNT->isValid()){
+                                    $nguoinopthue->setTenHKD($TenHKD);
+                                    $nguoinopthue->setSoCMND($SoCMND);
+                                    $nguoinopthue->setDiaChiCT($DiaChiCT);
+                                    $nguoinopthue->setSoGPKD($SoGPKD);
+                                    $nguoinopthue->setThoiDiemBDKD($ThoiDiemBDKD);
+                                    $nguoinopthue->setNgayCapMST($NgayCapMST);
+                                    $nguoinopthue->setNgheKD($Nghe);
+                                
+                                    $kq = $nguoinopthueModel->merge($nguoinopthue);
+                                
+                                    if($kq->getKq()==false){
+                                        $nguoinopthue = $this->getEntityManager()->find("Application\Entity\\nguoinopthue", $post->get("MaSoThue"));
+                                    }
+                                    else {
+                                        $kq->setMessenger("Cập nhật thông tin cơ bản của HKD thành công !");
+                                    }
+                                
+                                
+                                }
+                                else{
+                                    $kq->appentMessenger($this->getErrorMessengerForm($formTTCoBanNNT));
+                                    $kq->setKq(false);
+                                }    
+                            }else if ($post->get("HanhDong") == "ThayDoiDiaChiKD") {
+                                
+                            
+       
+                            } 
+                        
                 
                 return array(
-                    'kq' => ($kq==null ? '':$kq),
-                    'nguoinopthue' => $nguoinopthue
+                    'kq' => ($kq == null ? '' : $kq),
+                    'nguoinopthue' => $nguoinopthue,
+                    'canbothue' => $nguoinopthue->getCanBoDangQuanLy(),
+                    'formTTCoBanNNT' => $formTTCoBanNNT
                 );
             }
         }
@@ -375,34 +510,110 @@ class NguoinopthueController extends baseController
 
     public function laydanhsachnganhAction()
     {
-        $MaNganhCu = $this->getRequest()->getQuery()->get("MaNganhCu");
+        $MaNganhCu = $this->getRequest()
+            ->getQuery()
+            ->get("MaNganhCu");
         
         $nganhs = $this->getEntityManager()
             ->createQueryBuilder()
             ->select("nganh")
             ->from("Application\Entity\\nganh", "nganh")
-            ->where("nganh not in (".$this->getEntityManager()->createQueryBuilder()
-                                    ->select("nganh1")
-                                    ->from("Application\Entity\\nganh", "nganh1")
-                                    ->where("nganh1.MaNganh = ?1")
-                                    
-                                    ->getDQL().")")
-            
-                            ->setParameter(1, $MaNganhCu)
+            ->where("nganh not in (" . $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select("nganh1")
+            ->from("Application\Entity\\nganh", "nganh1")
+            ->where("nganh1.MaNganh = ?1")
+            ->
+        getDQL() . ")")
+            ->
+        setParameter(1, $MaNganhCu)
             ->getQuery()
             ->getArrayResult();
         echo json_encode($nganhs);
         return $this->getResponse();
     }
 
+    /**
+     * AJAX
+     * Lấy danh sách cán bộ thuế cho chức năng chọn cán bộ thuế, để cập nhật thông tin nnt
+     * Chức năng giành cho đội trưởng
+     * 
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    public function laydanhsachcbtcapnhatAction()
+    {
+        $MaCanBoCu = $this->getRequest()
+            ->getQuery()
+            ->get("MaCanBoCu");
+        
+        if ($this->getUser()->getLoaiUser() == 3) {
+            
+            $user = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select(array(
+                "user"
+            ))
+                ->from("Application\Entity\user", "user")
+                ->where("user.coquanthue = ?1")
+                ->andWhere("user not in(" . $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select("user1")
+                ->from("Application\Entity\user", "user1")
+                ->where("user1 = ?3")
+                ->orWhere("user1.MaUser = ?4")
+                ->getDQL() . ")")
+                ->setParameter(1, $this->getUser()
+                ->getCoquanthue())
+                ->setParameter(3, $this->getUser())
+                ->setParameter(4, $MaCanBoCu)
+                ->getQuery()
+                ->getArrayResult();
+            echo json_encode($user);
+        }
+        
+        return $this->response;
+    }
+    /**
+     * Thêm dử liệu vào cho input select quận
+     * @param Select $select
+     * */
+    private function addDataInputSelectQuan(Select &$select){
+        $quans = (new coquanthueModel($this->getEntityManager()))->DanhSachChiCucThue();
+        $options = $select->getValueOptions();
+        foreach ($quans as $quan) {
+            $items = array();
+            $items['value'] = $quan->getMaCoQuan();
+            $items['label'] = $quan->getTenGoi();
+            array_push($options, $items);
+        }
+        $select->setValueOptions($options);
+        
+    }
+    
+    /**
+     * Thêm dử liệu vào cho input select phường
+     * @param Select $select
+     * @param string $MaChiCuc
+     * */
+    private function addDataInputSelectPhuong(Select &$select,$MaChiCuc){
+        /* @var $phuongs phuong */
+        $phuongs = (new phuongModel($this->getEntityManager()))->DanhSachPhuongThuocQuan($MaChiCuc);
+        
+        $options = $select->getValueOptions();
+        foreach ($phuongs as $phuong) {
+            $items = array();
+            $items['value'] = $phuong->getMaPhuong();
+            $items['label'] = $phuong->getTenPhuong();
+            array_push($options, $items);
+        }
+        $select->setValueOptions($options);
+    
+    }
+
     public function testAction()
     {
-        $model = new nguoinopthueModel($this->getEntityManager());
-        var_dump($model->CallPro('test', array(
-            'a' => 123,
-            'b' => '',
-            'c' => '1221as21d sa'
-        )));
+       var_dump((new miengiamthueModel($this->getEntityManager()))->abc());
+       
         return $this->response;
     }
     

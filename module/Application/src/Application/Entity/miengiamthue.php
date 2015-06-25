@@ -6,7 +6,10 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="miengiamthue",
- *     indexes={@ORM\Index(name="fk_miengiamthue_nguoinopthue1_idx", columns={"MaSoThue"})}
+ *     indexes={
+ *     @ORM\Index(name="fk_miengiamthue_nguoinopthue1_idx", columns={"MaSoThue"}),
+ *     @ORM\Index(name="fk_miengiamthue_thongtinngungnghi1_idx", columns={"SoQDMG"})
+ *     }
  * )
  */
 class miengiamthue
@@ -23,29 +26,15 @@ class miengiamthue
     private $NgayNopDon;
 
     /**
-     * @ORM\Column(type="date", nullable=false)
-     */
-    private $TuNgay;
-
-    /**
-     * @ORM\Column(type="date", nullable=false)
-     */
-    private $DenNgay;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $NoiDung;
-
-    /**
      * @ORM\Column(type="string", nullable=true)
      */
     private $LyDo;
 
     /**
-     * @ORM\OneToOne(targetEntity="Application\Entity\ngungnghi", mappedBy="miengiamthue")
+     * @ORM\OneToOne(targetEntity="Application\Entity\thongtinngungnghi", inversedBy="miengiamthue")
+     * @ORM\JoinColumn(name="IDngungnghi", referencedColumnName="IDngungnghi", nullable=true, unique=true, onDelete="restrict")
      */
-    private $ngungnghi;
+    private $thongtinngungnghi;
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\kythuemg", mappedBy="miengiamthue")
@@ -57,6 +46,22 @@ class miengiamthue
      * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
      */
     private $nguoinopthue;
+ /**
+     * @return the $thongtinngungnghi
+     */
+    public function getThongtinngungnghi()
+    {
+        return $this->thongtinngungnghi;
+    }
+
+ /**
+     * @param field_type $thongtinngungnghi
+     */
+    public function setThongtinngungnghi($thongtinngungnghi)
+    {
+        $this->thongtinngungnghi = $thongtinngungnghi;
+    }
+
  /**
      * @return the $SoQDMG
      */
@@ -73,29 +78,9 @@ class miengiamthue
         return $this->NgayNopDon;
     }
 
- /**
-     * @return the $TuNgay
-     */
-    public function getTuNgay()
-    {
-        return $this->TuNgay;
-    }
 
- /**
-     * @return the $DenNgay
-     */
-    public function getDenNgay()
-    {
-        return $this->DenNgay;
-    }
 
- /**
-     * @return the $NoiDung
-     */
-    public function getNoiDung()
-    {
-        return $this->NoiDung;
-    }
+
 
  /**
      * @return the $LyDo
@@ -105,13 +90,7 @@ class miengiamthue
         return $this->LyDo;
     }
 
- /**
-     * @return the $ngungnghi
-     */
-    public function getNgungnghi()
-    {
-        return $this->ngungnghi;
-    }
+
 
  /**
      * @return the $kythuemgs
@@ -145,29 +124,9 @@ class miengiamthue
         $this->NgayNopDon = $NgayNopDon;
     }
 
- /**
-     * @param field_type $TuNgay
-     */
-    public function setTuNgay($TuNgay)
-    {
-        $this->TuNgay = $TuNgay;
-    }
 
- /**
-     * @param field_type $DenNgay
-     */
-    public function setDenNgay($DenNgay)
-    {
-        $this->DenNgay = $DenNgay;
-    }
 
- /**
-     * @param field_type $NoiDung
-     */
-    public function setNoiDung($NoiDung)
-    {
-        $this->NoiDung = $NoiDung;
-    }
+
 
  /**
      * @param field_type $LyDo
@@ -177,13 +136,7 @@ class miengiamthue
         $this->LyDo = $LyDo;
     }
 
- /**
-     * @param field_type $ngungnghi
-     */
-    public function setNgungnghi($ngungnghi)
-    {
-        $this->ngungnghi = $ngungnghi;
-    }
+
 
  /**
      * @param field_type $kythuemgs

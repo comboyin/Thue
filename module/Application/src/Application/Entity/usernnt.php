@@ -1,33 +1,36 @@
 <?php
 namespace Application\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
  * @ORM\Table(
- *     name="usernnt",
- *     indexes={
- *         @ORM\Index(name="fk_user_has_nguoinopthue_nguoinopthue1_idx", columns={"MaSoThue"}),
- *         @ORM\Index(name="fk_user_has_nguoinopthue_user1_idx", columns={"MaUser"})
- *     }
+ * name="usernnt",
+ * indexes={
+ * @ORM\Index(name="fk_user_has_nguoinopthue_nguoinopthue1_idx", columns={"MaSoThue"}),
+ * @ORM\Index(name="fk_user_has_nguoinopthue_user1_idx", columns={"MaUser"})
+ * }
  * )
  */
 class usernnt
 {
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $IDUserNNT;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Application\Entity\user", inversedBy="usernnts")
      * @ORM\JoinColumn(name="MaUser", referencedColumnName="MaUser", nullable=false, onDelete="restrict")
-    *@var user
+     * 
+     * @var user
      */
     private $user;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Application\Entity\nguoinopthue", inversedBy="usernnts")
      * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
@@ -43,7 +46,9 @@ class usernnt
      * @ORM\Column(type="date", nullable=true)
      */
     private $ThoiGianKetThuc;
- /**
+
+    /**
+     *
      * @return the $IDUserNNT
      */
     public function getIDUserNNT()
@@ -51,7 +56,8 @@ class usernnt
         return $this->IDUserNNT;
     }
 
- /**
+    /**
+     *
      * @return user
      */
     public function getUser()
@@ -59,7 +65,8 @@ class usernnt
         return $this->user;
     }
 
- /**
+    /**
+     *
      * @return the $nguoinopthue
      */
     public function getNguoinopthue()
@@ -67,7 +74,8 @@ class usernnt
         return $this->nguoinopthue;
     }
 
- /**
+    /**
+     *
      * @return the $ThoiGianBatDau
      */
     public function getThoiGianBatDau()
@@ -75,7 +83,8 @@ class usernnt
         return $this->ThoiGianBatDau;
     }
 
- /**
+    /**
+     *
      * @return the $ThoiGianKetThuc
      */
     public function getThoiGianKetThuc()
@@ -83,47 +92,61 @@ class usernnt
         return $this->ThoiGianKetThuc;
     }
 
- /**
-     * @param field_type $IDUserNNT
+    /**
+     *
+     * @param field_type $IDUserNNT            
      */
     public function setIDUserNNT($IDUserNNT)
     {
         $this->IDUserNNT = $IDUserNNT;
     }
 
- /**
-     * @param field_type $user
+    /**
+     *
+     * @param field_type $user            
      */
     public function setUser($user)
     {
         $this->user = $user;
     }
 
- /**
-     * @param field_type $nguoinopthue
+    /**
+     *
+     * @param field_type $nguoinopthue            
      */
     public function setNguoinopthue($nguoinopthue)
     {
         $this->nguoinopthue = $nguoinopthue;
     }
 
- /**
-     * @param field_type $ThoiGianBatDau
+    /**
+     *
+     * @param field_type $ThoiGianBatDau            
      */
     public function setThoiGianBatDau($ThoiGianBatDau)
     {
-        $this->ThoiGianBatDau = $ThoiGianBatDau;
+    if($ThoiGianBatDau!=null){
+             $date = \DateTime::createFromFormat("Y-m-d", $ThoiGianBatDau);
+            $this->ThoiGianBatDau = $date;
+        }
+        else{
+            $this->ThoiGianBatDau = $ThoiGianBatDau;
+        }
     }
 
- /**
-     * @param field_type $ThoiGianKetThuc
+    /**
+     * string Y-m-d
+     * 
+     * @param string $ThoiGianKetThuc            
      */
     public function setThoiGianKetThuc($ThoiGianKetThuc)
     {
-        $this->ThoiGianKetThuc = $ThoiGianKetThuc;
+     if($ThoiGianKetThuc!=null){
+             $date = \DateTime::createFromFormat("Y-m-d", $ThoiGianKetThuc);
+            $this->ThoiGianKetThuc = $date;
+        }
+        else{
+            $this->ThoiGianKetThuc = $ThoiGianKetThuc;
+        }
     }
-
-
-
-
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 
 /**
@@ -83,11 +84,24 @@ class coquanthue
     }
 
  /**
-     * @return the $users
+     * @return user[]|ArrayCollection
      */
     public function getUsers()
     {
         return $this->users;
+    }
+    /**
+     * Trả về đội trưởng của 1 đội thuế  */
+    public function getDoiTruong(){
+        if($this->getDoithue()==null){
+            foreach ($this->getUsers() as $user){
+                if($user->getLoaiUser()==3){
+                    return $user;
+                }
+            }
+            
+        }
+        return null;
     }
 
  /**

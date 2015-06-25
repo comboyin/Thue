@@ -1,14 +1,14 @@
 <?php
 /* @var $form Quanlyuser\Form\LoginForm */
-$form = $this->form;
+$formThayDoiDiaChiKDNNT = $this->form;
 
-$form->setAttribute('action', $this->url('quanlyuser', array(
+$formThayDoiDiaChiKDNNT->setAttribute('action', $this->url('quanlyuser', array(
     'controller' => 'Login',
     'action' => 'index'
 )));
-$form->prepare();
+$formThayDoiDiaChiKDNNT->prepare();
 
-echo $this->form()->openTag($form);
+echo $this->form()->openTag($formThayDoiDiaChiKDNNT);
 ?>
 
 <?php
@@ -16,7 +16,7 @@ echo $this->form()->openTag($form);
 
 
 
-echo $this->formElementErrors($form->get('remenber'));
+echo $this->formElementErrors($formThayDoiDiaChiKDNNT->get('remenber'));
 ?>
 
 <div class="lock-header">
@@ -35,23 +35,23 @@ echo $this->formElementErrors($form->get('remenber'));
 	<div class="metro double-size green">
 
 		<div class="input-append lock-input">
-					<?php echo $this->formElement($form->get('MaUser'));?>
+					<?php echo $this->formElement($formThayDoiDiaChiKDNNT->get('MaUser'));?>
 					
 				</div>
-    <?php echo $this->formElementErrors($form->get('MaUser'));?>
+    <?php echo $this->formElementErrors($formThayDoiDiaChiKDNNT->get('MaUser'));?>
 	</div>
 	<div class="metro double-size yellow">
 
 		<div class="input-append lock-input">
-					<?php echo $this->formElement($form->get('MatKhau'));?>
+					<?php echo $this->formElement($formThayDoiDiaChiKDNNT->get('MatKhau'));?>
 				</div>
-				<?php echo $this->formElementErrors($form->get('MatKhau'));?>
+				<?php echo $this->formElementErrors($formThayDoiDiaChiKDNNT->get('MatKhau'));?>
 
 	</div>
 	<div class="metro single-size terques login">
 
 		<button type="submit" class="btn login-btn">
-					<?php echo $this->formElement($form->get('submit'));?> <i
+					<?php echo $this->formElement($formThayDoiDiaChiKDNNT->get('submit'));?> <i
 				class=" icon-long-arrow-right"></i>
 		</button>
 
@@ -61,8 +61,8 @@ echo $this->formElementErrors($form->get('remenber'));
 	
 	
 		<div class="pull-left">
-				<?php echo $this->formElement($form->get('remenber'));?>
-				<?php echo $this->formLabel($form->get('remenber'));?>
+				<?php echo $this->formElement($formThayDoiDiaChiKDNNT->get('remenber'));?>
+				<?php echo $this->formLabel($formThayDoiDiaChiKDNNT->get('remenber'));?>
 			</div>
 			
 			

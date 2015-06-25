@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -59,6 +60,7 @@ class user implements InputFilterAwareInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\usernnt", mappedBy="user")
+     * @var ArrayCollection
      */
     private $usernnts;
 
@@ -69,8 +71,27 @@ class user implements InputFilterAwareInterface
      * })
      */
     private $coquanthue;
+    /**
+     * 
+     * @var ArrayCollection  */
+    private $usernntDangHoatDong;
 
     /**
+     * @return usernnt[]|ArrayCollection
+     */
+    public function getUsernntDangHoatDong()
+    {
+
+        $this->usernntDangHoatDong = new ArrayCollection();
+        foreach ($this->getUsernnts() as $usernnt){
+            if($usernnt->getThoiGianKetThuc()==null){
+                $this->usernntDangHoatDong->add($usernnt);
+            }
+        }
+        return $this->usernntDangHoatDong;
+    }
+
+ /**
      *
      * @return the $MaUser
      */
@@ -141,6 +162,8 @@ class user implements InputFilterAwareInterface
     {
         return $this->usernnts;
     }
+    
+
 
     /**
      *
@@ -231,14 +254,18 @@ class user implements InputFilterAwareInterface
     {
         $this->coquanthue = $coquanthue;
     }
-    
-    public function getChucVu(){
+
+    public function getChucVu()
+    {
         switch ($this->LoaiUser) {
             case 1:
-                return "Chi cục trưởng";
+                return "Admin";
             case 2:
                 return "Chi cục trưởng";
-                        
+            case 3:
+                return "Đội trưởng";
+            case 4:
+                return "Đội viên";
         }
     }
 
@@ -296,8 +323,8 @@ class user implements InputFilterAwareInterface
                         )
                     )
                 )
-                
-            ]));
+            ]
+            ));
             
             /*
              * $inputFilter->add($factory->createInput([

@@ -242,6 +242,17 @@ class coquanthue extends \Application\Entity\coquanthue implements \Doctrine\ORM
     /**
      * {@inheritDoc}
      */
+    public function getDoiTruong()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDoiTruong', array());
+
+        return parent::getDoiTruong();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setMaCoQuan($MaCoQuan)
     {
 

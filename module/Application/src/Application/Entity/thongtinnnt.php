@@ -147,7 +147,7 @@ class thongtinnnt
     }
 
  /**
-     * @return the $phuong
+     * @return phuong
      */
     public function getPhuong()
     {

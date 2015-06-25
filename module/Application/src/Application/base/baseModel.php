@@ -129,11 +129,6 @@ abstract class baseModel
         
     }
 
-    
-    abstract function xoa($id);
-    abstract function sua($id);
-    abstract function findById($id);
-    abstract function getDanhSach();
   
 }
 

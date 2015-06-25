@@ -34,6 +34,24 @@ function getAndRedirect(url, postData) {
 	$(formElement).submit();
 }
 
+
+/**
+ * Get an array of column indexes that match a given property
+ *  
+ *  @param {string} stringDate 
+ *  @returns {Date} Array of indexes with matched properties
+ *  @memberof DataTable#oApi
+ */
+function StringToDate(stringDate){
+	var parts =stringDate.split('-');
+	//please put attention to the month (parts[0]), Javascript counts months from 0:
+	//January - 0, February - 1, etc
+	var mydate = new Date(parts[2],parts[1]-1,parts[0]); 
+	
+	return mydate;
+}
+
+
 var DialogTable = (function() {
 	var self;
 	return self = {

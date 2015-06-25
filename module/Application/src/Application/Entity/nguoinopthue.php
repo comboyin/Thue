@@ -7,6 +7,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Doctrine\DBAL\Types\DateType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -83,9 +84,9 @@ class nguoinopthue implements InputFilterAwareInterface
     private $miengiamthue;
 
     /**
-     * @ORM\OneToMany(targetEntity="Application\Entity\ngungnghi", mappedBy="nguoinopthue")
+     * @ORM\OneToMany(targetEntity="Application\Entity\thongtinngungnghi", mappedBy="nguoinopthue")
      */
-    private $ngungnghis;
+    private $thongtinngungnghis;
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\sono", mappedBy="nguoinopthue")
@@ -127,6 +128,34 @@ class nguoinopthue implements InputFilterAwareInterface
      */
     private $dukienmbs;
 
+    /**
+     * @return the $thongtinngungnghis
+     */
+    public function getThongtinngungnghis()
+    {
+        return $this->thongtinngungnghis;
+    }
+
+ /**
+     * @param field_type $thongtinngungnghis
+     */
+    public function setThongtinngungnghis($thongtinngungnghis)
+    {
+        $this->thongtinngungnghis = $thongtinngungnghis;
+    }
+
+ /**
+     * 
+     * @return user  */
+    public function getCanBoDangQuanLy(){
+        
+        foreach ($this->getUsernnts() as $usernnt){
+            if($usernnt->getThoiGianKetThuc()==null){
+                return $usernnt->getUser();
+            }
+        }
+        return null;
+    }
     /**
      *
      * @return the $MaSoThue
@@ -179,7 +208,8 @@ class nguoinopthue implements InputFilterAwareInterface
      */
     public function getNgayCapMST()
     {
-        return $this->NgayCapMST->format('d/m/Y');
+        
+        return $this->NgayCapMST->format('d-m-Y');
     }
 
     /**
@@ -188,7 +218,7 @@ class nguoinopthue implements InputFilterAwareInterface
      */
     public function getThoiDiemBDKD()
     {
-        return $this->ThoiDiemBDKD->format("d/m/Y");
+        return $this->ThoiDiemBDKD->format("d-m-Y");
     }
 
     /**
@@ -211,11 +241,24 @@ class nguoinopthue implements InputFilterAwareInterface
 
     /**
      *
-     * @return thongtinnnt
+     * @return thongtinnnt|ArrayCollection
+     */
+    public function getThongtinnnts()
+    {
+        return $this->thongtinnnt;
+    }
+    /**
+     *
+     * @return thongtinnnt|NULL
      */
     public function getThongtinnnt()
     {
-        return $this->thongtinnnt;
+        foreach ($this->getThongtinnnt() as $thongtinntt){
+            if($thongtinntt->getThoiGianKetThuc()==null){
+                return $thongtinntt->getThoiGianKetThuc();
+            }
+        }
+        return null;
     }
 
     /**
@@ -236,14 +279,7 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->miengiamthue;
     }
 
-    /**
-     *
-     * @return the $ngungnghis
-     */
-    public function getNgungnghis()
-    {
-        return $this->ngungnghis;
-    }
+
 
     /**
      *
@@ -265,11 +301,27 @@ class nguoinopthue implements InputFilterAwareInterface
 
     /**
      *
-     * @return usernnt
+     * @return usernnt|ArrayCollection
      */
     public function getUsernnts()
     {
         return $this->usernnts;
+    }
+    
+    
+    /**
+     *
+     * @return usernnt
+     */
+    public function getUsernnt()
+    {
+        foreach ($this->getUsernnts() as $usennt){
+            if($usennt->getThoiGianKetThuc()==null){
+                return $usennt;
+            }
+        }
+        return null;
+        
     }
 
     /**
@@ -389,16 +441,18 @@ class nguoinopthue implements InputFilterAwareInterface
      */
     public function setNgayCapMST($NgayCapMST)
     {
-        $this->NgayCapMST = $NgayCapMST;
+        $this->NgayCapMST = \DateTime::createFromFormat("d-m-Y", $NgayCapMST);
     }
 
     /**
-     *
-     * @param field_type $ThoiDiemBDKD            
+     *param string d-m-Y
+     * @param string $ThoiDiemBDKD            
      */
     public function setThoiDiemBDKD($ThoiDiemBDKD)
     {
-        $this->ThoiDiemBDKD = $ThoiDiemBDKD;
+         $this->ThoiDiemBDKD= \DateTime::createFromFormat("d-m-Y", $ThoiDiemBDKD);
+        
+        
     }
 
     /**
@@ -446,14 +500,7 @@ class nguoinopthue implements InputFilterAwareInterface
         $this->miengiamthue = $miengiamthue;
     }
 
-    /**
-     *
-     * @param field_type $ngungnghis            
-     */
-    public function setNgungnghis($ngungnghis)
-    {
-        $this->ngungnghis = $ngungnghis;
-    }
+
 
     /**
      *

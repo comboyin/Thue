@@ -5,14 +5,13 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(
- *     name="ngungnghi",
+ *     name="thongtinngungnghi",
  *     indexes={
- *         @ORM\Index(name="fk_ngungnghi_nguoinopthue1_idx", columns={"MaSoThue"}),
- *         @ORM\Index(name="fk_ngungnghi_miengiamthue1_idx", columns={"SoQDMG"})
+ *         @ORM\Index(name="fk_thongtinngungnghi_nguoinopthue1_idx", columns={"MaSoThue"})
  *     }
  * )
  */
-class ngungnghi
+class thongtinngungnghi
 {
     /**
      * @ORM\Id
@@ -26,7 +25,7 @@ class ngungnghi
     private $TuNgay;
 
     /**
-     * @ORM\Column(type="date", nullable=false)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $DenNgay;
 
@@ -40,14 +39,14 @@ class ngungnghi
      */
     private $NgayNopDon;
 
+
     /**
-     * @ORM\OneToOne(targetEntity="Application\Entity\miengiamthue", inversedBy="ngungnghi")
-     * @ORM\JoinColumn(name="SoQDMG", referencedColumnName="SoQDMG", nullable=false, unique=true, onDelete="restrict")
+     * @ORM\OneToOne(targetEntity="Application\Entity\miengiamthue", mappedBy="thongtinngungnghi")
      */
     private $miengiamthue;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Entity\nguoinopthue", inversedBy="ngungnghis")
+     * @ORM\ManyToOne(targetEntity="Application\Entity\nguoinopthue", inversedBy="thongtinngungnghis")
      * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
      */
     private $nguoinopthue;
