@@ -17,7 +17,7 @@ class thongtinngungnghi
      * @ORM\Id
      * @ORM\Column(type="string", length=20)
      */
-    private $IDngungnghi;
+    private $MaTTNgungNghi;
 
     /**
      * @ORM\Column(type="date", nullable=false)
@@ -51,11 +51,11 @@ class thongtinngungnghi
      */
     private $nguoinopthue;
  /**
-     * @return the $IDngungnghi
+     * @return the $MaTTNgungNghi
      */
-    public function getIDngungnghi()
+    public function getMaTTNgungNghi()
     {
-        return $this->IDngungnghi;
+        return $this->MaTTNgungNghi;
     }
 
  /**
@@ -107,11 +107,11 @@ class thongtinngungnghi
     }
 
  /**
-     * @param field_type $IDngungnghi
+     * @param field_type $MaTTNgungNghi
      */
-    public function setIDngungnghi($IDngungnghi)
+    public function setIDngungnghi($MaTTNgungNghi)
     {
-        $this->IDngungnghi = $IDngungnghi;
+        $this->MaTTNgungNghi = $MaTTNgungNghi;
     }
 
  /**

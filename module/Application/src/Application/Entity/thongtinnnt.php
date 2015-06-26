@@ -72,6 +72,7 @@ class thongtinnnt
     /**
      * @ORM\ManyToOne(targetEntity="Application\Entity\nguoinopthue", inversedBy="thongtinnnt")
      * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
+     * @var nguoinopthue
      */
     private $nguoinopthue;
  /**
@@ -135,15 +136,18 @@ class thongtinnnt
      */
     public function getThoiGianBatDau()
     {
-        return $this->ThoiGianBatDau;
+        return $this->ThoiGianBatDau==null?"Không có":$this->ThoiGianBatDau->format("d-m-Y");
+        
     }
 
  /**
-     * @return the $ThoiGianKetThuc
+     * @return string
      */
     public function getThoiGianKetThuc()
     {
-        return $this->ThoiGianKetThuc;
+        return $this->ThoiGianKetThuc==null?null:$this->ThoiGianKetThuc->format("d-m-Y");
+        
+        
     }
 
  /**
@@ -218,20 +222,21 @@ class thongtinnnt
         $this->TenDuong = $TenDuong;
     }
 
- /**
+ /** string date format Y-m-d
      * @param field_type $ThoiGianBatDau
      */
     public function setThoiGianBatDau($ThoiGianBatDau)
     {
-        $this->ThoiGianBatDau = $ThoiGianBatDau;
+        
+        $this->ThoiGianBatDau =  $ThoiGianBatDau==null ? null:\DateTime::createFromFormat("Y-m-d", $ThoiGianBatDau);
     }
 
- /**
-     * @param field_type $ThoiGianKetThuc
+ /**    $ThoiGianKetThuc: string Y-m-d
+     * @param string $ThoiGianKetThuc
      */
     public function setThoiGianKetThuc($ThoiGianKetThuc)
     {
-        $this->ThoiGianKetThuc = $ThoiGianKetThuc;
+       $this->ThoiGianKetThuc =  $ThoiGianKetThuc==null ? null:\DateTime::createFromFormat("Y-m-d", $ThoiGianKetThuc);
     }
 
  /**

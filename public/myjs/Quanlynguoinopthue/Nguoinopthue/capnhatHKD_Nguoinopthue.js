@@ -93,6 +93,19 @@ var EditableTable = function () {
 					
 				
 			});
+			$('#formThayDoiDiaChiKDNNT').submit(function (e) {
+				
+				DialogTable.showPropress();
+				
+			
+			});
+			
+			
+			//dp_ThoiDiemThayDoi
+			$('#dp_ThoiDiemThayDoi').datepicker({
+		        format: 'dd-mm-yyyy'
+		    });
+			$("#dp_ThoiDiemThayDoi").datepicker('setValue', new Date());
 			
 			
 			//today = $.datepicker.formatDate("dd-mm-yy", new Date());

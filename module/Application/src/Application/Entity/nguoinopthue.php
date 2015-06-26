@@ -24,7 +24,7 @@ class nguoinopthue implements InputFilterAwareInterface
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=14)
      */
     private $MaSoThue;
 
@@ -34,7 +34,7 @@ class nguoinopthue implements InputFilterAwareInterface
     private $TenHKD;
 
     /**
-     * @ORM\Column(type="string", length=64, nullable=false)
+     * @ORM\Column(type="string", length=9, nullable=false)
      */
     private $SoCMND;
 
@@ -44,7 +44,7 @@ class nguoinopthue implements InputFilterAwareInterface
     private $DiaChiCT;
 
     /**
-     * @ORM\Column(type="string", length=64, nullable=false)
+     * @ORM\Column(type="string", length=21, nullable=false)
      */
     private $SoGPKD;
 
@@ -248,7 +248,7 @@ class nguoinopthue implements InputFilterAwareInterface
         return $this->thongtinnnt;
     }
     /**
-     *
+     * Trả về thongtinnnt đang hoạt động
      * @return thongtinnnt|NULL
      */
     public function getThongtinnnt()

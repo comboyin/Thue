@@ -11,7 +11,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity
  * @ORM\Table(
  * name="user",
- * indexes={@ORM\Index(name="fk_user_coquanthue1_idx", columns={"MaCoQuan"})},
+ * indexes={
+ *         @ORM\Index(name="fk_user_coquanthue1_idx", columns={"MaCoQuan"}),
+ *         @ORM\Index(name="fk_user_user1_idx", columns={"parentId"})
+ * },
  * uniqueConstraints={
  * @ORM\UniqueConstraint(name="Email", columns={"Email"})
  * }
@@ -27,6 +30,17 @@ class user implements InputFilterAwareInterface
      * @ORM\Column(type="string", length=64)
      */
     private $MaUser;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\user", mappedBy="parentUser")
+     **/
+    private $childrenUser;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Entity\user", inversedBy="$childrenUser")
+     * @ORM\JoinColumn(name="parentId", referencedColumnName="MaUser")
+     **/
+    private $parentUser;
 
     /**
      * @ORM\Column(type="integer",nullable=false, options={"default":"4"})
@@ -71,12 +85,46 @@ class user implements InputFilterAwareInterface
      * })
      */
     private $coquanthue;
+    
+    
     /**
      * 
      * @var ArrayCollection  */
     private $usernntDangHoatDong;
 
     /**
+     * @return the $childrenUser
+     */
+    public function getChildrenUser()
+    {
+        return $this->childrenUser;
+    }
+
+ /**
+     * @return the $parentUser
+     */
+    public function getParentUser()
+    {
+        return $this->parentUser;
+    }
+
+ /**
+     * @param field_type $childrenUser
+     */
+    public function setChildrenUser($childrenUser)
+    {
+        $this->childrenUser = $childrenUser;
+    }
+
+ /**
+     * @param field_type $parentUser
+     */
+    public function setParentUser($parentUser)
+    {
+        $this->parentUser = $parentUser;
+    }
+
+ /**
      * @return usernnt[]|ArrayCollection
      */
     public function getUsernntDangHoatDong()

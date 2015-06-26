@@ -108,14 +108,7 @@ class nguoinopthueModel extends baseModel
             } else 
                 if ($user->getLoaiUser() == 3) {
                     $qb->select(array(
-                        'nguoinopthue',
-                        'usernnts',
-                        'user',
-                        'NNTNganhs',
-                        'nganh',
-                        'thongtinnnt',
-                        'phuong',
-                        'coquanthue'
+                        'nguoinopthue'
                     ))
                         ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                         ->join('nguoinopthue.usernnts', 'usernnts')

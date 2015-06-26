@@ -35,7 +35,7 @@ class dukienthue implements InputFilterAwareInterface
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string",length=10,nullable=false)
+     * @ORM\Column(type="string",length=7,nullable=false)
      */
     private $KyThue;
 

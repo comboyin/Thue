@@ -32,7 +32,7 @@ class miengiamthue
 
     /**
      * @ORM\OneToOne(targetEntity="Application\Entity\thongtinngungnghi", inversedBy="miengiamthue")
-     * @ORM\JoinColumn(name="IDngungnghi", referencedColumnName="IDngungnghi", nullable=true, unique=true, onDelete="restrict")
+     * @ORM\JoinColumn(name="MaTTNgungNghi", referencedColumnName="MaTTNgungNghi", nullable=true, unique=true, onDelete="restrict")
      */
     private $thongtinngungnghi;
 
