@@ -6,8 +6,8 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Doctrine\DBAL\Types\DateType;
 use Doctrine\Common\Collections\ArrayCollection;
+use Application\Unlity\Unlity;
 
 /**
  * @ORM\Entity
@@ -128,8 +128,67 @@ class nguoinopthue implements InputFilterAwareInterface
      */
     private $dukienmbs;
 
+    
+
+    
     /**
-     * @return the $thongtinngungnghis
+     *   
+     * 0: nghĩ bỏ kinh doanh
+     * 1: đang hoạt động
+     * 2: tạm ngừng kd
+     * @var int  
+     * */
+    
+     
+    public function getTrangThai()
+    {
+       if($this->checkStop()==true){
+           return 0;
+       }else if($this->checkPause()==true){
+           return 2;
+       }
+       return 1;
+        
+        
+    }
+    /**
+     * Kiểm tra HKD có đang nghĩ kinh doanh hay không
+     * @return boolean  */
+    private function checkStop(){
+        $thongtinngungnghis = $this->getThongtinngungnghis();
+        foreach ($thongtinngungnghis as $ttnn){
+            if($ttnn->getDenNgay()==null && Unlity::CheckTodayLonHonHoacBang($ttnn->getTuNgay())){
+                return true;
+            }
+        }
+        return false;    
+    }
+    /**
+     * kiểm tra HKD đang tạm nghĩ KD hay không
+     * @return boolean  */
+    private function checkPause(){
+        if($this->checkStop()==false){
+            $thongtinngungnghis = $this->getThongtinngungnghis();
+            foreach ($thongtinngungnghis as $ttnt){
+                if(Unlity::CheckTodayBetweenTowDay($ttnt->getTuNgay(), $ttnt->getDenNgay())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * kiểm tra HKD đang hoạt động hay không 
+     * @return boolean  */
+    private function checkActive(){
+        if($this->checkPause()== false && $this->checkStop()==false){
+            return true;
+        }
+        return false;
+    }
+
+ /**
+     * @return thongtinngungnghi|ArrayCollection
      */
     public function getThongtinngungnghis()
     {

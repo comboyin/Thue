@@ -7,14 +7,14 @@ use Application\Entity\nguoinopthue;
 use Quanlynguoinopthue\Forms\formNguoiNopThue;
 use Application\Entity\coquanthue;
 use Zend\Form\Element\Select;
-use Doctrine\ORM\Query\AST\NullIfExpression;
+
 use Application\Entity\nganh;
 use Application\Entity\phuong;
 use Application\Entity\ketqua;
-use Zend\Form\Form;
+
 use Zend\Form\Element;
 use Application\Entity\NNTNganh;
-use Application\Entity\user;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Entity\usernnt;
 use Quanlynguoinopthue\Forms\formTTCoBanNNT;
@@ -22,7 +22,7 @@ use Quanlynguoinopthue\Forms\ValidationTTCoBanNNT;
 use Quanlynguoinopthue\Forms\formThayDoiDiaChiKDNNT;
 use Application\Models\phuongModel;
 use Application\Models\coquanthueModel;
-use Application\Models\miengiamthueModel;
+
 use Application\Entity\thongtinnnt;
 use Application\Models\thongtinnntModel;
 use Quanlynguoinopthue\Forms\ValidationThayDoiDiaChiKD;
@@ -677,10 +677,7 @@ class NguoinopthueController extends baseController
     public function testAction()
     {
         
-       $a =  new thongtinnntModel($this->getEntityManager());
-       
-       $a->ThongtinnntDangHoatDong("0300228647");
-       
+        var_dump(Unlity::CheckTodayLonHonHoacBang("28-06-2015"));
         return $this->response;
     }
     

@@ -27,7 +27,7 @@ class user implements InputFilterAwareInterface
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=20)
      */
     private $MaUser;
     

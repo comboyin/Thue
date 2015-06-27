@@ -64,10 +64,10 @@ class user extends \Application\Entity\user implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'inputFilter', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MaUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'LoaiUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'Email', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MatKhau', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TrangThai', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'buttoannothues', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernnts', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'coquanthue', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernntDangHoatDong');
+            return array('__isInitialized__', 'inputFilter', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MaUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'childrenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'parentUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'LoaiUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'Email', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MatKhau', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TrangThai', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'buttoannothues', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernnts', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'coquanthue', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernntDangHoatDong');
         }
 
-        return array('__isInitialized__', 'inputFilter', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MaUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'LoaiUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'Email', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MatKhau', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TrangThai', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'buttoannothues', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernnts', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'coquanthue', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernntDangHoatDong');
+        return array('__isInitialized__', 'inputFilter', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MaUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'childrenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'parentUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'LoaiUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TenUser', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'Email', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'MatKhau', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'TrangThai', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'buttoannothues', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernnts', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'coquanthue', '' . "\0" . 'Application\\Entity\\user' . "\0" . 'usernntDangHoatDong');
     }
 
     /**
@@ -173,6 +173,50 @@ class user extends \Application\Entity\user implements \Doctrine\ORM\Proxy\Proxy
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getChildrenUser()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getChildrenUser', array());
+
+        return parent::getChildrenUser();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParentUser()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getParentUser', array());
+
+        return parent::getParentUser();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setChildrenUser($childrenUser)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setChildrenUser', array($childrenUser));
+
+        return parent::setChildrenUser($childrenUser);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setParentUser($parentUser)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setParentUser', array($parentUser));
+
+        return parent::setParentUser($parentUser);
+    }
+
     /**
      * {@inheritDoc}
      */

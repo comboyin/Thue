@@ -63,7 +63,8 @@ class thongtinngungnghi
      */
     public function getTuNgay()
     {
-        return $this->TuNgay;
+        return $this->TuNgay==null? null:$this->TuNgay->format("d-m-Y");
+        
     }
 
  /**
@@ -71,7 +72,8 @@ class thongtinngungnghi
      */
     public function getDenNgay()
     {
-        return $this->DenNgay;
+        return $this->DenNgay==null? null:$this->DenNgay->format("d-m-Y");
+        
     }
 
  /**

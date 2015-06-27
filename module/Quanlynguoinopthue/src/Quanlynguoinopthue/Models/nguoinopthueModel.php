@@ -58,8 +58,6 @@ class nguoinopthueModel extends baseModel
         // TODO Auto-generated method stub
     }
 
-
-
     public function xoa($id)
     {
         // TODO Auto-generated method stub
@@ -67,6 +65,7 @@ class nguoinopthueModel extends baseModel
 
     /**
      * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý
+     * 
      * @param user $user            
      * @return \Application\Entity\ketqua
      */
@@ -81,30 +80,14 @@ class nguoinopthueModel extends baseModel
             if ($user->getLoaiUser() == 4) {
                 
                 $qb->select(array(
-                    'nguoinopthue',
-                    'usernnts',
-                    'user',
-                    'NNTNganhs',
-                    'nganh',
-                    'thongtinnnt',
-                    'phuong',
-                    'coquanthue'      
-                ))
+                    'nguoinopthue'
+                )
+                )
                     ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
-                    ->join('nguoinopthue.NNTNganhs', 'NNTNganhs')
-                    ->join('NNTNganhs.nganh', 'nganh')
-                    ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
-                    ->join('thongtinnnt.phuong', 'phuong')
-                    ->join('phuong.coquanthue', 'coquanthue')
-                    ->where('user.MaUser = ?1')
-                    ->andwhere('usernnts.ThoiGianKetThuc is null')
-                    ->andwhere('NNTNganhs.ThoiGianKetThuc is null')
-                    ->andwhere('thongtinnnt.ThoiGianKetThuc is null')
-                    ->setParameter(1, $ma);
-                // ->andWhere('nguoinopthueot in('.$qb->getDQL().')')
-                
+                    ->where('user = ?1')
+                        ->setParameter(1, $user);
             } else 
                 if ($user->getLoaiUser() == 3) {
                     $qb->select(array(
@@ -113,17 +96,14 @@ class nguoinopthueModel extends baseModel
                         ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                         ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join('usernnts.user', 'user')
-                        ->join('nguoinopthue.NNTNganhs', 'NNTNganhs')
-                        ->join('NNTNganhs.nganh', 'nganh')
-                        ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
-                        ->join('thongtinnnt.phuong', 'phuong')
-                        ->join('phuong.coquanthue', 'coquanthue')
-                        ->where('coquanthue = ?1')
-                        ->andwhere('usernnts.ThoiGianKetThuc is null')
-                        ->andwhere('NNTNganhs.ThoiGianKetThuc is null')
-                        ->andwhere('thongtinnnt.ThoiGianKetThuc is null')
-                        ->setParameter(1, $user->getCoquanthue());
+                        ->where('user in ('.$this->em->createQueryBuilder()->select("canbovien")
+                                                ->from('Application\Entity\user', 'canbovien')
+                                                ->where('canbovien.parentUser = ?1')->getDQL()
+                                                .')')
+                        ->setParameter(1, $user);
                 }
+            
+            
             
             $obj = $qb->getQuery()->getResult();
             
