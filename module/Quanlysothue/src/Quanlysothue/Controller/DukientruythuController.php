@@ -74,7 +74,7 @@ class DukientruythuController extends baseController
             $MaSoThue = $post->get('MaSoThue');
             $TieuMuc = $post->get('TieuMuc');
             $SoTien = $post->get('SoTien');
-            $TrangThai = $post->get('TrangThai');
+            $TrangThai = 0;
             $LyDo = $post->get('LyDo');
             $TiLeTinhThue = $post->get('TiLeTinhThue');
             $DoanhSo = $post->get('DoanhSo');
@@ -166,7 +166,7 @@ class DukientruythuController extends baseController
                 $MaSoThue = $post->get('MaSoThue');
                 $TieuMuc = $post->get('TieuMuc');
                 $SoTien = $post->get('SoTien');
-                $TrangThai = $post->get('TrangThai');
+                $TrangThai = 0;
                 $LyDo = $post->get('LyDo');
                 $TiLeTinhThue = $post->get('TiLeTinhThue');
                 $DoanhSo = $post->get('DoanhSo');

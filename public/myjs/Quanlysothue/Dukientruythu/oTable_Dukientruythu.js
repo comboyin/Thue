@@ -212,7 +212,7 @@ var EditableTable = function () {
 			function addRow(oTable, nRow) {
 				var aData = oTable.fnGetData(nRow);
 				var jqTds = $('>td', nRow);
-
+				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
 				// cansua
 				jqTds[1].innerHTML = '<input style="width:80px;" name="masothue" type="text"  value="'
 					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
@@ -246,19 +246,19 @@ var EditableTable = function () {
 
 			function saveRow(oTable, nRow) {
 				var jqInputs = $('input', nRow);
-				console.log()
+				
 				oTable.fnUpdate('<input class="check_item" type="checkbox">', nRow, 0, false);
 
 				// cansua
-				oTable.fnUpdate(jqInputs[0].value, nRow, 1, false);
-				oTable.fnUpdate(jqInputs[1].value, nRow, 2, false);
-				oTable.fnUpdate(jqInputs[2].value, nRow, 3, false);
-				oTable.fnUpdate(jqInputs[3].value, nRow, 4, false);
+				oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
+				oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
+				oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
+				oTable.fnUpdate(jqInputs[4].value, nRow, 4, false);
 
-				oTable.fnUpdate(jqInputs[4].value, nRow, 5, false);
-				oTable.fnUpdate(jqInputs[5].value, nRow, 6, false);
-				oTable.fnUpdate(jqInputs[6].value, nRow, 7, false);
-				oTable.fnUpdate(jqInputs[7].value, nRow, 8, false);
+				oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
+				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
+				oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
+				oTable.fnUpdate(jqInputs[8].value, nRow, 8, false);
 
 				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 9,
 					false);
