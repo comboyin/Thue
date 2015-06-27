@@ -486,34 +486,55 @@ class NguoinopthueController extends baseController
                                 $formThayDoiDiaChiKDNNT->setInputFilter((new ValidationThayDoiDiaChiKD())->getInputFilter());
                                 $formThayDoiDiaChiKDNNT->setData($post);
                                 if($formThayDoiDiaChiKDNNT->isValid()){
-                                    
-                                    $thongtinnntModel = new thongtinnntModel($this->getEntityManager()); 
-                                   
+                                    $thongtinnntModel = new thongtinnntModel($this->getEntityManager());
                                     $thongtinnntOld = $nguoinopthue->getThongtinnnt();
-                                    $thongtinnntOld->setThoiGianKetThuc(Unlity::stringDateToStringDate($ThoiDiemThayDoi));
-                                    
-                                    
-                                    $thongtinnntNew =  new thongtinnnt();
-                                    $thongtinnntNew->setDiaChiKD($DiaChiKD);
-                                    $thongtinnntNew->setPhuong($this->getEntityManager()->find("Application\\Entity\phuong", $Phuong));
-                                    $thongtinnntNew->setChanLe($ChanLe);
-                                    $thongtinnntNew->setHem($Hem);
-                                    $thongtinnntNew->setSoNha($SoNha);
-                                    $thongtinnntNew->setSoNhaPhu($SoNhaPhu);
-                                    $thongtinnntNew->setTenDuong($TenDuong);
-                                    
-                                    $thongtinnntNew->setThoiGianBatDau(Unlity::stringDateToStringDate($ThoiDiemThayDoi));
-                                    $thongtinnntNew->setThoiGianKetThuc(null);
-                                    $thongtinnntNew->setNguoinopthue($nguoinopthue);
-                                    
-                                    
-                                    //bắt đầu thay đổi địa chỉ kinh doanh
-                                    $kq = $thongtinnntModel->ThayDoiDiaChiKD($thongtinnntOld, $thongtinnntNew, $nguoinopthue->getMaSoThue());
-                                    
-                                    if($kq->getKq()==true){
-                                        $nguoinopthue->getThongtinnnts()->add((new thongtinnntModel($this->getEntityManager()))->ThongtinnntDangHoatDong($nguoinopthue->getMaSoThue())->getObj());
-                                       
+                                    if($post->get('SubmitCapNhat')!=null){
+                                        
+                                        
+                                        $thongtinnntOld->setDiaChiKD($DiaChiKD);
+                                        $thongtinnntOld->setPhuong($this->getEntityManager()->find("Application\\Entity\phuong", $Phuong));
+                                        $thongtinnntOld->setChanLe($ChanLe);
+                                        $thongtinnntOld->setHem($Hem);
+                                        $thongtinnntOld->setSoNha($SoNha);
+                                        $thongtinnntOld->setSoNhaPhu($SoNhaPhu);
+                                        $thongtinnntOld->setTenDuong($TenDuong);
+                                        
+                                        $thongtinnntOld->setThoiGianBatDau(Unlity::stringDateToStringDate($ThoiDiemThayDoi));
+                                        
+                                        $thongtinnntOld->setNguoinopthue($nguoinopthue);
+                                        $thongtinnntModel->merge($thongtinnntOld);
                                     }
+                                    else{
+                                        
+                                         
+                                        
+                                        $thongtinnntOld->setThoiGianKetThuc(Unlity::stringDateToStringDate($ThoiDiemThayDoi));
+                                        
+                                        
+                                        $thongtinnntNew =  new thongtinnnt();
+                                        $thongtinnntNew->setDiaChiKD($DiaChiKD);
+                                        $thongtinnntNew->setPhuong($this->getEntityManager()->find("Application\\Entity\phuong", $Phuong));
+                                        $thongtinnntNew->setChanLe($ChanLe);
+                                        $thongtinnntNew->setHem($Hem);
+                                        $thongtinnntNew->setSoNha($SoNha);
+                                        $thongtinnntNew->setSoNhaPhu($SoNhaPhu);
+                                        $thongtinnntNew->setTenDuong($TenDuong);
+                                        
+                                        $thongtinnntNew->setThoiGianBatDau(Unlity::stringDateToStringDate($ThoiDiemThayDoi));
+                                        $thongtinnntNew->setThoiGianKetThuc(null);
+                                        $thongtinnntNew->setNguoinopthue($nguoinopthue);
+                                        
+                                        
+                                        //bắt đầu thay đổi địa chỉ kinh doanh
+                                        $kq = $thongtinnntModel->ThayDoiDiaChiKD($thongtinnntOld, $thongtinnntNew, $nguoinopthue->getMaSoThue());
+                                        
+                                        if($kq->getKq()==true){
+                                            $nguoinopthue->getThongtinnnts()->add((new thongtinnntModel($this->getEntityManager()))->ThongtinnntDangHoatDong($nguoinopthue->getMaSoThue())->getObj());
+                                             
+                                        }
+                                    }
+                                    
+                                   
                                     
                                 }else{
                                     $kq->appentMessenger($this->getErrorMessengerForm($formThayDoiDiaChiKDNNT));
@@ -558,7 +579,7 @@ class NguoinopthueController extends baseController
                 ->andWhere("user not in(" . $this->getEntityManager()
                 ->createQueryBuilder()
                 ->select("user1")
-                ->from("Application\Entity\user", "user1")
+                ->from('Application\Entity\user', "user1")
                 ->where("user1 = ?3")
                 ->getDQL() . ")")
                 ->setParameter(1, $this->getUser()
@@ -673,6 +694,26 @@ class NguoinopthueController extends baseController
         $select->setValueOptions($options);
     
     }
+    
+    //ajax
+    public function checkHKDStopAction(){
+        $MaSoThue = $this->getRequest()->getPost()->get("MaSoThue");
+        $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue'
+            , $MaSoThue);
+        $data = array(
+            'check' => true
+        );
+        
+        if($nguoinopthue->getTrangThai()==0){
+            $data['check'] = true;
+            echo json_encode($data);
+        }
+        else{
+            $data['check'] = false;
+            echo json_encode($data);
+        }
+        return $this->response;
+    } 
 
     public function testAction()
     {

@@ -599,15 +599,30 @@ var EditableTable = function () {
 
 			$('#editable-sample a.edit').live('click',function (e) {
 					e.preventDefault();
-					DialogTable.showPropress();
 					var nRow = $(this).parents('tr')[0];
 					var aData = oTable.fnGetData(nRow);
 					_MaSoThue = aData[1].trim();
-					var data = {
-								HanhDong:'newsua',
-								MaSoThue:_MaSoThue
-							};
-					postAndRedirect('capnhatHKD',data);
+					
+					$.post("checkHKDStop",{
+						MaSoThue:_MaSoThue
+					},function(json){
+						if(json.check == true){
+							DialogTable.showThongBao('Thông báo','Hộ kinh doanh này đã nghĩ kinh doanh !');
+						}else{
+							DialogTable.showPropress();
+							
+							var data = {
+										HanhDong:'newsua',
+										MaSoThue:_MaSoThue
+									};
+							postAndRedirect('capnhatHKD',data);
+						}
+						
+					},'json');
+					
+					
+					
+					/**/
 				});
 
 			

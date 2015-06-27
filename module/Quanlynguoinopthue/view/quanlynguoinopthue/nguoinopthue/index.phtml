@@ -94,7 +94,7 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlyngu
 									<th>Ngành</th>
 									<th>Nghề</th>
 									<th>Cán Bộ QL</th>
-									
+									<th>Trang thái</th>
 									<th>Sửa</th>
     								<th>Xóa</th>
 								</tr>
@@ -123,7 +123,30 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlyngu
 								
 								<td><?php echo $nnt->getNgheKD()?></td>
 								<td><?php echo $nnt->getUsernnt()->getUser()->getTenUser()?></td>	
-								
+								<td>
+								    <?php 
+
+								    switch ($nnt->getTrangThai()) {
+								        // nghĩ
+								        case 0:
+								            echo '<button class="btn btn-danger"><i class="icon-ban"></i></button>';
+								            break;
+								            //dang hoạt động
+								        case 1:
+								            echo '<button class="btn btn-success"><i class="icon-ok"></i></button>';
+								            break;
+								            //tạm ngừng
+								        case 2:
+								            echo '<button class="btn btn-primary"><i class="icon-stopwatch"></i></button>';
+								            break;
+								        
+								    }
+								    ?>
+								    
+								    
+								    
+								    
+								</td>
 								<td><a class="edit" href="">Edit</a></td>
 								<td><a class="Delete" href="">Delete</a></td>
 								

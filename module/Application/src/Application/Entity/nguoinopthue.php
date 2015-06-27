@@ -142,9 +142,10 @@ class nguoinopthue implements InputFilterAwareInterface
      
     public function getTrangThai()
     {
-       if($this->checkStop()==true){
+        $thongtinngungnghis = $this->getThongtinngungnghis();
+       if($this->checkStop($thongtinngungnghis)==true){
            return 0;
-       }else if($this->checkPause()==true){
+       }else if($this->checkPause($thongtinngungnghis)==true){
            return 2;
        }
        return 1;
@@ -154,8 +155,8 @@ class nguoinopthue implements InputFilterAwareInterface
     /**
      * Kiểm tra HKD có đang nghĩ kinh doanh hay không
      * @return boolean  */
-    private function checkStop(){
-        $thongtinngungnghis = $this->getThongtinngungnghis();
+    private function checkStop($thongtinngungnghis){
+        
         foreach ($thongtinngungnghis as $ttnn){
             if($ttnn->getDenNgay()==null && Unlity::CheckTodayLonHonHoacBang($ttnn->getTuNgay())){
                 return true;
@@ -166,9 +167,9 @@ class nguoinopthue implements InputFilterAwareInterface
     /**
      * kiểm tra HKD đang tạm nghĩ KD hay không
      * @return boolean  */
-    private function checkPause(){
-        if($this->checkStop()==false){
-            $thongtinngungnghis = $this->getThongtinngungnghis();
+    private function checkPause($thongtinngungnghis){
+        if($this->checkStop($thongtinngungnghis)==false){
+            
             foreach ($thongtinngungnghis as $ttnt){
                 if(Unlity::CheckTodayBetweenTowDay($ttnt->getTuNgay(), $ttnt->getDenNgay())){
                     return true;

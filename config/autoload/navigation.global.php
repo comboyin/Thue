@@ -55,6 +55,22 @@ return array(
                         'controller' => 'Dukienthuecuanam',
                         'action' => 'index',
                         'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
+                    )
+                    ,
+                    array(
+                        'label' => 'Dự kiến thuế của tháng',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Dukienthuecuanam',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
+                    )
+                    ,
+                    array(
+                        'label' => 'Dự kiến thuế môn bài',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Dukienthuecuanam',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
                     ),
                     array(
                         'label' => 'Quản lý chứng từ',
