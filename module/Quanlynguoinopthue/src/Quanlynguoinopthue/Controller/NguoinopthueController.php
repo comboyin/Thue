@@ -4,7 +4,7 @@ namespace Quanlynguoinopthue\Controller;
 use Application\base\baseController;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Entity\nguoinopthue;
-use Quanlynguoinopthue\Forms\formNguoiNopThue;
+use Quanlynguoinopthue\Form\formNguoiNopThue;
 use Application\Entity\coquanthue;
 use Zend\Form\Element\Select;
 
@@ -17,15 +17,15 @@ use Application\Entity\NNTNganh;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Entity\usernnt;
-use Quanlynguoinopthue\Forms\formTTCoBanNNT;
-use Quanlynguoinopthue\Forms\ValidationTTCoBanNNT;
-use Quanlynguoinopthue\Forms\formThayDoiDiaChiKDNNT;
+use Quanlynguoinopthue\Form\formTTCoBanNNT;
+use Quanlynguoinopthue\Form\ValidationTTCoBanNNT;
+use Quanlynguoinopthue\Form\formThayDoiDiaChiKDNNT;
 use Application\Models\phuongModel;
 use Application\Models\coquanthueModel;
 
 use Application\Entity\thongtinnnt;
 use Application\Models\thongtinnntModel;
-use Quanlynguoinopthue\Forms\ValidationThayDoiDiaChiKD;
+use Quanlynguoinopthue\Form\ValidationThayDoiDiaChiKD;
 use Application\Unlity\Unlity;
 
 /**

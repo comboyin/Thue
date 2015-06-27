@@ -1,5 +1,5 @@
 <?php
-namespace Quanlynguoinopthue\Forms;
+namespace Quanlynguoinopthue\Form;
 
 use Zend\Form\Form;
 
