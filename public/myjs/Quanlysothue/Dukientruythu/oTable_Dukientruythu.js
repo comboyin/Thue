@@ -199,7 +199,7 @@ var EditableTable = function () {
 				jqTds[7].innerHTML = '<input style="width:10px;" name="TrangThai" type="text" value="'
 					 + aData[7] + ' "disabled>';
 				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
-					 + aData[8] + ' ">';
+					 + aData[8] + '">';
 
 				jqTds[9].innerHTML = '<a class="edit" href="">Save edit</a>';
 				jqTds[10].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
@@ -235,7 +235,7 @@ var EditableTable = function () {
 				jqTds[7].innerHTML = '<input style="width:10px;" name="TrangThai" type="text" value="'
 					 + aData[7] + ' "disabled>';
 				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
-					 + aData[8] + ' ">';
+					 + aData[8] + '">';
 
 				jqTds[9].innerHTML = '<a class="edit" href="">Save new</a>';
 				jqTds[10].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
@@ -246,18 +246,19 @@ var EditableTable = function () {
 
 			function saveRow(oTable, nRow) {
 				var jqInputs = $('input', nRow);
+				console.log()
 				oTable.fnUpdate('<input class="check_item" type="checkbox">', nRow, 0, false);
 
 				// cansua
-				oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
-				oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
-				oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-				oTable.fnUpdate(jqInputs[4].value, nRow, 4, false);
+				oTable.fnUpdate(jqInputs[0].value, nRow, 1, false);
+				oTable.fnUpdate(jqInputs[1].value, nRow, 2, false);
+				oTable.fnUpdate(jqInputs[2].value, nRow, 3, false);
+				oTable.fnUpdate(jqInputs[3].value, nRow, 4, false);
 
-				oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
-				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
-				oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
-				oTable.fnUpdate(jqInputs[8].value, nRow, 8, false);
+				oTable.fnUpdate(jqInputs[4].value, nRow, 5, false);
+				oTable.fnUpdate(jqInputs[5].value, nRow, 6, false);
+				oTable.fnUpdate(jqInputs[6].value, nRow, 7, false);
+				oTable.fnUpdate(jqInputs[7].value, nRow, 8, false);
 
 				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 9,
 					false);
@@ -325,19 +326,19 @@ var EditableTable = function () {
 								title : 'Thông báo',
 								message : json.messenger,
 							});
-
+							return nEditing;
 						} else {
 
-							saveRow(oTable, nEditing);
+							
 							BootstrapDialog
 							.confirm({
 								title : 'Thông báo',
 								message : json.messenger,
 
 							});
-
+							saveRow(oTable, nEditing);
 							nEditing = null;
-
+							return nEditing;
 						}
 
 					}, "json");
@@ -351,7 +352,7 @@ var EditableTable = function () {
 								title : 'Thông báo',
 								message : json.messenger,
 							});
-
+							return nEditing;
 						} else {
 
 							saveRow(oTable, nEditing);
@@ -363,11 +364,11 @@ var EditableTable = function () {
 							});
 
 							nEditing = null;
-
+							return nEditing;
 						}
 
 					}, "json");
-
+				}else{
 					return nEditing;
 				}
 
@@ -745,8 +746,8 @@ var EditableTable = function () {
 					}
 
 					var url = 'them';
-
-					nEditing = SaveNew('post', url, data, oTable, nEditing);
+					console.log(nEditing);
+					SaveNew('post', url, data, oTable, nEditing);
 
 				} else if (nEditing == nRow
 					 && this.innerHTML == "Save edit") {
