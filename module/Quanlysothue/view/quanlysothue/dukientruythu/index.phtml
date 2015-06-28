@@ -1,13 +1,16 @@
 <?php
 use Application\Entity\dukientruythu;
+use Quanlysothue\Froms\UploadForm;
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Dukientruythu/oTable_Dukientruythu.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fileDownload.js');
 
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap/js/bootstrap-fileupload.js');
 $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/bootstrap/css/bootstrap-fileupload.css');
 
 
 /* @var $dsDuKienTruyThu dukientruythu */
-
+/* @var $formUp UploadForm */
+$formUp = $this->formUp;
 ?>
 
 
@@ -109,7 +112,7 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
                                                <span class="btn btn-file">
                                                <span class="fileupload-new">Select file</span>
                                                <span class="fileupload-exists">Change</span>
-                                               <input type="file" class="default" accept=".xls,.xlsx">
+                                               <?php echo $this->formelement($formUp->get("dukientruythu-file"))?>
                                                </span>
                                                 <button style="margin-left: 5px;"  id="Import"
                             						class="btn btn-file">

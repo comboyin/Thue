@@ -843,6 +843,10 @@ var EditableTable = function () {
 				}, 'json');*/
 
 			});
+			
+			
+			//
+			
 
 			$('#editable-sample button.DialogTieuMuc').live('click', function (e) {
 
@@ -867,6 +871,42 @@ var EditableTable = function () {
 				});
 				
 
+			});
+			
+			
+			//upload
+			
+			$("#Import").click(function(){
+				var fd = new FormData();    
+				fd.append( 'dukientruythu-file',$('input[name="dukientruythu-file"]')[0].files[0]);
+				DialogTable.showPropressUnlimit();
+				$.ajax({
+				  url: 'uploadForm',
+				  data: fd,
+				  dataType: 'json',
+				  processData: false,
+				  contentType: false,
+				  type: 'POST',
+				  success: function(json){
+					  
+				    if(json.sucess==false){
+				    	
+				    	$.fileDownload('downloadFile', {
+							successCallback : function(url) {
+							},
+							failCallback : function(responseHtml, url) {
+							},
+							httpMethod : "GET",
+							data : 'filename='+json.fileNameErr
+						});
+				    }else if(json.sucess==true){
+				    	
+				    }
+				    
+				    DialogTable.setHeadAndMess('Thông báo',json.mess);
+				    
+				  }
+				});
 			});
 
 		}

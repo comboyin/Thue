@@ -23,7 +23,7 @@ class miengiamthue
     /**
      * @ORM\Column(type="date", nullable=false)
      */
-    private $NgayNopDon;
+    private $NgayCoHieuLuc;
 
     /**
      * @ORM\Column(type="string", nullable=true)

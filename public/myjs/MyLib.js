@@ -228,6 +228,15 @@ var DialogTable = (function() {
 				}, 3000);
 			}
 		},
+		showPropressUnlimit : function() {
+			if($('#DialogTable').hasClass('in')!=true){
+				this.addHead('Vui lòng chờ...');
+				$("#DialogTable > .modal-body").html('<div class="progress progress-striped active"> <div style="width: 100%;" class="bar"></div></div>');
+				$("#DialogTable").modal("show");
+				
+				
+			}
+		},
 		showThongBao : function(head,messenger) {
 			if($('#DialogTable').hasClass('in')!=true){
 				this.addHead(head);
@@ -242,13 +251,28 @@ var DialogTable = (function() {
 				}, 3000);
 			}
 		},
+		
+		showThongBaoUnlimit : function(head,messenger) {
+			if($('#DialogTable').hasClass('in')!=true){
+				this.addHead(head);
+				$("#DialogTable > .modal-body").html(messenger);
+				$("#DialogTable").modal("show");
+				
+				
+			}
+		},
 		hidePropress : function() {
 
 			if ($('#DialogTable').hasClass('in') == true) {
 				$('#DialogTable').modal('hide');
 			}
 
+		},
+		setHeadAndMess : function(head,messenger){
+			this.addHead(head);
+			$("#DialogTable > .modal-body").html(messenger);
 		}
+		
 
 	// example khai bao 1 doi tuong c
 	/*

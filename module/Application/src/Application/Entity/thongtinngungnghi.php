@@ -35,7 +35,7 @@ class thongtinngungnghi
     private $LyDo;
 
     /**
-     * @ORM\Column(type="date", nullable=false)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $NgayNopDon;
 

@@ -123,7 +123,7 @@ class dukientruythu implements InputFilterAwareInterface
 
     /**
      *
-     * @return the $muclucngansach
+     * @return muclucngansach
      */
     public function getMuclucngansach()
     {
@@ -132,7 +132,7 @@ class dukientruythu implements InputFilterAwareInterface
 
     /**
      *
-     * @return the $nguoinopthue
+     * @return nguoinopthue
      */
     public function getNguoinopthue()
     {
