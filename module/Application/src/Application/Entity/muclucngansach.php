@@ -20,6 +20,11 @@ class muclucngansach
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $TenGoi;
+    
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default":"0"})
+     */
+    private $SoTien;
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\chitietchungtu", mappedBy="muclucngansach")
@@ -30,6 +35,11 @@ class muclucngansach
      * @ORM\OneToMany(targetEntity="Application\Entity\kythuemg", mappedBy="muclucngansach")
      */
     private $kythuemgs;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\bieuthuetyle", mappedBy="muclucngansach")
+     */
+    private $bieuthuetyles;
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\sono", mappedBy="muclucngansach")
@@ -65,6 +75,38 @@ class muclucngansach
      * @ORM\OneToMany(targetEntity="Application\Entity\dukienmb", mappedBy="muclucngansach")
      */
     private $dukienmbs;
+ /**
+     * @return the $SoTien
+     */
+    public function getSoTien()
+    {
+        return $this->SoTien;
+    }
+
+ /**
+     * @return the $bieuthuetyles
+     */
+    public function getBieuthuetyles()
+    {
+        return $this->bieuthuetyles;
+    }
+
+ /**
+     * @param field_type $SoTien
+     */
+    public function setSoTien($SoTien)
+    {
+        $this->SoTien = $SoTien;
+    }
+
+ /**
+     * @param field_type $bieuthuetyles
+     */
+    public function setBieuthuetyles($bieuthuetyles)
+    {
+        $this->bieuthuetyles = $bieuthuetyles;
+    }
+
  /**
      * @return the $TieuMuc
      */

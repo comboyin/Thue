@@ -20,19 +20,15 @@ class nganh
     private $TenNganh;
 
     /**
-     * @ORM\Column(type="float",nullable=false)
-     */
-    private $TiLeTinhThueTNCN;
-
-    /**
-     * @ORM\Column(type="float",nullable=false)
-     */
-    private $TiLeTinhThueGTGT;
-
-    /**
      * @ORM\OneToMany(targetEntity="Application\Entity\NNTNganh", mappedBy="nganh")
      */
     private $NNTNganhs;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\bieuthuetyle", mappedBy="nganh")
+     */
+    private $bieuthuetyles;
+    
  /**
      * @return the $MaNganh
      */
@@ -49,21 +45,6 @@ class nganh
         return $this->TenNganh;
     }
 
- /**
-     * @return the $TiLeTinhThueTNCN
-     */
-    public function getTiLeTinhThueTNCN()
-    {
-        return $this->TiLeTinhThueTNCN;
-    }
-
- /**
-     * @return the $TiLeTinhThueGTGT
-     */
-    public function getTiLeTinhThueGTGT()
-    {
-        return $this->TiLeTinhThueGTGT;
-    }
 
  /**
      * @return the $NNTNganhs
@@ -89,21 +70,6 @@ class nganh
         $this->TenNganh = $TenNganh;
     }
 
- /**
-     * @param field_type $TiLeTinhThueTNCN
-     */
-    public function setTiLeTinhThueTNCN($TiLeTinhThueTNCN)
-    {
-        $this->TiLeTinhThueTNCN = $TiLeTinhThueTNCN;
-    }
-
- /**
-     * @param field_type $TiLeTinhThueGTGT
-     */
-    public function setTiLeTinhThueGTGT($TiLeTinhThueGTGT)
-    {
-        $this->TiLeTinhThueGTGT = $TiLeTinhThueGTGT;
-    }
 
  /**
      * @param field_type $NNTNganhs
