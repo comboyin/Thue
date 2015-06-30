@@ -74,15 +74,10 @@ return array(
                     ),
                     array(
                         'label' => 'Quản lý chứng từ',
-                        'route' => 'application',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Chungtu',
                         'action' => 'index',
-                        'resource' => 'Application\Controller\Index'
-                    ),
-                    array(
-                        'label' => 'Doanh số',
-                        'route' => 'application',
-                        'action' => 'index',
-                        'resource' => 'Application\Controller\Index'
+                        'resource' => 'Quanlysothue\Controller\Chungtu'
                     )
                 )
             ),

@@ -11,6 +11,7 @@ use Zend\Http\Request;
 use Zend\Form\Form;
 use Quanlysothue\Froms\UploadForm;
 use Quanlysothue\Excel\ImportExcelDuKienTruyThu;
+use Application\Models\nganhModel;
 
 
 class DukientruythuController extends baseController
@@ -71,19 +72,25 @@ class DukientruythuController extends baseController
         $form->setInputFilter($dukientruythu->getInputFilter());
         $form->setData($request->getPost());
         
+        
+    
+        
         // validation thanh cong
         if ($form->isValid()) {
             $post = $request->getPost();
+            $nganhModel = new nganhModel($this->getEntityManager());
             // them
             $KyThue = $post->get('KyThue');
             $MaSoThue = $post->get('MaSoThue');
             $TieuMuc = $post->get('TieuMuc');
-            $SoTien = $post->get('SoTien');
-            $TrangThai = 0;
-            $LyDo = $post->get('LyDo');
-            $TiLeTinhThue = $post->get('TiLeTinhThue');
             $DoanhSo = $post->get('DoanhSo');
             
+            
+            $TrangThai = 0;
+            $LyDo = $post->get('LyDo');
+            $TiLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
+            
+            $SoTien = $DoanhSo*$TiLeTinhThue;
             $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
             $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
             
@@ -98,8 +105,7 @@ class DukientruythuController extends baseController
             
             $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
             $kq = $dukientruythuModel->them($dukientruythu);
-        }  // validation lỗi
-else {
+        }  else { // validation lỗi
             $mss = $this->getErrorMessengerForm($form);
             $kq->setKq(false);
             $kq->setMessenger($kq->getMessenger() . "\n" . $mss);
@@ -313,28 +319,25 @@ else {
        return $this->response;
     }
     
-    public function downloadFileAction(){
-        
-        $fileNameErr = $this->request->getQuery()->get('filename');
-        
-        if (file_exists($fileNameErr)) {
-             
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename='.$fileNameErr);
-            header('Content-Transfer-Encoding: binary');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($fileNameErr)); // $file));
-            ob_clean();
-            flush();
-            // readfile($file);
-            readfile($fileNameErr);
-            unlink ($fileNameErr);
-            exit;
-            
-        }
-        $this->response;
-    }
+   public function abcAction(){
+       $Model = new nganhModel($this->getEntityManager());
+       
+       var_dump($Model->getTiLeTinhThue('N001', '1003')) ;
+       return $this->response;
+   }
+   
+   public function loadTyLeTinhThueAction(){
+       
+       $MaSoThue = $this->getRequest()->getQuery()->get('MaSoThue');
+       $TieuMuc = $this->getRequest()->getQuery()->get('TieuMuc');
+       
+       $nganhModel = new  nganhModel($this->getEntityManager());
+       $TyLeTinhThue =  $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
+       echo json_encode(array(
+           'TyLeTinhThue' => $TyLeTinhThue
+       ));
+       return $this->response;
+   }
+    
+    
 }

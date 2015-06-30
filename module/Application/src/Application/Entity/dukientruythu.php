@@ -302,7 +302,7 @@ class dukientruythu implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'SoTien',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -321,7 +321,7 @@ class dukientruythu implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'TrangThai',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -363,7 +363,7 @@ class dukientruythu implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'TiLeTinhThue',
-                'required' => true,
+                'required' => false,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'

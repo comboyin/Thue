@@ -14,10 +14,7 @@ class chungtu
      */
     private $SoChungTu;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $LoaiChungTu;
+
 
     /**
      * @ORM\Column(type="date", nullable=false)

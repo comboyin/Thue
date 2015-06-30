@@ -81,10 +81,11 @@ class thue
 
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=false)
+     * @ORM\Column(type="integer", length=1, nullable=false,options={"default":"0"})
      */
-    private $KetSo;
- /**
+    private $TrangThai;
+    
+    /**
      * @return the $KyThue
      */
     public function getKyThue()

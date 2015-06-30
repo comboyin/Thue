@@ -38,6 +38,11 @@ class truythu
     private $TiLeTinhThue;
     
     /**
+     * @ORM\Column(type="integer", length=1, nullable=false,options={"default":"0"})
+     */
+    private $TrangThai;
+    
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     private $LyDo;

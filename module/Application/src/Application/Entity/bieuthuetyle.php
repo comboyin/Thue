@@ -50,7 +50,7 @@ class bieuthuetyle
     /**
      * @ORM\Column(type="float",nullable=false)
      */
-    private $TiLeTinhThue;
+    private $TyLeTinhThue;
  /**
      * @return the $IDNganhMLNS
      */

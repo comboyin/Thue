@@ -64,10 +64,10 @@ class muclucngansach extends \Application\Entity\muclucngansach implements \Doct
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'TieuMuc', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'TenGoi', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'chitietchungtus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'kythuemgs', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'sonos', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'thues', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'thuemonbais', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukienthues', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukientruythus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'truythus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukienmbs');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'TieuMuc', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'TenGoi', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'SoTien', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'chitietchungtus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'kythuemgs', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'bieuthuetyles', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'sonos', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'thues', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'thuemonbais', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukienthues', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukientruythus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'truythus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukienmbs');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'TieuMuc', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'TenGoi', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'chitietchungtus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'kythuemgs', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'sonos', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'thues', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'thuemonbais', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukienthues', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukientruythus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'truythus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukienmbs');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'TieuMuc', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'TenGoi', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'SoTien', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'chitietchungtus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'kythuemgs', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'bieuthuetyles', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'sonos', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'thues', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'thuemonbais', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukienthues', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukientruythus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'truythus', '' . "\0" . 'Application\\Entity\\muclucngansach' . "\0" . 'dukienmbs');
     }
 
     /**
@@ -173,6 +173,50 @@ class muclucngansach extends \Application\Entity\muclucngansach implements \Doct
     }
 
     
+    /**
+     * {@inheritDoc}
+     */
+    public function getSoTien()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSoTien', array());
+
+        return parent::getSoTien();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBieuthuetyles()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBieuthuetyles', array());
+
+        return parent::getBieuthuetyles();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSoTien($SoTien)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSoTien', array($SoTien));
+
+        return parent::setSoTien($SoTien);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setBieuthuetyles($bieuthuetyles)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBieuthuetyles', array($bieuthuetyles));
+
+        return parent::setBieuthuetyles($bieuthuetyles);
+    }
+
     /**
      * {@inheritDoc}
      */

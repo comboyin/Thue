@@ -27,6 +27,10 @@ return array(
                     //bo trong la khong cho phep
                     'all'=>'canbothue'
                 ),
+                'Application\Controller\Service' =>array(
+                    //bo trong la khong cho phep
+                    'all'=>'canbothue'
+                ),
                 'Quanlyuser\Controller\Menu' =>array(
                     'all'=>'canbothue'
                 ),
@@ -40,6 +44,9 @@ return array(
                     'all' => 'canbothue'
                 ),
                 'Quanlysothue\Controller\Dukienthue' => array(
+                    'all' => 'canbothue'
+                ),
+                'Quanlysothue\Controller\Chungtu' => array(
                     'all' => 'canbothue'
                 ),
                 'Quanlysothue\Controller\Dukienthuecuanam' => array(

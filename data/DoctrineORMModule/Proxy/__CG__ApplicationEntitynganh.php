@@ -64,10 +64,10 @@ class nganh extends \Application\Entity\nganh implements \Doctrine\ORM\Proxy\Pro
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'MaNganh', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'TenNganh', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'TiLeTinhThueTNCN', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'TiLeTinhThueGTGT', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'NNTNganhs');
+            return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'MaNganh', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'TenNganh', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'NNTNganhs', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'bieuthuetyles');
         }
 
-        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'MaNganh', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'TenNganh', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'TiLeTinhThueTNCN', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'TiLeTinhThueGTGT', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'NNTNganhs');
+        return array('__isInitialized__', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'MaNganh', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'TenNganh', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'NNTNganhs', '' . "\0" . 'Application\\Entity\\nganh' . "\0" . 'bieuthuetyles');
     }
 
     /**
@@ -198,28 +198,6 @@ class nganh extends \Application\Entity\nganh implements \Doctrine\ORM\Proxy\Pro
     /**
      * {@inheritDoc}
      */
-    public function getTiLeTinhThueTNCN()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTiLeTinhThueTNCN', array());
-
-        return parent::getTiLeTinhThueTNCN();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTiLeTinhThueGTGT()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTiLeTinhThueGTGT', array());
-
-        return parent::getTiLeTinhThueGTGT();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getNNTNganhs()
     {
 
@@ -248,28 +226,6 @@ class nganh extends \Application\Entity\nganh implements \Doctrine\ORM\Proxy\Pro
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTenNganh', array($TenNganh));
 
         return parent::setTenNganh($TenNganh);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTiLeTinhThueTNCN($TiLeTinhThueTNCN)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTiLeTinhThueTNCN', array($TiLeTinhThueTNCN));
-
-        return parent::setTiLeTinhThueTNCN($TiLeTinhThueTNCN);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTiLeTinhThueGTGT($TiLeTinhThueGTGT)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTiLeTinhThueGTGT', array($TiLeTinhThueGTGT));
-
-        return parent::setTiLeTinhThueGTGT($TiLeTinhThueGTGT);
     }
 
     /**

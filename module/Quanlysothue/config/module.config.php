@@ -5,6 +5,9 @@ return array(
             'Quanlysothue\Controller\Index' => 'Quanlysothue\Controller\IndexController',
             'Quanlysothue\Controller\Dukientruythu' => 'Quanlysothue\Controller\DukientruythuController',
             'Quanlysothue\Controller\Dukienthuecuanam' => 'Quanlysothue\Controller\DukienthuecuanamController',
+            'Quanlysothue\Controller\Chungtu' => 'Quanlysothue\Controller\ChungtuController',
+            
+            
         ),
     ),
     'router' => array(

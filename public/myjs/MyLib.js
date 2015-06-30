@@ -1,3 +1,12 @@
+
+
+function baseUrl (url){
+	var baseFolder = '/'+window.location.pathname.split( '/' )[1]+'/';
+	
+	return baseFolder+url;
+	
+	
+}
 function postAndRedirect(url, postData) {
 	var postFormStr = "<form method='POST' action='" + url + "'>\n";
 
@@ -95,7 +104,8 @@ var DialogTable = (function() {
 								ChiTietTable += '<tr class="odd">';
 								ChiTietTable += '<td><input class="check_item" type="checkbox"></td>';
 								$.each(value, function(key, value) {
-									if (value.date != null) {
+									
+									if (value instanceof Object) {
 										value = $.datepicker.formatDate(
 												"dd-mm-yy",
 												new Date(value.date));

@@ -126,6 +126,7 @@ class ImportExcelDuKienTruyThu extends baseExcel
     public function PersitToArrayCollection($fileName){
         $arrayCollection = new ArrayCollection();
         $objPHPExcel =  \PHPExcel_IOFactory::load($fileName);
+        
         foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
             $worksheetTitle     = $worksheet->getTitle();
             $highestRow         = $worksheet->getHighestRow(); // e.g. 10
