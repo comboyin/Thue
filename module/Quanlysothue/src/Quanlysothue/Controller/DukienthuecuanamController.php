@@ -228,20 +228,22 @@ class DukienthuecuanamController extends baseController
         return $this->response;
     }
     /**
-     * Trả về danh sách dự kiến truy thu
+     * Trả về danh sách dự kiến thuế của năm
      *   */
-    public function dsDKTTJsonAction(){
+    public function dsDKTNJsonAction(){   
+        
         $kq = new ketqua();
         try {
             $get = $this->getRequest()->getQuery();
             
-            $model = new dukientruythuModel($this->getEntityManager());
+            $dukienthuecuanamModel = new dukienthuecuanamModel($this->getEntityManager());
             
-            $dukientruythus = $model->dsDKTTJson($get->get('KyThue'), $this->getUser());
+            // danh sach theo nam
+            $dsdkthuecuanam = $dukienthuecuanamModel->dsdukienthuecuanam($get->get('KyThue'), $this->getUser());
             
             
             
-            echo json_encode($dukientruythus);
+            echo json_encode($dsdkthuecuanam->getObj()->toArray());
             return $this->response;
         } catch (\Exception $e) {
             $kq->setKq(false);

@@ -217,39 +217,5 @@ class dukienthuecuanamModel extends baseModel
     }
     
     
-    /**
-     * Danh sách dự kiến truy thu theo kỳ thế và của user
-     * trả về array ketqua
-     * @param unknown $kythue
-     * @param unknown $user
-     * @return \Application\Entity\ketqua  */
-    public function dsDKTTJson($kythue,$user){
-    try {
-
-            $q = $this->em->createQueryBuilder()
-                ->select(array(
-                'dukientruythu',
-                'nguoinopthue','usernnts'
-            ))
-                ->from('Application\Entity\dukientruythu', 'dukientruythu')
-                ->join('dukientruythu.nguoinopthue', 'nguoinopthue')
-                ->join('nguoinopthue.usernnts', 'usernnts')
-                ->where('dukientruythu.KyThue = ?1')
-                ->andWhere('usernnts.user = ?2')
-                ->setParameter(2, $user)
-                ->setParameter(1, $kythue);
-            $this->kq->setKq(true);
-            
-            $this->kq->setObj($q->getQuery()
-                ->getArrayResult());
-            $this->kq->setMessenger('Lấy danh sách dự kiến truy thu của kỳ thuế ' . $kythue . ' thành công !');
-            return $this->kq->toArray();
-            
-        } catch (\Exception $e) {
-            $this->kq->setKq(false);
-            $this->kq->setMessenger($e->getMessage());
-            return $this->kq;
-        }
-    }
    
 }
