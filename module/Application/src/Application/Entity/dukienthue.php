@@ -75,7 +75,7 @@ class dukienthue implements InputFilterAwareInterface
     private $SoTien;
     
     /**
-     * @ORM\Column(type="date", nullable=false)
+     * @ORM\Column(type="date", nullable=true)
      */
     private $NgayPhaiNop;
 

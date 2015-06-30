@@ -107,6 +107,60 @@ class dukienthuecuanamModel extends baseModel
             return $this->kq;
         }
     }
+    
+    /**
+     *
+     * @param string $nam
+     * @param user $user
+     * @return \Application\Entity\ketqua  */
+    public function dsDKTNJson($nam,$user)
+    {
+        $q = $this->em->createQueryBuilder();
+        try {
+            if ($user->getLoaiUser() == 4) {
+                $q->select(array(
+                    'dukienthue',
+                    'nguoinopthue',
+                    'usernnts'
+                ))
+                ->from('Application\Entity\dukienthue', 'dukienthue')
+                ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                ->join('nguoinopthue.usernnts', 'usernnts')
+    
+                ->where('dukienthue.KyThue = ?1')
+                ->andWhere('usernnts.user = ?2')
+                ->setParameter(2, $user)
+                ->setParameter(1, $nam);
+            } else
+                if ($user->getLoaiUser() == 3) {
+                    $q->select(array(
+                        'dukienthue',
+                        'nguoinopthue',
+                        'usernnts'
+                    ))
+                    ->from('Application\Entity\dukienthue', 'dukienthue')
+                    ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where('dukienthue.KyThue = ?1')
+                    ->andWhere('user.coquanthue = ?2')
+                    ->setParameter(2, $user->getCoquanthue())
+                    ->setParameter(1, $nam);
+                }
+    
+            $this->kq->setKq(true);
+            $this->kq->setObj($q->getQuery()
+                ->getArrayResult());
+            $this->kq->setMessenger('Lấy danh sách dự thuế của năm ' . $nam . ' thành công !');
+            return $this->kq->toArray();
+    
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            $this->kq->setKq(false);
+            $this->kq->setMessenger($e->getMessage());
+            return $this->kq;
+        }
+    }
 
     /**
      *
