@@ -57,12 +57,12 @@ return array(
                         'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
                     )
                     ,
-                    array(
+/*                     array(
                         'label' => 'Dự kiến thuế của tháng',
                         'route' => 'quanlysothue/default',
                         'controller' => 'Dukienthuecuanam',
                         'action' => 'index',
-                        'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
+                        //'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
                     )
                     ,
                     array(
@@ -70,8 +70,8 @@ return array(
                         'route' => 'quanlysothue/default',
                         'controller' => 'Dukienthuecuanam',
                         'action' => 'index',
-                        'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
-                    ),
+                        //'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
+                    ), */
                     array(
                         'label' => 'Quản lý chứng từ',
                         'route' => 'application',

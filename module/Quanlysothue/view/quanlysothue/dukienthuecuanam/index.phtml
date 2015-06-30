@@ -1,9 +1,14 @@
 <?php
-use Application\Entity\dukientruythu;
 use Application\Entity\dukienthue;
+use Quanlysothue\Froms\UploadForm;
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Dukienthuecuanam/index_Dukienthuecuanam.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fileDownload.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap/js/bootstrap-fileupload.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/bootstrap/css/bootstrap-fileupload.css');
 
  /* @var $dsDuKienThueCuaNam dukienthue */
+/* @var $formUp UploadForm */
+$formUp = $this->formUp;
 
 ?>
 
@@ -21,15 +26,9 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysot
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 			<h3 class="page-title">QUẢN LÝ DỰ KIẾN THUẾ CỦA NĂM</h3>
 			<ul class="breadcrumb">
-				<!--  <li>
-                           <a href="#">Home</a>
-                           <span class="divider">/</span>
-                       </li>
-                       <li>
-                           <a href="#">Metro Lab</a>
-                           <span class="divider">/</span>
-                       </li> -->
-				<li class="active">Home</li>
+				<li class="active">
+                     <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Dukienthuecuanam','action'=>'index'));?>">Danh sách dự kiến thuế của năm</a>             
+                </li>
 			</ul>
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
@@ -43,7 +42,7 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysot
 			<div class="widget purple">
 
 				<div class="widget-title">
-					<h4>Danh sách dự kiến thuế theo năm</h4>
+					<h4>Danh sách dự kiến thuế của năm</h4>
 					<span class="tools"> <a href="javascript:;"
 						class="icon-chevron-down"></a>
 					</span>
@@ -90,14 +89,28 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysot
 							</div>
 
 							<div class="btn-group pull-right">
-								<button class="btn dropdown-toggle" data-toggle="dropdown">
-									Tùy chọn <i class="icon-angle-down"></i>
-								</button>
-								<ul class="dropdown-menu pull-right">
-									<!-- <li><a href="#">Print</a></li>
-									<li><a href="#">Save as PDF</a></li>
-									<li><a href="#">Export to Excel</a></li> -->
-								</ul>
+								<div class="control-group">
+                                    <div class="controls">
+                                        <div data-provides="fileupload" class="fileupload fileupload-new">
+                                            <div class="input-append">
+                                                <div class="uneditable-input">
+                                                    <i class="icon-file fileupload-exists"></i>
+                                                    <span class="fileupload-preview"></span>
+                                                </div>
+                                               <span class="btn btn-file">
+                                               <span class="fileupload-new">Select file</span>
+                                               <span class="fileupload-exists">Change</span>
+                                               <?php echo $this->formelement($formUp->get("dukientruythu-file"))?>
+                                               </span>
+                                                <button style="margin-left: 5px;"  id="Import"
+                            						class="btn btn-file">
+                            						Import <i class="icon-file"></i>
+								                    </button>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 							</div>
 						</div>
 	
@@ -114,11 +127,11 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysot
 									<th>Doanh số (*)</th>
 									<th>Tỉ lệ tính thuế (*)</th>
 									<th>Thuế suất (*)</th>
-									<th>Số tiền (*)</th>
-									<th>Trang thái (*)</th>
 									<th>Tên gọi</th>
 									<th>Sản lượng</th>
 									<th>Giá tính thuế</th>
+									<th>Số tiền (*)</th>
+									<th>Trang thái (*)</th>
 									
     								<th>Sửa</th>
     								<th>Xóa</th>
@@ -142,11 +155,11 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysot
 								<td><?php echo $thue->getDoanhThuChiuThue()?></td>
 								<td><?php echo $thue->getTiLeTinhThue()?></td>
 								<td><?php echo $thue->getThueSuat()?></td>
-								<td><?php echo $thue->getSoTien()?></td>
-								<td><?php echo $thue->getTrangThai()?></td>
 								<td><?php echo $thue->getTenGoi()?></td>
 								<td><?php echo $thue->getSanLuong()?></td>
 								<td><?php echo $thue->getGiaTinhThue()?></td>
+								<td><?php echo $thue->getSoTien()?></td>
+								<td><?php echo $thue->getTrangThai()?></td>
 									
 								<td><a class="edit" href="">Edit</a></td>
 								<td><a class="Delete" href="">Delete</a></td>
