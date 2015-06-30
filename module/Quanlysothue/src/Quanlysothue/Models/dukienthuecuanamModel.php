@@ -73,6 +73,7 @@ class dukienthuecuanamModel extends baseModel
                 ->from('Application\Entity\dukienthue', 'dukienthue')
                 ->join('dukienthue.nguoinopthue', 'nguoinopthue')
                 ->join('nguoinopthue.usernnts', 'usernnts')
+                
                 ->where('dukienthue.KyThue = ?1')
                 ->andWhere('usernnts.user = ?2')
                 ->setParameter(2, $user)

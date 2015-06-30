@@ -2,18 +2,16 @@
 namespace Quanlysothue\Controller;
 
 use Application\base\baseController;
-use Quanlysothue\Models\dukientruythuModel;
-use Application\Entity\dukientruythu;
+use Quanlysothue\Models\dukienthuecuanamModel;
+use Application\Entity\dukienthue;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
-use Quanlysothue\Froms\formDuKienTruyThu;
+use Quanlysothue\Froms\formDuKienThueCuaNam;
 use Application\Entity\ketqua;
 use Zend\Http\Request;
 use Zend\Form\Form;
-use Quanlysothue\Models\dukienthuecuanamModel;
-/**
- * Quản lý dự kiến thuế của năm 
- * @author Comboyin
- *  */
+use Quanlysothue\Froms\UploadForm;
+use Quanlysothue\Excel\ImportExcelDuKienThueCuaNam;
+
 class DukienthuecuanamController extends baseController
 {
 
@@ -22,21 +20,18 @@ class DukienthuecuanamController extends baseController
      */
     public function indexAction()
     {
-        // Lấy kỳ thuế gần nhất
+        $formUp = new UploadForm('upload-form');
+        // Lấy năm gần nhất
         // to String 'Y'
         $today = (new \DateTime())->format('Y');
         
         $dukienthuecuanamModel = new dukienthuecuanamModel($this->getEntityManager());
         
-        // danh sach theo ky thue
+        // danh sach theo nam
         $dsdkthuecuanam = $dukienthuecuanamModel->dsdukienthuecuanam($today, $this->getUser());
         
-        /*
-         * var_dump($dsDuKienTruyThu);
-         *
-         * return $this->response;
-         */
         return array(
+            'formUp'=>$formUp,
             'dsDuKienThueCuaNam' => $dsdkthuecuanam->getObj()
         );
     }
