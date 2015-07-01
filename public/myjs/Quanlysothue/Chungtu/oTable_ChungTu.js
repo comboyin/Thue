@@ -25,14 +25,35 @@ var EditableTableChungTu = function () {
             	  start1 = $.datepicker.formatDate("yy/mm/dd", start._d);
             	  end1 = $.datepicker.formatDate("yy/mm/dd", end._d);
             	  DialogTable.showPropressUnlimit();
-            	  
-            	  $.get(baseUrl('application/Service/'),{
+            	  deleteAllRows();
+            	  $.get(baseUrl('application/Service/danhSachChungTuGiuaNgay'),{
             		  start:start1,
             		  end:end1
             	  },function(json){
+            		  if(json.kq == true){
+            			  data = json.obj;
+            			  
+            			  $.each(data,function(key,value){
+            				             				
+	            				
+	            				
+    			    		oTable.fnAddData([
+    			    		         value.SoChungTu,
+    			    		         $.datepicker.formatDate("dd-mm-yy",new Date(value.NgayChungTu.date)),
+    			    		         $.datepicker.formatDate("dd-mm-yy",new Date(value.NgayHachToan.date)),
+    			    		         value.nguoinopthue.MaSoThue,
+    			    		         value.nguoinopthue.TenHKD,
+    				                          '<a class="edit" href="">Edit</a>', '<a class="delete" href="">Delete</a>'
+    				                  ]);
+	        			    		
+	        			    	
+            			  });
+            			  
+            			 
+            			  
+            		  }
+            		  DialogTable.setHeadAndMess('Thông báo',json.messenger);
             		  
-            		  
-            		  DialogTable.hidePropress();
             	  },'json');
             	 
               });
@@ -134,9 +155,10 @@ var EditableTableChungTu = function () {
 					 + aData[2] + '">';
 				jqTds[3].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
 					 + aData[3] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
-
-				jqTds[4].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[5].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				jqTds[4].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
+					 + aData[4] + ' "disabled>';
+				jqTds[5].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[6].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
@@ -154,9 +176,11 @@ var EditableTableChungTu = function () {
 					 + aData[2] + '">';
 				jqTds[3].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
 					 + aData[3] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
+				jqTds[4].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
+					 + aData[4] + ' "disabled>';
 
-				jqTds[4].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[5].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				jqTds[5].innerHTML = '<a class="edit" href="">Save new</a>';
+				jqTds[6].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
 
@@ -194,6 +218,7 @@ var EditableTableChungTu = function () {
 				// cansua
 				var aiNew = oTable
 					.fnAddData([
+							'',
 							'',
 							'',
 							'',
@@ -635,24 +660,22 @@ var EditableTableChungTu = function () {
 
 
 					
-					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
-					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-					var SoTien = $("input[name='SoTien']", nRow).val().trim();
-					var TrangThai = $("input[name='TrangThai']", nRow).val().trim();
-					var LyDo = $("input[name='LyDo']", nRow).val().trim();
-					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-					var DoanhSo  = $("input[name='DoanhSo']", nRow).val().trim();
-	
+					
+					var NgayChungTu= $("input[name='NgayChungTu']", nRow).val().trim();
+					var NgayHachToan= $("input[name='NgayHachToan']", nRow).val().trim();
+					var SoChungTu= $("input[name='SoChungTu']", nRow).val().trim();
+					var MaSoThue = $("input[name='MaSoThue']", nRow).val().trim();
+					
+					
 					data = {
-						KyThue : _KyThue,
-						MaSoThue : MaSoThue,
-						TieuMuc : TieuMuc,
-						LyDo : LyDo,
-						DoanhSo:DoanhSo
+							NgayChungTu : NgayChungTu,
+							NgayHachToan : NgayHachToan,
+							SoChungTu : SoChungTu,
+							MaSoThue : MaSoThue
 					}
 
 					var url = 'them';
-					console.log(nEditing);
+					
 					SaveNew('post', url, data, oTable, nEditing);
 
 				} else if (nEditing == nRow
@@ -714,11 +737,11 @@ var EditableTableChungTu = function () {
 				//lấy dòng được chọn
 				var nRow = $(this).parents('tr')[0];
 				//get input có name là "masothue"
-				MaSoThue = $("input[name='masothue']", nRow);
+				MaSoThue = $("input[name='MaSoThue']", nRow);
 				TenHKD = $("input[name='TenHKD']", nRow);
 				
 				
-				DialogTable.showFromUrl('get','danhsachNNT',{},function(){
+				DialogTable.showFromUrl('get',baseUrl('application/Service/danhsachNNT'),{},function(){
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
 					if (checkboxs.length == 1) {
@@ -729,8 +752,8 @@ var EditableTableChungTu = function () {
 						
 						MaSoThue.val(MaSoThueString);
 						TenHKD.val(TenHKDString);
-						TieuMuc = $("input[name='TieuMuc']").val();
-						loadTyLeTinhThue(MaSoThueString,TieuMuc);
+						
+						
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
 					}

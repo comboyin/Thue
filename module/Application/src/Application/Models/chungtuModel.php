@@ -21,8 +21,9 @@ class chungtuModel extends baseModel
         try {
             
             $obj = $qb = $this->em->createQueryBuilder()->
-                        select('chungtu')
+                        select(array('chungtu','nguoinopthue'))
                         ->from('Application\Entity\chungtu', 'chungtu')
+                        ->join('chungtu.nguoinopthue', 'nguoinopthue')
                         ->where('chungtu.NgayChungTu >= ?1')
                         ->andWhere('chungtu.NgayChungTu <= ?2')
                         ->setParameter(1, $startDate)

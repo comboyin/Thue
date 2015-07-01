@@ -9,12 +9,7 @@ class formDuKienTruyThu extends Form
     function __construct()
     {
         parent::__construct('');
-
-        
-
-        
-        
-        
+       
         $this->setAttribute('method', 'post');
 
         $this->add(array(

@@ -3,6 +3,7 @@ namespace Application\Controller;
 
 use Application\base\baseController;
 use Application\Models\chungtuModel;
+use Quanlynguoinopthue\Models\nguoinopthueModel;
 class ServiceController extends baseController
 {
     /**
@@ -46,10 +47,21 @@ class ServiceController extends baseController
     
         $chugtuModel = new chungtuModel($this->getEntityManager());
         
-        
-        
-        
-        $this->response;
+        $danhsachchungtuArray =  $chugtuModel->DanhSachChungTuGiuaNgay($start, $end);
+        echo json_encode($danhsachchungtuArray->toArray());
+        return $this->response;
+    }
+    
+    
+     /**
+     *   AJAX
+     *   Trả về danh sách danh sách người nộp thuế của user đó
+     *   */
+    public function danhsachNNTAction()
+    {
+        $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
+        echo $nguoinopthueModel->dsNNTbyUser($this->getUser());
+        return $this->response;
     }
 }
 
