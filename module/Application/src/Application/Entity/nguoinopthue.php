@@ -496,7 +496,7 @@ class nguoinopthue implements InputFilterAwareInterface
     }
 
     /**
-     *
+     * d-m-Y
      * @param field_type $NgayCapMST            
      */
     public function setNgayCapMST($NgayCapMST)

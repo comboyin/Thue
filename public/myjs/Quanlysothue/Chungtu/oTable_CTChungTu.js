@@ -15,7 +15,33 @@ var EditableTableChiTietChungTu = function () {
 		init : function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
-			
+			//chọn số chứng từ
+			$("#editable-chungtu_wrapper tr").live('click', function(){
+				/*var tbody = $(this).parents('tr')[0];
+				console.log(tbody);*/
+				SoChungTu =($('td',$(this)[0])[0]).textContent ;
+				deleteAllRows();
+			    $.get(baseUrl('application/Service/danhSachChiTietChungTu'),{
+			    	SoChungTu:SoChungTu
+			    },function(json){
+			    	if(json.kq==true){
+			    		data = json.obj;
+			    		$.each(data,function(key,value){
+             				
+            				
+            				
+    			    		oTable.fnAddData([
+    			    		         value.KyThue,
+    			    		         value.TieuMuc,
+    			    		         value.SoTien,
+    			    		         '<a class="edit" href="">Edit</a>', '<a class="delete" href="">Delete</a>'
+    				                  ]);
+	        			    		
+	        			    	
+            			  });
+			    	}
+			    },'json');
+			});
 			
 			//*******************ONLY PAGE END************************//
 
@@ -816,4 +842,5 @@ var EditableTableChiTietChungTu = function () {
 jQuery(document).ready(function () {
 
 	EditableTableChiTietChungTu.init();
+	console.log(EditableTableChiTietChungTu.oTable);
 });

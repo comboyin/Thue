@@ -105,15 +105,17 @@ class chungtu
      */
     public function setNgayChungTu($NgayChungTu)
     {
-        $this->NgayChungTu = $NgayChungTu;
+        $this->NgayChungTu = \DateTime::createFromFormat("d-m-Y", $NgayChungTu);
     }
 
  /**
+  *  param : d-m-Y
      * @param field_type $NgayHachToan
      */
     public function setNgayHachToan($NgayHachToan)
     {
-        $this->NgayHachToan = $NgayHachToan;
+        
+        $this->NgayHachToan = \DateTime::createFromFormat("d-m-Y", $NgayHachToan);
     }
 
  /**

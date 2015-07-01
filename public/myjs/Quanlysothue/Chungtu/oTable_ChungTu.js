@@ -18,6 +18,24 @@ var EditableTableChungTu = function () {
 			
 			
 			
+			$("#editable-chungtu_wrapper input[name='NgayChungTu']").live('focus', function(){
+			    if (false == $(this).hasClass('hasDatepicker')) {
+			    	$(this).datepicker({ 
+				    	format: 'dd-mm-yyyy'
+				    });
+			    }
+			});
+			
+		
+			$("#editable-chungtu_wrapper input[name='NgayHachToan']").live('focus', function(){
+			    if (false == $(this).hasClass('hasDatepicker')) {
+			    	$(this).datepicker({ 
+				    	format: 'dd-mm-yyyy'
+				    });
+			    }
+			});
+			
+			
 			
 			$('#reservation').daterangepicker({
                 format: 'DD-MM-YYYY'

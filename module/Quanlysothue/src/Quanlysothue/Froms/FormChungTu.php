@@ -97,7 +97,7 @@ class FormChungTu extends Form
         
         $inputFilter->add($factory->createInput([
             'name' => 'MaSoThue',
-            'required' => false,
+            'required' => true,
             'filters' => array(
                 array(
                     'name' => 'StripTags'
@@ -123,7 +123,7 @@ class FormChungTu extends Form
         //NgayChungTu
         $inputFilter->add($factory->createInput([
             'name' => 'NgayChungTu',
-            'required' => false,
+            'required' => true,
             'filters' => array(
                 array(
                     'name' => 'StripTags'
@@ -146,7 +146,7 @@ class FormChungTu extends Form
         //NgayHachToan
         $inputFilter->add($factory->createInput([
             'name' => 'NgayHachToan',
-            'required' => false,
+            'required' => true,
             'filters' => array(
                 array(
                     'name' => 'StripTags'
@@ -164,278 +164,6 @@ class FormChungTu extends Form
                 )
             )
         ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'TenHKD',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '4',
-                        'max' => '128'
-                    )
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'SoCMND',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '9',
-                        'max' => '9'
-                    )
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'DiaChiCT',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '4',
-                        'max' => '255'
-                    )
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'DiaChiKD',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '4',
-                        'max' => '255'
-                    )
-                )
-            )
-        ]));
-        // selected Phuong
-        // selected Quan
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'ChanLe',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '0',
-                        'max' => '4'
-                    )
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'Hem',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => '\Zend\Validator\Digits',
-                    'options' => array()
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'SoNha',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => '\Zend\Validator\Digits',
-                    'options' => array()
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'SoNhaPhu',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '0',
-                        'max' => '10'
-                    )
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'TenDuong',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '0',
-                        'max' => '127'
-                    )
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'SoGPKD',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '9',
-                        'max' => '21'
-                    )
-                )
-            )
-        ]));
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'ThoiDiemBDKD',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => '\Zend\Validator\Date',
-                    'options' => array(
-                        'format' => 'd-m-Y'
-                    )
-                )
-            )
-        ]));
-        
-        // option Nganh
-        
-        $inputFilter->add($factory->createInput([
-            'name' => 'Nghe',
-            'required' => false,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => 'StringLength',
-                    'options' => array(
-                        'encoding' => 'UTF-8',
-                        'min' => '4',
-                        'max' => '255'
-                    )
-                )
-            )
-        ]));
-        
-        
         
         $this->setInputFilter($inputFilter);
     }
