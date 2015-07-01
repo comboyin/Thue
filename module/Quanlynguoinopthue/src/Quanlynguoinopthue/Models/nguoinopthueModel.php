@@ -87,7 +87,7 @@ class nguoinopthueModel extends baseModel
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
                     ->where('user = ?1')
-                        ->setParameter(1, $user);
+                    ->setParameter(1, $user);
             } else 
                 if ($user->getLoaiUser() == 3) {
                     $qb->select(array(
@@ -120,128 +120,10 @@ class nguoinopthueModel extends baseModel
         }
     }
 
-    /**
-     * Trả về danh sách người nộp thuế chưa có dự kiến thuế trong [kỳ thuế] đó
-     *
-     * @param string $kythue            
-     * @param user $user            
-     * @return ketqua
-     */
-    public function dsNNTChuaCoDKDSTrongKyThue($kythue, $user)
-    {
-        try {
-            
-            $kq = new ketqua();
-            $qb = $this->em->createQueryBuilder();
-            $qb1 = $this->em->createQueryBuilder();
-            if ($user->getLoaiUser() == 4) {
-                
-                // DQL : Lay nguoinopthue có dự kiến thuế trong kỳ thuế $kythue và thuôc user
-                $qb1->select('nguoinopthue1')
-                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
-                    ->join('nguoinopthue1.dukientruythus', 'dukientruythus')
-                    ->where("dukientruythus.user = :user")
-                    ->andWhere("dukientruythus.KyThue = :kythue");
-                // DQL: Lay nguoinopthue chưa có dự kiến thuế trong kỳ thuế $kythue và thuôc user
-                $qb->select(array(
-                    'nguoinopthue'
-                ))
-                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
-                    ->join('nguoinopthue.usernnts', 'usernnts')
-                    ->where($qb->expr()
-                    ->notIn('nguoinopthue', $qb1->getDQL()))
-                    ->andWhere('usernnts.user = :user')
-                    ->groupBy('nguoinopthue.MaSoThue')
-                    ->setParameter(':user', $user)
-                    ->setParameter(':kythue', $kythue);
-                
-                $kq->setObj($qb->getQuery()
-                    ->getArrayResult());
-                if ($kq->getObj() != null) {
-                    $kq->setKq(true);
-                    $kq->setMessenger('Lấy danh sách thành công !');
-                    return $kq;
-                } else {
-                    $kq->setKq(false);
-                    $kq->setMessenger('Không thể trả về kết quả như mong muốn !');
-                    return $kq;
-                }
-            }
-            
-            return $kq;
-        } catch (\Exception $e) {
-            
-            $kq = new ketqua();
-            $kq->setKq(false);
-            $kq->setMessenger($e->getMessage());
-            return $kq;
-        }
-    }
 
     /**
-     * Danh sách người nôp thuế chưa có dự kiến thuế của loại thuế(tiểu mục)
-     * trong 1 kỳ thuế của user
-     *
-     * @param string $KyThue            
-     * @param string $TieuMuc            
-     * @param user $User            
-     */
-    public function dsNNTKhongCoDuKienThue($KyThue, $TieuMuc, $User)
-    {
-        try {
-            
-            if ($User->getLoaiUser() == 4) {
-                
-                $qbCoDuKien = $this->em->createQueryBuilder();
-                // lay danh sach nnt có du kien thue
-                $qbCoDuKien->select('nguoinopthue1')
-                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
-                    ->join('nguoinopthue1.dukienthues', 'dukienthues')
-                    ->join('dukienthues.muclucngansach', 'muclucngansach')
-                    ->where("dukienthues.user = :user")
-                    ->andWhere("muclucngansach.TieuMuc = :tieumuc")
-                    ->andWhere("dukienthues.KyThue = :kythue");
-                
-                // DQL: Lay nguoinopthue chưa có dự kiến thuế trong kỳ thuế $kythue và thuôc user
-                $qbKhongCoDuKien = $this->em->createQueryBuilder();
-                
-                $qbKhongCoDuKien->select(array(
-                    'nguoinopthue'
-                ))
-                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
-                    ->join('nguoinopthue.usernnts', 'usernnts')
-                    ->where($qbKhongCoDuKien->expr()
-                    ->notIn('nguoinopthue', $qbCoDuKien->getDQL()))
-                    ->andWhere('usernnts.user = :user')
-                    ->setParameter(':user', $User)
-                    ->setParameter(':tieumuc', $TieuMuc)
-                    ->setParameter(':kythue', $KyThue)
-                    ->groupBy('nguoinopthue.MaSoThue');
-                
-                $this->kq->setObj($qbKhongCoDuKien->getQuery()
-                    ->getArrayResult());
-                
-                if ($this->kq->getObj() != null) {
-                    $this->kq->setKq(true);
-                    $this->kq->setMessenger('Lấy danh sách thành công !');
-                    return $this->kq;
-                } else {
-                    $this->kq->setKq(false);
-                    $this->kq->setMessenger('Không thể trả về kết quả như mong muốn !');
-                    return $this->kq;
-                }
-            }
-        } catch (\Exception $e) {
-            var_dump($e);
-            $kq = new ketqua();
-            $kq->setKq(false);
-            $kq->setMessenger($e->getMessage());
-            return $kq;
-        }
-    }
-
-    /**
-     *
+     * json
+     * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý, đang kinh doanh
      * @param user $user            
      * @return string
      */
@@ -262,9 +144,13 @@ class nguoinopthueModel extends baseModel
                     ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
-                    ->where("user.coquanthue = ?1")
-                    ->andwhere("usernnts.ThoiGianKetThuc is null")
-                    ->setParameter(1, $user->getCoquanthue());
+                                            ->where('user in ('.$this->em->createQueryBuilder()->select("canbovien")
+                                                ->from('Application\Entity\user', 'canbovien')
+                                                ->where('canbovien.parentUser = ?1')->getDQL()
+                                                .')')
+                    ->setParameter(1, $user)
+                    ->andwhere("usernnts.ThoiGianKetThuc is null");
+                    
                 return json_encode($bq->getQuery()->getArrayResult());
             }
     }

@@ -3,7 +3,6 @@ namespace Quanlysothue\Controller;
 
 use Application\base\baseController;
 use Quanlysothue\Models\dukienthuecuanamModel;
-use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Quanlysothue\Froms\formDuKienThueCuaNam;
 use Application\Entity\ketqua;
 use Zend\Http\Request;
@@ -38,20 +37,7 @@ class DukienthuecuanamController extends baseController
     }
     
     // ajax lay danh sach NNT
-    public function danhsachNNTAction()
-    {
-        $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
-        echo $nguoinopthueModel->dsNNTbyUser($this->getUser());
-        return $this->response;
-    }
 
-    public function muclucngansachAction()
-    {
-        $bq = $this->getEntityManager()->createQueryBuilder();
-        $bq->select('tieumuc')->from('Application\Entity\muclucngansach', 'tieumuc');
-        echo json_encode($bq->getQuery()->getArrayResult());
-        return $this->response;
-    }
 
     public function themAction()
     {
@@ -89,9 +75,22 @@ class DukienthuecuanamController extends baseController
             $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
             $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
             $dukienthuenam->setThueSuat($ThueSuat);
-            $dukienthuenam->setTenGoi($TenGoi);
-            $dukienthuenam->setSanLuong($SanLuong);
-            $dukienthuenam->setGiaTinhThue($GiaTinhThue);
+            
+            if($TenGoi=="")
+                $dukienthuenam->setTenGoi(null);
+            else
+                $dukienthuenam->setTenGoi($TenGoi);
+            
+            if($SanLuong==0)
+                $dukienthuenam->setSanLuong(null);
+            else
+                $dukienthuenam->setSanLuong($SanLuong);
+            
+            if($GiaTinhThue==0)
+                $dukienthuenam->setGiaTinhThue(null);
+            else
+                $dukienthuenam->setGiaTinhThue($GiaTinhThue);
+            
             $dukienthuenam->setSoTien($SoTien);
             $dukienthuenam->setNgayPhaiNop(null);
             $dukienthuenam->setTrangThai(0);
@@ -126,14 +125,14 @@ class DukienthuecuanamController extends baseController
         // kiem tra masothue
         
         // xoa trong csdl
-        $mo = new dukientruythuModel($this->getEntityManager());
-        $dukientruythu = $mo->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj();
-        if ($dukientruythu != null) {
+        $model = new dukienthuecuanamModel($this->getEntityManager());
+        $dukienthuenam = $model->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj();
+        if ($dukienthuenam != null) {
             $kq->setKq(true);
-            $kq = $mo->remove($dukientruythu);
+            $kq = $model->remove($dukienthuenam);
         } else {
             $kq->setKq(false);
-            $mss .= 'Không tìm đuọc du kiến truy thu !';
+            $mss .= 'Không tìm được dự kiến thuế năm !';
         }
         
         $kq->setMessenger($kq->getMessenger() . $mss);
@@ -149,9 +148,8 @@ class DukienthuecuanamController extends baseController
             $request = $this->getRequest();
             $post = $request->getPost();
             $kq = new ketqua();
-            $dukientruythu = new dukientruythu();
-            $form = new formDuKienTruyThu();
-            $form->setInputFilter($dukientruythu->getInputFilter());
+            $dukienthuenam = new dukienthue();
+            $form = new formDuKienThueCuaNam();
             $form->setData($post);
             
             // validation thanh cong
@@ -159,42 +157,62 @@ class DukienthuecuanamController extends baseController
                 
                 // sua
                 
-                // tim dukientruythu
+                // tim dukienthue
                 
-                $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
-                /* @var $dukientruythu dukientruythu */
-                $dukientruythu = $dukientruythuModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
+                $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
+                /* @var $dukienthuenam dukienthue */
+                $dukienthuenam = $dukienthuenamModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
                     ->getObj();
                 
                 $KyThue = $post->get('_KyThue');
                 $MaSoThue = $post->get('MaSoThue');
                 $TieuMuc = $post->get('TieuMuc');
-                $SoTien = $post->get('SoTien');
-                $TrangThai = $post->get('TrangThai');
-                $LyDo = $post->get('LyDo');
+                $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
                 $TiLeTinhThue = $post->get('TiLeTinhThue');
-                $DoanhSo = $post->get('DoanhSo');
+                $ThueSuat = $post->get('ThueSuat');
+                $TenGoi = $post->get('TenGoi');
+                $SanLuong = $post->get('SanLuong');
+                $GiaTinhThue = $post->get('GiaTinhThue');
+                $SoTien = $post->get('SoTien');
+                
                 
                 $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
                 $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
                 
-                $dukientruythu->setNguoinopthue($nguoinopthue);
-                $dukientruythu->setMuclucngansach($muclucngansach);
-                $dukientruythu->setKyThue($KyThue);
-                $dukientruythu->setSoTien($SoTien);
-                $dukientruythu->setDoanhSo($DoanhSo);
-                $dukientruythu->setTrangThai($TrangThai);
-                $dukientruythu->setLyDo($LyDo);
-                $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
+            $dukienthuenam->setKyThue($KyThue);
+            $dukienthuenam->setNguoinopthue($nguoinopthue);
+            $dukienthuenam->setMuclucngansach($muclucngansach);
+            $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
+            $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
+            $dukienthuenam->setThueSuat($ThueSuat);
+            
+            if($TenGoi=="")
+                $dukienthuenam->setTenGoi(null);
+            else
+                $dukienthuenam->setTenGoi($TenGoi);
+            
+            if($SanLuong==0)
+                $dukienthuenam->setSanLuong(null);
+            else
+                $dukienthuenam->setSanLuong($SanLuong);
+            
+            if($GiaTinhThue==0)
+                $dukienthuenam->setGiaTinhThue(null);
+            else
+                $dukienthuenam->setGiaTinhThue($GiaTinhThue);
+            
+            $dukienthuenam->setSoTien($SoTien);
+            $dukienthuenam->setNgayPhaiNop(null);
+            $dukienthuenam->setTrangThai(0);
                 
-                $kq = $dukientruythuModel->merge($dukientruythu);
+                $kq = $dukienthuenamModel->merge($dukienthuenam);
             }             
 
             // validation lỗi
             else {
                 $mss = $this->getErrorMessengerForm($form);
                 $kq->setKq(false);
-                $kq->setMessenger($kq->getMessenger() . "\n" . $mss);
+                $kq->setMessenger($mss);
             }
             
             // trả về json
@@ -214,15 +232,15 @@ class DukienthuecuanamController extends baseController
         $KyThue = $post->get('_KyThue');
         $MaSoThueData = $post->get("MaSoThueData");
         $TieuMucData = $post->get("TieuMucData");
-        $model = new dukientruythuModel($this->getEntityManager());
+        $model = new dukienthuecuanamModel($this->getEntityManager());
         $dem = 0;
         for($i=0;$i<count($MaSoThueData);$i++)
         {
-            $dukientruythu = $model->findByID_($KyThue, $MaSoThueData[$i], $TieuMucData[$i])->getObj();
+            $dukienthue = $model->findByID_($KyThue, $MaSoThueData[$i], $TieuMucData[$i])->getObj();
             
-            if($dukientruythu !=null)
+            if($dukienthue !=null)
             {
-                $model->remove($dukientruythu);
+                $model->remove($dukienthue);
                 $dem++;
             }
             

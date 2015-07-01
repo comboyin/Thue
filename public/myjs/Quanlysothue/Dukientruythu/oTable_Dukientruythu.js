@@ -809,7 +809,7 @@ var EditableTable = function () {
 				TenHKD = $("input[name='TenHKD']", nRow);
 				
 				
-				DialogTable.showFromUrl('get','danhsachNNT',{},function(){
+				DialogTable.showFromUrl('get',baseUrl('application/Service/danhsachNNT'),{},function(){
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
 					if (checkboxs.length == 1) {
@@ -860,7 +860,7 @@ var EditableTable = function () {
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
 
-				DialogTable.showFromUrl('get','muclucngansach',{}, function () {
+				DialogTable.showFromUrl('get',baseUrl('application/Service/muclucngansach'),{}, function () {
 					
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 

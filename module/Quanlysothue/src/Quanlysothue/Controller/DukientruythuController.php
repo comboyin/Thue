@@ -43,21 +43,6 @@ class DukientruythuController extends baseController
         );
     }
     
-    // ajax lay danh sach NNT
-    public function danhsachNNTAction()
-    {
-        $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
-        echo $nguoinopthueModel->dsNNTbyUser($this->getUser());
-        return $this->response;
-    }
-
-    public function muclucngansachAction()
-    {
-        $bq = $this->getEntityManager()->createQueryBuilder();
-        $bq->select('tieumuc')->from('Application\Entity\muclucngansach', 'tieumuc');
-        echo json_encode($bq->getQuery()->getArrayResult());
-        return $this->response;
-    }
 
     public function themAction()
     {
