@@ -2,6 +2,7 @@
 namespace Application\Controller;
 
 use Application\base\baseController;
+use Application\Models\chungtuModel;
 class ServiceController extends baseController
 {
     /**
@@ -30,6 +31,24 @@ class ServiceController extends baseController
             exit;
     
         }
+        $this->response;
+    }
+    
+    /**
+     *   AJAX
+     *   Trả về danh sách chứng từ giữa 2 ngày
+     *   */
+    public function danhSachChungTuGiuaNgayAction(){
+    
+        $start = $this->getRequest()->getQuery()->get('start');
+        $end = $this->getRequest()->getQuery()->get('end');
+        
+    
+        $chugtuModel = new chungtuModel($this->getEntityManager());
+        
+        
+        
+        
         $this->response;
     }
 }

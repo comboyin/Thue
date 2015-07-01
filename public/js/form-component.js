@@ -153,9 +153,9 @@ var Script = function () {
 
     //daterange picker
 
-    $('#reservation').daterangepicker();
+   // $('#reservation').daterangepicker();
 
-    $('#reportrange').daterangepicker(
+    /*$('#reportrange').daterangepicker(
         {
             ranges: {
                 'Today': ['today', 'today'],
@@ -187,7 +187,7 @@ var Script = function () {
         function(start, end) {
             $('#reportrange span').html(start.toString('MMMM d, yyyy') + ' - ' + end.toString('MMMM d, yyyy'));
         }
-    );
+    );*/
 
     //Set the initial state of the picker label
     $('#reportrange span').html(Date.today().add({ days: -29 }).toString('MMMM d, yyyy') + ' - ' + Date.today().toString('MMMM d, yyyy'));

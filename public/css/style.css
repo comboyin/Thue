@@ -619,11 +619,11 @@ a, a:focus, a:hover, a:active {
 }
 
 .sidebar-scroll {
-	position: fixed;
+	/* position: fixed; */
 	overflow-y: scroll;
 	height: 100%;
 	width: 180px;
-	z-index: 100;
+	/* z-index: 100; */
 }
 
 #sidebar ul {

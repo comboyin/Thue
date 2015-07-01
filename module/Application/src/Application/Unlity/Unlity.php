@@ -43,6 +43,28 @@ class Unlity
     
     
     /**
+     * Kiểm tra ngày chỉ định có nằm giữa và bằng 2 ngày không ?
+     * format d-m-Y
+     * @param string $DateBegin
+     * @param string $DateCurrent
+     * @param string $DateEnd
+     * @return bool
+     */
+    public static function CheckDateBetweenTowDate($DateBegin,$DateEnd,$DateCurrent)
+    {
+        $paymentDate = \DateTime::createFromFormat("d-m-Y", $DateCurrent);
+        $contractDateBegin = \DateTime::createFromFormat("d-m-Y", $DateBegin);
+        $contractDateEnd = \DateTime::createFromFormat("d-m-Y", $DateEnd);
+    
+        if ($paymentDate->getTimestamp() >= $contractDateBegin->getTimestamp() && $paymentDate->getTimestamp() <= $contractDateEnd->getTimestamp()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
+    /**
      * Kiểm tra ngày hiện tại có lớn hơn hoặc bằng ngày truyền vào hay khog ?
      * format d-m-Y
      * @param string $Date

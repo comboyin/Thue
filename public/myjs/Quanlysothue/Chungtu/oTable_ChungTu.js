@@ -8,7 +8,7 @@ var EditableTableChungTu = function () {
 
 	//key
 	var _SoChungTu = "";
-	
+	var oTable = null;
 
 	return {
 
@@ -16,6 +16,26 @@ var EditableTableChungTu = function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
 			
+			
+			
+			
+			$('#reservation').daterangepicker({
+                format: 'DD-MM-YYYY'
+              }, function(start, end, label) {
+            	  start1 = $.datepicker.formatDate("yy/mm/dd", start._d);
+            	  end1 = $.datepicker.formatDate("yy/mm/dd", end._d);
+            	  DialogTable.showPropressUnlimit();
+            	  
+            	  $.get(baseUrl('application/Service/'),{
+            		  start:start1,
+            		  end:end1
+            	  },function(json){
+            		  
+            		  
+            		  DialogTable.hidePropress();
+            	  },'json');
+            	 
+              });
 			
 			//*******************ONLY PAGE END************************//
 
@@ -108,9 +128,9 @@ var EditableTableChungTu = function () {
 				
 				jqTds[0].innerHTML = '<input style="width:100px;" name="SoChungTu" type="text"  value="'
 					 + aData[0] + '">';
-				jqTds[1].innerHTML = '<input type="text" name="NgayChungTu" required="required" size="16" class="m-ctrl-medium popovers" data-trigger="hover" data-content="Ngày hạch toán phải trước ngày hạch toán" data-original-title="Ngày chứng từ" value=">'
+				jqTds[1].innerHTML = '<input type="text" style="width:80px;" name="NgayChungTu" required="required"  class="m-ctrl-medium popovers" value="'
 					 + aData[1] + '">';
-				jqTds[2].innerHTML = '<input type="text" name="NgayHachToan" required="required" size="16" class="m-ctrl-medium popovers" data-trigger="hover" data-content="Ngày hạch toán phải sau ngày chứng từ" data-original-title="Ngày hạch toán" value=">'
+				jqTds[2].innerHTML = '<input type="text" style="width:80px;" name="NgayHachToan" required="required" class="m-ctrl-medium popovers" value="'
 					 + aData[2] + '">';
 				jqTds[3].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
 					 + aData[3] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
@@ -128,9 +148,9 @@ var EditableTableChungTu = function () {
 				var jqTds = $('>td', nRow);
 				jqTds[0].innerHTML = '<input style="width:100px;" name="SoChungTu" type="text"  value="'
 					 + aData[0] + '">';
-				jqTds[1].innerHTML = '<input type="text" name="NgayChungTu" required="required" size="16" class="m-ctrl-medium popovers" data-trigger="hover" data-content="Ngày hạch toán phải trước ngày hạch toán" data-original-title="Ngày chứng từ" value=">'
+				jqTds[1].innerHTML = '<input type="text" style="width:80px;" name="NgayChungTu" required="required"  class="m-ctrl-medium popovers" value="'
 					 + aData[1] + '">';
-				jqTds[2].innerHTML = '<input type="text" name="NgayHachToan" required="required" size="16" class="m-ctrl-medium popovers" data-trigger="hover" data-content="Ngày hạch toán phải sau ngày chứng từ" data-original-title="Ngày hạch toán" value=">'
+				jqTds[2].innerHTML = '<input type="text" style="width:80px;" name="NgayHachToan" required="required" class="m-ctrl-medium popovers" value="'
 					 + aData[2] + '">';
 				jqTds[3].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
 					 + aData[3] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
