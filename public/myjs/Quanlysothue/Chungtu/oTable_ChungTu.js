@@ -40,6 +40,7 @@ var EditableTableChungTu = function () {
 			$('#reservation').daterangepicker({
                 format: 'DD-MM-YYYY'
               }, function(start, end, label) {
+            	  $("h1.SoChungTu").html('');
             	  start1 = $.datepicker.formatDate("yy/mm/dd", start._d);
             	  end1 = $.datepicker.formatDate("yy/mm/dd", end._d);
             	  DialogTable.showPropressUnlimit();
@@ -49,12 +50,10 @@ var EditableTableChungTu = function () {
             		  end:end1
             	  },function(json){
             		  if(json.kq == true){
+            			  
             			  data = json.obj;
             			  
             			  $.each(data,function(key,value){
-            				             				
-	            				
-	            				
     			    		oTable.fnAddData([
     			    		         value.SoChungTu,
     			    		         $.datepicker.formatDate("dd-mm-yy",new Date(value.NgayChungTu.date)),
