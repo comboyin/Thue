@@ -63,37 +63,47 @@ class DukientruythuController extends baseController
         // validation thanh cong
         if ($form->isValid()) {
             $post = $request->getPost();
-            $nganhModel = new nganhModel($this->getEntityManager());
-            // them
-            $KyThue = $post->get('KyThue');
             $MaSoThue = $post->get('MaSoThue');
-            $TieuMuc = $post->get('TieuMuc');
-            $DoanhSo = $post->get('DoanhSo');
             
-            
-            $TrangThai = 0;
-            $LyDo = $post->get('LyDo');
-            $TiLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
-            
-            $SoTien = $DoanhSo*$TiLeTinhThue;
-            $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
-            $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
-            
-            $dukientruythu->setNguoinopthue($nguoinopthue);
-            $dukientruythu->setMuclucngansach($muclucngansach);
-            $dukientruythu->setKyThue($KyThue);
-            $dukientruythu->setSoTien($SoTien);
-            $dukientruythu->setDoanhSo($DoanhSo);
-            $dukientruythu->setTrangThai($TrangThai);
-            $dukientruythu->setLyDo($LyDo);
-            $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
-            
-            $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
-            $kq = $dukientruythuModel->them($dukientruythu);
+            $kt = new nguoinopthueModel($this->getEntityManager());
+            if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
+            {
+                $nganhModel = new nganhModel($this->getEntityManager());
+                // them
+                $KyThue = $post->get('KyThue');
+                
+                $TieuMuc = $post->get('TieuMuc');
+                $DoanhSo = $post->get('DoanhSo');
+                
+                
+                $TrangThai = 0;
+                $LyDo = $post->get('LyDo');
+                $TiLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
+                
+                $SoTien = $DoanhSo*$TiLeTinhThue;
+                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
+                $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
+                
+                $dukientruythu->setNguoinopthue($nguoinopthue);
+                $dukientruythu->setMuclucngansach($muclucngansach);
+                $dukientruythu->setKyThue($KyThue);
+                $dukientruythu->setSoTien($SoTien);
+                $dukientruythu->setDoanhSo($DoanhSo);
+                $dukientruythu->setTrangThai($TrangThai);
+                $dukientruythu->setLyDo($LyDo);
+                $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
+                
+                $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
+                $kq = $dukientruythuModel->them($dukientruythu);
+            } else { 
+                $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                $kq->setKq(false);
+                $kq->setMessenger($mss);
+            }        
         }  else { // validation lỗi
             $mss = $this->getErrorMessengerForm($form);
             $kq->setKq(false);
-            $kq->setMessenger($kq->getMessenger() . "\n" . $mss);
+            $kq->setMessenger($mss);
         }
         
         // trả về json
@@ -148,38 +158,47 @@ class DukientruythuController extends baseController
             
             // validation thanh cong
             if ($form->isValid()) {
-                
-                // sua
-                
-                // tim dukientruythu
-                
-                $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
-                /* @var $dukientruythu dukientruythu */
-                $dukientruythu = $dukientruythuModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
-                    ->getObj();
-                
-                $KyThue = $post->get('_KyThue');
                 $MaSoThue = $post->get('MaSoThue');
-                $TieuMuc = $post->get('TieuMuc');
-                $SoTien = $post->get('SoTien');
-                $TrangThai = 0;
-                $LyDo = $post->get('LyDo');
-                $TiLeTinhThue = $post->get('TiLeTinhThue');
-                $DoanhSo = $post->get('DoanhSo');
-                
-                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
-                $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
-                
-                $dukientruythu->setNguoinopthue($nguoinopthue);
-                $dukientruythu->setMuclucngansach($muclucngansach);
-                $dukientruythu->setKyThue($KyThue);
-                $dukientruythu->setSoTien($SoTien);
-                $dukientruythu->setDoanhSo($DoanhSo);
-                $dukientruythu->setTrangThai($TrangThai);
-                $dukientruythu->setLyDo($LyDo);
-                $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
-                
-                $kq = $dukientruythuModel->merge($dukientruythu);
+                $kt = new nguoinopthueModel($this->getEntityManager());
+                if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
+                {
+                    // sua
+                    
+                    // tim dukientruythu
+                    
+                    $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
+                    /* @var $dukientruythu dukientruythu */
+                    $dukientruythu = $dukientruythuModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
+                    ->getObj();
+                    
+                    $KyThue = $post->get('_KyThue');
+                    
+                    $TieuMuc = $post->get('TieuMuc');
+                    $SoTien = $post->get('SoTien');
+                    $TrangThai = 0;
+                    $LyDo = $post->get('LyDo');
+                    $TiLeTinhThue = $post->get('TiLeTinhThue');
+                    $DoanhSo = $post->get('DoanhSo');
+                    
+                    $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
+                    $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
+                    
+                    $dukientruythu->setNguoinopthue($nguoinopthue);
+                    $dukientruythu->setMuclucngansach($muclucngansach);
+                    $dukientruythu->setKyThue($KyThue);
+                    $dukientruythu->setSoTien($SoTien);
+                    $dukientruythu->setDoanhSo($DoanhSo);
+                    $dukientruythu->setTrangThai($TrangThai);
+                    $dukientruythu->setLyDo($LyDo);
+                    $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
+                    
+                    $kq = $dukientruythuModel->merge($dukientruythu);
+                    
+                } else { 
+                    $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                    $kq->setKq(false);
+                    $kq->setMessenger($mss);
+                } 
             }             
 
             // validation lỗi

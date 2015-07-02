@@ -11,6 +11,7 @@ use Quanlysothue\Froms\UploadForm;
 use Quanlysothue\Excel\ImportExcelDuKienThueCuaNam;
 use Application\Models\nganhModel;
 use Application\Entity\dukienthue;
+use Quanlynguoinopthue\Models\nguoinopthueModel;
 
 class DukienthuecuanamController extends baseController
 {
@@ -54,49 +55,61 @@ class DukienthuecuanamController extends baseController
         // validation thanh cong
         if ($form->isValid()) {
             $post = $request->getPost();
-            // them
-            $KyThue = $post->get('KyThue');
             $MaSoThue = $post->get('MaSoThue');
-            $TieuMuc = $post->get('TieuMuc');
-            $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
-            $TiLeTinhThue = $post->get('TiLeTinhThue');
-            $ThueSuat = $post->get('ThueSuat');
-            $TenGoi = $post->get('TenGoi');
-            $SanLuong = $post->get('SanLuong');
-            $GiaTinhThue = $post->get('GiaTinhThue');
-            $SoTien = $post->get('SoTien');
-                     
-            $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
-            $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
             
-            $dukienthuenam->setKyThue($KyThue);
-            $dukienthuenam->setNguoinopthue($nguoinopthue);
-            $dukienthuenam->setMuclucngansach($muclucngansach);
-            $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
-            $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
-            $dukienthuenam->setThueSuat($ThueSuat);
-            
-            if($TenGoi=="")
-                $dukienthuenam->setTenGoi(null);
-            else
-                $dukienthuenam->setTenGoi($TenGoi);
-            
-            if($SanLuong==0)
-                $dukienthuenam->setSanLuong(null);
-            else
-                $dukienthuenam->setSanLuong($SanLuong);
-            
-            if($GiaTinhThue==0)
-                $dukienthuenam->setGiaTinhThue(null);
-            else
-                $dukienthuenam->setGiaTinhThue($GiaTinhThue);
-            
-            $dukienthuenam->setSoTien($SoTien);
-            $dukienthuenam->setNgayPhaiNop(null);
-            $dukienthuenam->setTrangThai(0);
-            
-            $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
-            $kq = $dukienthuenamModel->them($dukienthuenam);
+            $kt = new nguoinopthueModel($this->getEntityManager());
+            if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
+            {
+                $nganhModel = new nganhModel($this->getEntityManager());
+                // them
+                $KyThue = $post->get('KyThue');
+                
+                $TieuMuc = $post->get('TieuMuc');
+                $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
+                $TiLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
+                $ThueSuat = $post->get('ThueSuat');
+                $TenGoi = $post->get('TenGoi');
+                $SanLuong = $post->get('SanLuong');
+                $GiaTinhThue = $post->get('GiaTinhThue');
+                $SoTien = $post->get('SoTien');
+                 
+                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
+                $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
+                
+                $dukienthuenam->setKyThue($KyThue);
+                $dukienthuenam->setNguoinopthue($nguoinopthue);
+                $dukienthuenam->setMuclucngansach($muclucngansach);
+                $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
+                $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
+                $dukienthuenam->setThueSuat($ThueSuat);
+                
+                if($TenGoi=="")
+                    $dukienthuenam->setTenGoi(null);
+                else
+                    $dukienthuenam->setTenGoi($TenGoi);
+                
+                if($SanLuong==0)
+                    $dukienthuenam->setSanLuong(null);
+                else
+                    $dukienthuenam->setSanLuong($SanLuong);
+                
+                if($GiaTinhThue==0)
+                    $dukienthuenam->setGiaTinhThue(null);
+                else
+                    $dukienthuenam->setGiaTinhThue($GiaTinhThue);
+                
+                $dukienthuenam->setSoTien($SoTien);
+                $dukienthuenam->setNgayPhaiNop(null);
+                $dukienthuenam->setTrangThai(0);
+                
+                $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
+                $kq = $dukienthuenamModel->them($dukienthuenam);
+            } else { 
+                $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                $kq->setKq(false);
+                $kq->setMessenger($mss);
+            } 
+
         }  // validation lỗi
         else {
             $mss = $this->getErrorMessengerForm($form);
@@ -154,58 +167,66 @@ class DukienthuecuanamController extends baseController
             
             // validation thanh cong
             if ($form->isValid()) {
-                
-                // sua
-                
-                // tim dukienthue
-                
-                $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
-                /* @var $dukienthuenam dukienthue */
-                $dukienthuenam = $dukienthuenamModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
-                    ->getObj();
-                
-                $KyThue = $post->get('_KyThue');
                 $MaSoThue = $post->get('MaSoThue');
-                $TieuMuc = $post->get('TieuMuc');
-                $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
-                $TiLeTinhThue = $post->get('TiLeTinhThue');
-                $ThueSuat = $post->get('ThueSuat');
-                $TenGoi = $post->get('TenGoi');
-                $SanLuong = $post->get('SanLuong');
-                $GiaTinhThue = $post->get('GiaTinhThue');
-                $SoTien = $post->get('SoTien');
-                
-                
-                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
-                $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
-                
-            $dukienthuenam->setKyThue($KyThue);
-            $dukienthuenam->setNguoinopthue($nguoinopthue);
-            $dukienthuenam->setMuclucngansach($muclucngansach);
-            $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
-            $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
-            $dukienthuenam->setThueSuat($ThueSuat);
-            
-            if($TenGoi=="")
-                $dukienthuenam->setTenGoi(null);
-            else
-                $dukienthuenam->setTenGoi($TenGoi);
-            
-            if($SanLuong==0)
-                $dukienthuenam->setSanLuong(null);
-            else
-                $dukienthuenam->setSanLuong($SanLuong);
-            
-            if($GiaTinhThue==0)
-                $dukienthuenam->setGiaTinhThue(null);
-            else
-                $dukienthuenam->setGiaTinhThue($GiaTinhThue);
-            
-            $dukienthuenam->setSoTien($SoTien);
-            $dukienthuenam->setNgayPhaiNop(null);
-            $dukienthuenam->setTrangThai(0);
-                
-                $kq = $dukienthuenamModel->merge($dukienthuenam);
+                $kt = new nguoinopthueModel($this->getEntityManager());
+                if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
+                {
+                    // sua
+                    
+                    // tim dukienthue
+                    $nganhModel = new nganhModel($this->getEntityManager());
+                    $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
+                    /* @var $dukienthuenam dukienthue */
+                    $dukienthuenam = $dukienthuenamModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
+                    ->getObj();
+                    
+                    $KyThue = $post->get('_KyThue');
+                    
+                    $TieuMuc = $post->get('TieuMuc');
+                    $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
+                    $TiLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
+                    $ThueSuat = $post->get('ThueSuat');
+                    $TenGoi = $post->get('TenGoi');
+                    $SanLuong = $post->get('SanLuong');
+                    $GiaTinhThue = $post->get('GiaTinhThue');
+                    $SoTien = $post->get('SoTien');
+                    
+                    
+                    $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
+                    $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
+                    
+                    $dukienthuenam->setKyThue($KyThue);
+                    $dukienthuenam->setNguoinopthue($nguoinopthue);
+                    $dukienthuenam->setMuclucngansach($muclucngansach);
+                    $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
+                    $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
+                    $dukienthuenam->setThueSuat($ThueSuat);
+                    
+                    if($TenGoi=="")
+                        $dukienthuenam->setTenGoi(null);
+                    else
+                        $dukienthuenam->setTenGoi($TenGoi);
+                    
+                    if($SanLuong==0)
+                        $dukienthuenam->setSanLuong(null);
+                    else
+                        $dukienthuenam->setSanLuong($SanLuong);
+                    
+                    if($GiaTinhThue==0)
+                        $dukienthuenam->setGiaTinhThue(null);
+                    else
+                        $dukienthuenam->setGiaTinhThue($GiaTinhThue);
+                    
+                    $dukienthuenam->setSoTien($SoTien);
+                    $dukienthuenam->setNgayPhaiNop(null);
+                    $dukienthuenam->setTrangThai(0);
+                    
+                    $kq = $dukienthuenamModel->merge($dukienthuenam);
+                } else { 
+                    $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                    $kq->setKq(false);
+                    $kq->setMessenger($mss);
+                } 
             }             
 
             // validation lỗi

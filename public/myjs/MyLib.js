@@ -215,7 +215,7 @@ var DialogTable = (function() {
 					$("#DialogTable_btnOK").unbind("click");
 					$("#DialogTable_btnOK").click(action);
 				}, 'json');
-			} else {
+			} else if(method == 'post') {
 				$.post(url, data, function(json) {
 
 					self.addData(json);

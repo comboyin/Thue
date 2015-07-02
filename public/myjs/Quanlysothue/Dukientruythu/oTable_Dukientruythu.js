@@ -185,14 +185,14 @@ var EditableTable = function () {
 					 + aData[2] + '"disabled>';
 					 
 				jqTds[3].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 13px;margin-top:2px">Tìm</button>';
+					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 13px;margin-top:2px">Chọn</button>';
 
 
 				jqTds[4].innerHTML = '<input style="width:120px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';
 				
 				jqTds[5].innerHTML = '<input style="width:40px;" name="TiLeTinhThue" type="text"  value="'
-					 + aData[5] + '"disabled>';
+					 + aData[5] + '"disabled><button class="btn btn-primary DialogTiLeTinhThue" style="margin:0 10px;margin-top:2px">Chọn</button>';
 				
 				jqTds[6].innerHTML = '<input style="width:100px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '"disabled>';
@@ -221,7 +221,7 @@ var EditableTable = function () {
 					 + aData[2] + '"disabled>';
 					 
 				jqTds[3].innerHTML = '<input style="width:60px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 13px;margin-top:2px">Tìm</button>';
+					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 13px;margin-top:2px">Chọn</button>';
 
 
 				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhSo" type="text"  value="'
@@ -793,12 +793,12 @@ var EditableTable = function () {
 			});
 
 			
-			function loadTyLeTinhThue(MaSoThue,TieuMuc){
+/*			function loadTyLeTinhThue(MaSoThue,TieuMuc){
 				
 				$.get('loadTyLeTinhThue',{MaSoThue:MaSoThue,TieuMuc:TieuMuc},function(json){
 					$("input[name='TiLeTinhThue']").val(json.TyLeTinhThue);
 				},'json');
-			}
+			}*/
 			
 			// dialogTable
 			$('#editable-sample button.DialogNNT').live('click', function (e) {
@@ -820,8 +820,8 @@ var EditableTable = function () {
 						
 						MaSoThue.val(MaSoThueString);
 						TenHKD.val(TenHKDString);
-						TieuMuc = $("input[name='TieuMuc']").val();
-						loadTyLeTinhThue(MaSoThueString,TieuMuc);
+						//TieuMuc = $("input[name='TieuMuc']").val();
+						//loadTyLeTinhThue(MaSoThueString,TieuMuc);
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
 					}
@@ -871,8 +871,8 @@ var EditableTable = function () {
 						$("#DialogTable").modal("hide");
 						
 						TieuMuc.val(TieuMucString);
-						MaSoThue = $("input[name='masothue']").val();
-						loadTyLeTinhThue(MaSoThue,TieuMucString);
+						//MaSoThue = $("input[name='masothue']").val();
+						//loadTyLeTinhThue(MaSoThue,TieuMucString);
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
 					}
@@ -918,12 +918,16 @@ var EditableTable = function () {
 				
 				
 			});
+			
+			
+			
 
 		}
 
 	};
 }
 ();
+
 jQuery(document).ready(function () {
 
 	EditableTable.init();
