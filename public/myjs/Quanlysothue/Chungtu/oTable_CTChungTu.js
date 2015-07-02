@@ -21,11 +21,15 @@ var EditableTableChiTietChungTu = function () {
 				console.log(tbody);*/
 				SoChungTu =($('td',$(this)[0])[0]).textContent ;
 				deleteAllRows();
+				$("div.progressSoChungTu").css('display','block');
+				$("h1.SoChungTu").html(SoChungTu);
+    			 
 			    $.get(baseUrl('application/Service/danhSachChiTietChungTu'),{
 			    	SoChungTu:SoChungTu
 			    },function(json){
 			    	if(json.kq==true){
 			    		data = json.obj;
+			    		
 			    		$.each(data,function(key,value){
              				
             				
@@ -39,7 +43,10 @@ var EditableTableChiTietChungTu = function () {
 	        			    		
 	        			    	
             			  });
+			    		
 			    	}
+			    	
+			    	$("div.progressSoChungTu").css('display','none');
 			    },'json');
 			});
 			
@@ -67,7 +74,7 @@ var EditableTableChiTietChungTu = function () {
 					
 					
 					//*************************************
-					"sScrollY": "350px",
+					"sScrollY": "230px",
 					"sScrollX": "100%",
 					/*"bScrollCollapse": true,*/
 					//*************************************
@@ -132,17 +139,18 @@ var EditableTableChiTietChungTu = function () {
 				// khi click edit trên 1 dòng
 				// chuyển tất cả các ô trên dòng thành input
 				
-				jqTds[0].innerHTML = '<input style="width:100px;" name="SoChungTu" type="text"  value="'
+				jqTds[0].innerHTML = '<input style="width:80px;" name="KyThue" type="text"  value="'
 					 + aData[0] + '">';
-				jqTds[1].innerHTML = '<input type="text" name="NgayChungTu" required="required" size="16" class="m-ctrl-medium popovers" data-trigger="hover" data-content="Ngày hạch toán phải trước ngày hạch toán" data-original-title="Ngày chứng từ" value=">'
-					 + aData[1] + '">';
-				jqTds[2].innerHTML = '<input type="text" name="NgayHachToan" required="required" size="16" class="m-ctrl-medium popovers" data-trigger="hover" data-content="Ngày hạch toán phải sau ngày chứng từ" data-original-title="Ngày hạch toán" value=">'
-					 + aData[2] + '">';
-				jqTds[3].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
-					 + aData[3] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
+				
+				jqTds[1].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"  value="'
+					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogTieuMuc">Chọn</button>';
 
-				jqTds[4].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[5].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				jqTds[2].innerHTML = '<input style="width:80px;" type="text" name="SoTien" value="'
+					 + aData[2] + '">';
+				
+				
+				jqTds[3].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[4].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
@@ -152,17 +160,18 @@ var EditableTableChiTietChungTu = function () {
 			function addRow(oTable, nRow) {
 				var aData = oTable.fnGetData(nRow);
 				var jqTds = $('>td', nRow);
-				jqTds[0].innerHTML = '<input style="width:100px;" name="SoChungTu" type="text"  value="'
+				jqTds[0].innerHTML = '<input style="width:80px;" name="KyThue" type="text"  value="'
 					 + aData[0] + '">';
-				jqTds[1].innerHTML = '<input type="text" name="NgayChungTu" required="required" size="16" class="m-ctrl-medium popovers" data-trigger="hover" data-content="Ngày hạch toán phải trước ngày hạch toán" data-original-title="Ngày chứng từ" value=">'
-					 + aData[1] + '">';
-				jqTds[2].innerHTML = '<input type="text" name="NgayHachToan" required="required" size="16" class="m-ctrl-medium popovers" data-trigger="hover" data-content="Ngày hạch toán phải sau ngày chứng từ" data-original-title="Ngày hạch toán" value=">'
-					 + aData[2] + '">';
-				jqTds[3].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
-					 + aData[3] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
+				
+				jqTds[1].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"  value="'
+					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogTieuMuc">Chọn</button>';
 
-				jqTds[4].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[5].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				jqTds[2].innerHTML = '<input style="width:80px;" type="text" name="SoTien" value="'
+					 + aData[2] + '">';
+				
+
+				jqTds[3].innerHTML = '<a class="edit" href="">Save new</a>';
+				jqTds[4].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
 
@@ -177,13 +186,13 @@ var EditableTableChiTietChungTu = function () {
 				oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
 				oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
 				oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
-				oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
+				
 
 
-				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 4,
+				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 3,
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
-					5, false);
+					4, false);
 				oTable.fnDraw();
 			}
 			
@@ -641,24 +650,20 @@ var EditableTableChiTietChungTu = function () {
 
 
 					
-					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
+					var KyThue = $("input[name='KyThue']", nRow).val().trim();
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
 					var SoTien = $("input[name='SoTien']", nRow).val().trim();
-					var TrangThai = $("input[name='TrangThai']", nRow).val().trim();
-					var LyDo = $("input[name='LyDo']", nRow).val().trim();
-					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-					var DoanhSo  = $("input[name='DoanhSo']", nRow).val().trim();
-	
+					var SoChungTu = $("h1.SoChungTu").html().trim();
+					
 					data = {
-						KyThue : _KyThue,
-						MaSoThue : MaSoThue,
-						TieuMuc : TieuMuc,
-						LyDo : LyDo,
-						DoanhSo:DoanhSo
+						KyThue : KyThue,
+						TieuMuc:TieuMuc,
+						SoTien:SoTien,
+						SoChungTu:SoChungTu
 					}
 
-					var url = 'them';
-					console.log(nEditing);
+					var url = 'themChiTietChungTu';
+					
 					SaveNew('post', url, data, oTable, nEditing);
 
 				} else if (nEditing == nRow
@@ -775,7 +780,7 @@ var EditableTableChiTietChungTu = function () {
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
 
-				DialogTable.showFromUrl('get','muclucngansach',{}, function () {
+				DialogTable.showFromUrl('get',baseUrl('application/Service/muclucngansach'),{}, function () {
 					
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
