@@ -4,6 +4,11 @@
 
 
 
+
+
+
+
+
 var EditableTableChungTu = function () {
 
 	//key
@@ -27,13 +32,7 @@ var EditableTableChungTu = function () {
 			});
 			
 		
-			$("#editable-chungtu_wrapper input[name='NgayHachToan']").live('focus', function(){
-			    if (false == $(this).hasClass('hasDatepicker')) {
-			    	$(this).datepicker({ 
-				    	format: 'dd-mm-yyyy'
-				    });
-			    }
-			});
+
 			
 			
 			
@@ -57,7 +56,6 @@ var EditableTableChungTu = function () {
     			    		oTable.fnAddData([
     			    		         value.SoChungTu,
     			    		         $.datepicker.formatDate("dd-mm-yy",new Date(value.NgayChungTu.date)),
-    			    		         $.datepicker.formatDate("dd-mm-yy",new Date(value.NgayHachToan.date)),
     			    		         value.nguoinopthue.MaSoThue,
     			    		         value.nguoinopthue.TenHKD,
     				                          '<a class="edit" href="">Edit</a>', '<a class="delete" href="">Delete</a>'
@@ -168,14 +166,12 @@ var EditableTableChungTu = function () {
 					 + aData[0] + '">';
 				jqTds[1].innerHTML = '<input type="text" style="width:80px;" name="NgayChungTu" required="required"  class="m-ctrl-medium popovers" value="'
 					 + aData[1] + '">';
-				jqTds[2].innerHTML = '<input type="text" style="width:80px;" name="NgayHachToan" required="required" class="m-ctrl-medium popovers" value="'
-					 + aData[2] + '">';
-				jqTds[3].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
-					 + aData[3] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
-				jqTds[4].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
-					 + aData[4] + ' "disabled>';
-				jqTds[5].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[6].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				jqTds[2].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
+					 + aData[2] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
+				jqTds[3].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
+					 + aData[3] + ' "disabled>';
+				jqTds[4].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[5].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
@@ -185,19 +181,17 @@ var EditableTableChungTu = function () {
 			function addRow(oTable, nRow) {
 				var aData = oTable.fnGetData(nRow);
 				var jqTds = $('>td', nRow);
+				
 				jqTds[0].innerHTML = '<input style="width:100px;" name="SoChungTu" type="text"  value="'
 					 + aData[0] + '">';
 				jqTds[1].innerHTML = '<input type="text" style="width:80px;" name="NgayChungTu" required="required"  class="m-ctrl-medium popovers" value="'
 					 + aData[1] + '">';
-				jqTds[2].innerHTML = '<input type="text" style="width:80px;" name="NgayHachToan" required="required" class="m-ctrl-medium popovers" value="'
-					 + aData[2] + '">';
-				jqTds[3].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
-					 + aData[3] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
-				jqTds[4].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
-					 + aData[4] + ' "disabled>';
-
-				jqTds[5].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[6].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				jqTds[2].innerHTML = '<input style="width:80px;" name="MaSoThue" type="text"  value="'
+					 + aData[2] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
+				jqTds[3].innerHTML = '<input style="width:80px;" name="TenHKD" type="text"  value="'
+					 + aData[3] + ' "disabled>';
+				jqTds[4].innerHTML = '<a class="edit" href="">Save new</a>';
+				jqTds[5].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
 
@@ -239,7 +233,6 @@ var EditableTableChungTu = function () {
 							'',
 							'',
 							'',
-							'',
 							'<a class="edit" href="">Edit</a>',
 							'<a class="cancel" data-mode="new" href="">Cancel</a>'
 						]);
@@ -248,23 +241,7 @@ var EditableTableChungTu = function () {
 				nEditing = nRow;
 			});
 
-			/*function cancelEditRow(oTable, nRow) {
-			var jqInputs = $('input', nRow);
-
-
-
-
-			oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
-			oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
-			oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
-			oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-			oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 4,
-			false);
-
-
-
-			oTable.fnDraw();
-			}*/
+			
 
 			function SaveNew(method, url, data, oTable, nEditing) {
 
@@ -477,7 +454,7 @@ var EditableTableChungTu = function () {
 			}
 
 			jQuery('#editable-chungtu_wrapper .dataTables_filter input')
-			.addClass(" medium"); // modify
+			.addClass(" span6"); // modify
 
 			jQuery('#editable-chungtu_wrapper .dataTables_length select')
 			.addClass(" xsmall"); // modify
@@ -833,9 +810,10 @@ var EditableTableChungTu = function () {
 			
 			//upload
 			
-			$("#Import").click(function(){
+			$("#Import").click(function(e){
+				e.preventDefault();
 				var fd = new FormData();    
-				fd.append( 'dukientruythu-file',$('input[name="dukientruythu-file"]')[0].files[0]);
+				fd.append( 'file-excel',$('input[name="file-excel"]')[0].files[0]);
 				DialogTable.showPropressUnlimit();
 				$.ajax({
 				  url: 'uploadForm',
@@ -848,14 +826,14 @@ var EditableTableChungTu = function () {
 					  
 				    if(json.sucess==false){
 				    	
-				    	$.fileDownload(baseUrl("application/Service/downloadFile"), {
+				    	/*$.fileDownload(baseUrl("application/Service/downloadFile"), {
 							successCallback : function(url) {
 							},
 							failCallback : function(responseHtml, url) {
 							},
 							httpMethod : "GET",
 							data : 'filename='+json.fileNameErr
-						});
+						});*/
 				    }else if(json.sucess==true){
 				    	
 				    }

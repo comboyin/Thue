@@ -22,11 +22,6 @@ class chungtu
     private $NgayChungTu;
 
     /**
-     * @ORM\Column(type="date", nullable=false)
-     */
-    private $NgayHachToan;
-
-    /**
      * @ORM\OneToMany(targetEntity="Application\Entity\chitietchungtu", mappedBy="chungtu")
      */
     private $chitietchungtus;
@@ -60,13 +55,7 @@ class chungtu
         return $this->NgayChungTu;
     }
 
- /**
-     * @return the $NgayHachToan
-     */
-    public function getNgayHachToan()
-    {
-        return $this->NgayHachToan;
-    }
+
 
  /**
      * @return the $chitietchungtus
@@ -105,18 +94,10 @@ class chungtu
      */
     public function setNgayChungTu($NgayChungTu)
     {
-        $this->NgayChungTu = \DateTime::createFromFormat("d-m-Y", $NgayChungTu);
+        $this->NgayChungTu = \DateTime::createFromFormat("Y-m-d", $NgayChungTu);
     }
 
- /**
-  *  param : d-m-Y
-     * @param field_type $NgayHachToan
-     */
-    public function setNgayHachToan($NgayHachToan)
-    {
-        
-        $this->NgayHachToan = \DateTime::createFromFormat("d-m-Y", $NgayHachToan);
-    }
+
 
  /**
      * @param field_type $chitietchungtus

@@ -11,11 +11,15 @@ use Application\base\baseExcel;
 class ImportExcelDuKienTruyThu extends baseExcel
 {
 
+   
     /**
+     * Validation file dự kiến import vào
+     * @param string $fileName
      * @param EntityManager $EntityManager
-     * @param string $fileName  */
+     * @return string|boolean  */
     public function CheckFileImport($fileName,$EntityManager){
         $boolErr = 0;
+        //Hộ kinh doanh không thuộc sự quản lý của cán bộ thuế đó
         $messKeyExist  = "Doanh số này đã được dự kiến !";
         $messMaSoThueNotExist  = "Mã số thuế không tồn tại !";
         $messTieuMucNotExist  = "Tiểu mục không tồn tại !";

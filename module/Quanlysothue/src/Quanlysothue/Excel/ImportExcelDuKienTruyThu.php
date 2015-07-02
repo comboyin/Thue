@@ -16,6 +16,7 @@ class ImportExcelDuKienTruyThu extends baseExcel
      * @param string $fileName  */
     public function CheckFileImport($fileName,$EntityManager){
         $boolErr = 0;
+        //Hộ kinh doanh không thuộc sự quản lý của cán bộ thuế đó
         $messKeyExist  = "Doanh số này đã được dự kiến !";
         $messMaSoThueNotExist  = "Mã số thuế không tồn tại !";
         $messTieuMucNotExist  = "Tiểu mục không tồn tại !";
