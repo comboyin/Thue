@@ -179,7 +179,7 @@ var EditableTable = function () {
 					 + aData[2] + '"disabled>';
 					 
 				jqTds[3].innerHTML = '<input style="width:50px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Tìm</button>';
+					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Chọn</button>';
 
 
 				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhThuChiuThue" type="text"  value="'
@@ -221,7 +221,7 @@ var EditableTable = function () {
 					 + aData[2] + '"disabled>';
 					 
 				jqTds[3].innerHTML = '<input style="width:50px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Tìm</button>';
+					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Chọn</button>';
 
 
 				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhThuChiuThue" type="text"  value="'
@@ -826,7 +826,7 @@ var EditableTable = function () {
 				TenHKD = $("input[name='TenHKD']", nRow);
 				
 				
-				DialogTable.showFromUrl('get','danhsachNNT',{},function(){
+				DialogTable.showFromUrl('get',baseUrl('application/Service/danhsachNNT'),{},function(){
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
 					if (checkboxs.length == 1) {
@@ -878,7 +878,7 @@ var EditableTable = function () {
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
 
-				DialogTable.showFromUrl('get','muclucngansach',{}, function () {
+				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnsthue'),{}, function () {
 					
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 

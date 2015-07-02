@@ -205,6 +205,7 @@ var DialogTable = (function() {
 		// show from url
 
 		showFromUrl : function(method, url, data, action) {
+			console.log(data);
 			$("#DialogTable > .modal-body")
 					.html(
 							'<div class="progress progress-striped active"> <div style="width: 100%;" class="bar"></div></div>');
@@ -215,7 +216,7 @@ var DialogTable = (function() {
 					$("#DialogTable_btnOK").unbind("click");
 					$("#DialogTable_btnOK").click(action);
 				}, 'json');
-			} else {
+			} else if(method == 'post') {
 				$.post(url, data, function(json) {
 
 					self.addData(json);

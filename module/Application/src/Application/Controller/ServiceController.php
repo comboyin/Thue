@@ -98,6 +98,55 @@ class ServiceController extends baseController
         echo json_encode($bq->getQuery()->getArrayResult());
         return $this->response;
     }
+    
+    /**
+     * AJAX
+     * Lấy danh sách mục luc ngân sách, trừ môn bài
+     * @return \Zend\Mvc\Controller\Response  */
+    public function mlnsthueAction()
+    {
+        $bq = $this->getEntityManager()->createQueryBuilder();
+        $bq->select('tieumuc')->from('Application\Entity\muclucngansach', 'tieumuc')
+        ->where("tieumuc.TieuMuc not like '180_'");
+        echo json_encode($bq->getQuery()->getArrayResult());
+        return $this->response;
+    }
+    
+    /**
+     * AJAX
+     * Lấy danh sách mục luc ngân sách, chỉ lấy 1003 và 1701
+     * @return \Zend\Mvc\Controller\Response  */
+    public function mlnstruythuAction()
+    {
+        $bq = $this->getEntityManager()->createQueryBuilder();
+        $bq->select('tieumuc')->from('Application\Entity\muclucngansach', 'tieumuc')
+        ->where("tieumuc.TieuMuc like '1003'")
+        ->orWhere("tieumuc.TieuMuc like '1701'");
+        echo json_encode($bq->getQuery()->getArrayResult());
+        return $this->response;
+    }
+    
+    //tiletinhthuetm
+    /**
+     * AJAX
+     * Lấy danh sách biểu thuế tỷ lệ theo tiểu mục
+     * @return \Zend\Mvc\Controller\Response  */
+    public function tiletinhthuetmAction()
+    {
+        $tieumuc = $this->getRequest()
+        ->getQuery()
+        ->get('TieuMuc');
+        
+        $bq = $this->getEntityManager()->createQueryBuilder();
+        $bq->select(array('nganh.MaNganh','nganh.TenNganh','bieuthuetyle.TyLeTinhThue'))->from('Application\Entity\bieuthuetyle', 'bieuthuetyle')
+                                   ->join('bieuthuetyle.muclucngansach', 'muclucngansach')
+                                   ->join('bieuthuetyle.nganh', 'nganh')
+                                   ->where("muclucngansach.TieuMuc = ?1")
+                                   ->setParameter(1, $tieumuc);
+        echo json_encode($bq->getQuery()->getArrayResult());
+        return $this->response;
+    }
+    
 }
 
 ?>

@@ -4,7 +4,7 @@ namespace Quanlysothue\Models;
 use Application\base\baseModel;
 use Application\Entity\ketqua;
 use Application\Entity\user;
-use Application\Entity\dukientruythu;
+use Application\Entity\dukienthue;
 
 class dukienthuecuanamModel extends baseModel
 {
@@ -37,7 +37,7 @@ class dukienthuecuanamModel extends baseModel
     {}
 
     /**
-     * @param dukientruythu $obj
+     * @param dukienthue $obj
      */
     public function sua($obj)
     {
@@ -90,8 +90,8 @@ class dukienthuecuanamModel extends baseModel
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
                     ->where('dukienthue.KyThue = ?1')
-                    ->andWhere('user.coquanthue = ?2')
-                    ->setParameter(2, $user->getCoquanthue())
+                    ->andWhere('user.parentUser = ?2')
+                    ->setParameter(2, $user)
                     ->setParameter(1, $nam);
                 }
             
@@ -166,46 +166,6 @@ class dukienthuecuanamModel extends baseModel
      *
      * @param string $kythue            
      * @param string $masothue            
-     * @return ketqua
-     *
-     */
-    public function xoadukientruythu($kythue, $masothue)
-    {
-        try {
-            $nguoinopthue = $this->em->find('Application\Entity\nguoinopthue', $masothue);
-            $kq = new ketqua();
-            if ($nguoinopthue == null) {
-                $kq->setKq(false);
-                $kq->setMessenger('Không tìm thấy người nộp thuế cố mã số thuế ' . $masothue);
-                return $kq;
-            } else {
-                $qb = $this->em->createQueryBuilder();
-                
-                $qb->delete('Application\Entity\dukientruythu', 'd')
-                    ->where('d.nguoinopthue = :nguoinopthue')
-                    ->andWhere('d.KyThue = :KyThue')
-                    ->setParameter(':nguoinopthue', $nguoinopthue)
-                    ->setParameter(':KyThue', $kythue);
-                $d = $qb->getQuery()->execute();
-                
-                if ($d == 1) {
-                    $kq->setKq(true);
-                    $kq->setMessenger("Xóa thành công doanh số dự kiến có mã số thuế $masothue và kỳ thuế $kythue");
-                }
-                return $kq;
-            }
-        } catch (\Exception $e) {
-            $kq = new ketqua();
-            $kq->setKq(false);
-            $kq->setMessenger($e->getMessage());
-            return $kq;
-        }
-    }
-
-    /**
-     *
-     * @param string $kythue            
-     * @param string $masothue            
      * @param string $user 
      * @param string $tieumuc            
      * @return ketqua
@@ -217,13 +177,13 @@ class dukienthuecuanamModel extends baseModel
             $kq = new ketqua();
             $qb = $this->em->createQueryBuilder();
             
-            $qb->select('dukientruythu')
-                ->from('Application\Entity\dukientruythu', 'dukientruythu')
-                ->join('dukientruythu.nguoinopthue', 'nguoinopthue')
-                ->join('dukientruythu.muclucngansach', 'muclucngansach')
+            $qb->select('dukienthue')
+                ->from('Application\Entity\dukienthue', 'dukienthue')
+                ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                ->join('dukienthue.muclucngansach', 'muclucngansach')
                 ->where('nguoinopthue.MaSoThue = ?1')
                 ->andWhere('muclucngansach.TieuMuc = ?2')
-                ->andWhere('dukientruythu.KyThue = ?3')
+                ->andWhere('dukienthue.KyThue = ?3')
                 ->setParameter(3, $kythue)
                 ->setParameter(1, $masothue)
                 ->setParameter(2, $tieumuc);
@@ -232,36 +192,6 @@ class dukienthuecuanamModel extends baseModel
                 ->getSingleResult());
             $kq->setKq(true);
             return $kq;
-        } catch (\Exception $e) {
-            $kq = new ketqua();
-            $kq->setKq(false);
-            $kq->setMessenger($e->getMessage());
-            return $kq;
-        }
-    }
-
-    /**
-     * Xóa nhiều dự kiến doanh số 1 lúc
-     * 
-     * @param string $kythue            
-     * @param array $masothuedata            
-     * @param user $user            
-     */
-    public function xoanhieuDKDS($kythue, $masothuedata, $user)
-    {
-        try {
-            $dem = 0;
-            foreach ($masothuedata as $mst) {
-                $kq = $this->xoadukientruythu($kythue, $mst);
-                if($kq->getKq()==true)
-                {
-                    $dem++;
-                }
-            }
-            
-            $this->kq->setKq(true);
-            $this->kq->setMessenger("Đã xóa $dem dự kiến doanh số của kỳ thuế $kythue");
-            return $this->kq;
         } catch (\Exception $e) {
             $kq = new ketqua();
             $kq->setKq(false);
