@@ -878,7 +878,7 @@ var EditableTable = function () {
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
 
-				DialogTable.showFromUrl('get',baseUrl('application/Service/muclucngansach'),{}, function () {
+				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnsthue'),{}, function () {
 					
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
