@@ -142,6 +142,7 @@ class ServiceController extends baseController
                                    ->join('bieuthuetyle.muclucngansach', 'muclucngansach')
                                    ->join('bieuthuetyle.nganh', 'nganh')
                                    ->where("muclucngansach.TieuMuc = ?1")
+                                   ->andwhere('bieuthuetyle.ThoiGianKetThuc is null')
                                    ->setParameter(1, $tieumuc);
         echo json_encode($bq->getQuery()->getArrayResult());
         return $this->response;

@@ -19,6 +19,7 @@ class nganhModel extends baseModel
                             ->join('bieuthuetyle.muclucngansach', 'muclucngansach')
                             ->where('nganh.MaNganh = ?1')
                             ->andwhere('muclucngansach.TieuMuc = ?2')
+                            ->andwhere('bieuthuetyle.ThoiGianKetThuc is null')
                             ->setParameter(1, $MaNganh)
                             ->setParameter(2, $TieuMuc)
                             ->getQuery()
@@ -43,6 +44,8 @@ class nganhModel extends baseModel
         
         return null;
     }
+    
+    
 }
 
 ?>

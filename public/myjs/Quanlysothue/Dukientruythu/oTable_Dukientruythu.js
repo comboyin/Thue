@@ -285,7 +285,7 @@ var EditableTable = function () {
 							'',
 							'',
 							0,
-							'0',
+							0,
 							0,
 							0,
 							'',
@@ -738,7 +738,10 @@ var EditableTable = function () {
 						KyThue : _KyThue,
 						MaSoThue : MaSoThue,
 						TieuMuc : TieuMuc,
+						SoTien : SoTien,
+						TrangThai : TrangThai,
 						LyDo : LyDo,
+						TiLeTinhThue:TiLeTinhThue,
 						DoanhSo:DoanhSo
 					}
 

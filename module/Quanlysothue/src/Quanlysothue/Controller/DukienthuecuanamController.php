@@ -223,7 +223,7 @@ class DukienthuecuanamController extends baseController
                     
                     $kq = $dukienthuenamModel->merge($dukienthuenam);
                 } else { 
-                    $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                    $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn hoặc đã nghĩ bỏ kinh doanh không thể lập dự kiến thuế.";
                     $kq->setKq(false);
                     $kq->setMessenger($mss);
                 } 
