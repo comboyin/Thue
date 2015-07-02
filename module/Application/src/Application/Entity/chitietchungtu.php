@@ -19,6 +19,12 @@ class chitietchungtu
      * @ORM\Column(type="string", length=7)
      */
     private $KyThue;
+    
+    
+    /**
+     * @ORM\Column(type="date", nullable=false)
+     */
+    private $NgayHachToan;
 
     /**
      * @ORM\Column(type="integer", nullable=false, options={"default":"0"})
@@ -38,6 +44,22 @@ class chitietchungtu
      * @ORM\JoinColumn(name="SoChungTu", referencedColumnName="SoChungTu", nullable=false, onDelete="restrict")
      */
     private $chungtu;
+ /**
+     * @return the $NgayHachToan
+     */
+    public function getNgayHachToan()
+    {
+        return $this->NgayHachToan;
+    }
+
+ /**
+     * @param field_type $NgayHachToan
+     */
+    public function setNgayHachToan($NgayHachToan)
+    {
+        $this->NgayHachToan = \DateTime::createFromFormat("Y-m-d", $NgayHachToan);
+    }
+
  /**
      * @return the $KyThue
      */

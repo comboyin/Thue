@@ -288,10 +288,10 @@ class DukientruythuController extends baseController
                 
                 $ImportData = new ImportExcelDuKienTruyThu();
                 
-                //validation file
-                //nếu lỗi
-                $fileNameErr = $ImportData->CheckFileImport($fileName, $this->getEntityManager());
                 
+                //validation file
+                $fileNameErr = $ImportData->CheckFileImport($fileName, $this->getEntityManager());
+                //nếu lỗi
                 if($fileNameErr!==false){
                     echo json_encode(array(
                         'sucess'=>false,

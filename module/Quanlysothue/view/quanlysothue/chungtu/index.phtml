@@ -6,6 +6,11 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fi
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap-daterangepicker/moment.js');
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap-daterangepicker/daterangepicker.js');
 
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fileDownload.js');
+
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap/js/bootstrap-fileupload.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/bootstrap/css/bootstrap-fileupload.css');
+
 
 $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/bootstrap-daterangepicker/daterangepicker-bs2.css');
 /* $this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap/js/bootstrap-fileupload.js');
@@ -53,9 +58,8 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 				</div>
 				<div class="widget-body">
 				
-				
-				    
-				    <div>
+				<div class="clearfix">
+				           
 						<form action="#" class="form-horizontal">
 						
 						      <div class="control-group">
@@ -65,13 +69,64 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
                                             <span class="add-on"><i class="icon-calendar"></i></span>
                                             <input id="reservation" type="text" class=" m-ctrl-medium">
                                         </div>
+                                        
+                                        
+                                        
+                                        <div class="btn-group pull-right">
+							
+							     <div class="control-group">
+                                    
+                                    <div class="controls">
+                                        <div data-provides="fileupload" class="fileupload fileupload-new">
+                                            <div class="input-append">
+                                                <div class="uneditable-input">
+                                                    <i class="icon-file fileupload-exists"></i>
+                                                    <span class="fileupload-preview"></span>
+                                                </div>
+                                               <span class="btn btn-file">
+                                               <span class="fileupload-new">Select file</span>
+                                               <span class="fileupload-exists">Change</span>
+                                               <?php echo $this->formelement($formUp->get("file-excel"))?>
+                                               </span>
+                                                <button style="margin-left: 5px;"  id="Import"
+                            						class="btn btn-file">
+                            						Import <i class="icon-file"></i>
+								                    </button>
+                                                
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+							
+								<!-- <button class="btn dropdown-toggle" data-toggle="dropdown">
+									Tùy chọn <i class="icon-angle-down"></i>
+								</button>
+								<ul class="dropdown-menu pull-right">
+									<li><a href="#">Print</a></li>
+									<li><a href="#">Save as PDF</a></li>
+									<li><a href="#">Export to Excel</a></li>
+								</ul> -->
+							</div>
+                                        
+                                        
+                                    </div>
+                                    
+                                    
+                                    
+                                    
+                                    
                                 </div>
 						
 						</form>
 						
 						
-					</div>
+					           
+				            
+				
+				
+				</div>
+				    
+				    
 					
 					
 					
@@ -123,7 +178,7 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 								    
 									<th>Số chứng từ (*)</th>
 						            <th>Ngày chứng từ</th>
-									<th>Ngày hạch toán</th>
+								
 									<th>Mã số thuế</th>
 									<th>Tên HKD</th>
     								<th>Sửa</th>
@@ -137,7 +192,7 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 						
 						
 						<div class="span6" style="border: 1px solid #9D4A9C;">
-						<div style="display: none;" class="progressSoChungTu progress progress-striped progress-danger active">
+						<div style="display: none;" class="progressSoChungTu progress progress-striped progress-success active">
                                 <div style="width: 100%; " class="bar" ></div>
                             </div>
 						<div class="profile-side-box red">
@@ -180,13 +235,13 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 								    
 									<th>Kỳ thuế (*)</th>
 						            <th>Tiểu mục</th>
+									<th>Ngày hạch toán</th>
 									<th>Số tiền</th>
-									
     								<th>Sửa</th>
     								<th>Xóa</th>
 							</tr>
     						</thead>
-            				        <tbody id="tablechitietchungtu">
+            				        <tbody >
         							</tbody>
     					    </table>
 						</div>

@@ -24,11 +24,12 @@ class Unlity
     /**
      * Kiểm tra ngày hiện tại có nằm giữa 2 ngày không ?
      * format d-m-Y
-     * @param string $DateBegin       
+     *
+     * @param string $DateBegin            
      * @param string $DateEnd            
      * @return bool
      */
-    public static function CheckTodayBetweenTowDay($DateBegin,$DateEnd)
+    public static function CheckTodayBetweenTowDay($DateBegin, $DateEnd)
     {
         $paymentDate = new \DateTime(); // Today
         $contractDateBegin = \DateTime::createFromFormat("d-m-Y", $DateBegin);
@@ -40,34 +41,34 @@ class Unlity
             return false;
         }
     }
-    
-    
+
     /**
      * Kiểm tra ngày chỉ định có nằm giữa và bằng 2 ngày không ?
      * format d-m-Y
-     * @param string $DateBegin
-     * @param string $DateCurrent
-     * @param string $DateEnd
+     *
+     * @param string $DateBegin            
+     * @param string $DateCurrent            
+     * @param string $DateEnd            
      * @return bool
      */
-    public static function CheckDateBetweenTowDate($DateBegin,$DateEnd,$DateCurrent)
+    public static function CheckDateBetweenTowDate($DateBegin, $DateEnd, $DateCurrent)
     {
         $paymentDate = \DateTime::createFromFormat("d-m-Y", $DateCurrent);
         $contractDateBegin = \DateTime::createFromFormat("d-m-Y", $DateBegin);
         $contractDateEnd = \DateTime::createFromFormat("d-m-Y", $DateEnd);
-    
+        
         if ($paymentDate->getTimestamp() >= $contractDateBegin->getTimestamp() && $paymentDate->getTimestamp() <= $contractDateEnd->getTimestamp()) {
             return true;
         } else {
             return false;
         }
     }
-    
-    
+
     /**
      * Kiểm tra ngày hiện tại có lớn hơn hoặc bằng ngày truyền vào hay khog ?
      * format d-m-Y
-     * @param string $Date
+     *
+     * @param string $Date            
      * @return bool
      */
     public static function CheckTodayLonHonHoacBang($Date)
@@ -75,11 +76,33 @@ class Unlity
         $paymentDate = new \DateTime(); // Today
         $contractDate = \DateTime::createFromFormat("d-m-Y", $Date);
         
-    
         if ($paymentDate->getTimestamp() >= $contractDate->getTimestamp()) {
             return true;
         } else {
             return false;
         }
+    }
+
+    /**
+     * Conver từ format sang d-m-Y
+     * format d-m-Y
+     * example:
+     * Unlity::ConverDate('Y-m-d', $NgayHachToan, 'm/Y');
+     * 'Y-m-d' -> 'm/Y'
+     *
+     * @param string $Date            
+     * @return string
+     */
+    public static function ConverDate($format, $dateString, $formatConver)
+    {
+        $date = \DateTime::createFromFormat($format, $dateString);
+        
+        return $date->format($formatConver);
+    }
+    
+    public static function ConverPhpExcelToDateTimeObject($cell)
+    {
+        return date('Y-m-d', \PHPExcel_Shared_Date::ExcelToPHP($cell->getValue()));
+    
     }
 }
