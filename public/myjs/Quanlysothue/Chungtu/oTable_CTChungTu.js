@@ -25,11 +25,26 @@ var EditableTableChiTietChungTu = function () {
 			});
 			
 			
+			$("#editable-chitietchungtu  input[name='NgayHachToan']").live('focus', function(){
+			    if (false == $(this).hasClass('hasDatepicker')) {
+			    	$(this).datepicker({ 
+				    	format: 'dd-mm-yyyy'
+				    });
+			    }
+			});
+			
+			
+			
 			//chọn số chứng từ
-			$("#editable-chungtu_wrapper tr").live('click', function(){
+			$("#tablechungtu a.CTChungTu").live('click', function(e){
 				/*var tbody = $(this).parents('tr')[0];
 				console.log(tbody);*/
-				SoChungTu =($('td',$(this)[0])[0]).textContent ;
+				e.preventDefault();
+				
+				var nRow = $(this).parents('tr')[0];
+
+				
+				SoChungTu =($('td',nRow)[1]).textContent ;
 				deleteAllRows();
 				$("div.progressSoChungTu").css('display','block');
 				$("h1.SoChungTu").html(SoChungTu);
@@ -85,7 +100,7 @@ var EditableTableChiTietChungTu = function () {
 					
 					
 					//*************************************
-					"sScrollY": "230px",
+					"sScrollY": "210px",
 					"sScrollX": "100%",
 					/*"bScrollCollapse": true,*/
 					//*************************************
@@ -604,7 +619,7 @@ var EditableTableChiTietChungTu = function () {
 				}
 			});
 
-			$('#editable-chitietchungtu a.Delete').live('click', function (e) {
+			$('#tablechungtu a.Delete').live('click', function (e) {
 				e.preventDefault();
 
 				var nRow = $(this).parents('tr')[0];
@@ -674,12 +689,14 @@ var EditableTableChiTietChungTu = function () {
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
 					var SoTien = $("input[name='SoTien']", nRow).val().trim();
 					var SoChungTu = $("h1.SoChungTu").html().trim();
+					var NgayHachToan = $("input[name='NgayHachToan']",nRow).val().trim();
 					
 					data = {
 						KyThue : KyThue,
 						TieuMuc:TieuMuc,
 						SoTien:SoTien,
-						SoChungTu:SoChungTu
+						SoChungTu:SoChungTu,
+						NgayHachToan:NgayHachToan
 					}
 
 					var url = 'themChiTietChungTu';

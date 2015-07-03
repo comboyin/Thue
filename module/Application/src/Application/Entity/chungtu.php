@@ -1,6 +1,7 @@
 <?php
 namespace Application\Entity;
 use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity
@@ -22,7 +23,7 @@ class chungtu
     private $NgayChungTu;
 
     /**
-     * @ORM\OneToMany(targetEntity="Application\Entity\chitietchungtu", mappedBy="chungtu")
+     * @ORM\OneToMany(targetEntity="Application\Entity\chitietchungtu", mappedBy="chungtu", cascade={"remove"})
      */
     private $chitietchungtus;
 
@@ -58,7 +59,7 @@ class chungtu
 
 
  /**
-     * @return the $chitietchungtus
+     * @return chitietchungtu|PersistentCollection
      */
     public function getChitietchungtus()
     {

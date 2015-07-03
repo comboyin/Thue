@@ -10,6 +10,7 @@ use Quanlysothue\Froms\FormCTChungTu;
 use Application\Entity\chitietchungtu;
 use Application\Forms\UploadForm;
 use Quanlysothue\Excel\ImportExcelChungTu;
+use Application\Unlity\Unlity;
 
 class ChungtuController extends baseController
 {
@@ -60,15 +61,15 @@ class ChungtuController extends baseController
                     unlink($fileName);
                     // Form is valid, save the form!
                     // var_dump($data);
-                    if ($kq == true) {
+                    if ($kq->getKq() == true) {
                         echo json_encode(array(
                             'sucess' => true,
-                            'mess' => 'Import thành công vui lòng chọn kỳ thuế để kiểm tra !'
+                            'mess' => 'Import thành công !'
                         ));
                     } else {
                         echo json_encode(array(
                             'sucess' => false,
-                            'mess' => 'Import không thành công, file này có một vài lỗi !'
+                            'mess' => $kq->getMessenger()
                         ));
                     }
                     
@@ -87,7 +88,6 @@ class ChungtuController extends baseController
         /* @var $form Form */
         $request = $this->getRequest();
         $kq = new ketqua();
-        
         $form = new FormCTChungTu();
         
         $form->setData($request->getPost());
@@ -111,7 +111,8 @@ class ChungtuController extends baseController
             $ChiTietCt->setSoTien($SoTien);
             $ChiTietCt->setChungtu($this->getEntityManager()
                 ->find('Application\Entity\chungtu', $SoChungTu));
-            $ChiTietCt->setNgayHachToan($NgayHachToan);
+            
+            $ChiTietCt->setNgayHachToan(Unlity::ConverDate('d-m-Y', $NgayHachToan, 'Y-m-d'));
             
             $kq = $chungtuModel->them($ChiTietCt);
         } else { // validation lỗi
@@ -123,6 +124,89 @@ class ChungtuController extends baseController
         // trả về json
         echo json_encode($kq->toArray());
         return $this->response;
+    }
+
+    public function xoaAction()
+    {
+        try {
+            $kq = new ketqua();
+            $this->getEntityManager()
+                ->getConnection()
+                ->beginTransaction();
+            $request = $this->getRequest();
+            $post = $request->getPost();
+            $SoChungTu = $post->get('SoChungTu');
+            
+            $chungtuModel = new chungtuModel($this->getEntityManager());
+            $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $SoChungTu);
+            
+            $kq = $chungtuModel->remove($ChungTu);
+            
+            $this->getEntityManager()
+                ->getConnection()
+                ->commit();
+        } catch (\Exception $e) {
+            
+            $this->getEntityManager()
+                ->getConnection()
+                ->rollBack();
+        }
+        
+        echo json_encode($kq->toArray());
+        
+        return $this->response;
+    }
+
+    public function suaAction()
+    {
+        //error_reporting(0);
+        try {
+            /* @var $request Request */
+            /* @var $form Form */
+            $request = $this->getRequest();
+            $post = $request->getPost();
+            $kq = new ketqua();
+            $form = new FormChungTu();
+            
+            $form->setData($request->getPost());
+            
+            // validation thanh cong
+            if ($form->isValid()) {
+                /* @var $ChungTu chungtu */
+                $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu',$post->get('_SoChungTu'));
+                
+                if ($ChungTu!=null) {
+                    
+                    
+                    
+                    $chungtuModel = new chungtuModel($this->getEntityManager());
+                    $ChungTu->setSoChungTu($post->get('SoChungTu'));
+                    $ChungTu->setNgayChungTu(Unlity::ConverDate('m-d-Y',   $post->get('NgayChungTu'), 'Y-m-d')  );
+                    $ChungTu->setNguoinopthue($this->getEntityManager()->find('Application\Entity\nguoinopthue', $post->get('MaSoThue')));  
+                    $kq = $chungtuModel->merge($ChungTu);
+                } else {
+                    
+                    $kq->setKq(false);
+                    $kq->appentMessenger("Sô chứng từ không tồn tại !");
+                }
+            }             
+
+            // validation lỗi
+            else {
+               
+                $kq->setKq(false);
+                $kq->appentMessenger($this->getErrorMessengerForm($form));
+            }
+            
+            // trả về json
+            echo json_encode($kq->toArray());
+            return $this->response;
+        } catch (\Exception $e) {
+            $kq = new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger($e->getMessage());
+            echo json_encode($kq->toArray());
+        }
     }
 
     public function themAction()
@@ -149,7 +233,7 @@ class ChungtuController extends baseController
             $MaSoThue = $post->get('MaSoThue');
             $chungtu = new chungtu();
             $chungtu->setSoChungTu($SoChungTu);
-            $chungtu->setNgayHachToan($NgayChungTu);
+            $chungtu->setNgayChungTu(Unlity::ConverDate('d-m-Y', $NgayChungTu, 'Y-m-d'));
             $chungtu->setNguoinopthue($this->getEntityManager()
                 ->find('Application\Entity\nguoinopthue', $MaSoThue));
             
@@ -162,6 +246,25 @@ class ChungtuController extends baseController
         
         // trả về json
         echo json_encode($kq->toArray());
+        return $this->response;
+    }
+
+    /**
+     * AjAx
+     */
+    public function SoChiTietCuaChungTuAction()
+    {
+        $SoChungTu = $this->getRequest()
+            ->getQuery()
+            ->get('SoChungTu');
+        /* @var $ChungTu chungtu */
+        $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $SoChungTu);
+        
+        $count = $ChungTu->getChitietchungtus()->count();
+        
+        echo json_encode(array(
+            'count' => $count
+        ));
         return $this->response;
     }
 }
