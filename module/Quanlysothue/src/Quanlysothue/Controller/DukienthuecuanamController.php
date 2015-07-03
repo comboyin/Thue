@@ -71,7 +71,18 @@ class DukienthuecuanamController extends baseController
                 $TenGoi = $post->get('TenGoi');
                 $SanLuong = $post->get('SanLuong');
                 $GiaTinhThue = $post->get('GiaTinhThue');
-                $SoTien = $post->get('SoTien');
+                
+                if($TieuMuc == '1003' || $TieuMuc == '1701') //TNCN&GTGT
+                    $SoTien = intval($DoanhThuChiuThue*$TiLeTinhThue);
+                else if ($TieuMuc == '2601') //BVMT
+                    $SoTien = intval($SanLuong*$GiaTinhThue);
+                else if ($TieuMuc == '3801') //TN
+                    $SoTien = intval($SanLuong*$GiaTinhThue*$ThueSuat);
+                else if ($TieuMuc == '1757') //TTDB
+                    $SoTien = intval($GiaTinhThue*$ThueSuat);
+                else
+                    $SoTien = $post->get('SoTien');
+                
                  
                 $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
                 $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
@@ -83,17 +94,17 @@ class DukienthuecuanamController extends baseController
                 $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
                 $dukienthuenam->setThueSuat($ThueSuat);
                 
-                if($TenGoi=="")
+                if($TenGoi==""  && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
                     $dukienthuenam->setTenGoi(null);
                 else
                     $dukienthuenam->setTenGoi($TenGoi);
                 
-                if($SanLuong==0)
+                if($SanLuong==0 && $TieuMuc != '2601' && $TieuMuc != '3801')
                     $dukienthuenam->setSanLuong(null);
                 else
                     $dukienthuenam->setSanLuong($SanLuong);
                 
-                if($GiaTinhThue==0)
+                if($GiaTinhThue==0 && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
                     $dukienthuenam->setGiaTinhThue(null);
                 else
                     $dukienthuenam->setGiaTinhThue($GiaTinhThue);
@@ -189,7 +200,17 @@ class DukienthuecuanamController extends baseController
                     $TenGoi = $post->get('TenGoi');
                     $SanLuong = $post->get('SanLuong');
                     $GiaTinhThue = $post->get('GiaTinhThue');
-                    $SoTien = $post->get('SoTien');
+                    
+                    if($TieuMuc == '1003' || $TieuMuc == '1701') //TNCN&GTGT
+                        $SoTien = intval($DoanhThuChiuThue*$TiLeTinhThue);
+                    else if ($TieuMuc == '2601') //BVMT
+                        $SoTien = intval($SanLuong*$GiaTinhThue);
+                    else if ($TieuMuc == '3801') //TN
+                        $SoTien = intval($SanLuong*$GiaTinhThue*$ThueSuat);
+                    else if ($TieuMuc == '1757') //TTDB
+                        $SoTien = intval($GiaTinhThue*$ThueSuat);
+                    else
+                        $SoTien = $post->get('SoTien');
                     
                     
                     $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
@@ -202,17 +223,17 @@ class DukienthuecuanamController extends baseController
                     $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
                     $dukienthuenam->setThueSuat($ThueSuat);
                     
-                    if($TenGoi=="")
+                    if($TenGoi==""  && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
                         $dukienthuenam->setTenGoi(null);
                     else
                         $dukienthuenam->setTenGoi($TenGoi);
                     
-                    if($SanLuong==0)
+                    if($SanLuong==0 && $TieuMuc != '2601' && $TieuMuc != '3801')
                         $dukienthuenam->setSanLuong(null);
                     else
                         $dukienthuenam->setSanLuong($SanLuong);
                     
-                    if($GiaTinhThue==0)
+                    if($GiaTinhThue==0  && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
                         $dukienthuenam->setGiaTinhThue(null);
                     else
                         $dukienthuenam->setGiaTinhThue($GiaTinhThue);

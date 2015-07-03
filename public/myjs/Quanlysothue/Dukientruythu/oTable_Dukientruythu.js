@@ -26,6 +26,13 @@ var EditableTable = function () {
 					}
 			});
 			
+			$("input[name='DoanhSo']").live('focus',function(){
+				if($("input[name='DoanhSo']").val() == 0)
+				{
+					$("input[name='DoanhSo']").val('');
+				}
+			});
+			
 			$("input[name='DoanhSo']").live('keyup',function(){
 				TinhTien();
 			});
