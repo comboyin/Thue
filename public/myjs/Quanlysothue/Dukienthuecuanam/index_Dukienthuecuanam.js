@@ -14,19 +14,185 @@ var EditableTable = function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
 			
+			function TinhTien(){
+				if($("input[name='TieuMuc']").val().trim() != ""){
+					
+					$("input[name='SoTien']").attr( 'class', 'popovers' );
+					$("input[name='SoTien']").attr( 'data-trigger', 'hover' );
+					$("input[name='SoTien']").attr( 'data-container', 'body' );
+		    		
+					if($("input[name='masothue']").val().trim() != "" && ($("input[name='TieuMuc']").val().trim() == '1003' || $("input[name='TieuMuc']").val().trim() == '1701'))
+					{
+						//TNCN&GTGT
+						d = $("input[name='DoanhThuChiuThue']").val().trim();
+						t = $("input[name='TiLeTinhThue']").val().trim();
+						$("input[name='SoTien']").val(parseInt(d*t));
+						$("input[name='SoTien']").attr( 'data-content', 'Doanh Thu x Tỷ Lệ');
+					}
+					else if($("input[name='TieuMuc']").val().trim() == '2601')
+					{
+						//BVMT
+						s = $("input[name='SanLuong']").val().trim();
+						g = $("input[name='GiaTinhThue']").val().trim();
+						$("input[name='SoTien']").val(parseInt(s*g));
+						$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá');
+					}
+					else if($("input[name='TieuMuc']").val().trim() == '3801')
+					{
+						//TN
+						s = $("input[name='SanLuong']").val().trim();
+						g = $("input[name='GiaTinhThue']").val().trim();
+						ts = $("input[name='ThueSuat']").val().trim()
+						$("input[name='SoTien']").val(parseInt(s*g*ts));
+						$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá x Thuế Suất');
+					}
+					else if($("input[name='TieuMuc']").val().trim() == '1757')
+					{
+						//TTDB
+						g = $("input[name='GiaTinhThue']").val().trim();
+						ts = $("input[name='ThueSuat']").val().trim()
+						$("input[name='SoTien']").val(parseInt(g*ts));
+						$("input[name='SoTien']").attr( 'data-content', 'Giá x Thuế Suất');
+					}
+					
+					$('.popovers').popover();
+				}
+			}
+			
+			//DoanhThuChiuThue
 			$("input[name='DoanhThuChiuThue']").live('blur',function(){
 				if($("input[name='DoanhThuChiuThue']").val() == '')
-					{
+				{
 					$("input[name='DoanhThuChiuThue']").val(0);
-					}
-			});			
+				}
+			});
 			
-			$("input[name='TiLeTinhThue']").live('blur',function(){
-				if($("input[name='TiLeTinhThue']").val() == '')
+			$("input[name='DoanhThuChiuThue']").live('focus',function(){
+				if($("input[name='DoanhThuChiuThue']").val() == 0)
+				{
+					$("input[name='DoanhThuChiuThue']").val('');
+				}
+			});
+			
+			$("input[name='DoanhThuChiuThue']").live('input',function(){
+
+				if($("input[name='masothue']").val().trim() == "" || $("input[name='TieuMuc']").val().trim() == "")
+				{
+					alert("Vui lòng chọn tiểu mục và mã số thuế trước !");
+					$("input[name='DoanhThuChiuThue']").val(0);
+				}
+			});
+			
+			$("input[name='DoanhThuChiuThue']").live('keyup',function(){
+					TinhTien();
+			});
+			
+/*			$("input[name='TiLeTinhThue']").live('blur',function(){
+				TinhTien();
+			});*/
+			
+			//SanLuong
+			$("input[name='SanLuong']").live('blur',function(){
+				if($("input[name='SanLuong']").val() == '')
 					{
-					$("input[name='TiLeTinhThue']").val(1.0);
+					$("input[name='SanLuong']").val(0);
 					}
 			});
+			$("input[name='SanLuong']").live('focus',function(){
+				if($("input[name='SanLuong']").val() == 0)
+				{
+					$("input[name='SanLuong']").val('');
+				}
+			});
+			$("input[name='SanLuong']").live('input',function(){
+
+				if($("input[name='TieuMuc']").val().trim() == "")
+				{
+					alert("Vui lòng chọn tiểu mục trước !");
+					$("input[name='SanLuong']").val(0);
+				}
+			});
+			$("input[name='SanLuong']").live('keyup',function(){
+				TinhTien();
+			});
+			
+			//GiaTinhThue
+			$("input[name='GiaTinhThue']").live('blur',function(){
+				if($("input[name='GiaTinhThue']").val() == '')
+					{
+					$("input[name='GiaTinhThue']").val(0);
+					}
+			});
+			$("input[name='GiaTinhThue']").live('focus',function(){
+				if($("input[name='GiaTinhThue']").val() == 0)
+				{
+					$("input[name='GiaTinhThue']").val('');
+				}
+			});
+			$("input[name='GiaTinhThue']").live('input',function(){
+
+				if($("input[name='TieuMuc']").val().trim() == "")
+				{
+					alert("Vui lòng chọn tiểu mục trước !");
+					$("input[name='GiaTinhThue']").val(0);
+				}
+			});
+			$("input[name='GiaTinhThue']").live('keyup',function(){
+				TinhTien();
+			});
+			
+			//SoTien
+			$("input[name='SoTien']").live('blur',function(){
+				if($("input[name='SoTien']").val() == '')
+					{
+					$("input[name='SoTien']").val(0);
+					}
+			});
+			$("input[name='SoTien']").live('focus',function(){
+				if($("input[name='SoTien']").val() == 0)
+				{
+					$("input[name='SoTien']").val('');
+				}
+				TinhTien();
+			});
+			$("input[name='SoTien']").live('input',function(){
+
+				if($("input[name='TieuMuc']").val().trim() == "")
+				{
+					alert("Vui lòng chọn tiểu mục trước !");
+					$("input[name='SoTien']").val(0);
+				}
+			});
+			$("input[name='SoTien']").live('keyup',function(){
+				TinhTien();
+			});
+			
+			//ThueSuat
+			$("input[name='ThueSuat']").live('blur',function(){
+				if($("input[name='ThueSuat']").val() == '')
+					{
+					$("input[name='ThueSuat']").val(1);
+					}
+			});
+			$("input[name='ThueSuat']").live('focus',function(){
+				if($("input[name='ThueSuat']").val() == 1)
+				{
+					$("input[name='ThueSuat']").val('');
+				}
+			});
+			$("input[name='ThueSuat']").live('input',function(){
+
+				if($("input[name='TieuMuc']").val().trim() == "")
+				{
+					alert("Vui lòng chọn tiểu mục trước !");
+					$("input[name='ThueSuat']").val(1);
+				}
+			});
+			$("input[name='ThueSuat']").live('keyup',function(){
+				TinhTien();
+			});
+			
+			
 			
 			$('#dpYears').datepicker({
 				    format: " yyyy",
@@ -293,11 +459,11 @@ var EditableTable = function () {
 							'',
 							'',
 							0,
-							'1.0',
+							0,
 							1,
 							'',
-							'',
-							'',
+							0,
+							0,
 							0,
 							'<a class="edit" href="">Edit</a>',
 							'<a class="cancel" data-mode="new" href="">Cancel</a>'
@@ -815,6 +981,7 @@ var EditableTable = function () {
 				$.get('loadTyLeTinhThue',{MaSoThue:MaSoThue,TieuMuc:TieuMuc},function(json){
 					$("input[name='TiLeTinhThue']").val(json.TyLeTinhThue);
 				},'json');
+
 			}
 
 			// dialogTable
@@ -843,8 +1010,8 @@ var EditableTable = function () {
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
 					}
+					
 				});
-				
 				/*$.get('danhsachNNT', {}, function (json) {
 
 					DialogTable.show(json, function () {
@@ -891,11 +1058,11 @@ var EditableTable = function () {
 						TieuMuc.val(TieuMucString);
 						MaSoThue = $("input[name='masothue']").val();
 						loadTyLeTinhThue(MaSoThue,TieuMucString);
+						
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
 					}
 				});
-				
 
 			});
 			

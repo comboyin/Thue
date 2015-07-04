@@ -32,7 +32,7 @@ class dukientruythu implements InputFilterAwareInterface
     private $DoanhSo;
 
     /**
-     * @ORM\Column(type="float",nullable=false, options={"default":"1"})
+     * @ORM\Column(type="float",nullable=false, options={"default":"0"})
      */
     private $TiLeTinhThue;
 
@@ -302,7 +302,7 @@ class dukientruythu implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'SoTien',
-                'required' => false,
+                'required' => true,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -315,6 +315,13 @@ class dukientruythu implements InputFilterAwareInterface
                     array(
                         'name' => '\Zend\Validator\Digits',
                         'options' => array()
+                    ),
+        
+                    array(
+                        'name' => 'GreaterThan',
+                        'options' => array(
+                            'min' => 0
+                        )
                     )
                 )
             ]));
@@ -363,7 +370,7 @@ class dukientruythu implements InputFilterAwareInterface
             
             $inputFilter->add($factory->createInput([
                 'name' => 'TiLeTinhThue',
-                'required' => false,
+                'required' => true,
                 'filters' => array(
                     array(
                         'name' => 'StripTags'
@@ -385,6 +392,12 @@ class dukientruythu implements InputFilterAwareInterface
                         'options' => array(
                             'min' => 0,
                             'locale' => 'en'
+                        )
+                    ),
+                    array(
+                        'name' => 'GreaterThan',
+                        'options' => array(
+                            'min' => 0
                         )
                     )
                 )

@@ -11,7 +11,6 @@ use Zend\Http\Request;
 use Zend\Form\Form;
 use Quanlysothue\Froms\UploadForm;
 use Quanlysothue\Excel\ImportExcelDuKienTruyThu;
-use Application\Models\nganhModel;
 
 
 class DukientruythuController extends baseController
@@ -68,7 +67,6 @@ class DukientruythuController extends baseController
             $kt = new nguoinopthueModel($this->getEntityManager());
             if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
             {
-                $nganhModel = new nganhModel($this->getEntityManager());
                 // them
                 $KyThue = $post->get('KyThue');
                 
@@ -78,7 +76,7 @@ class DukientruythuController extends baseController
                 
                 $TrangThai = 0;
                 $LyDo = $post->get('LyDo');
-                $TiLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
+                $TiLeTinhThue = $post->get('TiLeTinhThue');
                 
                 $SoTien = $DoanhSo*$TiLeTinhThue;
                 $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
@@ -322,26 +320,6 @@ class DukientruythuController extends baseController
         }
        return $this->response;
     }
-    
-   public function abcAction(){
-       $Model = new nganhModel($this->getEntityManager());
-       
-       var_dump($Model->getTiLeTinhThue('N001', '1003')) ;
-       return $this->response;
-   }
-   
-   public function loadTyLeTinhThueAction(){
-       
-       $MaSoThue = $this->getRequest()->getQuery()->get('MaSoThue');
-       $TieuMuc = $this->getRequest()->getQuery()->get('TieuMuc');
-       
-       $nganhModel = new  nganhModel($this->getEntityManager());
-       $TyLeTinhThue =  $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
-       echo json_encode(array(
-           'TyLeTinhThue' => $TyLeTinhThue
-       ));
-       return $this->response;
-   }
     
     
 }

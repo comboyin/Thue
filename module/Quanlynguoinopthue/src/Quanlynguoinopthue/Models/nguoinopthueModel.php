@@ -221,7 +221,7 @@ class nguoinopthueModel extends baseModel
      * Kiểm tra xem nnt có trong danh sách người nộp thuế của cán bộ thuế đang quản lý, đang kinh doanh hay ko
      * @param string $mst
      * @param user $user
-     * @return BooleanType
+     * @return boolean
      */
     public function ktNNT($mst, $user)
     {

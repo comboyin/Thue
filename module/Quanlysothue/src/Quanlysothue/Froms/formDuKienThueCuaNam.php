@@ -239,7 +239,7 @@ class formDuKienThueCuaNam extends Form
                 array(
                     'name' => 'GreaterThan',
                     'options' => array(
-                        'min' => 0
+                        'min' => -1
                     )
                 )
             )
@@ -270,6 +270,12 @@ class formDuKienThueCuaNam extends Form
                         'min' => 0,
                         'locale' => 'en'
                     )
+                ),
+                array(
+                    'name' => 'GreaterThan',
+                    'options' => array(
+                        'min' => -0.001
+                    )
                 )
             )
         ]
@@ -277,7 +283,7 @@ class formDuKienThueCuaNam extends Form
         
         $inputFilter->add($factory->createInput([
             'name' => 'ThueSuat',
-            'required' => false,
+            'required' => true,
             'filters' => array(
                 array(
                     'name' => 'StripTags'
@@ -290,6 +296,12 @@ class formDuKienThueCuaNam extends Form
                 array(
                     'name' => '\Zend\Validator\Digits',
                     'options' => array()
+                ),
+                array(
+                    'name' => 'GreaterThan',
+                    'options' => array(
+                        'min' => 0
+                    )
                 )
             )
         ]));
@@ -333,7 +345,14 @@ class formDuKienThueCuaNam extends Form
                     'name' => '\Zend\Validator\Digits',
                     'options' => array()
                 )
-            )
+            ),
+        
+                array(
+                    'name' => 'GreaterThan',
+                    'options' => array(
+                        'min' => -1
+                    )
+                )
         ]));
         
         $inputFilter->add($factory->createInput([
@@ -356,7 +375,7 @@ class formDuKienThueCuaNam extends Form
                 array(
                     'name' => 'GreaterThan',
                     'options' => array(
-                        'min' => 0
+                        'min' => -1
                     )
                 )
             )
@@ -382,7 +401,7 @@ class formDuKienThueCuaNam extends Form
                 array(
                     'name' => 'GreaterThan',
                     'options' => array(
-                        'min' => 0
+                        'min' => -1
                     )
                 )
             )

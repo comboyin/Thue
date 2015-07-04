@@ -26,6 +26,13 @@ var EditableTable = function () {
 					}
 			});
 			
+			$("input[name='DoanhSo']").live('focus',function(){
+				if($("input[name='DoanhSo']").val() == 0)
+				{
+					$("input[name='DoanhSo']").val('');
+				}
+			});
+			
 			$("input[name='DoanhSo']").live('keyup',function(){
 				TinhTien();
 			});
@@ -285,7 +292,7 @@ var EditableTable = function () {
 							'',
 							'',
 							0,
-							'0',
+							0,
 							0,
 							0,
 							'',
@@ -738,7 +745,10 @@ var EditableTable = function () {
 						KyThue : _KyThue,
 						MaSoThue : MaSoThue,
 						TieuMuc : TieuMuc,
+						SoTien : SoTien,
+						TrangThai : TrangThai,
 						LyDo : LyDo,
+						TiLeTinhThue:TiLeTinhThue,
 						DoanhSo:DoanhSo
 					}
 
