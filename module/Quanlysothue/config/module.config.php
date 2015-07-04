@@ -6,7 +6,7 @@ return array(
             'Quanlysothue\Controller\Dukientruythu' => 'Quanlysothue\Controller\DukientruythuController',
             'Quanlysothue\Controller\Dukienthuecuanam' => 'Quanlysothue\Controller\DukienthuecuanamController',
             'Quanlysothue\Controller\Chungtu' => 'Quanlysothue\Controller\ChungtuController',
-            
+            'Quanlysothue\Controller\Dukienthuemonbai' => 'Quanlysothue\Controller\DukienthuemonbaiController'
             
         ),
     ),

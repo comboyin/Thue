@@ -63,15 +63,14 @@ return array(
                         'controller' => 'Dukienthuecuanam',
                         'action' => 'index',
                         //'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
-                    )
-                    ,
+                    ) ,*/
                     array(
                         'label' => 'Dự kiến thuế môn bài',
                         'route' => 'quanlysothue/default',
-                        'controller' => 'Dukienthuecuanam',
+                        'controller' => 'Dukienthuemonbai',
                         'action' => 'index',
-                        //'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
-                    ), */
+                        'resource' => 'Quanlysothue\Controller\Dukienthuemonbai'
+                    ), 
                     array(
                         'label' => 'Quản lý chứng từ',
                         'route' => 'quanlysothue/default',

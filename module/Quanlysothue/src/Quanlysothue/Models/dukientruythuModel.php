@@ -189,8 +189,8 @@ class dukientruythuModel extends baseModel
                         ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join("usernnts.user", "user")
                         ->where('dukientruythu.KyThue = ?1')
-                        ->andWhere("user.coquanthue = ?2")
-                        ->setParameter(2, $user->getCoquanthue())
+                        ->andWhere("user.parentUser = ?2")
+                        ->setParameter(2, $user)
                         ->setParameter(1, $kythue);
                 }
             

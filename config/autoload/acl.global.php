@@ -52,6 +52,9 @@ return array(
                 'Quanlysothue\Controller\Dukienthuecuanam' => array(
                     'all' => 'canbothue'
                 ),
+                'Quanlysothue\Controller\Dukienthuemonbai' => array(
+                    'all' => 'canbothue'
+                ),
 				
 				////Module Quanlynguoinopthue
                 'Quanlynguoinopthue\Controller\Nguoinopthue' => array(

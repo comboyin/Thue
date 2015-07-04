@@ -46,64 +46,66 @@ class DukientruythuController extends baseController
     public function themAction()
     {
         error_reporting(E_ERROR | E_PARSE);
-        
-        /* @var $request Request */
-        /* @var $form Form */
-        $request = $this->getRequest();
         $kq = new ketqua();
-        $dukientruythu = new dukientruythu();
-        $form = new formDuKienTruyThu();
-        $form->setInputFilter($dukientruythu->getInputFilter());
-        $form->setData($request->getPost());
         
-        
-    
-        
-        // validation thanh cong
-        if ($form->isValid()) {
-            $post = $request->getPost();
-            $MaSoThue = $post->get('MaSoThue');
+        try {
+            /* @var $request Request */
+            /* @var $form Form */
+            $request = $this->getRequest();
             
-            $kt = new nguoinopthueModel($this->getEntityManager());
-            if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
-            {
-                // them
-                $KyThue = $post->get('KyThue');
+            $dukientruythu = new dukientruythu();
+            $form = new formDuKienTruyThu();
+            $form->setInputFilter($dukientruythu->getInputFilter());
+            $form->setData($request->getPost());
+    
+            // validation thanh cong
+            if ($form->isValid()) {
+                $post = $request->getPost();
+                $MaSoThue = $post->get('MaSoThue');
                 
-                $TieuMuc = $post->get('TieuMuc');
-                $DoanhSo = $post->get('DoanhSo');
-                
-                
-                $TrangThai = 0;
-                $LyDo = $post->get('LyDo');
-                $TiLeTinhThue = $post->get('TiLeTinhThue');
-                
-                $SoTien = $DoanhSo*$TiLeTinhThue;
-                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
-                $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
-                
-                $dukientruythu->setNguoinopthue($nguoinopthue);
-                $dukientruythu->setMuclucngansach($muclucngansach);
-                $dukientruythu->setKyThue($KyThue);
-                $dukientruythu->setSoTien($SoTien);
-                $dukientruythu->setDoanhSo($DoanhSo);
-                $dukientruythu->setTrangThai($TrangThai);
-                $dukientruythu->setLyDo($LyDo);
-                $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
-                
-                $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
-                $kq = $dukientruythuModel->them($dukientruythu);
-            } else { 
-                $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                $kt = new nguoinopthueModel($this->getEntityManager());
+                if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
+                {
+                    // them
+                    $KyThue = $post->get('KyThue');
+                    
+                    $TieuMuc = $post->get('TieuMuc');
+                    $DoanhSo = $post->get('DoanhSo');
+                    
+                    
+                    $TrangThai = 0;
+                    $LyDo = $post->get('LyDo');
+                    $TiLeTinhThue = $post->get('TiLeTinhThue');
+                    
+                    $SoTien = $DoanhSo*$TiLeTinhThue;
+                    $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
+                    $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
+                    
+                    $dukientruythu->setNguoinopthue($nguoinopthue);
+                    $dukientruythu->setMuclucngansach($muclucngansach);
+                    $dukientruythu->setKyThue($KyThue);
+                    $dukientruythu->setSoTien($SoTien);
+                    $dukientruythu->setDoanhSo($DoanhSo);
+                    $dukientruythu->setTrangThai($TrangThai);
+                    $dukientruythu->setLyDo($LyDo);
+                    $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
+                    
+                    $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
+                    $kq = $dukientruythuModel->them($dukientruythu);
+                } else { 
+                    $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                    $kq->setKq(false);
+                    $kq->setMessenger($mss);
+                }        
+            }  else { // validation lỗi
+                $mss = $this->getErrorMessengerForm($form);
                 $kq->setKq(false);
                 $kq->setMessenger($mss);
-            }        
-        }  else { // validation lỗi
-            $mss = $this->getErrorMessengerForm($form);
+            }
+        } catch (\Exception $e) {
             $kq->setKq(false);
-            $kq->setMessenger($mss);
+            $kq->setMessenger($e->getMessage());
         }
-        
         // trả về json
         echo json_encode($kq->toArray());
         return $this->response;

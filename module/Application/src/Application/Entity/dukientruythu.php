@@ -326,7 +326,7 @@ class dukientruythu implements InputFilterAwareInterface
                 )
             ]));
             
-            $inputFilter->add($factory->createInput([
+/*             $inputFilter->add($factory->createInput([
                 'name' => 'TrangThai',
                 'required' => false,
                 'filters' => array(
@@ -343,7 +343,7 @@ class dukientruythu implements InputFilterAwareInterface
                         'options' => array()
                     )
                 )
-            ]));
+            ])); */
             
             $inputFilter->add($factory->createInput([
                 'name' => 'LyDo',

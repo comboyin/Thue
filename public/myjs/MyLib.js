@@ -60,6 +60,11 @@ function StringToDate(stringDate){
 	return mydate;
 }
 
+function DateToString(stringDate){
+	var d = stringDate.slice(0, 10).split('-');   
+	var mydate = d[2] +'-'+ d[1] +'-'+ d[0];	
+	return mydate;
+}
 
 var DialogTable = (function() {
 	var self;

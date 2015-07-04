@@ -91,7 +91,7 @@ class dukienmb
      */
     public function getNgayPhaiNop()
     {
-        return $this->NgayPhaiNop;
+        return $this->NgayPhaiNop->format('d-m-Y');
     }
 
  /**

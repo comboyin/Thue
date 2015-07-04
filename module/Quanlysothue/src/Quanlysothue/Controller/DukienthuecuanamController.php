@@ -42,93 +42,98 @@ class DukienthuecuanamController extends baseController
     {
         error_reporting(E_ERROR | E_PARSE);
         
-        /* @var $request Request */
-        /* @var $form Form */
-        $request = $this->getRequest();
         $kq = new ketqua();
-        $dukienthuenam = new dukienthue();
-        $form = new formDuKienThueCuaNam();
-        $form->setData($request->getPost());
-        
-        // validation thanh cong
-        if ($form->isValid()) {
-            $post = $request->getPost();
-            $MaSoThue = $post->get('MaSoThue');
+        try {
+            /* @var $request Request */
+            /* @var $form Form */
+            $request = $this->getRequest();
+           
+            $dukienthuenam = new dukienthue();
+            $form = new formDuKienThueCuaNam();
+            $form->setData($request->getPost());
             
-            $kt = new nguoinopthueModel($this->getEntityManager());
-            if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
-                $nganhModel = new nganhModel($this->getEntityManager());
-                // them
-                $KyThue = $post->get('KyThue');
+            // validation thanh cong
+            if ($form->isValid()) {
+                $post = $request->getPost();
+                $MaSoThue = $post->get('MaSoThue');
                 
-                $TieuMuc = $post->get('TieuMuc');
-                $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
-                $TiLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
-                $ThueSuat = $post->get('ThueSuat');
-                $TenGoi = $post->get('TenGoi');
-                $SanLuong = $post->get('SanLuong');
-                $GiaTinhThue = $post->get('GiaTinhThue');
-                
-                if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
-                {
-                    if ($DoanhThuChiuThue * 12 > 100000000) {
-                        $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
-                    } else
-                        $SoTien = 0;
-                } else 
-                    if ($TieuMuc == '2601') // BVMT
-                        $SoTien = intval($SanLuong * $GiaTinhThue);
-                    else 
-                        if ($TieuMuc == '3801') // TN
-                            $SoTien = intval($SanLuong * $GiaTinhThue * $ThueSuat);
+                $kt = new nguoinopthueModel($this->getEntityManager());
+                if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
+                    $nganhModel = new nganhModel($this->getEntityManager());
+                    // them
+                    $KyThue = $post->get('KyThue');
+                    
+                    $TieuMuc = $post->get('TieuMuc');
+                    $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
+                    $TiLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
+                    $ThueSuat = $post->get('ThueSuat');
+                    $TenGoi = $post->get('TenGoi');
+                    $SanLuong = $post->get('SanLuong');
+                    $GiaTinhThue = $post->get('GiaTinhThue');
+                    
+                    if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
+                    {
+                        if ($DoanhThuChiuThue * 12 > 100000000) {
+                            $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
+                        } else
+                            $SoTien = 0;
+                    } else 
+                        if ($TieuMuc == '2601') // BVMT
+                            $SoTien = intval($SanLuong * $GiaTinhThue);
                         else 
-                            if ($TieuMuc == '1757') // TTDB
-                                $SoTien = intval($GiaTinhThue * $ThueSuat);
-                            else
-                                $SoTien = $post->get('SoTien');
-                
-                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
-                $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
-                
-                $dukienthuenam->setKyThue($KyThue);
-                $dukienthuenam->setNguoinopthue($nguoinopthue);
-                $dukienthuenam->setMuclucngansach($muclucngansach);
-                $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
-                $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
-                $dukienthuenam->setThueSuat($ThueSuat);
-                
-                if ($TenGoi == "" && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
-                    $dukienthuenam->setTenGoi(null);
-                else
-                    $dukienthuenam->setTenGoi($TenGoi);
-                
-                if ($SanLuong == 0 && $TieuMuc != '2601' && $TieuMuc != '3801')
-                    $dukienthuenam->setSanLuong(null);
-                else
-                    $dukienthuenam->setSanLuong($SanLuong);
-                
-                if ($GiaTinhThue == 0 && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
-                    $dukienthuenam->setGiaTinhThue(null);
-                else
-                    $dukienthuenam->setGiaTinhThue($GiaTinhThue);
-                
-                $dukienthuenam->setSoTien($SoTien);
-                $dukienthuenam->setNgayPhaiNop(null);
-                $dukienthuenam->setTrangThai(0);
-                
-                $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
-                $kq = $dukienthuenamModel->them($dukienthuenam);
-            } else {
-                $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                            if ($TieuMuc == '3801') // TN
+                                $SoTien = intval($SanLuong * $GiaTinhThue * $ThueSuat);
+                            else 
+                                if ($TieuMuc == '1757') // TTDB
+                                    $SoTien = intval($GiaTinhThue * $ThueSuat);
+                                else
+                                    $SoTien = $post->get('SoTien');
+                    
+                    $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
+                    $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
+                    
+                    $dukienthuenam->setKyThue($KyThue);
+                    $dukienthuenam->setNguoinopthue($nguoinopthue);
+                    $dukienthuenam->setMuclucngansach($muclucngansach);
+                    $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
+                    $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
+                    $dukienthuenam->setThueSuat($ThueSuat);
+                    
+                    if ($TenGoi == "" && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
+                        $dukienthuenam->setTenGoi(null);
+                    else
+                        $dukienthuenam->setTenGoi($TenGoi);
+                    
+                    if ($SanLuong == 0 && $TieuMuc != '2601' && $TieuMuc != '3801')
+                        $dukienthuenam->setSanLuong(null);
+                    else
+                        $dukienthuenam->setSanLuong($SanLuong);
+                    
+                    if ($GiaTinhThue == 0 && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
+                        $dukienthuenam->setGiaTinhThue(null);
+                    else
+                        $dukienthuenam->setGiaTinhThue($GiaTinhThue);
+                    
+                    $dukienthuenam->setSoTien($SoTien);
+                    $dukienthuenam->setNgayPhaiNop(null);
+                    $dukienthuenam->setTrangThai(0);
+                    
+                    $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
+                    $kq = $dukienthuenamModel->them($dukienthuenam);
+                } else {
+                    $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                    $kq->setKq(false);
+                    $kq->setMessenger($mss);
+                }
+            }  else {
+                $mss = $this->getErrorMessengerForm($form);
                 $kq->setKq(false);
                 $kq->setMessenger($mss);
             }
-        }  else {
-            $mss = $this->getErrorMessengerForm($form);
+        } catch (\Exception $e) {
             $kq->setKq(false);
-            $kq->setMessenger($kq->getMessenger() . "\n" . $mss);
+            $kq->setMessenger($e->getMessage());
         }
-        
         // trả về json
         echo json_encode($kq->toArray());
         return $this->response;
@@ -149,7 +154,7 @@ class DukienthuecuanamController extends baseController
             $model = new dukienthuecuanamModel($this->getEntityManager());
             $dukienthuenam = $model->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj();
             //kt ton tai
-            if ($dukienthuenam != null  && $dukienthuenam->getTrangThai() == 0) {
+            if ($dukienthuenam != null) {
                 // kiem tra masothue
                 $kt = new nguoinopthueModel($this->getEntityManager());
                 if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
@@ -193,7 +198,7 @@ class DukienthuecuanamController extends baseController
                 /* @var $dukienthuenam dukienthue */
                 $dukienthuenam = $dukienthuenamModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
                 ->getObj();
-                if ($dukienthuenam != null && $dukienthuenam->getTrangThai() == 0) {
+                if ($dukienthuenam != null) {
                 
                     $MaSoThue = $post->get('MaSoThue');
                     $kt = new nguoinopthueModel($this->getEntityManager());
@@ -276,16 +281,14 @@ class DukienthuecuanamController extends baseController
                 $kq->setKq(false);
                 $kq->setMessenger($mss);
             }
-            
-            // trả về json
-            echo json_encode($kq->toArray());
-            return $this->response;
         } catch (\Exception $e) {
             
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
-            echo json_encode($kq->toArray());
+
         }
+        echo json_encode($kq->toArray());
+        return $this->response;
     }
 
     public function xoanhieuAction()
@@ -307,7 +310,7 @@ class DukienthuecuanamController extends baseController
             for ($i = 0; $i < count($MaSoThueData); $i ++) {
                 
                 $dukienthue = $model->findByID_($KyThue, $MaSoThueData[$i], $TieuMucData[$i])->getObj();
-                if ($dukienthue != null && $dukienthuenam->getTrangThai() == 0) {
+                if ($dukienthue != null) {
                     // kiem tra nguoi nop thue co thuoc quyen quan ly cua cbt do khong ?
                     $kt = new nguoinopthueModel($this->getEntityManager());
                     if ($kt->ktNNT($MaSoThueData[$i], $this->getUser()) == true) 

@@ -1,0 +1,178 @@
+<?php
+use Application\Entity\dukienmb;
+use Quanlysothue\Froms\UploadForm;
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Dukienthuemonbai/index_Dukienthuemonbai.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fileDownload.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap/js/bootstrap-fileupload.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/bootstrap/css/bootstrap-fileupload.css');
+
+ /* @var $dsDuKienThueMonBai dukienmb */
+/* @var $formUp UploadForm */
+$formUp = $this->formUp;
+
+?>
+
+
+
+<div class="container-fluid">
+
+
+
+
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN THEME CUSTOMIZER-->
+			<!-- END THEME CUSTOMIZER-->
+			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+			<h3 class="page-title">QUẢN LÝ DỰ KIẾN THUẾ MÔN BÀI</h3>
+			<ul class="breadcrumb">
+				<li class="active">
+                     <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Dukienthuemonbai','action'=>'index'));?>">Danh sách dự kiến thuế môn bài</a>             
+                </li>
+			</ul>
+			<!-- END PAGE TITLE & BREADCRUMB-->
+		</div>
+	</div>
+
+	<!-- BEGIN EDITABLE TABLE widget-->
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN EXAMPLE TABLE widget-->
+
+			<div class="widget purple">
+
+				<div class="widget-title">
+					<h4>Danh sách dự kiến thuế môn bài</h4>
+					<span class="tools"> <a href="javascript:;"
+						class="icon-chevron-down"></a>
+					</span>
+				</div>
+				<div class="widget-body">
+					<div>
+						<form action="#" class="form-horizontal">
+							<div class="control-group">
+							<label class="control-label">Năm: </label>
+							<div class="controls">
+								<div class="input-append date" id="dpYears"
+									data-date="102/2012" data-date-format=" yyyy"
+									data-date-viewmode="years" data-date-minviewmode="years">
+									
+								<input readonly="readonly" class="m-ctrl-medium" type="text" name="KyThue" id="kythue" >
+
+								 <span class="add-on"> <i class="icon-calendar"> </i></span>
+									<div class="progress progress-striped active"
+										id="progress_kythue"
+										style="width: 219.5px; margin-bottom: 0px; display: none;">
+										<div style="width: 100%;" class="bar"></div>
+									</div>
+								</div>
+								<div id="progess_dpmonths" style="width: 247px; display: none;" class="progress progress-striped progress-danger active">
+                                     <div style="width: 100%;" class="bar"></div>
+                                </div>
+								<p class="help-block"></p>
+							</div>
+						</div>
+						</form>
+						<div class="clearfix">
+							<div class="btn-group">
+
+								<button id="editable-sample_new"
+									class="btn green">
+									Thêm mới <i class="icon-plus"></i>
+								</button>
+								
+								<button style="margin-left: 5px;"  id="xoa_nhieu"
+									class="btn green">
+									Xóa đã chọn <i class="icon-remove"></i>
+								</button>
+
+							</div>
+
+							<div class="btn-group pull-right">
+								<div class="control-group">
+                                    <div class="controls">
+                                        <div data-provides="fileupload" class="fileupload fileupload-new">
+                                            <div class="input-append">
+                                                <div class="uneditable-input">
+                                                    <i class="icon-file fileupload-exists"></i>
+                                                    <span class="fileupload-preview"></span>
+                                                </div>
+                                               <span class="btn btn-file">
+                                               <span class="fileupload-new">Select file</span>
+                                               <span class="fileupload-exists">Change</span>
+                                               <?php echo $this->formelement($formUp->get("dukientruythu-file"))?>
+                                               </span>
+                                                <button style="margin-left: 5px;"  id="Import"
+                            						class="btn btn-file">
+                            						Import <i class="icon-file"></i>
+								                    </button>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+							</div>
+						</div>
+	
+						
+						<div class="space12"></div>
+					<table cellspacing="0" class="table table-striped table-bordered"
+						width="100%" id="editable-sample">
+						<thead>
+							<tr>
+								    <th><input id="check_all" type="checkbox"></th>
+									<th>Mã số thuế (*)</th>
+						            <th>Tên HKD</th>
+									<th>Bậc môn bài(*)</th>
+									<th>Ngày phải nộp (*)</th>
+									<th>Số tiền (*)</th>
+									<th>Trạng thái </th>
+									
+    								<th>Sửa</th>
+    								<th>Xóa</th>
+							</tr>
+						</thead>
+						<tbody id="chitiet">
+										
+										
+										<?php if($dsDuKienThueMonBai!=null):?>
+										
+        										
+                                       <?php foreach ($dsDuKienThueMonBai as $thue):?>
+                                       
+                            <tr class="odd">
+                            
+								<td><input class="check_item" type="checkbox"></td>
+								
+								<td><?php echo $thue->getNguoinopthue()->getMaSoThue()?></td>
+								<td><?php echo $thue->getNguoinopthue()->getTenHKD()?></td>
+								<td><?php echo mb_substr($thue->getMuclucngansach()->getTenGoi(),13,17,'UTF-8');?></td>
+								<td><?php echo $thue->getNgayPhaiNop()?></td>
+								<td><?php echo $thue->getSoTien()?></td>
+								<td><?php echo $thue->getTrangThai()?></td>
+								
+									
+								<td><a class="edit" href="">Edit</a></td>
+								<td><a class="Delete" href="">Delete</a></td>
+								
+							</tr>
+                                
+                                <?php endforeach;?>
+        										          
+										<?php endif;?>		
+  
+							</tbody>
+					</table>
+						
+						
+					</div>
+				</div>
+			</div>
+			<!-- END EXAMPLE TABLE widget-->
+		</div>
+	</div>
+
+
+	<!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
