@@ -10,6 +10,7 @@ use Application\base\baseExcel;
 use Application\Unlity\Unlity;
 use Application\Entity\chungtu;
 use Application\Entity\chitietchungtu;
+use Application\Entity\ketqua;
 
 class ImportExcelChungTu extends baseExcel
 {
@@ -127,6 +128,7 @@ class ImportExcelChungTu extends baseExcel
     public function PersitToDatabase($fileName, $em)
     {
         try {
+            $kq= new ketqua();
             // begin transaction
             $em->getConnection()->beginTransaction();
             $_SoChungTu = 6;
@@ -149,10 +151,7 @@ class ImportExcelChungTu extends baseExcel
                         // mm/dd/yy
                         
                         $SoChungTu = $worksheet->getCellByColumnAndRow($_SoChungTu, $row)->getValue() . '';
-                        
-                        
-                        
-                        
+
                         // d-m-Y
                         $NgayHachToan =  Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
                         
@@ -173,6 +172,7 @@ class ImportExcelChungTu extends baseExcel
                             $chungtuTemp->setSoChungTu($SoChungTu);
                             $chungtuTemp->setNgayChungTu($NgayChungTu);
                             $chungtuTemp->setNguoinopthue($em->find('Application\Entity\nguoinopthue', $MaSoThue));
+                            
                             $em->persist($chungtuTemp);
                             $chungtuTemp=$em->find('Application\Entity\chungtu', $SoChungTu);
                             $chitietchungtuTemp = new chitietchungtu();
@@ -181,6 +181,7 @@ class ImportExcelChungTu extends baseExcel
                             $chitietchungtuTemp->setKyThue($KyThue);
                             $chitietchungtuTemp->setSoTien($SoTien);
                             $chitietchungtuTemp->setMuclucngansach($muclucngansach);
+                            
                             $em->persist($chitietchungtuTemp);
                         } else {
                             // chung tu
@@ -206,12 +207,16 @@ class ImportExcelChungTu extends baseExcel
             }
             $em->flush();
             $em->getConnection()->commit();
-            return true;
+            $kq->setKq(true);
+            
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
+            $kq->setKq(false);
+            $kq->setMessenger($e->getMessage());
             $em->getConnection()->rollBack();
-            return false;
+            
         }
+        
+        return $kq;
     }
 }
 
