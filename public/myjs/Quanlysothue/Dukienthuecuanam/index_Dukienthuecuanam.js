@@ -14,20 +14,33 @@ var EditableTable = function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
 			
-			function TinhTien(){
-				if($("input[name='TieuMuc']").val().trim() != ""){
+			function TinhTien(){		
+				
+				if($("input[name='TieuMuc']").val().trim() != "")
+				{
 					
 					$("input[name='SoTien']").attr( 'class', 'popovers' );
 					$("input[name='SoTien']").attr( 'data-trigger', 'hover' );
 					$("input[name='SoTien']").attr( 'data-container', 'body' );
-		    		
+					$("input[name='SoTien']").removeAttr('data-content');
+					
 					if($("input[name='masothue']").val().trim() != "" && ($("input[name='TieuMuc']").val().trim() == '1003' || $("input[name='TieuMuc']").val().trim() == '1701'))
 					{
+						
 						//TNCN&GTGT
 						d = $("input[name='DoanhThuChiuThue']").val().trim();
 						t = $("input[name='TiLeTinhThue']").val().trim();
-						$("input[name='SoTien']").val(parseInt(d*t));
-						$("input[name='SoTien']").attr( 'data-content', 'Doanh Thu x Tỷ Lệ');
+						if(d*12>100000000)
+						{
+							$("input[name='SoTien']").val(parseInt(d*t));
+							$("input[name='SoTien']").attr( 'data-content', 'Doanh Thu x Tỷ Lệ');
+						}
+						else
+						{
+							$("input[name='SoTien']").val(0);
+							$("input[name='SoTien']").attr( 'data-content', 'Diện không phải nộp thuế!');
+						}
+
 					}
 					else if($("input[name='TieuMuc']").val().trim() == '2601')
 					{
@@ -332,7 +345,7 @@ var EditableTable = function () {
 				/*_MaSoThue = $("input[name='masothue']", nRow).val().trim();
 				_TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();*/
 				
-
+				
 				// cansua
 				// khi click edit trên 1 dòng
 				// chuyển tất cả các ô trên dòng thành input
@@ -358,9 +371,12 @@ var EditableTable = function () {
 					 + aData[6] + '">';
 				jqTds[7].innerHTML = '<input style="width:60px;" name="TenGoi" type="text" value="'
 					 + aData[7] + '">';
-				jqTds[8].innerHTML = '<input style="width:60px;" name="SanLuong" type="text" value="'
+				
+				jqTds[8].innerHTML = (aData[8]=='')?'<input style="width:60px;" name="SanLuong" type="text" value="0">':'<input style="width:60px;" name="SanLuong" type="text" value="'
 					 + aData[8] + '">';
-				jqTds[9].innerHTML = '<input style="width:60px;" name="GiaTinhThue" type="text" value="'
+				
+				
+				jqTds[9].innerHTML = (aData[9]=='')?'<input style="width:60px;" name="GiaTinhThue" type="text" value="0">':'<input style="width:60px;" name="GiaTinhThue" type="text" value="'
 					 + aData[9] + '">';
 				
 				jqTds[10].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
@@ -429,10 +445,12 @@ var EditableTable = function () {
 				oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
 				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
 				oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
-				oTable.fnUpdate(jqInputs[8].value, nRow, 8, false);
 				
-				oTable.fnUpdate(jqInputs[7].value, nRow, 9, false);
-				oTable.fnUpdate(jqInputs[8].value, nRow, 10, false);
+				oTable.fnUpdate((jqInputs[8].value == 0) ? '':jqInputs[8].value, nRow, 8, false);
+				
+				oTable.fnUpdate((jqInputs[9].value == 0) ? '':jqInputs[9].value, nRow, 9, false);
+				
+				oTable.fnUpdate(jqInputs[10].value, nRow, 10, false);
 
 				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 11,
 					false);
@@ -980,7 +998,10 @@ var EditableTable = function () {
 				
 				$.get('loadTyLeTinhThue',{MaSoThue:MaSoThue,TieuMuc:TieuMuc},function(json){
 					$("input[name='TiLeTinhThue']").val(json.TyLeTinhThue);
+					TinhTien();
 				},'json');
+
+				
 
 			}
 

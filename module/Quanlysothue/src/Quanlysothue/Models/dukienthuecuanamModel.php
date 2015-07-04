@@ -76,6 +76,7 @@ class dukienthuecuanamModel extends baseModel
                 
                 ->where('dukienthue.KyThue = ?1')
                 ->andWhere('usernnts.user = ?2')
+                ->andWhere('usernnts.ThoiGianKetThuc is null')
                 ->setParameter(2, $user)
                 ->setParameter(1, $nam);
             } else
@@ -91,6 +92,7 @@ class dukienthuecuanamModel extends baseModel
                     ->join('usernnts.user', 'user')
                     ->where('dukienthue.KyThue = ?1')
                     ->andWhere('user.parentUser = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
                     ->setParameter(2, $user)
                     ->setParameter(1, $nam);
                 }
@@ -129,6 +131,7 @@ class dukienthuecuanamModel extends baseModel
     
                 ->where('dukienthue.KyThue = ?1')
                 ->andWhere('usernnts.user = ?2')
+                ->andWhere('usernnts.ThoiGianKetThuc is null')
                 ->setParameter(2, $user)
                 ->setParameter(1, $nam);
             } else
@@ -144,6 +147,7 @@ class dukienthuecuanamModel extends baseModel
                     ->join('usernnts.user', 'user')
                     ->where('dukienthue.KyThue = ?1')
                     ->andWhere('user.coquanthue = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
                     ->setParameter(2, $user->getCoquanthue())
                     ->setParameter(1, $nam);
                 }
