@@ -6,8 +6,7 @@ var EditableTable = function () {
 	return {
 
 		init : function () {
-			
-			$("#ChonNganh").click(function(){
+			function laydanhsachnganh(){
 				MaNganhCu = $("span[class='MaNganhCu']").html();
 				
 				DialogTable.showFromUrl('get','laydanhsachnganh',{MaNganhCu:MaNganhCu},function(){
@@ -28,12 +27,12 @@ var EditableTable = function () {
 						alert("Vui lòng chọn ít nhất một !");
 					}
 				});
-			});
+			}
 			
-			$("#ChonCanBo").click(function(){
+			function laydanhsachcanbo(){
 				MaNganhCu = $("span[class='MaCanBoCu']").html();
 				
-				DialogTable.showFromUrl('get','laydanhsachcbtcapnhat',{MaNganhCu:MaNganhCu},function(){
+				DialogTable.showFromUrl('get',baseUrl("application/Service/laydanhsachcbtcapnhat"),{MaNganhCu:MaNganhCu},function(){
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
 					if (checkboxs.length == 1) {
@@ -51,6 +50,15 @@ var EditableTable = function () {
 						alert("Vui lòng chọn ít nhất một !");
 					}
 				});
+			}
+			
+			
+			$("#ChonNganh").click(function(){
+				laydanhsachnganh();
+			});
+			
+			$("#ChonCanBo").click(function(){
+				laydanhsachcanbo();
 			});
 			
 			

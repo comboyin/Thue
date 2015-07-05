@@ -161,6 +161,47 @@ class ServiceController extends baseController
         return $this->response;
     }
     
+    /**
+     * AJAX
+     * Lấy danh sách cán bộ thuế cho chức năng chọn cán bộ thuế, để cập nhật thông tin nnt
+     * Chức năng giành cho đội trưởng
+     *
+     * @return \Zend\Stdlib\ResponseInterface
+     */
+    public function laydanhsachcbtcapnhatAction()
+    {
+        $MaCanBoCu = $this->getRequest()
+        ->getQuery()
+        ->get("MaCanBoCu");
+    
+        if ($this->getUser()->getLoaiUser() == 3) {
+    
+            $user = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select(array(
+                "user"
+            ))
+            ->from("Application\Entity\user", "user")
+            ->where("user.coquanthue = ?1")
+            ->andWhere("user not in(" . $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select("user1")
+                ->from("Application\Entity\user", "user1")
+                ->where("user1 = ?3")
+                ->orWhere("user1.MaUser = ?4")
+                ->getDQL() . ")")
+                ->setParameter(1, $this->getUser()
+                    ->getCoquanthue())
+                    ->setParameter(3, $this->getUser())
+                    ->setParameter(4, $MaCanBoCu)
+                    ->getQuery()
+                    ->getArrayResult();
+            echo json_encode($user);
+        }
+    
+        return $this->response;
+    }
+    
 }
 
 ?>

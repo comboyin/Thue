@@ -8,6 +8,8 @@ var EditableTableChiTietChungTu = function () {
 
 	//key
 	var _SoChungTu = "";
+	var _TieuMuc = "";
+	var _KyThue = "";
 	var oTable = null;
 
 	return {
@@ -64,7 +66,7 @@ var EditableTableChiTietChungTu = function () {
     			    		         value.TieuMuc,
     			    		         $.datepicker.formatDate('dd-mm-yy',new Date(value.NgayHachToan.date)),
     			    		         value.SoTien,
-    			    		         '<a class="edit" href="">Edit</a>', '<a class="delete" href="">Delete</a>'
+    			    		         '<a class="edit" href="">Edit</a>', '<a class="Delete" href="">Delete</a>'
     				                  ]);
 	        			    		
 	        			    	
@@ -154,7 +156,9 @@ var EditableTableChiTietChungTu = function () {
 
 				// cansua
 				//lưu các biến key
-				_SoChungTu = aData[0].trim();
+				_SoChungTu = $("h1.SoChungTu").html().trim();
+				_KyThue = aData[0].trim();
+				_TieuMuc = aData[1].trim();
 				
 				
 				/*_MaSoThue = $("input[name='masothue']", nRow).val().trim();
@@ -220,7 +224,7 @@ var EditableTableChiTietChungTu = function () {
 				oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
 				oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
 				oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
-				oTable.fnUpdate(jqInputs[2].value, nRow, 3, false);
+				oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
 
 
 				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow,4,
@@ -619,7 +623,7 @@ var EditableTableChiTietChungTu = function () {
 				}
 			});
 
-			$('#tablechungtu a.Delete').live('click', function (e) {
+			$('#editable-chitietchungtu a.Delete').live('click', function (e) {
 				e.preventDefault();
 
 				var nRow = $(this).parents('tr')[0];
@@ -628,17 +632,21 @@ var EditableTableChiTietChungTu = function () {
 				// cansuaxoa
 				
 				//dang lam
-				_MaSoThue = aData[1].trim();
-				_TieuMuc = aData[3].trim();
+				SoChungTu = $("h1.SoChungTu").html();
+				
+				KyThue = aData[0].trim();
+				TieuMuc = aData[1].trim();
+					
+				
 				
 				data = {
-					_MaSoThue : _MaSoThue,
-					_KyThue : _KyThue,
-					_TieuMuc : _TieuMuc
+					SoChungTu : SoChungTu,
+					KyThue : KyThue,
+					TieuMuc : TieuMuc
 				};
 				
 				
-				var url = "xoa";
+				var url = "xoaCTChungTu";
 				Xoa('post', url, data, oTable, nRow);
 
 			});
@@ -711,32 +719,25 @@ var EditableTableChiTietChungTu = function () {
 					//cansuaedit
 
 					//lay du lieu					
-					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
+					var KyThue = $("input[name='KyThue']", nRow).val().trim();
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
+					var NgayHachToan =$("input[name='NgayHachToan']", nRow).val().trim()
 					var SoTien = $("input[name='SoTien']", nRow).val().trim();
-					var TrangThai = $("input[name='TrangThai']", nRow).val().trim();
-					var LyDo = $("input[name='LyDo']", nRow).val().trim();
-					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-					var DoanhSo  = $("input[name='DoanhSo']", nRow).val().trim();
-					
-					
+					var _SoChungTu = $("h1.SoChungTu").html().trim();
 					
 					data = {
-						_MaSoThue : _MaSoThue,
 						_KyThue : _KyThue,
 						_TieuMuc : _TieuMuc,
-
-						KyThue : _KyThue,
-						MaSoThue : MaSoThue,
+						
+						
+						SoChungTu : _SoChungTu,
+						KyThue : KyThue,
 						TieuMuc : TieuMuc,
-						SoTien : SoTien,
-						TrangThai : TrangThai,
-						LyDo : LyDo,
-						TiLeTinhThue:TiLeTinhThue,
-						DoanhSo:DoanhSo
+						NgayHachToan : NgayHachToan,
+						SoTien : SoTien
 					}
 
-					var url = "sua";
+					var url = "suaCTChungTu";
 
 					
 

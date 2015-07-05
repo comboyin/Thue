@@ -8,6 +8,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Unlity\Unlity;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity
@@ -386,7 +387,7 @@ class nguoinopthue implements InputFilterAwareInterface
 
     /**
      *
-     * @return NNTNganh[]
+     * @return NNTNganh|PersistentCollection
      */
     public function getNNTNganhs()
     {
