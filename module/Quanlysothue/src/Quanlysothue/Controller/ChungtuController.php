@@ -248,6 +248,83 @@ class ChungtuController extends baseController
         echo json_encode($kq->toArray());
         return $this->response;
     }
+    
+    public function suaCTChungTuAction()
+    {
+        //error_reporting(0);
+        try {
+            /* @var $request Request */
+            /* @var $form Form */
+            $request = $this->getRequest();
+            $post = $request->getPost();
+            $kq = new ketqua();
+            $form = new FormCTChungTu();
+    
+            $form->setData($request->getPost());
+    
+            // validation thanh cong
+            if ($form->isValid()) {
+                $_KyThue = $post->get('_KyThue');
+                $_TieuMuc = $post->get('_TieuMuc');
+                
+                
+                $KyThue = $post->get('KyThue');
+                $SoChungTu =$post->get('SoChungTu');
+                $TieuMuc = $post->get('TieuMuc');
+                $NgayHachToan = Unlity::ConverDate('d-m-Y', $post->get('NgayHachToan'), 'Y-m-d') ;
+                $SoTien = $post->get('SoTien');
+                $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $SoChungTu);
+                $MucLuc = $this->getEntityManager()->find('Application\Entity\muclucngansach', $_TieuMuc);
+                /* @var $CTChungTu chitietchungtu */
+                $CTChungTu = $this->getEntityManager()->find('Application\Entity\chitietchungtu',
+                                        array(
+                                            'chungtu' => $ChungTu,
+                                            'muclucngansach' => $MucLuc,
+                                            'KyThue' => $_KyThue
+                                        )
+                                
+                                        );
+    
+                if ($CTChungTu!=null) {
+    
+    
+    
+                    $chungtuModel = new chungtuModel($this->getEntityManager());
+                    $CTChungTu->setMuclucngansach($MucLuc);
+                    $CTChungTu->setChungtu($ChungTu);
+                    $CTChungTu->setNgayHachToan($NgayHachToan);
+                    $CTChungTu->setKyThue($KyThue);
+                    $CTChungTu->setSoTien($SoTien);
+                    
+                    $kq = $chungtuModel->merge($CTChungTu);
+                } else {
+    
+                    $kq->setKq(false);
+                    $kq->appentMessenger("Chi tiết chứng từ không tồn tại !");
+                }
+            }
+    
+            // validation lỗi
+            else {
+                 
+                $kq->setKq(false);
+                $kq->appentMessenger($this->getErrorMessengerForm($form));
+            }
+    
+            // trả về json
+            echo json_encode($kq->toArray());
+            
+        } catch (\Exception $e) {
+            $kq = new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger($e->getMessage());
+            echo json_encode($kq->toArray());
+        }
+        
+        return $this->response;
+    }
+    
+    
 
     /**
      * AjAx

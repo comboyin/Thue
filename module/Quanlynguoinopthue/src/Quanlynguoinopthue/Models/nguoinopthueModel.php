@@ -6,6 +6,7 @@ use Application\Entity\user;
 use Application\Entity\ketqua;
 use Application\Entity\nguoinopthue;
 use Doctrine\DBAL\Types\BooleanType;
+use Application\Entity\NNTNganh;
 
 class nguoinopthueModel extends baseModel
 {
@@ -67,7 +68,7 @@ class nguoinopthueModel extends baseModel
 
     /**
      * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý
-     * 
+     *
      * @param user $user            
      * @return \Application\Entity\ketqua
      */
@@ -83,8 +84,7 @@ class nguoinopthueModel extends baseModel
                 
                 $qb->select(array(
                     'nguoinopthue'
-                )
-                )
+                ))
                     ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
@@ -98,14 +98,13 @@ class nguoinopthueModel extends baseModel
                         ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                         ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join('usernnts.user', 'user')
-                        ->where('user in ('.$this->em->createQueryBuilder()->select("canbovien")
-                                                ->from('Application\Entity\user', 'canbovien')
-                                                ->where('canbovien.parentUser = ?1')->getDQL()
-                                                .')')
+                        ->where('user in (' . $this->em->createQueryBuilder()
+                        ->select("canbovien")
+                        ->from('Application\Entity\user', 'canbovien')
+                        ->where('canbovien.parentUser = ?1')
+                        ->getDQL() . ')')
                         ->setParameter(1, $user);
                 }
-            
-            
             
             $obj = $qb->getQuery()->getResult();
             
@@ -122,10 +121,10 @@ class nguoinopthueModel extends baseModel
         }
     }
 
-
     /**
      * json
      * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý, đang kinh doanh
+     *
      * @param user $user            
      * @return string
      */
@@ -146,26 +145,28 @@ class nguoinopthueModel extends baseModel
                     ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
-                                            ->where('user in ('.$this->em->createQueryBuilder()->select("canbovien")
-                                                ->from('Application\Entity\user', 'canbovien')
-                                                ->where('canbovien.parentUser = ?1')->getDQL()
-                                                .')')
+                    ->where('user in (' . $this->em->createQueryBuilder()
+                    ->select("canbovien")
+                    ->from('Application\Entity\user', 'canbovien')
+                    ->where('canbovien.parentUser = ?1')
+                    ->getDQL() . ')')
                     ->setParameter(1, $user)
                     ->andwhere("usernnts.ThoiGianKetThuc is null");
-                    
+                
                 return json_encode($bq->getQuery()->getArrayResult());
             }
     }
-    
+
     /**
      * array
      * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý, đang kinh doanh
-     * @param user $user
+     *
+     * @param user $user            
      * @return \Application\Entity\ketqua
      */
     private function dsNNTbyUser2($user)
     {
-            // cbt
+        // cbt
         $kq = new ketqua();
         $qb = $this->em->createQueryBuilder();
         $ma = $user->getMaUser();
@@ -173,11 +174,9 @@ class nguoinopthueModel extends baseModel
         try {
             if ($user->getLoaiUser() == 4) {
                 
-                $qb->select(
-                    'nguoinopthue'
-                
-                )
-                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+                $qb->select('nguoinopthue')
+                    ->
+                from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
                     ->where('user = ?1')
@@ -191,15 +190,14 @@ class nguoinopthueModel extends baseModel
                         ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                         ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join('usernnts.user', 'user')
-                        ->where('user in ('.$this->em->createQueryBuilder()->select("canbovien")
-                                                ->from('Application\Entity\user', 'canbovien')
-                                                ->where('canbovien.parentUser = ?1')->getDQL()
-                                                .')')
+                        ->where('user in (' . $this->em->createQueryBuilder()
+                        ->select("canbovien")
+                        ->from('Application\Entity\user', 'canbovien')
+                        ->where('canbovien.parentUser = ?1')
+                        ->getDQL() . ')')
                         ->andwhere("usernnts.ThoiGianKetThuc is null")
                         ->setParameter(1, $user);
                 }
-            
-            
             
             $obj = $qb->getQuery()->getResult();
             
@@ -215,33 +213,113 @@ class nguoinopthueModel extends baseModel
             return $kq;
         }
     }
-    
+
     /**
-     * 
+     *
      * Kiểm tra xem nnt có trong danh sách người nộp thuế của cán bộ thuế đang quản lý, đang kinh doanh hay ko
-     * @param string $mst
-     * @param user $user
+     *
+     * @param string $mst            
+     * @param user $user            
      * @return boolean
      */
     public function ktNNT($mst, $user)
     {
         $dsnnt = $this->dsNNTbyUser2($user)->getObj();
-        if($dsnnt!=null)
-        {
-            foreach ($dsnnt as $nnt)
-            {
-                if($nnt->getMaSoThue() == $mst)
+        if ($dsnnt != null) {
+            foreach ($dsnnt as $nnt) {
+                if ($nnt->getMaSoThue() == $mst)
                     return true;
             }
-        }
-        else 
-        {
+        } else {
             return false;
         }
         return false;
     }
+    /**
+     * Câp nhật ngành .
+     * sửa nntnganh cu 
+     * và thêm mới nntnganh mới 
+     * nếu xảy ra lỗi sẽ  rollback và đọc lại trong csdl cập nhật nguoinopthue
+     * @param NNTNganh $nntnganhOld
+     * @param NNTNganh $nntnganhNew
+     * @param nguoinopthue $nguoinopthue
+     * @return \Application\Entity\ketqua  */
+    public function capNhatNganh($nntnganhOld, $nntnganhNew,&$nguoinopthue)
+    {
+        $kq = new ketqua();
+        try {
+            
+            $this->em->getConnection()->beginTransaction();       
+            $this->em->merge($nntnganhOld);
+            $this->em->persist($nntnganhNew);           
+            
+            $kq->setObj($nntnganhNew);
+
+            // appent messanger
+            $kq->setKq(true);
+            $kq->appentMessenger("Cập nhật ngành thành công !");
+            $kq->appentMessenger("Thông tin cập nhật như sau: ");
+            $kq->appentMessenger('Từ ');
+            $kq->appentMessenger($nntnganhOld->getNganh()
+                ->getMaNganh() . ' - ' . $nntnganhOld->getNganh()
+                ->getTenNganh());
+            $kq->appentMessenger('thành');
+            $kq->appentMessenger($nntnganhNew->getNganh()
+                ->getMaNganh() . ' - ' . $nntnganhNew->getNganh()
+                ->getTenNganh());
+            $this->em->flush();
+            $this->em->commit();
+        } catch (\Exception $e) {
+            
+            $nguoinopthue = $this->em->find('Application\Entity\nguoinopthue', $nguoinopthue->getMaSoThue());
+            
+            $kq->setKq(false);
+            $kq->setMessenger('Thất bại trong việc cập nhật ngành !');
+            $kq->appentMessenger($e->getMessage());
+            
+            $this->em->getConnection()->rollBack();
+            
+            
+            
+        }
+        
+        return $kq;
+    }
     
     
+    public function capNhatCanBoQuanLy($UsernntCu, $UsernntNew,&$nguoinopthue)
+    {
+        $kq = new ketqua();
+        try {
+    
+            $this->em->getConnection()->beginTransaction();
+            $this->em->merge($UsernntCu);
+            $this->em->persist($UsernntNew);
+    
+            
+    
+            // appent messanger
+            $kq->setKq(true);
+            $kq->appentMessenger("Cập nhật cán bộ thành công !");
+            $this->em->flush();
+            $this->em->commit();
+            $kq->setObj($UsernntNew);
+        } catch (\Exception $e) {
+    
+            $nguoinopthue = $this->em->find('Application\Entity\nguoinopthue', $nguoinopthue->getMaSoThue());
+    
+            $kq->setKq(false);
+            $kq->setMessenger('Thất bại trong việc cập nhật ngành !');
+            $kq->appentMessenger($e->getMessage());
+    
+            $this->em->getConnection()->rollBack();
+    
+    
+    
+        }
+    
+        return $kq;
+    }
 }
 
 ?>

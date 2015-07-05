@@ -215,7 +215,7 @@ class ImportExcelChungTu extends baseExcel
             $em->getConnection()->rollBack();
             
         }
-        
+        unlink($fileName);
         return $kq;
     }
 }
