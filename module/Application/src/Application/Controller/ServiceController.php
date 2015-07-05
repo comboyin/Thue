@@ -126,6 +126,19 @@ class ServiceController extends baseController
         return $this->response;
     }
     
+    /**
+     * AJAX
+     * Lấy danh sách mục luc ngân sách, chỉ lấy môn bài
+     * @return \Zend\Mvc\Controller\Response  */
+    public function mlnsmonbaiAction()
+    {
+        $bq = $this->getEntityManager()->createQueryBuilder();
+        $bq->select('tieumuc')->from('Application\Entity\muclucngansach', 'tieumuc')
+        ->where("tieumuc.TieuMuc like '180_'");
+        echo json_encode($bq->getQuery()->getArrayResult());
+        return $this->response;
+    }
+    
     //tiletinhthuetm
     /**
      * AJAX

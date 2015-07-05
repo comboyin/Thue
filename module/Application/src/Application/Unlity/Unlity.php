@@ -20,6 +20,22 @@ class Unlity
         
         return $kq;
     }
+    
+    /**
+     * format d-m-Y to Y
+     *
+     * @param string $stringDate
+     * @return string
+     *
+     */
+    public static function stringDateToStringYear($stringDate)
+    {
+        $temp = explode("-", $stringDate);
+    
+        $kq = $temp[2];
+    
+        return $kq;
+    }
 
     /**
      * Kiểm tra ngày hiện tại có nằm giữa 2 ngày không ?

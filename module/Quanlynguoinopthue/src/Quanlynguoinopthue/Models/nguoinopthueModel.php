@@ -207,7 +207,6 @@ class nguoinopthueModel extends baseModel
             
             return $kq;
         } catch (\Exception $e) {
-            var_dump($e);
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
             return $kq;

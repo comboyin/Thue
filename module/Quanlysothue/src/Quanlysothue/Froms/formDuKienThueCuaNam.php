@@ -13,7 +13,6 @@ class formDuKienThueCuaNam extends Form
 
     function __construct()
     {
-        parent::__construct('');
        
 
         parent::__construct(''); 
