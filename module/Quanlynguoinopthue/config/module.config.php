@@ -3,7 +3,10 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Quanlynguoinopthue\Controller\Index' => 'Quanlynguoinopthue\Controller\IndexController',
-			'Quanlynguoinopthue\Controller\Nguoinopthue' => 'Quanlynguoinopthue\Controller\NguoinopthueController'
+			'Quanlynguoinopthue\Controller\Nguoinopthue' => 'Quanlynguoinopthue\Controller\NguoinopthueController',
+            'Quanlynguoinopthue\Controller\Thongtinngungnghi' => 'Quanlynguoinopthue\Controller\ThongtinngungnghiController'
+            
+            
         ),
     ),
     'router' => array(

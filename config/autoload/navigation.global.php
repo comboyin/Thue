@@ -94,10 +94,10 @@ return array(
                     ,
                     array(
                         'label' => 'Ngưng nghĩ',
-                        'route' => 'quanlyuser',
-                        'controller' => 'menu',
+                        'route' => 'quanlynguoinopthue/default',
+                        'controller' => 'Thongtinngungnghi',
                         'action' => 'index',
-                        'resource' => 'Quanlyuser\Controller\Menu'
+                        'resource' => 'Quanlynguoinopthue\Controller\Thongtinngungnghi'
                     ),
                     array(
                         'label' => 'Miễn giảm',

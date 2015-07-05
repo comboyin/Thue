@@ -39,6 +39,11 @@ return array(
                     'all' => 'canbothue'
                 ),
                 
+                
+                'Quanlynguoinopthue\Controller\Thongtinngungnghi' => array(
+                    'all' => 'canbothue'
+                ),
+                
                 //Module Quanlysothue
                 'Quanlysothue\Controller\Dukientruythu' => array(
                     'all' => 'canbothue'
