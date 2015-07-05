@@ -137,11 +137,11 @@ class dukienmb
     }
 
  /**
-     * @param field_type $NgayPhaiNop
+     * @param string $NgayPhaiNop
      */
     public function setNgayPhaiNop($NgayPhaiNop)
     {
-        $this->NgayPhaiNop = $NgayPhaiNop;
+        $this->NgayPhaiNop = \DateTime::createFromFormat('Y-m-d', $NgayPhaiNop);
     }
 
  /**

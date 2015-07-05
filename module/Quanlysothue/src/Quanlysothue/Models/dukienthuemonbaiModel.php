@@ -100,7 +100,7 @@ class dukienthuemonbaiModel extends baseModel
             $this->kq->setKq(true);
             $this->kq->setObj($q->getQuery()
                 ->getResult());
-            $this->kq->setMessenger('Lấy danh sách dự môn bài của năm ' . $nam . ' thành công !');
+            $this->kq->setMessenger('Lấy danh sách dự kiến môn bài của năm ' . $nam . ' thành công !');
             return $this->kq;
             
         } catch (\Exception $e) {
@@ -158,7 +158,7 @@ class dukienthuemonbaiModel extends baseModel
             $this->kq->setKq(true);
             $this->kq->setObj($q->getQuery()
                 ->getArrayResult());
-            $this->kq->setMessenger('Lấy danh sách dự môn bài của năm ' . $nam . ' thành công !');
+            $this->kq->setMessenger('Lấy danh sách dự kiến môn bài của năm ' . $nam . ' thành công !');
             return $this->kq->toArray();
     
         } catch (\Exception $e) {
@@ -200,6 +200,67 @@ class dukienthuemonbaiModel extends baseModel
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
             return $kq;
+        }
+    }
+    
+
+    private function findByMST($masothue)
+    {
+        try {
+            $kq = new ketqua();
+            $qb = $this->em->createQueryBuilder();
+    
+            $qb->select('dukienmb')
+            ->from('Application\Entity\dukienmb', 'dukienmb')
+            ->join('dukienmb.nguoinopthue', 'nguoinopthue')
+            ->where('nguoinopthue.MaSoThue = ?1')
+            ->setParameter(1, $masothue);
+    
+            $obj = $qb->getQuery()->getResult();
+            $kq->setObj($obj);
+            $kq->setKq(true);
+            $kq->setMessenger("Lấy danh sách dự kiến môn bài thành công");
+            
+            return $kq;
+        } catch (\Exception $e) {
+            $kq = new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger($e->getMessage());
+            return $kq;
+        }
+    }
+    
+    /**
+     * For Action Update
+     * Kiểm tra xem người nộp thuế này có phải được lập dự kiến môn bài lần đầu không
+     *
+     * @param string $mst
+     * @return boolean
+     */
+    public function ktMBUp($mst)
+    {
+        $ds = $this->findByMST($mst)->getObj();
+        if (count($ds) <= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * For Action Insert
+     * Kiểm tra xem người nộp thuế này có phải được lập dự kiến môn bài lần đầu không
+     *
+     * @param string $mst
+     * @return boolean
+     */
+    public function ktMBIn($mst)
+    {
+        $ds = $this->findByMST($mst)->getObj();
+        if ($ds == null) {
+            return true;
+        } else {
+            return false;
         }
     }
     

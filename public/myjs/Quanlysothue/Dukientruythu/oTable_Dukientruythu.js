@@ -75,8 +75,11 @@ var EditableTable = function () {
 								data[i]['SoTien'],
 								data[i]['TrangThai'],
 								data[i]['LyDo'],
-								'<a class="edit" href="">Edit</a>',
-								'<a class="Delete" href="">Delete</a>']);
+								
+								(data[i]['TrangThai']==0)?'<a class="edit" href="">Edit</a>':'',
+								(data[i]['TrangThai']==0)?'<a class="Delete" href="">Delete</a>':''
+								
+								]);
 					}
 
 					/*$("#progess_dpmonths").css(

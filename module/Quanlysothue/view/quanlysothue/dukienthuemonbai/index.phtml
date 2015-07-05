@@ -153,9 +153,13 @@ $formUp = $this->formUp;
 								<td><?php echo $thue->getSoTien()?></td>
 								<td><?php echo $thue->getTrangThai()?></td>
 								
-									
+								<?php if($thue->getTrangThai()==0):?>	
 								<td><a class="edit" href="">Edit</a></td>
 								<td><a class="Delete" href="">Delete</a></td>
+								<?php else:?>
+								<td></td>
+								<td></td>
+								<?php endif;?>
 								
 							</tr>
                                 

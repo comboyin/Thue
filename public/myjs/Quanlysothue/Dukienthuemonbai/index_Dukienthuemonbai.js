@@ -6,7 +6,7 @@ var EditableTable = function () {
 	//key
 	var _KyThue = "";
 	var _MaSoThue = "";
-
+	var _flag = ""; //cho loadSoTien
 	return {
 
 		init : function () {
@@ -55,8 +55,10 @@ var EditableTable = function () {
 								data[i]['SoTien'],
 								data[i]['TrangThai'],
 								
-								'<a class="edit" href="">Edit</a>',
-								'<a class="Delete" href="">Delete</a>']);
+								(data[i]['TrangThai']==0)?'<a class="edit" href="">Edit</a>':'',
+								(data[i]['TrangThai']==0)?'<a class="Delete" href="">Delete</a>':''
+								
+								]);
 					}
 
 					/*$("#progess_dpmonths").css(
@@ -154,7 +156,7 @@ var EditableTable = function () {
 				// cansua
 				//lưu các biến key
 				_MaSoThue = aData[1].trim();				
-				
+				_flag = "edit";
 				
 				// cansua
 				// khi click edit trên 1 dòng
@@ -178,13 +180,14 @@ var EditableTable = function () {
 					 + aData[5] + '">';
 				
 				jqTds[6].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
-					 + aData[6] + '">';
+					 + aData[6] + '"disabled>';
 				jqTds[7].innerHTML = '<input style="width:30px;" name="TrangThai" type="text"  value="'
 					 + aData[7] + '"disabled>';
 				
 
 				jqTds[8].innerHTML = '<a class="edit" href="">Save edit</a>';
 				jqTds[9].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
@@ -213,7 +216,7 @@ var EditableTable = function () {
 					 + aData[5] + '">';
 				
 				jqTds[6].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
-					 + aData[6] + '">';
+					 + aData[6] + '"disabled>';
 				jqTds[7].innerHTML = '<input style="width:30px;" name="TrangThai" type="text"  value="'
 					 + aData[7] + '"disabled>';
 
@@ -272,6 +275,7 @@ var EditableTable = function () {
 						]);
 				var nRow = oTable.fnGetNodes(aiNew[0]);
 				addRow(oTable, nRow);
+				_flag="new";
 				nEditing = nRow;
 			});
 
@@ -624,7 +628,7 @@ var EditableTable = function () {
 
 			$('#editable-sample a.cancel').live('click', function (e) {
 				e.preventDefault();
-
+				_flag = '';
 				if ($(this).attr("data-mode") == "new") {
 					var nRow = $(this).parents('tr')[0];
 
@@ -709,13 +713,13 @@ var EditableTable = function () {
 							KyThue : _KyThue,
 							MaSoThue : MaSoThue,
 							TieuMuc : TieuMuc,
-							NgayPhaiNop : NgayPhaiNop,
-							SoTien : SoTien
+							NgayPhaiNop : NgayPhaiNop
+							
 							
 					}
 
 					var url = 'them';
-					console.log(nEditing);
+					//console.log(nEditing);
 					SaveNew('post', url, data, oTable, nEditing);
 
 				} else if (nEditing == nRow
@@ -739,8 +743,8 @@ var EditableTable = function () {
 						KyThue : _KyThue,
 						MaSoThue : MaSoThue,
 						TieuMuc : TieuMuc,
-						NgayPhaiNop : NgayPhaiNop,
-						SoTien : SoTien
+						NgayPhaiNop : NgayPhaiNop
+						
 					}
 
 					var url = "sua";
@@ -755,6 +759,17 @@ var EditableTable = function () {
 					nEditing = nRow;
 				}
 			});
+			
+			function loadSoTien(MaSoThue,TieuMuc){
+				
+
+				$.get('loadSoTien',{MaSoThue:MaSoThue,TieuMuc:TieuMuc, flag : _flag},function(json){
+					$("input[name='SoTien']").val(json.SoTien);
+				},'json');
+
+				
+
+			}
 
 			// dialogTable
 			$('#editable-sample button.DialogNNT').live('click', function (e) {
@@ -777,33 +792,13 @@ var EditableTable = function () {
 						MaSoThue.val(MaSoThueString);
 						TenHKD.val(TenHKDString);
 						TieuMuc = $("input[name='TieuMuc']").val();
-						loadTyLeTinhThue(MaSoThueString,TieuMuc);
+						loadSoTien(MaSoThueString,TieuMuc);
 						
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
 					}
 					
 				});
-				/*$.get('danhsachNNT', {}, function (json) {
-
-					DialogTable.show(json, function () {
-					
-						checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
-
-						if (checkboxs.length == 1) {
-							var MaSoThueString = $('td', checkboxs[0])[1].textContent;
-							var TenHKDString = $('td', checkboxs[0])[2].textContent;
-							
-							$("#DialogTable").modal("hide");
-							
-							MaSoThue.val(MaSoThueString);
-							TenHKD.val(TenHKDString);
-							
-						} else {
-							alert("Vui lòng chọn ít nhất một !");
-						}
-					});
-				}, 'json');*/
 
 			});
 			
@@ -816,6 +811,7 @@ var EditableTable = function () {
 				var nRow = $(this).parents('tr')[0];
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
+				TenGoi = $("input[name='TenGoi']", nRow);
 
 				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnsmonbai'),{}, function () {
 					
@@ -824,12 +820,14 @@ var EditableTable = function () {
 					if (checkboxs.length == 1) {
 						
 						var TieuMucString = $('td', checkboxs[0])[1].textContent;
+						var TenGoiString = $('td', checkboxs[0])[2].textContent.substr(13,5);
 						
 						$("#DialogTable").modal("hide");
 						
 						TieuMuc.val(TieuMucString);
+						TenGoi.val(TenGoiString);
 						MaSoThue = $("input[name='masothue']").val();
-						loadTyLeTinhThue(MaSoThue,TieuMucString);
+						loadSoTien(MaSoThue,TieuMucString);
 						
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
