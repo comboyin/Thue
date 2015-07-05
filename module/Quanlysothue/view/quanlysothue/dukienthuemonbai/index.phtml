@@ -39,7 +39,7 @@ $formUp = $this->formUp;
 		<div class="span12">
 			<!-- BEGIN EXAMPLE TABLE widget-->
 
-			<div class="widget purple">
+			<div class="widget orange">
 
 				<div class="widget-title">
 					<h4>Danh sách dự kiến thuế môn bài</h4>
@@ -123,7 +123,8 @@ $formUp = $this->formUp;
 								    <th><input id="check_all" type="checkbox"></th>
 									<th>Mã số thuế (*)</th>
 						            <th>Tên HKD</th>
-									<th>Bậc môn bài(*)</th>
+						            <th>Tiểu Mục(*)</th>
+									<th>Bậc môn bài</th>
 									<th>Ngày phải nộp (*)</th>
 									<th>Số tiền (*)</th>
 									<th>Trạng thái </th>
@@ -146,6 +147,7 @@ $formUp = $this->formUp;
 								
 								<td><?php echo $thue->getNguoinopthue()->getMaSoThue()?></td>
 								<td><?php echo $thue->getNguoinopthue()->getTenHKD()?></td>
+								<td><?php echo $thue->getMuclucngansach()->getTieuMuc()?></td>
 								<td><?php echo mb_substr($thue->getMuclucngansach()->getTenGoi(),13,17,'UTF-8');?></td>
 								<td><?php echo $thue->getNgayPhaiNop()?></td>
 								<td><?php echo $thue->getSoTien()?></td>

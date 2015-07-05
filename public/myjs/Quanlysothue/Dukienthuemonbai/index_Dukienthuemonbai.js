@@ -12,7 +12,14 @@ var EditableTable = function () {
 		init : function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
-			
+			//editable-sample
+			$("#editable-sample input[name='NgayPhaiNop']").live('focus', function(){
+			    if (false == $(this).hasClass('hasDatepicker')) {
+			    	$(this).datepicker({ 
+				    	format: 'dd-mm-yyyy'
+				    });
+			    }
+			});
 
 			
 			
@@ -42,6 +49,7 @@ var EditableTable = function () {
 								'<th><input class="check_item" type="checkbox"></th>',
 								data[i]['nguoinopthue']['MaSoThue'],
 								data[i]['nguoinopthue']['TenHKD'],
+								data[i]['muclucngansach']['TieuMuc'],
 								data[i]['muclucngansach']['TenGoi'].substr(13,5),
 								DateToString(data[i]['NgayPhaiNop']['date']),
 								data[i]['SoTien'],
@@ -145,11 +153,7 @@ var EditableTable = function () {
 
 				// cansua
 				//lưu các biến key
-				_MaSoThue = aData[1].trim();
-				_TieuMuc = aData[3].trim();
-				
-				/*_MaSoThue = $("input[name='masothue']", nRow).val().trim();
-				_TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();*/
+				_MaSoThue = aData[1].trim();				
 				
 				
 				// cansua
@@ -159,38 +163,28 @@ var EditableTable = function () {
 
 				jqTds[1].innerHTML = '<input style="width:65px;" name="masothue" type="text"  value="'
 					 + aData[1] + ' "disabled><button style="margin:0 10px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
-				jqTds[2].innerHTML = '<input style="width:100px;" name="TenHKD" type="text"  value="'
+				jqTds[2].innerHTML = '<input style="width:130px;" name="TenHKD" type="text"  value="'
 
 					 + aData[2] + '"disabled>';
-					 
+				
 				jqTds[3].innerHTML = '<input style="width:50px;" name="TieuMuc" type="text"   value="'
 					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Chọn</button>';
+					 
+				jqTds[4].innerHTML = '<input style="width:100px;" name="TenGoi" type="text"   value="'
+					 + aData[4] + ' "disabled>';
 
 
-				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhThuChiuThue" type="text"  value="'
-					 + aData[4] + '">';
+				jqTds[5].innerHTML = '<input style="width:100px;" name="NgayPhaiNop" type="text"  value="'
+					 + aData[5] + '">';
 				
-				jqTds[5].innerHTML = '<input style="width:35px;" name="TiLeTinhThue" type="text"  value="'
-					 + aData[5] + '"disabled>';
-				
-				jqTds[6].innerHTML = '<input style="width:20px;" name="ThueSuat" type="text" value="'
+				jqTds[6].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '">';
-				jqTds[7].innerHTML = '<input style="width:60px;" name="TenGoi" type="text" value="'
-					 + aData[7] + '">';
-				
-				jqTds[8].innerHTML = (aData[8]=='')?'<input style="width:60px;" name="SanLuong" type="text" value="0">':'<input style="width:60px;" name="SanLuong" type="text" value="'
-					 + aData[8] + '">';
-				
-				
-				jqTds[9].innerHTML = (aData[9]=='')?'<input style="width:60px;" name="GiaTinhThue" type="text" value="0">':'<input style="width:60px;" name="GiaTinhThue" type="text" value="'
-					 + aData[9] + '">';
-				
-				jqTds[10].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
-					 + aData[10] + '">';
+				jqTds[7].innerHTML = '<input style="width:30px;" name="TrangThai" type="text"  value="'
+					 + aData[7] + '"disabled>';
 				
 
-				jqTds[11].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[12].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				jqTds[8].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[9].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
@@ -204,34 +198,27 @@ var EditableTable = function () {
 				// cansua
 				jqTds[1].innerHTML = '<input style="width:65px;" name="masothue" type="text"  value="'
 					 + aData[1] + ' "disabled><button style="margin:0 10px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
-				jqTds[2].innerHTML = '<input style="width:100px;" name="TenHKD" type="text"  value="'
+				jqTds[2].innerHTML = '<input style="width:130px;" name="TenHKD" type="text"  value="'
 
 					 + aData[2] + '"disabled>';
-					 
+				
 				jqTds[3].innerHTML = '<input style="width:50px;" name="TieuMuc" type="text"   value="'
 					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Chọn</button>';
+					 
+				jqTds[4].innerHTML = '<input style="width:100px;" name="TenGoi" type="text"   value="'
+					 + aData[4] + ' "disabled>';
 
 
-				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhThuChiuThue" type="text"  value="'
-					 + aData[4] + '">';
+				jqTds[5].innerHTML = '<input style="width:100px;" name="NgayPhaiNop" type="text"  value="'
+					 + aData[5] + '">';
 				
-				jqTds[5].innerHTML = '<input style="width:35px;" name="TiLeTinhThue" type="text"  value="'
-					 + aData[5] + '"disabled>';
-				
-				jqTds[6].innerHTML = '<input style="width:20px;" name="ThueSuat" type="text" value="'
+				jqTds[6].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '">';
-				jqTds[7].innerHTML = '<input style="width:60px;" name="TenGoi" type="text" value="'
-					 + aData[7] + '">';
-				jqTds[8].innerHTML = '<input style="width:60px;" name="SanLuong" type="text" value="'
-					 + aData[8] + '">';
-				jqTds[9].innerHTML = '<input style="width:60px;" name="GiaTinhThue" type="text" value="'
-					 + aData[9] + '">';
-				
-				jqTds[10].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
-					 + aData[10] + '">';
+				jqTds[7].innerHTML = '<input style="width:30px;" name="TrangThai" type="text"  value="'
+					 + aData[7] + '"disabled>';
 
-				jqTds[11].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[12].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				jqTds[8].innerHTML = '<a class="edit" href="">Save new</a>';
+				jqTds[9].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
 
@@ -251,20 +238,13 @@ var EditableTable = function () {
 				oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
 				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
 				oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
-				
-				oTable.fnUpdate((jqInputs[8].value == 0) ? '':jqInputs[8].value, nRow, 8, false);
-				
-				oTable.fnUpdate((jqInputs[9].value == 0) ? '':jqInputs[9].value, nRow, 9, false);
-				
-				oTable.fnUpdate(jqInputs[10].value, nRow, 10, false);
 
-				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 11,
+				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 8,
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
-					12, false);
+					9, false);
 				oTable.fnDraw();
 			}
-			
 			
 			var nEditing = null;
 			//Thêm 1 dòng mới
@@ -282,13 +262,11 @@ var EditableTable = function () {
 							'',
 							'',
 							'',
-							0,
-							0,
-							1,
+							'',
 							'',
 							0,
 							0,
-							0,
+
 							'<a class="edit" href="">Edit</a>',
 							'<a class="cancel" data-mode="new" href="">Cancel</a>'
 						]);
@@ -606,18 +584,16 @@ var EditableTable = function () {
 					// cansuaxoanhieu
 					// Cái nào checked thì lấy
 					var MaSoThueData = new Array();
-					var TieuMucData = new Array();
+					
 					for (i = checkboxs.length - 1; i >= 0; i--) {
 						var MaSoThue = $('td', checkboxs[i])[1].textContent;
 						MaSoThueData.push(MaSoThue);
-						var TieuMuc = $('td', checkboxs[i])[3].textContent;
-						TieuMucData.push(TieuMuc);
 					}
 
 					data = {
 						_KyThue : _KyThue,
-						MaSoThueData : MaSoThueData,
-						TieuMucData : TieuMucData
+						MaSoThueData : MaSoThueData
+						
 					};
 					var url = "xoanhieu";
 
@@ -670,12 +646,12 @@ var EditableTable = function () {
 				
 				//dang lam
 				_MaSoThue = aData[1].trim();
-				_TieuMuc = aData[3].trim();
+				
 				
 				data = {
 					_MaSoThue : _MaSoThue,
-					_KyThue : _KyThue,
-					_TieuMuc : _TieuMuc
+					_KyThue : _KyThue
+					
 				};
 				
 				
@@ -724,26 +700,18 @@ var EditableTable = function () {
 
 					//lay du lieu
 					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
-					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-					var DoanhThuChiuThue = $("input[name='DoanhThuChiuThue']", nRow).val().trim();				
-					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-					var ThueSuat = $("input[name='ThueSuat']", nRow).val().trim();
-					var TenGoi = $("input[name='TenGoi']", nRow).val().trim();
-					var SanLuong  = $("input[name='SanLuong']", nRow).val().trim();
-					var GiaTinhThue  = $("input[name='GiaTinhThue']", nRow).val().trim();
+					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();			
+					var NgayPhaiNop = $("input[name='NgayPhaiNop']", nRow).val().trim();
 					var SoTien  = $("input[name='SoTien']", nRow).val().trim();
+					
 	
 					data = {
 							KyThue : _KyThue,
 							MaSoThue : MaSoThue,
 							TieuMuc : TieuMuc,
-							DoanhThuChiuThue : DoanhThuChiuThue,
-							TiLeTinhThue : TiLeTinhThue,
-							ThueSuat : ThueSuat,
-							TenGoi : TenGoi,
-							SanLuong : SanLuong,
-							GiaTinhThue : GiaTinhThue,
+							NgayPhaiNop : NgayPhaiNop,
 							SoTien : SoTien
+							
 					}
 
 					var url = 'them';
@@ -759,31 +727,19 @@ var EditableTable = function () {
 
 					//lay du lieu					
 					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
-					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-					var DoanhThuChiuThue = $("input[name='DoanhThuChiuThue']", nRow).val().trim();				
-					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-					var ThueSuat = $("input[name='ThueSuat']", nRow).val().trim();
-					var TenGoi = $("input[name='TenGoi']", nRow).val().trim();
-					var SanLuong  = $("input[name='SanLuong']", nRow).val().trim();
-					var GiaTinhThue  = $("input[name='GiaTinhThue']", nRow).val().trim();
+					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();			
+					var NgayPhaiNop = $("input[name='NgayPhaiNop']", nRow).val().trim();
 					var SoTien  = $("input[name='SoTien']", nRow).val().trim();
-					
-					
 					
 					data = {
 						_MaSoThue : _MaSoThue,
 						_KyThue : _KyThue,
-						_TieuMuc : _TieuMuc,
+						
 
 						KyThue : _KyThue,
 						MaSoThue : MaSoThue,
 						TieuMuc : TieuMuc,
-						DoanhThuChiuThue : DoanhThuChiuThue,
-						TiLeTinhThue : TiLeTinhThue,
-						ThueSuat : ThueSuat,
-						TenGoi : TenGoi,
-						SanLuong : SanLuong,
-						GiaTinhThue : GiaTinhThue,
+						NgayPhaiNop : NgayPhaiNop,
 						SoTien : SoTien
 					}
 
@@ -799,17 +755,6 @@ var EditableTable = function () {
 					nEditing = nRow;
 				}
 			});
-			
-			function loadTyLeTinhThue(MaSoThue,TieuMuc){
-				
-				$.get('loadTyLeTinhThue',{MaSoThue:MaSoThue,TieuMuc:TieuMuc},function(json){
-					$("input[name='TiLeTinhThue']").val(json.TyLeTinhThue);
-					TinhTien();
-				},'json');
-
-				
-
-			}
 
 			// dialogTable
 			$('#editable-sample button.DialogNNT').live('click', function (e) {
@@ -872,7 +817,7 @@ var EditableTable = function () {
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
 
-				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnsthue'),{}, function () {
+				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnsmonbai'),{}, function () {
 					
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 

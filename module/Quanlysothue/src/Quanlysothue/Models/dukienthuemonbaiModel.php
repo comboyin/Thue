@@ -140,11 +140,13 @@ class dukienthuemonbaiModel extends baseModel
                     $q->select(array(
                         'dukienmb',
                         'nguoinopthue',
-                        'usernnts'
+                        'usernnts',
+                        'muclucngansach'
                     ))
                     ->from('Application\Entity\dukienmb', 'dukienmb')
                     ->join('dukienmb.nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('dukienmb.muclucngansach', 'muclucngansach')
                     ->join('usernnts.user', 'user')
                     ->where('dukienmb.Nam = ?1')
                     ->andWhere('user.parentUser = ?2')
