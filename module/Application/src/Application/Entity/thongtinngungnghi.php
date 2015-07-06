@@ -15,7 +15,7 @@ class thongtinngungnghi
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="integer")
      */
     private $MaTTNgungNghi;
 
@@ -50,6 +50,14 @@ class thongtinngungnghi
      * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
      */
     private $nguoinopthue;
+ /**
+     * @param field_type $MaTTNgungNghi
+     */
+    public function setMaTTNgungNghi($MaTTNgungNghi)
+    {
+        $this->MaTTNgungNghi = $MaTTNgungNghi;
+    }
+
  /**
      * @return the $MaTTNgungNghi
      */
@@ -89,7 +97,8 @@ class thongtinngungnghi
      */
     public function getNgayNopDon()
     {
-        return $this->NgayNopDon;
+         return $this->NgayNopDon==null? null:$this->NgayNopDon->format("d-m-Y");
+        
     }
 
  /**
@@ -121,7 +130,7 @@ class thongtinngungnghi
      */
     public function setTuNgay($TuNgay)
     {
-        $this->TuNgay = $TuNgay;
+        $this->TuNgay = \DateTime::createFromFormat('Y-m-d', $TuNgay);
     }
 
  /**
@@ -129,7 +138,7 @@ class thongtinngungnghi
      */
     public function setDenNgay($DenNgay)
     {
-        $this->DenNgay = $DenNgay;
+        $this->DenNgay = \DateTime::createFromFormat('Y-m-d', $DenNgay);
     }
 
  /**
@@ -145,7 +154,7 @@ class thongtinngungnghi
      */
     public function setNgayNopDon($NgayNopDon)
     {
-        $this->NgayNopDon = $NgayNopDon;
+        $this->NgayNopDon = \DateTime::createFromFormat('Y-m-d', $NgayNopDon);
     }
 
  /**

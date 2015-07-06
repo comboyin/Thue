@@ -23,9 +23,9 @@ class formThongTinNgungNghi extends Form
     public function addElements()
     {
         
-        //SoChungTu
+        //LyDo
         $this->add(array(
-            'name' => 'SoChungTu',
+            'name' => 'LyDo',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array()
         ));
@@ -46,6 +46,30 @@ class formThongTinNgungNghi extends Form
             'attributes' => array(
             )
         ));
+        //DenNgay
+        $this->add(array(
+            'name' => 'DenNgay',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+            )
+        ));
+        
+        //NgayNopDon
+        $this->add(array(
+            'name' => 'NgayNopDon',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+            )
+        ));
+        
+        
+        //MaTTNgungNghi
+        $this->add(array(
+            'name' => 'MaTTNgungNghi',
+            'type' => 'Zend\Form\Element\Text',
+            'attributes' => array(
+            )
+        ));
         
         
 
@@ -59,7 +83,7 @@ class formThongTinNgungNghi extends Form
         
         
         
-        //SoChungTu
+        //MaSoThue
         $inputFilter->add($factory->createInput([
             'name' => 'MaSoThue',
             'required' => false,
@@ -86,12 +110,10 @@ class formThongTinNgungNghi extends Form
         
         
         
-        
-        //MaSoThue
-        
+        //LyDo
         $inputFilter->add($factory->createInput([
-            'name' => 'MaSoThue',
-            'required' => true,
+            'name' => 'LyDo',
+            'required' => false,
             'filters' => array(
                 array(
                     'name' => 'StripTags'
@@ -101,12 +123,12 @@ class formThongTinNgungNghi extends Form
                 )
             ),
             'validators' => array(
-                
+        
                 array(
                     'name' => '\Zend\Validator\StringLength',
                     'options' => array(
-                        'min' => 9, // Minimum length
-                        'max' => 20, // Maximum length, null if there is no length limitation
+                        'min' => 10, // Minimum length
+                        'max' => 255, // Maximum length, null if there is no length limitation
                         'encoding' => 'UTF-8'
                     )
                 )
@@ -114,9 +136,41 @@ class formThongTinNgungNghi extends Form
         ]));
         
         
+        
+        //MaTTNgungNghi
+        $inputFilter->add($factory->createInput([
+            'name' => 'MaTTNgungNghi',
+            'required' => false,
+            'filters' => array(
+                array(
+                    'name' => 'StripTags'
+                ),
+                array(
+                    'name' => 'StringTrim'
+                )
+            ),
+            'validators' => array(
+        
+                array(
+                    'name' => '\Zend\Validator\StringLength',
+                    'options' => array(
+                        'min' => 1, // Minimum length
+                        'max' => 10, // Maximum length, null if there is no length limitation
+                        'encoding' => 'UTF-8'
+                    )
+                )
+            )
+        ]));
+        
+        
+        
+        
+       
+        
+        
         //NgayChungTu
         $inputFilter->add($factory->createInput([
-            'name' => 'NgayChungTu',
+            'name' => 'TuNgay',
             'required' => true,
             'filters' => array(
                 array(
@@ -135,6 +189,55 @@ class formThongTinNgungNghi extends Form
                 )
             )
         ]));
+        
+        
+        //DenNgay
+        $inputFilter->add($factory->createInput([
+            'name' => 'DenNgay',
+            'required' => true,
+            'filters' => array(
+                array(
+                    'name' => 'StripTags'
+                ),
+                array(
+                    'name' => 'StringTrim'
+                )
+            ),
+            'validators' => array(
+                array(
+                    'name' => '\Zend\Validator\Date',
+                    'options' => array(
+                        'format' => 'd-m-Y'
+                    )
+                )
+            )
+        ]));
+        
+        //NgayNopDon
+        $inputFilter->add($factory->createInput([
+            'name' => 'NgayNopDon',
+            'required' => true,
+            'filters' => array(
+                array(
+                    'name' => 'StripTags'
+                ),
+                array(
+                    'name' => 'StringTrim'
+                )
+            ),
+            'validators' => array(
+                array(
+                    'name' => '\Zend\Validator\Date',
+                    'options' => array(
+                        'format' => 'd-m-Y'
+                    )
+                )
+            )
+        ]));
+        
+        
+        
+        
         
         
 

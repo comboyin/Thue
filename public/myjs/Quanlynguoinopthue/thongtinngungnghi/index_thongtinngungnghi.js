@@ -263,20 +263,20 @@ var EditableTableThongtinngungnghi = function () {
 			function saveRow(oTable, nRow) {
 				var jqInputs = $('input', nRow);
 				var jqTextareas = $('textarea', nRow);
-				
+				data=  oTable.fnGetData(nRow);
 				
 				// cansua
-				oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
-				oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
-				oTable.fnUpdate(jqTextareas[0].value, nRow, 2, false);
-				oTable.fnUpdate(jqInputs[2].value, nRow, 3, false);
+				console.log(jqInputs);
+				oTable.fnUpdate(jqInputs[0].value, nRow, 1, false);
+				oTable.fnUpdate(jqInputs[1].value, nRow,2, false);
+				oTable.fnUpdate(jqTextareas[0].value, nRow, 3, false);
+				oTable.fnUpdate(jqInputs[2].value, nRow, 4, false);
 				
-
-
-				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 4,
+				
+				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow,5,
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
-					5, false);
+					6, false);
 				oTable.fnDraw();
 			}
 			
@@ -667,10 +667,9 @@ var EditableTableThongtinngungnghi = function () {
 				e.preventDefault();
 				var nRow = $(this).parents('tr')[0];
 				var aData = oTable.fnGetData(nRow);
-		
 				// cansuaxoa
 
-				MaTTNgungNghi = aData[0].trim();
+				MaTTNgungNghi = aData[0];
 				
 				//thong bao ban co muon xoa chung tu nay khong ? 
 				data = {
