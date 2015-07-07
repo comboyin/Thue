@@ -35,14 +35,7 @@ return array(
                     'all'=>'canbothue'
                 ),
                 
-                'Quanlynguoinopthue\Controller\Index' => array(
-                    'all' => 'canbothue'
-                ),
                 
-                
-                'Quanlynguoinopthue\Controller\Thongtinngungnghi' => array(
-                    'all' => 'canbothue'
-                ),
                 
                 //Module Quanlysothue
                 'Quanlysothue\Controller\Dukientruythu' => array(
@@ -64,7 +57,19 @@ return array(
 				////Module Quanlynguoinopthue
                 'Quanlynguoinopthue\Controller\Nguoinopthue' => array(
                     'all' => 'canbothue'
-                )
+                ),
+                'Quanlynguoinopthue\Controller\Index' => array(
+                    'all' => 'canbothue'
+                ),
+                'Quanlynguoinopthue\Controller\Thongtinngungnghi' => array(
+                    'all' => 'canbothue'
+                ),
+                
+                //Module Quanlycanbothue
+                'Quanlycanbothue\Controller\Canbothue' => array(
+                    'all' => 'doitruong'
+                ),
+                //end
             )
         )
     )

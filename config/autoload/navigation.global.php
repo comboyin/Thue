@@ -101,7 +101,7 @@ return array(
                     ),
                     array(
                         'label' => 'Miễn giảm',
-                        'route' => 'quanlyuser',
+                        'route' => 'quanlynguoinopthue/default',
                         'controller' => 'menu',
                         'action' => 'index',
                         'resource' => 'Quanlyuser\Controller\Menu'
@@ -115,18 +115,11 @@ return array(
                 'uri' => 'javascript:;',
                 'pages' => array(
                     array(
-                        'label' => 'Cơ quan thuế',
-                        'route' => 'application',
-                        'action' => 'index',
-                        'resource' => 'Application\Controller\Index'
-                    )
-                    ,
-                    array(
                         'label' => 'Cán bộ thuế',
-                        'route' => 'quanlyuser',
-                        'controller' => 'menu',
+                        'route' => 'quanlycanbothue/default',
+                        'controller' => 'Canbothue',
                         'action' => 'index',
-                        'resource' => 'Quanlyuser\Controller\Menu'
+                        'resource' => 'Quanlycanbothue\Controller\Canbothue'
                     )
                     
                 )

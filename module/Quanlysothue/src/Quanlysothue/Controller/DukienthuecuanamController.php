@@ -15,7 +15,6 @@ use Quanlynguoinopthue\Models\nguoinopthueModel;
 
 class DukienthuecuanamController extends baseController
 {
-
     /**
      * Hiển thị danh sách dự kiến của năm theo kỳ thuế năm hiện tại.
      */
