@@ -87,18 +87,7 @@ class formDuKienTruyThu extends Form
             )
         ));
 
-        $this->add(array(
-            'name' => 'TrangThai',
-            'type' => 'Zend\Form\Element\Checkbox',
-            'attributes' => array(
-                'use_hidden_element' => false,
-                'checked_value' => '1',
-                'unchecked_value' => '0'
-            ),
-            'options' => array(
-                'label' => 'Trang thái'
-            )
-        ));
+
 
         $this->add(array(
             'name' => 'LyDo',

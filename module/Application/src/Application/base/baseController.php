@@ -29,54 +29,52 @@ class baseController extends AbstractActionController
         }
         return $this->em;
     }
-    
+
     /**
-     * 
+     *
      * @return user|null
-     *   
-     * */
+     *
+     *
+     */
     protected function getUser()
     {
-        //KIEM TRA XEM DA DANG NHAP CHUA
+        // KIEM TRA XEM DA DANG NHAP CHUA
         $authService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
         
         if ($authService->hasIdentity()) {
             /* @var $identity user */
-        
+            
             $identity = $authService->getIdentity();
-        
+            
             return $identity;
-            //return $this->redirect()->toRoute('quanlyuser',array('controller'=>'Login','action'=>'foo'));
+            // return $this->redirect()->toRoute('quanlyuser',array('controller'=>'Login','action'=>'foo'));
         }
         return null;
     }
 
     /**
-     * 
-     * @param Form $form  */
+     *
+     * @param Form $form            
+     */
     protected function getErrorMessengerForm($form)
     {
         $mss = "";
-        //var_dump($form->getElements());
-        foreach ($form->getElements() as $Element)
-        {
+        // var_dump($form->getElements());
+        foreach ($form->getElements() as $Element) {
             /* @var $value Element */
             
-            if(count($Element->getMessages() )>0 ){
-                $mss .= $Element->getName().":\n";
-                foreach ($Element->getMessages() as $mess)
-                {
-                
+            if (count($Element->getMessages()) > 0) {
+                $mss .= $Element->getName() . ":\n";
+                foreach ($Element->getMessages() as $mess) {
+                    
                     $mss .= "   + " . $mess . "\n";
-                
                 }
             }
-             
-           
         }
-       
+        
         return $mss;
     }
+
 
 }
 

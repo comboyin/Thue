@@ -11,6 +11,7 @@ use Application\Entity\chitietchungtu;
 use Application\Forms\UploadForm;
 use Quanlysothue\Excel\ImportExcelChungTu;
 use Application\Unlity\Unlity;
+use Quanlynguoinopthue\Models\nguoinopthueModel;
 
 class ChungtuController extends baseController
 {
@@ -102,6 +103,10 @@ class ChungtuController extends baseController
             $TieuMuc = $post->get('TieuMuc');
             $SoTien = $post->get('SoTien');
             $SoChungTu = $post->get('SoChungTu');
+            if($this->checkSoCT($SoChungTu, $kq)==false){
+                echo json_encode($kq->toArray());
+                return $this->response;
+            }
             $NgayHachToan = $post->get('NgayHachToan');
             
             $ChiTietCt = new chitietchungtu();
@@ -137,6 +142,12 @@ class ChungtuController extends baseController
             $post = $request->getPost();
             $SoChungTu = $post->get('SoChungTu');
             
+            if($this->checkSoCT($SoChungTu,$kq)==false){
+                echo json_encode($kq->toArray());
+                return $this->response;
+            }
+            
+            
             $chungtuModel = new chungtuModel($this->getEntityManager());
             $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $SoChungTu);
             
@@ -157,9 +168,46 @@ class ChungtuController extends baseController
         return $this->response;
     }
 
+    public function xoaCTChungTuAction()
+    {
+        $kq = new ketqua();
+        $SoChungTu = $this->getRequest()
+            ->getPost()
+            ->get("SoChungTu");
+        $KyThue = $this->getRequest()
+            ->getPost()
+            ->get("KyThue");
+        $TieuMuc = $this->getRequest()
+            ->getPost()
+            ->get("TieuMuc");
+        if($this->checkSoCT($SoChungTu, $kq)==false){
+            echo json_encode($kq->toArray());
+            return $this->response;
+        }
+        $MucLuc = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
+        $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $SoChungTu);
+        
+        $chitietchungtu = $this->getEntityManager()->find('Application\Entity\chitietchungtu', array(
+            'KyThue' => $KyThue,
+            'chungtu' => $ChungTu,
+            'muclucngansach' => $MucLuc
+        ));
+        
+        if ($chitietchungtu != null) {
+            $model = new chungtuModel($this->getEntityManager());
+            $kq = $model->remove($chitietchungtu);
+        } else {
+            $kq->setKq(false);
+            $kq->setMessenger('Không tìm thấy Chi Tiết Chứng Từ này !');
+        }
+        
+        echo json_encode($kq->toArray());
+        return $this->response;
+    }
+
     public function suaAction()
     {
-        //error_reporting(0);
+        // error_reporting(0);
         try {
             /* @var $request Request */
             /* @var $form Form */
@@ -172,17 +220,29 @@ class ChungtuController extends baseController
             
             // validation thanh cong
             if ($form->isValid()) {
-                /* @var $ChungTu chungtu */
-                $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu',$post->get('_SoChungTu'));
+                $MaSoThue = $post->get('MaSoThue');
+                $SoChungTu = $post->get('NgayChungTu');
+                if($this->checkMaSoThue($MaSoThue, $kq)==false){
+                    echo json_encode($kq->toArray());
+                    return $this->response;
+                }
                 
-                if ($ChungTu!=null) {
-                    
-                    
+                
+                if($this->checkSoCT($SoChungTu, $kq)==false){
+                    echo json_encode($kq->toArray());
+                    return $this->response;
+                }
+                
+                /* @var $ChungTu chungtu */
+                $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $post->get('_SoChungTu'));
+                
+                if ($ChungTu != null) {
                     
                     $chungtuModel = new chungtuModel($this->getEntityManager());
                     $ChungTu->setSoChungTu($post->get('SoChungTu'));
-                    $ChungTu->setNgayChungTu(Unlity::ConverDate('m-d-Y',   $post->get('NgayChungTu'), 'Y-m-d')  );
-                    $ChungTu->setNguoinopthue($this->getEntityManager()->find('Application\Entity\nguoinopthue', $post->get('MaSoThue')));  
+                    $ChungTu->setNgayChungTu(Unlity::ConverDate('m-d-Y', $post->get('NgayChungTu'), 'Y-m-d'));
+                    $ChungTu->setNguoinopthue($this->getEntityManager()
+                        ->find('Application\Entity\nguoinopthue', $post->get('MaSoThue')));
                     $kq = $chungtuModel->merge($ChungTu);
                 } else {
                     
@@ -193,7 +253,7 @@ class ChungtuController extends baseController
 
             // validation lỗi
             else {
-               
+                
                 $kq->setKq(false);
                 $kq->appentMessenger($this->getErrorMessengerForm($form));
             }
@@ -231,13 +291,20 @@ class ChungtuController extends baseController
             $NgayChungTu = $post->get('NgayChungTu');
             $SoChungTu = $post->get('SoChungTu');
             $MaSoThue = $post->get('MaSoThue');
-            $chungtu = new chungtu();
-            $chungtu->setSoChungTu($SoChungTu);
-            $chungtu->setNgayChungTu(Unlity::ConverDate('d-m-Y', $NgayChungTu, 'Y-m-d'));
-            $chungtu->setNguoinopthue($this->getEntityManager()
-                ->find('Application\Entity\nguoinopthue', $MaSoThue));
             
-            $kq = $chungtuModel->them($chungtu);
+            $kt = new nguoinopthueModel($this->getEntityManager());
+            if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
+                $chungtu = new chungtu();
+                $chungtu->setSoChungTu($SoChungTu);
+                $chungtu->setNgayChungTu(Unlity::ConverDate('d-m-Y', $NgayChungTu, 'Y-m-d'));
+                $chungtu->setNguoinopthue($this->getEntityManager()
+                    ->find('Application\Entity\nguoinopthue', $MaSoThue));
+                
+                $kq = $chungtuModel->them($chungtu);
+            } else {
+                $kq->setKq(false);
+                $kq->setMessenger("Mã số thuế $MaSoThue không thuộc quản lý của bạn !");
+            }
         } else { // validation lỗi
             $mss = $this->getErrorMessengerForm($form);
             $kq->setKq(false);
@@ -248,10 +315,10 @@ class ChungtuController extends baseController
         echo json_encode($kq->toArray());
         return $this->response;
     }
-    
+
     public function suaCTChungTuAction()
     {
-        //error_reporting(0);
+        // error_reporting(0);
         try {
             /* @var $request Request */
             /* @var $form Form */
@@ -259,36 +326,36 @@ class ChungtuController extends baseController
             $post = $request->getPost();
             $kq = new ketqua();
             $form = new FormCTChungTu();
-    
+            
             $form->setData($request->getPost());
-    
+            
             // validation thanh cong
             if ($form->isValid()) {
                 $_KyThue = $post->get('_KyThue');
                 $_TieuMuc = $post->get('_TieuMuc');
                 
-                
                 $KyThue = $post->get('KyThue');
-                $SoChungTu =$post->get('SoChungTu');
+                $SoChungTu = $post->get('SoChungTu');
+                if($this->checkSoCT($SoChungTu, $kq)==false){
+                    echo json_encode($kq->toArray());
+                    return $this->response;
+                }
                 $TieuMuc = $post->get('TieuMuc');
-                $NgayHachToan = Unlity::ConverDate('d-m-Y', $post->get('NgayHachToan'), 'Y-m-d') ;
+                $NgayHachToan = Unlity::ConverDate('d-m-Y', $post->get('NgayHachToan'), 'Y-m-d');
                 $SoTien = $post->get('SoTien');
                 $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $SoChungTu);
                 $MucLuc = $this->getEntityManager()->find('Application\Entity\muclucngansach', $_TieuMuc);
                 /* @var $CTChungTu chitietchungtu */
-                $CTChungTu = $this->getEntityManager()->find('Application\Entity\chitietchungtu',
-                                        array(
-                                            'chungtu' => $ChungTu,
-                                            'muclucngansach' => $MucLuc,
-                                            'KyThue' => $_KyThue
-                                        )
-                                
-                                        );
-    
-                if ($CTChungTu!=null) {
-    
-    
-    
+                $CTChungTu = $this->getEntityManager()->find('Application\Entity\chitietchungtu', array(
+                    'chungtu' => $ChungTu,
+                    'muclucngansach' => $MucLuc,
+                    'KyThue' => $_KyThue
+                ))
+
+                ;
+                
+                if ($CTChungTu != null) {
+                    
                     $chungtuModel = new chungtuModel($this->getEntityManager());
                     $CTChungTu->setMuclucngansach($MucLuc);
                     $CTChungTu->setChungtu($ChungTu);
@@ -298,22 +365,21 @@ class ChungtuController extends baseController
                     
                     $kq = $chungtuModel->merge($CTChungTu);
                 } else {
-    
+                    
                     $kq->setKq(false);
                     $kq->appentMessenger("Chi tiết chứng từ không tồn tại !");
                 }
-            }
-    
+            }             
+
             // validation lỗi
             else {
-                 
+                
                 $kq->setKq(false);
                 $kq->appentMessenger($this->getErrorMessengerForm($form));
             }
-    
+            
             // trả về json
             echo json_encode($kq->toArray());
-            
         } catch (\Exception $e) {
             $kq = new ketqua();
             $kq->setKq(false);
@@ -323,8 +389,6 @@ class ChungtuController extends baseController
         
         return $this->response;
     }
-    
-    
 
     /**
      * AjAx
@@ -343,6 +407,53 @@ class ChungtuController extends baseController
             'count' => $count
         ));
         return $this->response;
+    }
+
+    /**
+     * AJAX
+     * Trả về danh sách chứng từ giữa 2 ngày
+     */
+    public function danhSachChungTuGiuaNgayAction()
+    {
+        $start = $this->getRequest()
+            ->getQuery()
+            ->get('start');
+        $end = $this->getRequest()
+            ->getQuery()
+            ->get('end');
+        
+        $chugtuModel = new chungtuModel($this->getEntityManager());
+        
+        $danhsachchungtuArray = $chugtuModel->DanhSachChungTuGiuaNgay($start, $end, $this->getUser(), 'array');
+        echo json_encode($danhsachchungtuArray->toArray());
+        return $this->response;
+    }
+
+    private function checkMaSoThue($MaSoThue,&$kq)
+    {
+       
+        $ktnnt = new nguoinopthueModel($this->getEntityManager());
+        
+        if ($ktnnt->ktNNT($MaSoThue, $this->getUser()) == false) {
+            $kq->setKq(false);
+            $kq->setMessenger("Mã số thuế $MaSoThue không thuộc quyền quản lý của bạn !");
+            return false;
+        }
+        
+        return true;
+    }
+
+    private function checkSoCT($SoChungTu,&$kq)
+    {
+        
+        $ktSCT = new chungtuModel($this->getEntityManager());
+        
+        if ($ktSCT->KiemTraSoChungCuaUser($SoChungTu, $this->getUser()) == false) {
+            $kq->setKq(false);
+            $kq->setMessenger("Số chứng từ $SoChungTu không thuộc quyền quản lý của bạn !");
+            return false;
+        }
+        return true;
     }
 }
 

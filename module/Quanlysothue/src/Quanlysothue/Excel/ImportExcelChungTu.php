@@ -2,9 +2,6 @@
 namespace Quanlysothue\Excel;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Entity\dukientruythu;
-use Application\Entity\nguoinopthue;
-use Application\Entity\muclucngansach;
 use Doctrine\ORM\EntityManager;
 use Application\base\baseExcel;
 use Application\Unlity\Unlity;
@@ -22,19 +19,23 @@ class ImportExcelChungTu extends baseExcel
      * @param EntityManager $EntityManager            
      * @return string|boolean
      */
-    public function CheckFileImport($fileName, $EntityManager)
+    public function CheckFileImport($fileName, $EntityManager, $user)
     {
+        $kq = new ketqua();
         $boolErr = 0;
-        // Hộ kinh doanh không thuộc sự quản lý của cán bộ thuế đó
+        
         $messKeyExist = "Doanh số này đã được dự kiến !";
         $messMaSoThueNotExist = "Mã số thuế không tồn tại !";
         $messTieuMucNotExist = "Tiểu mục không tồn tại !";
-        $ColMaSoThue = 1;
-        $ColTenHKD = 2;
-        $ColTieuMuc = 3;
-        $ColDoanhSo = 4;
-        $ColTiLeTinhThue = 5;
-        $ColLyDo = 6;
+        $messNNTKhongThuocQuanLy = "Người nộp thuế này không thuộc quản lý của bạn hoặc đã nghĩ kinh doanh!";
+        $messKiemTraTieuMuc = "Dự kiến chỉ truy thu 1003 và 1701 !";
+        $_SoChungTu = 6;
+        $_NgayHachToan = 2;
+        $_NgayChungTu = 1;
+        $_MaSoThue = 3;
+        $_TieuMuc = 7;
+        $_SoTien = 8;
+        $_ColLast = 23;
         
         $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
         foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
@@ -42,80 +43,76 @@ class ImportExcelChungTu extends baseExcel
             $highestRow = $worksheet->getHighestRow(); // e.g. 10
             $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
             $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-            /*
-             * $nrColumns = ord($highestColumn) - 64;
-             * echo "<br>The worksheet ".$worksheetTitle." has ";
-             * echo $nrColumns . ' columns (A-' . $highestColumn . ') ';
-             * echo ' and ' . $highestRow . ' row.';
-             * echo '<br>Data: <table border="1"><tr>';
-             */
             
             $tempStr = $worksheet->getCellByColumnAndRow(0, 1)->getValue();
             $KyThue = trim(substr($tempStr, strripos($tempStr, '-') + 1));
-            
-            for ($row = 5; $row <= $highestRow; ++ $row) {
+            if ($highestRow >= 1) {
+                for ($row = 2; $row <= $highestRow; ++ $row) {
+                    if ($worksheet->getCellByColumnAndRow(0, $row)->getValue() != '') {
+                        // mm/dd/yy
                 
-                $arrayMessErro = array();
-                $MaSoThue = $worksheet->getCellByColumnAndRow($ColMaSoThue, $row)->getValue() . '';
-                $TieuMuc = $worksheet->getCellByColumnAndRow($ColTieuMuc, $row)->getValue() . '';
-                $DoanhSo = $worksheet->getCellByColumnAndRow($ColDoanhSo, $row)->getValue();
-                $TiLeTinhThue = $worksheet->getCellByColumnAndRow($ColTiLeTinhThue, $row)->getValue();
-                $SoTien = $DoanhSo * $TiLeTinhThue;
-                $TrangThai = 0;
-                $LyDo = $worksheet->getCellByColumnAndRow($ColLyDo, $row)->getValue();
+                        $SoChungTu = $worksheet->getCellByColumnAndRow($_SoChungTu, $row)->getValue() . '';
                 
-                // check tieumuc
-                $checkTieuMuc = $EntityManager->find('Application\Entity\muclucngansach', $TieuMuc);
-                if ($checkTieuMuc == null) {
-                    $arrayMessErro[] = $messTieuMucNotExist;
-                }
-                // check masothue
-                $checkMaSoThue = $EntityManager->find('Application\Entity\nguoinopthue', $MaSoThue);
-                if ($checkMaSoThue == null) {
-                    $arrayMessErro[] = $messMaSoThueNotExist;
-                }
-                // check key
-                if ($checkTieuMuc != null && $checkMaSoThue != null) {
-                    $checkKey = $EntityManager->find('Application\Entity\dukientruythu', array(
-                        'KyThue' => $KyThue,
-                        'nguoinopthue' => $checkMaSoThue,
-                        'muclucngansach' => $checkTieuMuc
-                    ));
-                    if ($checkKey != null) {
-                        $arrayMessErro[] = $messKeyExist;
-                    }
-                }
+                        // d-m-Y
+                        $NgayHachToan = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
                 
-                if (count($arrayMessErro) > 0) {
-                    $boolErr = 1;
-                    // fill color row
-                    $colFist = \PHPExcel_Cell::stringFromColumnIndex(0);
-                    $colLast = \PHPExcel_Cell::stringFromColumnIndex($ColLyDo);
-                    $strCellsFill = $colFist . $row . ':' . $colLast . $row;
-                    $this->cellColor($strCellsFill, 'F28A8C', $objPHPExcel);
-                    $LastCol = $ColLyDo + 1;
-                    foreach ($arrayMessErro as $messerr) {
+                        $NgayChungTu = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayChungTu, $row));
+                        $MaSoThue = $worksheet->getCellByColumnAndRow($_MaSoThue, $row)->getValue() . '';
+                        $KyThue = Unlity::ConverDate('Y-m-d', $NgayHachToan, 'm/Y');
+                        $TieuMuc = $worksheet->getCellByColumnAndRow($_TieuMuc, $row)->getValue() . '';
+                        $SoTien = $worksheet->getCellByColumnAndRow($_SoTien, $row)->getValue();
+                        $muclucngansach = $em->find('Application\Entity\muclucngansach', $TieuMuc);
                         
-                        // add values
-                        $worksheet->setCellValueByColumnAndRow($LastCol, $row, $messerr);
-                        $LastCol ++;
+                        
+                        
+                        //**************begin check********************//
+                        
+                        
+                        
+                        
+                        
+                        
+                        //**************end check********************//
+                        if (count($arrayMessErro) > 0) {
+                            $boolErr = 1;
+                            // fill color row
+                            $colFist = \PHPExcel_Cell::stringFromColumnIndex(0);
+                            $colLast = \PHPExcel_Cell::stringFromColumnIndex($ColLyDo);
+                            $strCellsFill = $colFist . $row . ':' . $colLast . $row;
+                            $this->cellColor($strCellsFill, 'F28A8C', $objPHPExcel);
+                            $LastCol = $ColCuoi;
+                            foreach ($arrayMessErro as $messerr) {
+                        
+                                // add values
+                                $worksheet->setCellValueByColumnAndRow($LastCol, $row, $messerr);
+                                $LastCol ++;
+                            }
+                        }
+                        
+                        
                     }
+                }
+                // Thônng báo import thành công
+                $kq->setKq(true);
+                if ($boolErr == 1) {
                     
                     // create file and save file excel
                     
                     $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
                     $fileName = './data/filetmp/' . 'error-' . (new \DateTime())->format("d-m-Y") . '-' . mt_rand() . '.xlsx';
-                    
                     $objWriter->save($fileName);
                     // return namefile
+                    $kq->setKq(false);
+                    $kq->setObj($fileName);
+                    $kq->setMessenger('File bạn sử dụng gặp một số vấn đề, một file với các đánh dấu lỗi đã được gởi lại, vui lòng kiểm tra và thử lại !');
                 }
+            } else {
+                $kq->setKq(false);
+                $kq->setMessenger('File không đúng định dạng !');
             }
         }
-        if ($boolErr == 1) {
-            return $fileName;
-        }
         
-        return false;
+        return $kq;
     }
 
     /**
@@ -128,7 +125,7 @@ class ImportExcelChungTu extends baseExcel
     public function PersitToDatabase($fileName, $em)
     {
         try {
-            $kq= new ketqua();
+            $kq = new ketqua();
             // begin transaction
             $em->getConnection()->beginTransaction();
             $_SoChungTu = 6;
@@ -151,11 +148,11 @@ class ImportExcelChungTu extends baseExcel
                         // mm/dd/yy
                         
                         $SoChungTu = $worksheet->getCellByColumnAndRow($_SoChungTu, $row)->getValue() . '';
-
-                        // d-m-Y
-                        $NgayHachToan =  Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
                         
-                        $NgayChungTu  =  Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayChungTu, $row));
+                        // d-m-Y
+                        $NgayHachToan = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
+                        var_dump($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
+                        $NgayChungTu = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayChungTu, $row));
                         $MaSoThue = $worksheet->getCellByColumnAndRow($_MaSoThue, $row)->getValue() . '';
                         $KyThue = Unlity::ConverDate('Y-m-d', $NgayHachToan, 'm/Y');
                         $TieuMuc = $worksheet->getCellByColumnAndRow($_TieuMuc, $row)->getValue() . '';
@@ -174,7 +171,7 @@ class ImportExcelChungTu extends baseExcel
                             $chungtuTemp->setNguoinopthue($em->find('Application\Entity\nguoinopthue', $MaSoThue));
                             
                             $em->persist($chungtuTemp);
-                            $chungtuTemp=$em->find('Application\Entity\chungtu', $SoChungTu);
+                            $chungtuTemp = $em->find('Application\Entity\chungtu', $SoChungTu);
                             $chitietchungtuTemp = new chitietchungtu();
                             $chitietchungtuTemp->setChungtu($chungtuTemp);
                             $chitietchungtuTemp->setNgayHachToan($NgayHachToan);
@@ -208,12 +205,10 @@ class ImportExcelChungTu extends baseExcel
             $em->flush();
             $em->getConnection()->commit();
             $kq->setKq(true);
-            
         } catch (\Exception $e) {
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
             $em->getConnection()->rollBack();
-            
         }
         unlink($fileName);
         return $kq;

@@ -34,10 +34,10 @@ var EditableTableChungTu = function () {
             	  end1 = $.datepicker.formatDate("yy/mm/dd", end._d);
             	  DialogTable.showPropressUnlimit();
             	  deleteAllRows();
-            	  $.get(baseUrl('application/Service/danhSachChungTuGiuaNgay'),{
+            	  $.get('danhSachChungTuGiuaNgay',{
             		  start:start1,
             		  end:end1
-            	  },function(json){
+            	  },function(json){	
             		  if(json.kq == true){
             			  
             			  data = json.obj;
@@ -380,74 +380,52 @@ var EditableTableChungTu = function () {
 			function Xoa(method, url, data, oTable, nRow) {
 				// xoa trong csdl
 
-				BootstrapDialog.confirm({
-					title : 'Cảnh báo',
-					message : 'Có thật sự chắc chắn với hành động này?',
-					type : BootstrapDialog.TYPE_WARNING, // <-- Default value
-					// is
-					// BootstrapDialog.TYPE_PRIMARY
-					closable : true, // <-- Default value is false
-					draggable : true, // <-- Default value is false
-					btnCancelLabel : 'No', // <-- Default value is
-					// 'Cancel',
-					btnOKLabel : 'Yes',
-					// dialog type
-					// will be used,
-					callback : function (result) {
-						// result will be true if button was click, while it
-						// will be false
-						// if users close the dialog directly.
-						if (result) {
+				
+					if (method == "get") {
+						$.get(url, data, function (json) {
 
-							if (method == "get") {
-								$.get(url, data, function (json) {
+							if (json.kq == false) {
 
-									if (json.kq == false) {
+								BootstrapDialog.confirm({
+									title : 'Thông báo',
+									message : json.messenger
+								});
+								return;
+							} else {
+								// xoa html
 
-										BootstrapDialog.confirm({
-											title : 'Thông báo',
-											message : json.messenger
-										});
-										return;
-									} else {
-										// xoa html
+								oTable.fnDeleteRow(nRow);
 
-										oTable.fnDeleteRow(nRow);
-
-										BootstrapDialog.confirm({
-											title : 'Thông báo',
-											message : json.messenger
-										});
-									}
-
-								}, "json");
-							} else if (method == "post") {
-								$.post(url, data, function (json) {
-
-									if (json.kq == false) {
-
-										BootstrapDialog.confirm({
-											title : 'Thông báo',
-											message : json.messenger
-										});
-										return;
-									} else {
-
-										oTable.fnDeleteRow(nRow);
-
-										BootstrapDialog.confirm({
-											title : 'Thông báo',
-											message : json.messenger
-										});
-									}
-
-								}, "json");
-
+								BootstrapDialog.confirm({
+									title : 'Thông báo',
+									message : json.messenger
+								});
 							}
 
-						} else {}
+						}, "json");
+					} else if (method == "post") {
+						$.post(url, data, function (json) {
+
+							if (json.kq == false) {
+
+								BootstrapDialog.confirm({
+									title : 'Thông báo',
+									message : json.messenger
+								});
+								return;
+							} else {
+
+								oTable.fnDeleteRow(nRow);
+
+								BootstrapDialog.confirm({
+									title : 'Thông báo',
+									message : json.messenger
+								});
+							}
+
+						}, "json");
+
 					}
-				});
 
 			}
 

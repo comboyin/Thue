@@ -67,7 +67,7 @@ class chungtu
     }
 
  /**
-     * @return the $nguoinopthue
+     * @return nguoinopthue
      */
     public function getNguoinopthue()
     {

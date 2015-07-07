@@ -25,11 +25,12 @@ class ImportExcelDuKienTruyThu extends baseExcel
     {
         $kq = new ketqua();
         $boolErr = 0;
-        // Hộ kinh doanh không thuộc sự quản lý của cán bộ thuế đó
+       
         $messKeyExist = "Doanh số này đã được dự kiến !";
         $messMaSoThueNotExist = "Mã số thuế không tồn tại !";
         $messTieuMucNotExist = "Tiểu mục không tồn tại !";
-        $messNNTKhongThuocQuanLy = "Người nộp thuế này không thuộc quản lý của bạn !";
+        $messNNTKhongThuocQuanLy = "Người nộp thuế này không thuộc quản lý của bạn hoặc đã nghĩ kinh doanh!";
+        $messKiemTraTieuMuc = "Dự kiến chỉ truy thu 1003 và 1701 !";
         $ColMaSoThue = 1;
         $ColTenHKD = 2;
         $ColTieuMuc = 3;
@@ -59,12 +60,18 @@ class ImportExcelDuKienTruyThu extends baseExcel
                     $TrangThai = 0;
                     $LyDo = $worksheet->getCellByColumnAndRow($ColLyDo, $row)->getValue();
                     
-                    // check tieumuc
-                    $checkTieuMuc = $EntityManager->find('Application\Entity\muclucngansach', $TieuMuc);
                     
+                    
+                    //**************begin check********************//
+                    // check tieumuc
+                    /* @var $checkTieuMuc muclucngansach */
+                    $checkTieuMuc = $EntityManager->find('Application\Entity\muclucngansach', $TieuMuc);
                     if ($checkTieuMuc == null) {
                         $arrayMessErro[] = $messTieuMucNotExist;
+                    }else if($checkTieuMuc->getTieuMuc() == '1003' || $checkTieuMuc->getTieuMuc() == '1701' ){
+                        $arrayMessErro[] = $messKiemTraTieuMuc;
                     }
+                    
                     // check masothue
                     $checkMaSoThue = $EntityManager->find('Application\Entity\nguoinopthue', $MaSoThue);
                     if ($checkMaSoThue == null) {
@@ -86,6 +93,10 @@ class ImportExcelDuKienTruyThu extends baseExcel
                             $arrayMessErro[] = $messKeyExist;
                         }
                     }
+                    
+                    
+                    //**************end check********************//
+                    
                     
                     if (count($arrayMessErro) > 0) {
                         $boolErr = 1;

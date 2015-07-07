@@ -79,7 +79,7 @@ class ServiceController extends baseController
         
         $chugtuModel = new chungtuModel($this->getEntityManager());
         
-        $danhsachchungtuArray = $chugtuModel->DanhSachChungTuGiuaNgay($start, $end);
+        $danhsachchungtuArray = $chugtuModel->DanhSachChungTuGiuaNgay($start, $end,'array');
         echo json_encode($danhsachchungtuArray->toArray());
         return $this->response;
     }

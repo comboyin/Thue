@@ -89,7 +89,7 @@ class DukientruythuController extends baseController
                     $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
                     $kq = $dukientruythuModel->them($dukientruythu);
                 } else {
-                    $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                    $mss = "Người nộp thuế này không thuộc quản lý của bạn hoặc đã nghĩ kinh doanh !";
                     $kq->setKq(false);
                     $kq->setMessenger($mss);
                 }
@@ -130,7 +130,7 @@ class DukientruythuController extends baseController
                     $kq->setKq(true);
                     $kq = $mo->remove($dukientruythu);
                 } else {
-                    $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                    $mss = "Người nộp thuế này không thuộc quản lý của bạn hoặc đã nghĩ kinh doanh !";
                     $kq->setKq(false);
                     $kq->setMessenger($mss);
                 }
@@ -196,7 +196,7 @@ class DukientruythuController extends baseController
                         
                         $kq = $dukientruythuModel->merge($dukientruythu);
                     } else {
-                        $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
+                        $mss = "Người nộp thuế này không thuộc quản lý của bạn hoặc đã nghĩ kinh doanh !";
                         $kq->setKq(false);
                         $kq->setMessenger($mss);
                     }
@@ -245,7 +245,7 @@ class DukientruythuController extends baseController
                         $model->remove($dukientruythu);
                         $dem ++;
                     } else {
-                        $mss = "Người nộp thuế có mã " . $MaSoThueData[$i] . " không thuộc quyền quản lý của bạn.";
+                        $mss = "Người nộp thuế có mã " . $MaSoThueData[$i] . " không thuộc quyền quản lý của bạn hoặc đã nghĩ kinh doanh!";
                         $kq->setKq(false);
                         $kq->setMessenger($mss);
                         $this->getEntityManager()
