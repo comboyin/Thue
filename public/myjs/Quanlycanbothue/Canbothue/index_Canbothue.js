@@ -78,10 +78,8 @@ var EditableTable = function () {
 			$('#editable-sample_new').click(function (e) {
 				e.preventDefault();
 				
-				//DialogTable.showPropress();
 				$("#DialogFormCBT").modal('show');
-				//data = {};
-				//getAndRedirect('persit',data);
+				
 				
 			});
 			

@@ -172,13 +172,14 @@ $form = $this->formCanBoThue;
             <!-- BEGIN FORM-->
               <form id="signupForm" action="post" class="form-horizontal cmxform">
             	<div class="modal-body"> 		
-
+                            <?php echo $this->formelement($form->get('HanhDong'))?>
                             
                             <!-- Chi nhap so, nho hon 65 ky tu -->
                             <div class="control-group">
                                 <label for="MaUser" class="control-label">Mã User</label>
                                 <div class="controls">
                                     <?php echo $this->formelement($form->get('MaUser'))?>
+                                    <span class="help-inline MaUser" style="display: none;"></span>
                                 </div> 
                             </div>
                             
@@ -201,7 +202,7 @@ $form = $this->formCanBoThue;
                                 <label for="Email" class="control-label">Email</label>
                                 <div class="controls">
                                     <?php echo $this->formelement($form->get('Email'))?>
-                                    
+                                    <span class="help-inline Email" style="display: none;"></span>
                                 </div>
                            </div>
                             
@@ -223,13 +224,13 @@ $form = $this->formCanBoThue;
                                 <label class="control-label">Trạng Thái</label>
                                 <div class="controls">
                                     <div id="text-toggle-button">
-                                        <input type="checkbox" checked="checked">
+                                        <input name="TrangThai" type="checkbox" checked="checked">
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="control-group">
-                                <label class="control-label">Đội Thuế</label> 
+                                <label class="control-label">Cơ Quan Thuế</label> 
                                 <div class="controls">
                                     <input type="text" class="span4" value="<?php echo $user->getCoquanthue()->getTenGoi();?>" disabled="disabled"/>
                                 </div>

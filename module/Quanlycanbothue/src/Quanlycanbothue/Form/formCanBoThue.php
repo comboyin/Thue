@@ -21,6 +21,15 @@ class formCanBoThue extends Form
         $this->setAttribute('method', 'post');
         
         $this->add(array(
+            'name' => 'HanhDong',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                "class" => "HanhDong",
+                "id" => "HanhDong",
+                "value" => "them"
+            )
+        ));
+        $this->add(array(
             'name' => 'MaUser',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
