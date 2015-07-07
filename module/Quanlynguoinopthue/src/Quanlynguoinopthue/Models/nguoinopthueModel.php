@@ -90,14 +90,20 @@ class nguoinopthueModel extends baseModel
         
         try {
             
+
+           
+            
             if ($user->getLoaiUser() == 4) {
                 
                 $DQL_HKD_NghiKD = $this->em->createQueryBuilder()
-                    ->select('nguoinopthue1')
-                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
-                    ->join('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis')
-                    ->where('thongtinngungnghis.DenNgay is null')
-                    ->getDQL();
+                ->select('nguoinopthue1')
+                ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
+                ->join('nguoinopthue1.usernnts', 'usernnts1')
+                ->join('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis')
+                ->where('usernnts1.user = ?1')
+                ->andWhere('thongtinngungnghis.DenNgay is null')
+                ->getDQL();
+                
                 
                 $qb->select(array(
                     'nguoinopthue'
@@ -110,18 +116,35 @@ class nguoinopthueModel extends baseModel
                     ->setParameter(1, $user);
             } else 
                 if ($user->getLoaiUser() == 3) {
+                    
+                    // Danh sách cán bộ viên của thuộc quản lý của đội trưởng
+                    $DQL_CanBoVien =  $this->em->createQueryBuilder()
+                    ->select("canbovien")
+                    ->from('Application\Entity\user', 'canbovien')
+                    ->where('canbovien.parentUser = ?1')
+                    ->getDQL();
+                    
+                    
+                    $DQL_HKD_NghiKD = $this->em->createQueryBuilder()
+                    ->select('nguoinopthue1')
+                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
+                    ->join('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis')
+                    ->join('nguoinopthue1.usernnts', 'usernnts1')
+                    ->join('usernnts1.user', 'user1')
+                    ->andWhere('user1.parentUser = ?1')
+                    ->andWhere('thongtinngungnghis.DenNgay is null')
+                    ->getDQL();
+                    
+                    
                     $qb->select(array(
                         'nguoinopthue'
                     ))
                         ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                         ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join('usernnts.user', 'user')
-                        ->where('usernnts.ThoiGianKetThuc is null')
-                        ->andwhere('user in (' . $this->em->createQueryBuilder()
-                        ->select("canbovien")
-                        ->from('Application\Entity\user', 'canbovien')
-                        ->where('canbovien.parentUser = ?1')
-                        ->getDQL() . ')')
+                        ->andWhere('user.parentUser = ?1')
+                        ->where("usernnts.ThoiGianKetThuc is null OR nguoinopthue in ($DQL_HKD_NghiKD)")
+                        ->andwhere("user in ($DQL_CanBoVien)")
                         ->setParameter(1, $user);
                 }
             if($type==$StringArray){
