@@ -12,7 +12,6 @@ use Zend\Form\Form;
 use Quanlysothue\Froms\UploadForm;
 use Quanlysothue\Excel\ImportExcelDuKienTruyThu;
 
-
 class DukientruythuController extends baseController
 {
 
@@ -37,11 +36,10 @@ class DukientruythuController extends baseController
          * return $this->response;
          */
         return array(
-            'formUp'=>$formUp,
+            'formUp' => $formUp,
             'dsDuKienTruyThu' => $dsDuKienTruyThu->getObj()
         );
     }
-    
 
     public function themAction()
     {
@@ -57,27 +55,25 @@ class DukientruythuController extends baseController
             $form = new formDuKienTruyThu();
             $form->setInputFilter($dukientruythu->getInputFilter());
             $form->setData($request->getPost());
-    
+            
             // validation thanh cong
             if ($form->isValid()) {
                 $post = $request->getPost();
                 $MaSoThue = $post->get('MaSoThue');
                 
                 $kt = new nguoinopthueModel($this->getEntityManager());
-                if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
-                {
+                if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
                     // them
                     $KyThue = $post->get('KyThue');
                     
                     $TieuMuc = $post->get('TieuMuc');
                     $DoanhSo = $post->get('DoanhSo');
                     
-                    
                     $TrangThai = 0;
                     $LyDo = $post->get('LyDo');
                     $TiLeTinhThue = $post->get('TiLeTinhThue');
                     
-                    $SoTien = $DoanhSo*$TiLeTinhThue;
+                    $SoTien = $DoanhSo * $TiLeTinhThue;
                     $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
                     $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
                     
@@ -92,12 +88,12 @@ class DukientruythuController extends baseController
                     
                     $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
                     $kq = $dukientruythuModel->them($dukientruythu);
-                } else { 
+                } else {
                     $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
                     $kq->setKq(false);
                     $kq->setMessenger($mss);
-                }        
-            }  else { // validation lỗi
+                }
+            } else { // validation lỗi
                 $mss = $this->getErrorMessengerForm($form);
                 $kq->setKq(false);
                 $kq->setMessenger($mss);
@@ -121,17 +117,16 @@ class DukientruythuController extends baseController
             $MaSoThue = $post->get('_MaSoThue');
             $KyThue = $post->get('_KyThue');
             $TieuMuc = $post->get('_TieuMuc');
-
+            
             // xoa trong csdl
             $mo = new dukientruythuModel($this->getEntityManager());
             /* @var $dukientruythu dukientruythu */
-            $dukientruythu = $mo->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj();    
-            //kt ton tai
+            $dukientruythu = $mo->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj();
+            // kt ton tai
             if ($dukientruythu != null && $dukientruythu->getTrangThai() == 0) {
                 // kiem tra masothue
                 $kt = new nguoinopthueModel($this->getEntityManager());
-                if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
-                {
+                if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
                     $kq->setKq(true);
                     $kq = $mo->remove($dukientruythu);
                 } else {
@@ -143,7 +138,6 @@ class DukientruythuController extends baseController
                 $kq->setKq(false);
                 $kq->setMessenger('Không tìm được dự kiến truy thu !');
             }
-            
         } catch (\Exception $e) {
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
@@ -173,12 +167,11 @@ class DukientruythuController extends baseController
                 $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
                 /* @var $dukientruythu dukientruythu */
                 $dukientruythu = $dukientruythuModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
-                ->getObj();
-                if ($dukientruythu != null  && $dukientruythu->getTrangThai() == 0) {
+                    ->getObj();
+                if ($dukientruythu != null && $dukientruythu->getTrangThai() == 0) {
                     $MaSoThue = $post->get('MaSoThue');
                     $kt = new nguoinopthueModel($this->getEntityManager());
-                    if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
-                    {
+                    if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
                         // sua
                         $KyThue = $post->get('_KyThue');
                         
@@ -202,16 +195,15 @@ class DukientruythuController extends baseController
                         $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
                         
                         $kq = $dukientruythuModel->merge($dukientruythu);
-                        
-                    } else { 
+                    } else {
                         $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
                         $kq->setKq(false);
                         $kq->setMessenger($mss);
-                    } 
+                    }
                 } else {
                     $kq->setKq(false);
                     $kq->setMessenger('Không tìm được dự kiến truy thu!');
-                }    
+                }
             } else {
                 $mss = $this->getErrorMessengerForm($form);
                 $kq->setKq(false);
@@ -233,8 +225,8 @@ class DukientruythuController extends baseController
         $kq = new ketqua();
         try {
             $this->getEntityManager()
-            ->getConnection()
-            ->beginTransaction();
+                ->getConnection()
+                ->beginTransaction();
             
             $post = $this->getRequest()->getPost();
             $KyThue = $post->get('_KyThue');
@@ -243,19 +235,17 @@ class DukientruythuController extends baseController
             $model = new dukientruythuModel($this->getEntityManager());
             $dem = 0;
             
-            
             for ($i = 0; $i < count($MaSoThueData); $i ++) {
                 
                 $dukientruythu = $model->findByID_($KyThue, $MaSoThueData[$i], $TieuMucData[$i])->getObj();
-                if ($dukientruythu != null  && $dukientruythu->getTrangThai() == 0) {
+                if ($dukientruythu != null && $dukientruythu->getTrangThai() == 0) {
                     // kiem tra nguoi nop thue co thuoc quyen quan ly cua cbt do khong ?
                     $kt = new nguoinopthueModel($this->getEntityManager());
-                    if ($kt->ktNNT($MaSoThueData[$i], $this->getUser()) == true) 
-                    {
+                    if ($kt->ktNNT($MaSoThueData[$i], $this->getUser()) == true) {
                         $model->remove($dukientruythu);
                         $dem ++;
                     } else {
-                        $mss = "Người nộp thuế có mã ".$MaSoThueData[$i]." không thuộc quyền quản lý của bạn.";
+                        $mss = "Người nộp thuế có mã " . $MaSoThueData[$i] . " không thuộc quyền quản lý của bạn.";
                         $kq->setKq(false);
                         $kq->setMessenger($mss);
                         $this->getEntityManager()
@@ -265,25 +255,23 @@ class DukientruythuController extends baseController
                         return $this->response;
                     }
                 } else {
-                    $mss = "Không tìm được dự kiến truy thu có mã ".$MaSoThueData[$i]." !";
+                    $mss = "Không tìm được dự kiến truy thu có mã " . $MaSoThueData[$i] . " !";
                     $kq->setKq(false);
                     $kq->setMessenger($mss);
                     $this->getEntityManager()
-                    ->getConnection()
-                    ->rollBack();
+                        ->getConnection()
+                        ->rollBack();
                     echo json_encode($kq->toArray());
                     return $this->response;
-                    
                 }
-
             }
             
             $kq->setKq(true);
             $kq->setMessenger("Đã xóa " . $dem . " mục");
             
             $this->getEntityManager()
-            ->getConnection()
-            ->commit();
+                ->getConnection()
+                ->commit();
         } catch (\Exception $e) {
             $this->getEntityManager()
                 ->getConnection()
@@ -325,16 +313,11 @@ class DukientruythuController extends baseController
         $request = $this->getRequest();
         $tempFile = null;
         if ($request->isPost()) {
-            $post = array_merge_recursive(
-                $request->getPost()->toArray(),
-                $request->getFiles()->toArray()
-            );
+            $post = array_merge_recursive($request->getPost()->toArray(), $request->getFiles()->toArray());
             
-            //var_dump($post);
+            // var_dump($post);
             
             $form->setData($post);
-            
-            
             
             if ($form->isValid()) {
                 $data = $form->getData();
@@ -343,38 +326,47 @@ class DukientruythuController extends baseController
                 
                 $ImportData = new ImportExcelDuKienTruyThu();
                 
+                // validation file
+                $fileNameErr = $ImportData->CheckFileImport($fileName, $this->getEntityManager(),$this->getUser());
                 
-                //validation file
-                $fileNameErr = $ImportData->CheckFileImport($fileName, $this->getEntityManager());
-                //nếu lỗi
-                if($fileNameErr!==false){
-                    echo json_encode(array(
-                        'sucess'=>false,
-                        'mess'=>'File bạn sử dụng gặp một số vấn đề, một file với các đánh dấu lỗi đã được gởi lại, vui lòng kiểm tra và thử lại !',
-                        'fileNameErr'=>$fileNameErr
-                    ));
-                    unlink ($fileName);
+                // nếu lỗi
+                if ($fileNameErr->getKq() == false) {
+                    
+                    // file sai ràng buộc database
+                    if ($fileNameErr->getObj() != null && file_exists($fileNameErr->getObj())) {
+                        echo json_encode(array(
+                            'sucess'=>false,
+                            'mess'=>$fileNameErr->getMessenger(),
+                            'fileNameErr'=>$fileNameErr->getObj()
+                        ));
+                    }
+                    else{
+                        // File sai dinh dang
+                        echo json_encode(array(
+                            'sucess'=>false,
+                            'mess'=>$fileNameErr->getMessenger()
+                        ));
+                    }
+                    
+                    unlink($fileName);
                     return $this->response;
-                }
-                else{
+                } else {
+                    
                     $aray = $ImportData->PersitToArrayCollection($fileName);
                     $model->PersitArrayTruyThu($aray);
-                    //xóa file
-                    unlink ($fileName);
+                    // xóa file
+                    unlink($fileName);
                     // Form is valid, save the form!
-                    //var_dump($data);
+                    // var_dump($data);
                     
                     echo json_encode(array(
-                        'sucess'=>true,
-                        'mess'=>'Import thành công vui lòng chọn kỳ thuế để kiểm tra !'
+                        'sucess' => true,
+                        'mess' => 'Import thành công vui lòng chọn kỳ thuế để kiểm tra !'
                     ));
                     return $this->response;
                 }
-                
             }
         }
-       return $this->response;
+        return $this->response;
     }
-    
-    
 }

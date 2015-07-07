@@ -194,7 +194,7 @@ class formThongTinNgungNghi extends Form
         //DenNgay
         $inputFilter->add($factory->createInput([
             'name' => 'DenNgay',
-            'required' => true,
+            'required' => false,
             'filters' => array(
                 array(
                     'name' => 'StripTags'

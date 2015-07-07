@@ -5,7 +5,6 @@ use Application\base\baseModel;
 use Application\Entity\user;
 use Application\Entity\ketqua;
 use Application\Entity\nguoinopthue;
-use Doctrine\DBAL\Types\BooleanType;
 use Application\Entity\NNTNganh;
 
 class nguoinopthueModel extends baseModel
@@ -68,19 +67,37 @@ class nguoinopthueModel extends baseModel
 
     /**
      * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý
-     *
-     * @param user $user            
+     * Bao gồm :
+             * + Người nộp thuế tạm ngừng kinh doanh
+             * + Người nộp thuế đang hoạt động
+             * + Người nộp thuế ngưng kinh doanh
+     * 
+     * $type: 
+     *          + array
+     *          + object
+     * @param user $user         
+     * @param string $type   
      * @return \Application\Entity\ketqua
      */
-    public function DanhSachByIdentity($user)
+    public function DanhSachByIdentity($user,$type)
     {
+        $StringArray = "array";
+        $StringObject = "object";
         // cbt
         $kq = new ketqua();
         $qb = $this->em->createQueryBuilder();
         $ma = $user->getMaUser();
         
         try {
+            
             if ($user->getLoaiUser() == 4) {
+                
+                $DQL_HKD_NghiKD = $this->em->createQueryBuilder()
+                    ->select('nguoinopthue1')
+                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
+                    ->join('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis')
+                    ->where('thongtinngungnghis.DenNgay is null')
+                    ->getDQL();
                 
                 $qb->select(array(
                     'nguoinopthue'
@@ -89,6 +106,7 @@ class nguoinopthueModel extends baseModel
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
                     ->where('user = ?1')
+                    ->andWhere("usernnts.ThoiGianKetThuc is null OR nguoinopthue in ($DQL_HKD_NghiKD)")
                     ->setParameter(1, $user);
             } else 
                 if ($user->getLoaiUser() == 3) {
@@ -98,15 +116,20 @@ class nguoinopthueModel extends baseModel
                         ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                         ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join('usernnts.user', 'user')
-                        ->where('user in (' . $this->em->createQueryBuilder()
+                        ->where('usernnts.ThoiGianKetThuc is null')
+                        ->andwhere('user in (' . $this->em->createQueryBuilder()
                         ->select("canbovien")
                         ->from('Application\Entity\user', 'canbovien')
                         ->where('canbovien.parentUser = ?1')
                         ->getDQL() . ')')
                         ->setParameter(1, $user);
                 }
+            if($type==$StringArray){
+                $obj = $qb->getQuery()->getArrayResult();
+            }else if($type==$StringObject){
+                $obj = $qb->getQuery()->getResult();
+            }
             
-            $obj = $qb->getQuery()->getResult();
             
             $kq->setObj($obj);
             $kq->setKq(true);
@@ -175,8 +198,7 @@ class nguoinopthueModel extends baseModel
             if ($user->getLoaiUser() == 4) {
                 
                 $qb->select('nguoinopthue')
-                    ->
-                from('Application\Entity\nguoinopthue', 'nguoinopthue')
+                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')
                     ->where('user = ?1')
@@ -234,26 +256,30 @@ class nguoinopthueModel extends baseModel
         }
         return false;
     }
+
     /**
      * Câp nhật ngành .
-     * sửa nntnganh cu 
-     * và thêm mới nntnganh mới 
-     * nếu xảy ra lỗi sẽ  rollback và đọc lại trong csdl cập nhật nguoinopthue
-     * @param NNTNganh $nntnganhOld
-     * @param NNTNganh $nntnganhNew
-     * @param nguoinopthue $nguoinopthue
-     * @return \Application\Entity\ketqua  */
-    public function capNhatNganh($nntnganhOld, $nntnganhNew,&$nguoinopthue)
+     *
+     * sửa nntnganh cu
+     * và thêm mới nntnganh mới
+     * nếu xảy ra lỗi sẽ rollback và đọc lại trong csdl cập nhật nguoinopthue
+     * 
+     * @param NNTNganh $nntnganhOld            
+     * @param NNTNganh $nntnganhNew            
+     * @param nguoinopthue $nguoinopthue            
+     * @return \Application\Entity\ketqua
+     */
+    public function capNhatNganh($nntnganhOld, $nntnganhNew, &$nguoinopthue)
     {
         $kq = new ketqua();
         try {
             
-            $this->em->getConnection()->beginTransaction();       
+            $this->em->getConnection()->beginTransaction();
             $this->em->merge($nntnganhOld);
-            $this->em->persist($nntnganhNew);           
+            $this->em->persist($nntnganhNew);
             
             $kq->setObj($nntnganhNew);
-
+            
             // appent messanger
             $kq->setKq(true);
             $kq->appentMessenger("Cập nhật ngành thành công !");
@@ -277,26 +303,20 @@ class nguoinopthueModel extends baseModel
             $kq->appentMessenger($e->getMessage());
             
             $this->em->getConnection()->rollBack();
-            
-            
-            
         }
         
         return $kq;
     }
-    
-    
-    public function capNhatCanBoQuanLy($UsernntCu, $UsernntNew,&$nguoinopthue)
+
+    public function capNhatCanBoQuanLy($UsernntCu, $UsernntNew, &$nguoinopthue)
     {
         $kq = new ketqua();
         try {
-    
+            
             $this->em->getConnection()->beginTransaction();
             $this->em->merge($UsernntCu);
             $this->em->persist($UsernntNew);
-    
             
-    
             // appent messanger
             $kq->setKq(true);
             $kq->appentMessenger("Cập nhật cán bộ thành công !");
@@ -304,19 +324,16 @@ class nguoinopthueModel extends baseModel
             $this->em->commit();
             $kq->setObj($UsernntNew);
         } catch (\Exception $e) {
-    
+            
             $nguoinopthue = $this->em->find('Application\Entity\nguoinopthue', $nguoinopthue->getMaSoThue());
-    
+            
             $kq->setKq(false);
             $kq->setMessenger('Thất bại trong việc cập nhật ngành !');
             $kq->appentMessenger($e->getMessage());
-    
+            
             $this->em->getConnection()->rollBack();
-    
-    
-    
         }
-    
+        
         return $kq;
     }
 }

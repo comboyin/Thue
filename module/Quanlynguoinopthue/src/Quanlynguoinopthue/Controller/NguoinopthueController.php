@@ -44,7 +44,7 @@ class NguoinopthueController extends baseController
         
         $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
         
-        $dsnguoinopthue = $nguoinopthueModel->DanhSachByIdentity($this->getUser())
+        $dsnguoinopthue = $nguoinopthueModel->DanhSachByIdentity($this->getUser(),'object')
             ->getObj();
         
         /*

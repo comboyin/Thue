@@ -138,7 +138,7 @@ class thongtinngungnghi
      */
     public function setDenNgay($DenNgay)
     {
-        $this->DenNgay = \DateTime::createFromFormat('Y-m-d', $DenNgay);
+        $this->DenNgay =$DenNgay==null?null: \DateTime::createFromFormat('Y-m-d', $DenNgay);
     }
 
  /**

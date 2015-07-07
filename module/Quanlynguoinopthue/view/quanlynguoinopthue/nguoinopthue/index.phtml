@@ -115,21 +115,21 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlyngu
 								<td><?php echo $nnt->getTenHKD()?></td>
 								<td><?php echo $nnt->getSoCMND();?></td>
 								<td><?php echo $nnt->getDiaChiCT();?></td>
-								<td><?php echo $nnt->getThongtinnnt()->getDiaChiKD()?></td>
+								<td><?php echo ($nnt->getThongtinnnt()==null) ? 'Hộ nghĩ kinh doanh':$nnt->getThongtinnnt()->getDiaChiKD()?></td>
 								<td><?php echo $nnt->getSoGPKD()?></td>
 								<td><?php echo $nnt->getThoiDiemBDKD()?></td>
 								
-								<td><?php echo $nnt->getNNTNganh()->getNganh()->getTenNganh()?></td>
+								<td><?php echo $nnt->getNNTNganh()==null?'Hộ nghĩ kinh doanh':$nnt->getNNTNganh()->getNganh()->getTenNganh()?></td>
 								
 								<td><?php echo $nnt->getNgheKD()?></td>
-								<td><?php echo $nnt->getUsernnt()->getUser()->getTenUser()?></td>	
-								<td>
+								<td><?php echo $nnt->getUsernnt()==null?'Hộ nghĩ kinh doanh':$nnt->getUsernnt()->getUser()->getTenUser()?></td>	
+								<td>  
 								    <?php 
 
 								    switch ($nnt->getTrangThai()) {
 								        // nghĩ
 								        case 0:
-								            echo '<button class="btn btn-danger"><i class="icon-ban"></i></button>';
+								            echo '<button class="btn btn-danger"><i class="icon-ban-circle"></i></button>';
 								            break;
 								            //dang hoạt động
 								        case 1:
@@ -137,7 +137,7 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlyngu
 								            break;
 								            //tạm ngừng
 								        case 2:
-								            echo '<button class="btn btn-primary"><i class="icon-stopwatch"></i></button>';
+								            echo '<button class="btn btn-warning"><i class="icon-pause"></i></button>';
 								            break;
 								        
 								    }

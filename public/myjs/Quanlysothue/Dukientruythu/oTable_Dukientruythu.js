@@ -48,13 +48,26 @@ var EditableTable = function () {
 					}
 			});*/
 			
+			
+			$("#file_mau").click(function(){
+				
+				$.fileDownload(baseUrl("application/Service/downloadFileNoDelete"), {
+					successCallback : function(url) {
+					},
+					failCallback : function(responseHtml, url) {
+					},
+					httpMethod : "GET",
+					data : 'filename='+'./data/MauImport/DuKienTruyThu.xlsx'
+				});
+			});
+			
 			$('#dpMonths').datepicker().on('changeDate', function (ev) {
 
 				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
 				
-				DialogTable.showPropress();
+				$("img.loading").css('display','inline');
 				
-				/*$("#progess_dpmonths").css('display', 'block');*/
+				
 
 				//post
 				$.get("dsDKTTJson", {KyThue : _KyThue},
@@ -80,12 +93,10 @@ var EditableTable = function () {
 								(data[i]['TrangThai']==0)?'<a class="Delete" href="">Delete</a>':''
 								
 								]);
+						
 					}
 
-					/*$("#progess_dpmonths").css(
-						'display',
-						'none');*/
-					DialogTable.hidePropress();
+					$("img.loading").css('display','none');
 				}, "json");
 
 			});
@@ -946,9 +957,8 @@ var EditableTable = function () {
 				  contentType: false,
 				  type: 'POST',
 				  success: function(json){
-					  
-				    if(json.sucess==false){
-				    	
+					  console.log( );
+				    if(json.sucess==false && typeof(json.fileNameErr) == 'string'){
 				    	$.fileDownload(baseUrl("application/Service/downloadFile"), {
 							successCallback : function(url) {
 							},

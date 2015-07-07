@@ -10,7 +10,7 @@ class ServiceController extends baseController
 
     /**
      * AJAX
-     * download file neu file ton tai
+     * download file neu file ton tai và xóa file vừa download
      */
     public function downloadFileAction()
     {
@@ -31,6 +31,34 @@ class ServiceController extends baseController
             // readfile($file);
             readfile($fileNameErr);
             unlink($fileNameErr);
+            exit();
+        }
+        $this->response;
+    }
+    
+    /**
+     * AJAX
+     * download file neu file ton tai
+     */
+    public function downloadFileNoDeleteAction()
+    {
+        $fileNameErr = $this->request->getQuery()->get('filename');
+    
+        if (file_exists($fileNameErr)) {
+    
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=' . $fileNameErr);
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($fileNameErr)); // $file));
+            ob_clean();
+            flush();
+            // readfile($file);
+            readfile($fileNameErr);
+            
             exit();
         }
         $this->response;
@@ -64,6 +92,22 @@ class ServiceController extends baseController
     {
         $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
         echo $nguoinopthueModel->dsNNTbyUser($this->getUser());
+        return $this->response;
+    }
+    
+    
+    /**
+     * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý
+     * Bao gồm : 
+     *          + Người nộp thuế tạm ngừng kinh doanh
+     *          + Người nộp thuế đang hoạt động
+     *          + Người nộp thuế ngưng kinh doanh
+     * AJAX
+     */
+    public function DanhSachByIdentityAction()
+    {
+        $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
+        echo json_encode($nguoinopthueModel->DanhSachByIdentity($this->getUser(),'array')->getObj());
         return $this->response;
     }
 
@@ -181,12 +225,12 @@ class ServiceController extends baseController
             ->select(array(
                 "user"
             ))
-            ->from("Application\Entity\user", "user")
+            ->from('Application\Entity\user', "user")
             ->where("user.coquanthue = ?1")
             ->andWhere("user not in(" . $this->getEntityManager()
                 ->createQueryBuilder()
                 ->select("user1")
-                ->from("Application\Entity\user", "user1")
+                ->from('Application\Entity\user', "user1")
                 ->where("user1 = ?3")
                 ->orWhere("user1.MaUser = ?4")
                 ->getDQL() . ")")

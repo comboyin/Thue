@@ -62,7 +62,7 @@ class ThongtinngungnghiController extends baseController
 
     public function suaAction()
     {
-        $kq=new ketqua();
+        $kq = new ketqua();
         $MaTTNgungNghi = $this->getRequest()
             ->getPost()
             ->get("MaTTNgungNghi");
@@ -72,9 +72,9 @@ class ThongtinngungnghiController extends baseController
         $TuNgay = Unlity::ConverDate('d-m-Y', $this->getRequest()
             ->getPost()
             ->get("TuNgay"), 'Y-m-d');
-        $DenNgay = Unlity::ConverDate('d-m-Y', $this->getRequest()
-            ->getPost()
-            ->get("DenNgay"), 'Y-m-d');
+        $DenNgaytem = $this->getRequest()->getPost()->get("DenNgay");
+        
+        $DenNgay = (strlen($DenNgaytem) ==0) ? $DenNgaytem : Unlity::ConverDate('d-m-Y', $DenNgaytem, 'Y-m-d');
         $LyDo = $this->getRequest()
             ->getPost()
             ->get("LyDo");
@@ -88,7 +88,7 @@ class ThongtinngungnghiController extends baseController
             ->getPost());
         if ($form->isValid()) {
             // kiem tra
-            if (strtotime($TuNgay) < strtotime($DenNgay)) {
+            if ((strlen($DenNgaytem) == 0)?true:strtotime($TuNgay) < strtotime($DenNgay)) {
                 if (strtotime($NgayNopDon) > strtotime($TuNgay)) {
                     
                     
@@ -101,7 +101,8 @@ class ThongtinngungnghiController extends baseController
                         $thongtinngungnghi->setNguoinopthue($this->getEntityManager()
                             ->find('Application\Entity\nguoinopthue', $MaSoThue));
                         $thongtinngungnghi->setTuNgay($TuNgay);
-                        $thongtinngungnghi->setDenNgay($DenNgay);
+                        
+                        $thongtinngungnghi->setDenNgay($DenNgay==""?null:$DenNgay);
                         $thongtinngungnghi->setNgayNopDon($NgayNopDon);
                         $thongtinngungnghi->setLyDo($LyDo);
                         $kq = $thongtinngungnghiModel->merge($thongtinngungnghi);
@@ -137,9 +138,9 @@ class ThongtinngungnghiController extends baseController
         $TuNgay = Unlity::ConverDate('d-m-Y', $this->getRequest()
             ->getPost()
             ->get("TuNgay"), 'Y-m-d');
-        $DenNgay = Unlity::ConverDate('d-m-Y', $this->getRequest()
-            ->getPost()
-            ->get("DenNgay"), 'Y-m-d');
+        $DenNgaytem = $this->getRequest()->getPost()->get("DenNgay");
+        
+        $DenNgay = (strlen($DenNgaytem) ==0) ? $DenNgaytem : Unlity::ConverDate('d-m-Y', $DenNgaytem, 'Y-m-d');
         $LyDo = $this->getRequest()
             ->getPost()
             ->get("LyDo");
@@ -153,8 +154,9 @@ class ThongtinngungnghiController extends baseController
             ->getPost());
         if ($form->isValid()) {
             // kiem tra
-            if (strtotime($TuNgay) < strtotime($DenNgay)) {
-                if (strtotime($NgayNopDon) > strtotime($TuNgay)) {
+            
+            if ((strlen($DenNgaytem) == 0)?true:strtotime($TuNgay) < strtotime($DenNgay)) {
+                if (strtotime($NgayNopDon) < strtotime($TuNgay)) {
                     
                     // Them vao CSDl
                     $thongtinngungnghiModel = new thongtinngungnghiModel($this->getEntityManager());
@@ -162,7 +164,7 @@ class ThongtinngungnghiController extends baseController
                     $thongtinngungnghi->setNguoinopthue($this->getEntityManager()
                         ->find('Application\Entity\nguoinopthue', $MaSoThue));
                     $thongtinngungnghi->setTuNgay($TuNgay);
-                    $thongtinngungnghi->setDenNgay($DenNgay);
+                    $thongtinngungnghi->setDenNgay($DenNgay==""?null:$DenNgay);
                     $thongtinngungnghi->setNgayNopDon($NgayNopDon);
                     $thongtinngungnghi->setLyDo($LyDo);
                     $thongtinngungnghi->setMaTTNgungNghi($thongtinngungnghiModel->createMaTTNgungNghi());

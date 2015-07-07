@@ -12,7 +12,7 @@ var EditableTableThongtinngungnghi = function () {
 			//*******************ONLY PAGE BEGIN************************//
 			
 			$("a.TimNNT").click(function(){
-				DialogTable.showFromUrl('get',baseUrl('application/Service/danhsachNNT'),{},function(){
+				DialogTable.showFromUrl('get',baseUrl('application/Service/DanhSachByIdentity'),{},function(){
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 					$("img.loading").css('display','inline');
 					if (checkboxs.length == 1) {
@@ -48,10 +48,18 @@ var EditableTableThongtinngungnghi = function () {
 		            			  data = json.obj;
 		            			  
 		            			  $.each(data,function(key,value){
+		            				  
+		            				 DenNgay = "";
+		            				 if(value.DenNgay == null){
+		            					 DenNgay = "Nghĩ kinh doanh";
+		            				 }
+		            				 else{
+		            					 DenNgay= $.datepicker.formatDate("dd-mm-yy",new Date(value.DenNgay.date));
+		            				 }
 		    			    		oTable.fnAddData([
 		    			    		             value.MaTTNgungNghi,     
 		    			    		             $.datepicker.formatDate("dd-mm-yy",new Date(value.TuNgay.date)),
-		    			    		         $.datepicker.formatDate("dd-mm-yy",new Date(value.DenNgay.date)),
+		    			    		             DenNgay,
 		    			    		         value.LyDo,
 		    			    		         $.datepicker.formatDate("dd-mm-yy",new Date(value.NgayNopDon.date)),
 		    				                 '<a class="edit" href="">Edit</a>', '<a class="Delete" href="">Delete</a>'
@@ -221,14 +229,9 @@ var EditableTableThongtinngungnghi = function () {
 				
 				
 				
-				
-				
 				jqTds[0].innerHTML = '<input style="width:100px;" name="TuNgay" type="text"  value="'
 					 + aData[1] + '">';
-				jqTds[1].innerHTML = '<input style="width:100px;" name="DenNgay" type="text"  value="'
-					 + aData[2] + '">';
-				
-				
+				jqTds[1].innerHTML = 'Nghĩ kinh doanh'?'<input style="width:100px;" class="active" name="DenNgay" type="text" value=""><button class="btn btn-green nghi">Nghĩ</button>':'<input style="width:100px;" class="active" name="DenNgay" type="text" value="'+aData[2]+'"><button class="btn btn-green nghi">Nghĩ</button>';
 				jqTds[2].innerHTML = '<textarea type="text" style="width:200px;" name="LyDo">'
 					 + aData[3] + '</textarea>';
 				jqTds[3].innerHTML = '<input style="width:80px;" name="NgayNopDon" type="text"  value="'
@@ -238,7 +241,8 @@ var EditableTableThongtinngungnghi = function () {
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
-
+				//$("input[name='DenNgay']").popover('destroy');
+				nghiKD();
 			}
 
 			function addRow(oTable, nRow) {
@@ -247,8 +251,8 @@ var EditableTableThongtinngungnghi = function () {
 				
 				jqTds[0].innerHTML = '<input style="width:100px;" name="TuNgay" type="text"  value="'
 					 + aData[1] + '">';
-				jqTds[1].innerHTML = '<input style="width:100px;" name="DenNgay" type="text"  value="'
-					 + aData[2] + '">';
+				jqTds[1].innerHTML = '<input style="width:100px;" class="active" name="DenNgay" type="text"  value="'
+					 + aData[2] + '"><button class="btn btn-green nghi">Nghĩ</button>';
 				jqTds[2].innerHTML = '<textarea type="text" style="width:200px;" name="LyDo">'
 					 + aData[3] + '</textarea>';
 				jqTds[3].innerHTML = '<input style="width:80px;" name="NgayNopDon" type="text"  value="'
@@ -257,7 +261,31 @@ var EditableTableThongtinngungnghi = function () {
 				jqTds[5].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
+				
+				nghiKD();
+				
 
+			}
+			
+			function nghiKD(){
+				$("button.nghi").bind('click');
+				
+				$("button.nghi").click(function(){
+					$flag = $("input[name='DenNgay']").attr('class');
+					if($flag=="active"){
+						$("input[name='DenNgay']").attr('disabled','disabled');
+						$("input[name='DenNgay']").attr('value','');
+						$("input[name='DenNgay']").attr('class','disabled');
+					}else{
+						
+						$("input[name='DenNgay']").removeAttr('disabled');
+						$("input[name='DenNgay']").attr('class','active');
+						
+					}
+					
+				});
+				
+				
 			}
 
 			function saveRow(oTable, nRow) {
@@ -268,7 +296,7 @@ var EditableTableThongtinngungnghi = function () {
 				// cansua
 				console.log(jqInputs);
 				oTable.fnUpdate(jqInputs[0].value, nRow, 1, false);
-				oTable.fnUpdate(jqInputs[1].value, nRow,2, false);
+				oTable.fnUpdate(jqInputs[1].value==''?'Nghĩ kinh doanh':jqInputs[1].value, nRow,2, false);
 				oTable.fnUpdate(jqTextareas[0].value, nRow, 3, false);
 				oTable.fnUpdate(jqInputs[2].value, nRow, 4, false);
 				
@@ -310,7 +338,7 @@ var EditableTableThongtinngungnghi = function () {
 					nEditing = nRow;
 				}
 				else{
-					DialogTable.showThongBao("Thông báo","Vui lòng tìm và chọn người nộp thuế trước khi thêm mới !");
+					DialogTable.showPropressUnlimit("Thông báo","Vui lòng tìm và chọn người nộp thuế trước khi thêm mới !");
 				}
 				
 			});
@@ -730,7 +758,7 @@ var EditableTableThongtinngungnghi = function () {
 					
 					var DenNgay= $("input[name='DenNgay']", nRow).val().trim();
 					var LyDo = $("textarea[name='LyDo']", nRow).val().trim();
-					var NgayNopDon = $("input[name='DenNgay']", nRow).val().trim();
+					var NgayNopDon = $("input[name='NgayNopDon']", nRow).val().trim();
 						
 					
 					
@@ -759,7 +787,7 @@ var EditableTableThongtinngungnghi = function () {
 					var TuNgay= $("input[name='TuNgay']", nRow).val().trim();
 					var DenNgay= $("input[name='DenNgay']", nRow).val().trim();
 					var LyDo = $("textarea[name='LyDo']", nRow).val().trim();
-					var NgayNopDon = $("input[name='DenNgay']", nRow).val().trim();
+					var NgayNopDon = $("input[name='NgayNopDon']", nRow).val().trim();
 					var MaTTNgungNghi = aData[0];
 					
 					

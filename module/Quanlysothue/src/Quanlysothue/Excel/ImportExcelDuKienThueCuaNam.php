@@ -36,11 +36,7 @@ class ImportExcelDuKienTruyThu extends baseExcel
             $highestRow         = $worksheet->getHighestRow(); // e.g. 10
             $highestColumn      = $worksheet->getHighestColumn(); // e.g 'F'
             $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-            /* $nrColumns = ord($highestColumn) - 64;
-             echo "<br>The worksheet ".$worksheetTitle." has ";
-             echo $nrColumns . ' columns (A-' . $highestColumn . ') ';
-             echo ' and ' . $highestRow . ' row.';
-            echo '<br>Data: <table border="1"><tr>'; */
+
         
             $tempStr = $worksheet->getCellByColumnAndRow(0, 1)->getValue();
             $KyThue =  trim(substr($tempStr,strripos($tempStr, '-')+1));
