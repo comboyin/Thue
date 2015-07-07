@@ -50,12 +50,12 @@ class ImportExcelChungTu extends baseExcel
                 for ($row = 2; $row <= $highestRow; ++ $row) {
                     if ($worksheet->getCellByColumnAndRow(0, $row)->getValue() != '') {
                         // mm/dd/yy
-                
+                        
                         $SoChungTu = $worksheet->getCellByColumnAndRow($_SoChungTu, $row)->getValue() . '';
-                
+                        
                         // d-m-Y
                         $NgayHachToan = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
-                
+                        
                         $NgayChungTu = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayChungTu, $row));
                         $MaSoThue = $worksheet->getCellByColumnAndRow($_MaSoThue, $row)->getValue() . '';
                         $KyThue = Unlity::ConverDate('Y-m-d', $NgayHachToan, 'm/Y');
@@ -63,16 +63,9 @@ class ImportExcelChungTu extends baseExcel
                         $SoTien = $worksheet->getCellByColumnAndRow($_SoTien, $row)->getValue();
                         $muclucngansach = $em->find('Application\Entity\muclucngansach', $TieuMuc);
                         
+                        // **************begin check********************//
                         
-                        
-                        //**************begin check********************//
-                        
-                        
-                        
-                        
-                        
-                        
-                        //**************end check********************//
+                        // **************end check********************//
                         if (count($arrayMessErro) > 0) {
                             $boolErr = 1;
                             // fill color row
@@ -82,14 +75,12 @@ class ImportExcelChungTu extends baseExcel
                             $this->cellColor($strCellsFill, 'F28A8C', $objPHPExcel);
                             $LastCol = $ColCuoi;
                             foreach ($arrayMessErro as $messerr) {
-                        
+                                
                                 // add values
                                 $worksheet->setCellValueByColumnAndRow($LastCol, $row, $messerr);
                                 $LastCol ++;
                             }
                         }
-                        
-                        
                     }
                 }
                 // Thônng báo import thành công
@@ -151,7 +142,7 @@ class ImportExcelChungTu extends baseExcel
                         
                         // d-m-Y
                         $NgayHachToan = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
-                        var_dump($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
+                        
                         $NgayChungTu = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayChungTu, $row));
                         $MaSoThue = $worksheet->getCellByColumnAndRow($_MaSoThue, $row)->getValue() . '';
                         $KyThue = Unlity::ConverDate('Y-m-d', $NgayHachToan, 'm/Y');
@@ -174,6 +165,7 @@ class ImportExcelChungTu extends baseExcel
                             $chungtuTemp = $em->find('Application\Entity\chungtu', $SoChungTu);
                             $chitietchungtuTemp = new chitietchungtu();
                             $chitietchungtuTemp->setChungtu($chungtuTemp);
+                            
                             $chitietchungtuTemp->setNgayHachToan($NgayHachToan);
                             $chitietchungtuTemp->setKyThue($KyThue);
                             $chitietchungtuTemp->setSoTien($SoTien);
@@ -186,15 +178,18 @@ class ImportExcelChungTu extends baseExcel
                             // ky thue
                             
                             $chitietchungtuTemp = $em->find('Application\Entity\chitietchungtu', array(
-                                
                                 'KyThue' => $KyThue,
                                 'muclucngansach' => $muclucngansach,
                                 'chungtu' => $chungtu
                             ));
-                            if ($chitietchungtuTemp != null) {
+                            if ($chitietchungtuTemp == null) {
+                                
                                 $chitietchungtuTemp = new chitietchungtu();
                                 $chitietchungtuTemp->setChungtu($chungtu);
+                                
+                                $chitietchungtuTemp->setNgayHachToan($NgayHachToan);
                                 $chitietchungtuTemp->setKyThue($KyThue);
+                                $chitietchungtuTemp->setSoTien($SoTien);
                                 $chitietchungtuTemp->setMuclucngansach($muclucngansach);
                                 $em->persist($chitietchungtuTemp);
                             }
