@@ -3,6 +3,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Quanlycanbothue\Controller\Index' => 'Quanlycanbothue\Controller\IndexController',
+            'Quanlycanbothue\Controller\Canbothue' => 'Quanlycanbothue\Controller\CanbothueController'
         ),
     ),
     'router' => array(
@@ -11,7 +12,7 @@ return array(
                 'type'    => 'Literal',
                 'options' => array(
                     // Change this to something specific to your module
-                    'route'    => '/index',
+                    'route'    => '/quanlycanbothue',
                     'defaults' => array(
                         // Change this value to reflect the namespace in which
                         // the controllers for your module are found
