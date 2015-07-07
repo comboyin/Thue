@@ -159,6 +159,34 @@ class canbothueModel extends baseModel
     }
     
     /**
+     * ajax
+     * @param string $ma
+     * @return ketqua
+     */
+    public function findByID_aj($ma)
+    {
+        try {
+            $kq = new ketqua();
+            $qb = $this->em->createQueryBuilder();
+    
+            $qb->select(array('canbothue'))
+            ->from('Application\Entity\user', 'canbothue')
+            ->where('canbothue.MaUser = ?1')
+            ->setParameter(1, $ma);
+    
+            $kq->setObj($qb->getQuery()
+                ->getArrayResult());
+            $kq->setKq(true);
+            return $kq->toArray();
+        } catch (\Exception $e) {
+            $kq = new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger($e->getMessage());
+            return $kq->toArray();
+        }
+    }
+    
+    /**
      *
      * @param string $email
      * @return ketqua
@@ -173,6 +201,37 @@ class canbothueModel extends baseModel
             ->from('Application\Entity\user', 'canbothue')
             ->where('canbothue.Email = ?1')
             ->setParameter(1, $email);
+    
+            $kq->setObj($qb->getQuery()
+                ->getSingleResult());
+            $kq->setKq(true);
+            return $kq;
+        } catch (\Exception $e) {
+            $kq = new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger($e->getMessage());
+            return $kq;
+        }
+    }
+    
+    /**
+     *
+     * @param string $email
+     * @param string $MaUser
+     * @return ketqua
+     */
+    public function findByEmail2_($email, $MaUser)
+    {
+        try {
+            $kq = new ketqua();
+            $qb = $this->em->createQueryBuilder();
+    
+            $qb->select(array('canbothue'))
+            ->from('Application\Entity\user', 'canbothue')
+            ->where('canbothue.Email = ?1')
+            ->andWhere('canbothue.MaUser not like ?2')
+            ->setParameter(1, $email)
+            ->setParameter(2, $MaUser);
     
             $kq->setObj($qb->getQuery()
                 ->getSingleResult());

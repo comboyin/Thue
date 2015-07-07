@@ -30,6 +30,14 @@ class formCanBoThue extends Form
             )
         ));
         $this->add(array(
+            'name' => 'MaUserHidden',
+            'type' => 'Zend\Form\Element\Hidden',
+            'attributes' => array(
+                "class" => "MaUserHidden",
+                "id" => "MaUserHidden"
+            )
+        ));
+        $this->add(array(
             'name' => 'MaUser',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
@@ -127,9 +135,9 @@ class formCanBoThue extends Form
         ]));
         
         //email
-        $email = new Input('email');
+/*         $email = new Input('email');
         $email->getValidatorChain()->attach(new Validator\EmailAddress());
-        $inputFilter->add($email);
+        $inputFilter->add($email); */
         
         
         $inputFilter->add($factory->createInput([

@@ -1,9 +1,6 @@
 var Script = function () {
 
-    $.validator.setDefaults({
-        submitHandler: function() { alert("submitted!"); }
-    });
-
+   
     $().ready(function() {
         // validate the comment form when it is submitted
         $("#commentForm").validate();
@@ -57,49 +54,84 @@ var Script = function () {
             }
         });
 
-        $("#MaUser").blur(function(){
-        	//ktMaUser
-        	MaUser =  $("#MaUser").val();
-        	$("span .MaUser").css("display","none");
-        	$.get("ktMaUser", { MaUser : MaUser}, function(json){
-        		
-        		if(json.ktMaUser == false)
+        $("#MaUser").keyup(function(){
+        	if($("#HanhDong").val()=="sua"){
+        		if($("#MaUser").val() != _MaCanBo)
     			{
-        			
-        			$("span.MaUser").css("display","inline");
-        			$("span.MaUser").css("color","red");
-        			$("span.MaUser").html('Mã user này đã tồn tại! Bạn không thể sử dụng mã này!');
+        			$("#MaUser").val(_MaCanBo);
     			}
-        		else if(json.ktMaUser == true){
-        			if(MaUser.length >= 9){
+        	}
+        });
+        $("#MaUser").blur(function(){
+        	_onsbm = true;
+        	if($("#HanhDong").val()=="them"){
+	        	//ktMaUser
+	        	MaUser =  $("#MaUser").val();
+	        	$("span .MaUser").css("display","none");
+	        	$.get("ktMaUser", { MaUser : MaUser}, function(json){
+	        		
+	        		if(json.ktMaUser == false)
+	    			{
+	        			
 	        			$("span.MaUser").css("display","inline");
-	        			$("span.MaUser").css("color","green");
-	        			$("span.MaUser").html('Bạn có thể sử dụng mã này!');
-        			}else {
-        				$("span.MaUser").html(' ');
-        			}
-        		}
-        	}, "json");
-        	
+	        			$("span.MaUser").css("color","red");
+	        			$("span.MaUser").html('Mã user này đã tồn tại! Bạn không thể sử dụng mã này!');
+	        			_onsbm = false;
+	    			}
+	        		else if(json.ktMaUser == true){
+	        			if(MaUser.length >= 9){
+		        			$("span.MaUser").css("display","inline");
+		        			$("span.MaUser").css("color","green");
+		        			$("span.MaUser").html('Bạn có thể sử dụng mã này!');
+	        			}else {
+	        				$("span.MaUser").html(' ');
+	        			}
+	        		}
+	        	}, "json");
+        	}
         });
         
         $("#Email").blur(function(){
-        	//ktMaUser
-        	Email =  $("#Email").val();
-        	$("span .Email").css("display","none");
-        	$.get("ktEmail", { Email : Email}, function(json){
-        		
-        		if(json.ktEmail == false)
-    			{
-        			$("span.Email").css("display","inline");
-        			$("span.Email").css("color","red");
-        			$("span.Email").html('Email này đã tồn tại!');
-    			}
-        		else
-        		{
-        			$("span.Email").html(' ');
-        		}
-        	}, "json");
+        	_onsbm = true;
+        	if($("#HanhDong").val()=="them"){
+	        	//ktMaUser
+	        	Email =  $("#Email").val();
+	        	$("span .Email").css("display","none");
+	        	$.get("ktEmail", { Email : Email}, function(json){
+	        		
+	        		if(json.ktEmail == false)
+	    			{
+	        			$("span.Email").css("display","inline");
+	        			$("span.Email").css("color","red");
+	        			$("span.Email").html('Email này đã tồn tại!');
+	        			_onsbm = false;
+	    			}
+	        		else
+	        		{
+	        			$("span.Email").html(' ');
+	        		}
+	        	}, "json");
+        	} else if($("#HanhDong").val()=="sua"){
+	        	//ktMaUser
+        		MaUser = $("#MaUser").val();
+	        	Email =  $("#Email").val();
+	        	$("span .Email").css("display","none");
+	        	$.get("ktEmail2", { Email : Email, MaUser : MaUser}, function(json){
+	        		
+	        		if(json.ktEmail == false)
+	    			{
+	        			$("span.Email").css("display","inline");
+	        			$("span.Email").css("color","red");
+	        			$("span.Email").html('Email này đã tồn tại!');
+	        			_onsbm = false;
+	    			}
+	        		else
+	        		{
+	        			$("span.Email").html(' ');
+	        		}
+	        	}, "json");
+
+        	}
         	
         });
         // propose username by combining first- and lastname

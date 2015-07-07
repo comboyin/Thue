@@ -34,6 +34,35 @@ $form = $this->formCanBoThue;
 		</div>
 	</div>
 
+	<!-- thong bao -->
+		<div class="row-fluid">
+        	<div class="span12">
+        	<?php /* @var $kq ketqua */?>
+        				<?php if(isset($kq)):?>
+        				    <?php if ($kq!=null):?>
+        				                  <?php if($kq->getKq()==true):?>
+                				        <div class="alert alert-block alert-success fade in">
+        					<button data-dismiss="alert" class="close" type="button">×</button>
+        					<h4 class="alert-heading">Success!</h4>
+        					<p><?php echo $kq->getMessenger();?>.</p>
+        				</div>
+        				<?php else:?>
+        				<div class="alert alert-block alert-error fade in">
+        					<button data-dismiss="alert" class="close" type="button">×</button>
+        					<h4 class="alert-heading">Error!</h4>
+        					<p><?php echo $kq->getMessenger();?>.</p>
+        				</div>
+        				     <?php endif;?>
+        
+        				<?php endif;?>
+        				    
+        				    
+        				    <?php endif;?>
+        				
+        				   
+	</div>
+</div>
+<!-- end thong bao -->
 	<!-- BEGIN EDITABLE TABLE widget-->
 	<div class="row-fluid">
 		<div class="span12">
@@ -170,10 +199,10 @@ $form = $this->formCanBoThue;
             	</div>
             	
             <!-- BEGIN FORM-->
-              <form id="signupForm" action="post" class="form-horizontal cmxform">
+              <form id="signupForm" action="" method="post" class="form-horizontal cmxform">
             	<div class="modal-body"> 		
                             <?php echo $this->formelement($form->get('HanhDong'))?>
-                            
+
                             <!-- Chi nhap so, nho hon 65 ky tu -->
                             <div class="control-group">
                                 <label for="MaUser" class="control-label">Mã User</label>
@@ -224,7 +253,7 @@ $form = $this->formCanBoThue;
                                 <label class="control-label">Trạng Thái</label>
                                 <div class="controls">
                                     <div id="text-toggle-button">
-                                        <input name="TrangThai" type="checkbox" checked="checked">
+                                        <input name="TrangThai" type="checkbox" checked="checked" value="1">
                                     </div>
                                 </div>
                             </div>

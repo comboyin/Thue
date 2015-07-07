@@ -1,10 +1,10 @@
 
-
-
+//key
+var _MaCanBo = "";
+var _onsbm = true;
 var EditableTable = function () {
 
-	//key
-	var _MaCanBo = "";
+
 
 	return {
 
@@ -22,6 +22,12 @@ var EditableTable = function () {
 		            enabled: "Hoạt Động",
 		            disabled: "Đình Chỉ"
 		        }
+		    });
+		    $("#signupForm").submit(function(e){
+		    	if(_onsbm == false)
+	    		{
+		    		e.preventDefault();
+	    		}
 		    });
 			//*******************ONLY PAGE END************************//
 
@@ -77,12 +83,52 @@ var EditableTable = function () {
 			var nEditing = null;
 			$('#editable-sample_new').click(function (e) {
 				e.preventDefault();
-				
+				$("#HanhDong").val("them");
+				$("#DialogFormCBT h3").html("Thêm Cán Bộ Thuế");
 				$("#DialogFormCBT").modal('show');
 				
+				//reset
+				$("#MaUser").val('');
+				$("#Email").val('');
+				$("#TenUser").val('');
+				$("span.MaUser").html(' ');
+				$("span.Email").html(' ');
+				_MaCanBo = "";
+				_onsbm = true;
 				
 			});
-			
+			$('#editable-sample a.edit').live('click',function (e) {
+				e.preventDefault();
+				$("#HanhDong").val("sua");
+				$("#DialogFormCBT h3").html("Sửa Thông Tin Cán Bộ Thuế");
+				$("#DialogFormCBT").modal('show');
+				
+				//reset
+				$("span.MaUser").html(' ');
+				$("span.Email").html(' ');
+				_onsbm = true;
+				
+				//load
+				var nRow = $(this).parents('tr')[0];
+				var aData = oTable.fnGetData(nRow);
+				
+
+				
+				_MaUser = aData[0].trim();
+				_MaCanBo = _MaUser;
+				
+				$.post("load", { _MaUser : _MaUser}, function(json){
+	        		if(json.kq == true)
+        			{
+	        			data = json.obj[0];
+	        			//console.log(data.MaUser);
+	        			
+	        			$("#MaUser").val(data.MaUser);
+	        			$("#TenUser").val(data.TenUser);
+	        			$("#Email").val(data.Email);
+        			}
+	        	}, "json");
+			});
 			
 /*			$('#editable-sample a.edit').live('click',function (e) {
 				e.preventDefault();
