@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * name="dukienmb",
  * indexes={
  * @ORM\Index(name="fk_dukienmb_nguoinopthue1_idx", columns={"MaSoThue"}),
- * @ORM\Index(name="fk_dukienmb_muclucngansach1_idx", columns={"Bac"})
+ * @ORM\Index(name="fk_dukienmb_muclucngansach1_idx", columns={"Bac"}),
+ * @ORM\Index(name="fk_dukienmb_user1_idx", columns={"MaUser"})
  * }
  * )
  */
@@ -23,7 +24,10 @@ class dukienmb
      */
     private $nguoinopthue;
     
-
+    /**
+     * @ORM\Column(type="integer",nullable=false)
+     */
+    private $DoanhSo;
 
     /**
      * @ORM\Id
@@ -53,6 +57,30 @@ class dukienmb
      * @ORM\Column(type="integer",length=1,nullable=false,options={"default":"0"})
      */
     private $TrangThai;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Entity\user", inversedBy="dukienmbs")
+     * @ORM\JoinColumn(name="MaUser", referencedColumnName="MaUser", nullable=false, onDelete="restrict")
+     */
+    private $user;
+    
+    
+ /**
+     * @return the $DoanhSo
+     */
+    public function getDoanhSo()
+    {
+        return $this->DoanhSo;
+    }
+
+ /**
+     * @param field_type $DoanhSo
+     */
+    public function setDoanhSo($DoanhSo)
+    {
+        $this->DoanhSo = $DoanhSo;
+    }
+
  /**
      * @return the $nguoinopthue
      */

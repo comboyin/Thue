@@ -13,7 +13,8 @@ use Zend\InputFilter\InputFilterInterface;
  * name="dukientruythu",
  * indexes={
  * @ORM\Index(name="fk_dukientruythu_nguoinopthue1_idx", columns={"MaSoThue"}),
- * @ORM\Index(name="fk_dukientruythu_muclucngansach1_idx", columns={"TieuMuc"})
+ * @ORM\Index(name="fk_dukientruythu_muclucngansach1_idx", columns={"TieuMuc"}),
+ * @ORM\Index(name="fk_dukientruythu_user1_idx", columns={"MaUser"})
  * }
  * )
  */
@@ -64,10 +65,33 @@ class dukientruythu implements InputFilterAwareInterface
      * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
      */
     private $nguoinopthue;
+    
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Entity\user", inversedBy="dukientruythus")
+     * @ORM\JoinColumn(name="MaUser", referencedColumnName="MaUser", nullable=false, onDelete="restrict")
+     */
+    private $user;
 
     private $inputFilter;
 
     /**
+     * @return user
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+ /**
+     * @param field_type $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+ /**
      *
      * @return the $KyThue
      */

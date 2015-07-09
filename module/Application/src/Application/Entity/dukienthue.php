@@ -13,7 +13,8 @@ use Zend\InputFilter\InputFilterInterface;
  * name="dukienthue",
  * indexes={
  * @ORM\Index(name="fk_dukienthue_nguoinopthue1_idx", columns={"MaSoThue"}),
- * @ORM\Index(name="fk_dukienthue_muclucngansach1_idx", columns={"TieuMuc"})
+ * @ORM\Index(name="fk_dukienthue_muclucngansach1_idx", columns={"TieuMuc"}),
+ * @ORM\Index(name="fk_dukienthue_user1_idx", columns={"MaUser"})
  * })
  */
 class dukienthue implements InputFilterAwareInterface
@@ -84,7 +85,11 @@ class dukienthue implements InputFilterAwareInterface
      */
     private $TrangThai;
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Entity\user", inversedBy="dukienthues")
+     * @ORM\JoinColumn(name="MaUser", referencedColumnName="MaUser", nullable=false, onDelete="restrict")
+     */
+    private $user;
     
     protected $inputFilter;
 

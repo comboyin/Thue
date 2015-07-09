@@ -11,6 +11,10 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 /* @var $dsDuKienTruyThu dukientruythu */
 /* @var $formUp UploadForm */
 $formUp = $this->formUp;
+use Application\Entity\user;
+/* @var $user user */
+$user = $this->identity();
+
 ?>
 
 
@@ -152,6 +156,7 @@ $formUp = $this->formUp;
 									<th>Số tiền (*)</th>
 									<th>Trang thái (*)</th>
 									<th>Lý do</th>
+									<th>Mã cán bộ</th>
     								<th>Sửa</th>
     								<th>Xóa</th>
 							</tr>
@@ -175,6 +180,7 @@ $formUp = $this->formUp;
             								<td><?php echo $truythu->getSoTien()?></td>
             								<td><?php echo $truythu->getTrangThai()?></td>
             								<td><?php echo $truythu->getLyDo()?></td>
+            								<td><?php echo $truythu->getUser()->getMaUser()?></td>
             								<?php if($truythu->getTrangThai()==0):?>	
             								<td><a class="edit" href="">Edit</a></td>
             								<td><a class="Delete" href="">Delete</a></td>
@@ -194,6 +200,7 @@ $formUp = $this->formUp;
   
 							</tbody>
 					</table>
+					<span class="MaCanBo"><?php echo $user->getMaUser()?></span>
 						
 						
 					</div>

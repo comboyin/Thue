@@ -21,7 +21,10 @@ class thuemonbai
     private $Nam;
 
 
-
+    /**
+     * @ORM\Column(type="integer",nullable=false)
+     */
+    private $DoanhSo;
     /**
      * @ORM\Column(type="integer",nullable=false, options={"default":"0"})
      */

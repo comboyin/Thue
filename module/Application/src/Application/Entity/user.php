@@ -66,6 +66,19 @@ class user implements InputFilterAwareInterface
      * @ORM\Column(type="integer",nullable=false, options={"default":"1"})
      */
     private $TrangThai;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\dukientruythu", mappedBy="user")
+     */
+    private $dukientruythus;
+    /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\dukienmb", mappedBy="user")
+     */
+    private $dukienmbs;
+    /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\dukienthue", mappedBy="user")
+     */
+    private $dukienthues;
 
     /**
      * @ORM\OneToMany(targetEntity="Application\Entity\buttoannothue", mappedBy="user")

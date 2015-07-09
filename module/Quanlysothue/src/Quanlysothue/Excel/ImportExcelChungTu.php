@@ -73,7 +73,9 @@ class ImportExcelChungTu extends baseExcel
                             $colLast = \PHPExcel_Cell::stringFromColumnIndex($ColLyDo);
                             $strCellsFill = $colFist . $row . ':' . $colLast . $row;
                             $this->cellColor($strCellsFill, 'F28A8C', $objPHPExcel);
+                            
                             $LastCol = $ColCuoi;
+                            
                             foreach ($arrayMessErro as $messerr) {
                                 
                                 // add values

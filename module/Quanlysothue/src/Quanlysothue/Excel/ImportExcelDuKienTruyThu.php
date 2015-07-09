@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManager;
 use Application\base\baseExcel;
 use Application\Entity\ketqua;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
+use Application\Entity\user;
 
 class ImportExcelDuKienTruyThu extends baseExcel
 {
@@ -68,7 +69,8 @@ class ImportExcelDuKienTruyThu extends baseExcel
                     $checkTieuMuc = $EntityManager->find('Application\Entity\muclucngansach', $TieuMuc);
                     if ($checkTieuMuc == null) {
                         $arrayMessErro[] = $messTieuMucNotExist;
-                    }else if($checkTieuMuc->getTieuMuc() == '1003' || $checkTieuMuc->getTieuMuc() == '1701' ){
+                    }else if($checkTieuMuc->getTieuMuc() != "1003" && $checkTieuMuc->getTieuMuc() != "1701" ){
+                        
                         $arrayMessErro[] = $messKiemTraTieuMuc;
                     }
                     
@@ -140,10 +142,11 @@ class ImportExcelDuKienTruyThu extends baseExcel
     /**
      * Đọc dữ liệu từ file excel và thêm vào arrayconllection
      *
-     * @param string $fileName            
+     * @param string $fileName   
+     * @param user $user         
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function PersitToArrayCollection($fileName)
+    public function PersitToArrayCollection($fileName,$user)
     {
         $arrayCollection = new ArrayCollection();
         $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
@@ -191,6 +194,7 @@ class ImportExcelDuKienTruyThu extends baseExcel
                 
                 // set kythue
                 $dukientruythuTemp->setKyThue($KyThue);
+                $dukientruythuTemp->setUser($user);
                 
                 $dukientruythuTemp->setDoanhSo($DoanhSo);
                 $dukientruythuTemp->setTiLeTinhThue($TiLeTinhThue);

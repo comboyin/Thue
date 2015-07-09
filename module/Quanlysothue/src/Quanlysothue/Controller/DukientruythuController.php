@@ -85,6 +85,7 @@ class DukientruythuController extends baseController
                     $dukientruythu->setTrangThai($TrangThai);
                     $dukientruythu->setLyDo($LyDo);
                     $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
+                    $dukientruythu->setUser($this->getUser());
                     
                     $dukientruythuModel = new dukientruythuModel($this->getEntityManager());
                     $kq = $dukientruythuModel->them($dukientruythu);
@@ -193,6 +194,7 @@ class DukientruythuController extends baseController
                         $dukientruythu->setTrangThai($TrangThai);
                         $dukientruythu->setLyDo($LyDo);
                         $dukientruythu->setTiLeTinhThue($TiLeTinhThue);
+                        $dukientruythu->setUser($this->getUser());
                         
                         $kq = $dukientruythuModel->merge($dukientruythu);
                     } else {
@@ -352,7 +354,7 @@ class DukientruythuController extends baseController
                     return $this->response;
                 } else {
                     
-                    $aray = $ImportData->PersitToArrayCollection($fileName);
+                    $aray = $ImportData->PersitToArrayCollection($fileName,$this->getUser());
                     $model->PersitArrayTruyThu($aray);
                     // xóa file
                     unlink($fileName);

@@ -54,10 +54,7 @@ class thue
      */
     private $DoanhThuChiuThue;
     
-    /**
-     * @ORM\Column(type="integer",nullable=false)
-     */
-    private $DoanhSo;
+
 
     /**
      * @ORM\Column(type="float",nullable=false, options={"default":"1"})

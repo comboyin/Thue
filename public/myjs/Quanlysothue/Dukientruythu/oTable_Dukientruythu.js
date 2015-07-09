@@ -75,7 +75,7 @@ var EditableTable = function () {
 
 					deleteAllRows();
 					data = json.obj;
-
+					var MaCanBo = $("span.MaCanBo").html();
 					for (i = 0; i < data.length; i++) {
 						oTable
 						.fnAddData([
@@ -88,7 +88,7 @@ var EditableTable = function () {
 								data[i]['SoTien'],
 								data[i]['TrangThai'],
 								data[i]['LyDo'],
-								
+								MaCanBo,
 								(data[i]['TrangThai']==0)?'<a class="edit" href="">Edit</a>':'',
 								(data[i]['TrangThai']==0)?'<a class="Delete" href="">Delete</a>':''
 								
@@ -140,7 +140,7 @@ var EditableTable = function () {
 					
 					
 					
-					"iDisplayLength" : 5,
+					"iDisplayLength" : -1,
 					"sDom" : "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"sPaginationType" : "bootstrap",
 					"oLanguage" : {
@@ -221,9 +221,11 @@ var EditableTable = function () {
 					 + aData[7] + ' "disabled>';
 				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
 					 + aData[8] + '">';
+				jqTds[9].innerHTML = '<input style="width:120px;" name="MaCanBo" type="text" value="'
+					 + aData[9] + '"disabled>';
 
-				jqTds[9].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[10].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				jqTds[10].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[11].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
@@ -233,6 +235,7 @@ var EditableTable = function () {
 			function addRow(oTable, nRow) {
 				var aData = oTable.fnGetData(nRow);
 				var jqTds = $('>td', nRow);
+				var MaCanBo = $("span.MaCanBo").html();
 				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
 				// cansua
 				jqTds[1].innerHTML = '<input style="width:80px;" name="masothue" type="text"  value="'
@@ -257,9 +260,10 @@ var EditableTable = function () {
 					 + aData[7] + ' "disabled>';
 				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
 					 + aData[8] + '">';
-
-				jqTds[9].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[10].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				jqTds[9].innerHTML = '<input style="width:120px;" name="MaCanBo" type="text" value="'
+					 + MaCanBo + '"disabled>';
+				jqTds[10].innerHTML = '<a class="edit" href="">Save new</a>';
+				jqTds[11].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
 
@@ -280,11 +284,12 @@ var EditableTable = function () {
 				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
 				oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
 				oTable.fnUpdate(jqInputs[8].value, nRow, 8, false);
+				oTable.fnUpdate(jqInputs[9].value, nRow, 9, false);
 
-				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 9,
+				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 10,
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
-					10, false);
+					11, false);
 				oTable.fnDraw();
 			}
 			
@@ -309,6 +314,7 @@ var EditableTable = function () {
 							0,
 							0,
 							0,
+							'',
 							'',
 							'<a class="edit" href="">Edit</a>',
 							'<a class="cancel" data-mode="new" href="">Cancel</a>'
