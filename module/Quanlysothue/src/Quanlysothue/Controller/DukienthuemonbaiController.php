@@ -8,7 +8,7 @@ use Application\Entity\ketqua;
 use Zend\Http\Request;
 use Zend\Form\Form;
 use Quanlysothue\Froms\UploadForm;
-
+use Quanlysothue\Excel\ImportExcelDuKienThueCuaNam;
 use Application\Entity\dukienmb;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Entity\muclucngansach;
@@ -63,6 +63,7 @@ class DukienthuemonbaiController extends baseController
                     $KyThue = $post->get('KyThue');
                     $TieuMuc = $post->get('TieuMuc');
                     $NgayPhaiNop = $post->get('NgayPhaiNop');
+                    $DoanhSo = $post->get('DoanhSo');
                     
                     /* @var $nguoinopthue nguoinopthue */
                     /* @var $muclucngansach muclucngansach */
@@ -88,9 +89,11 @@ class DukienthuemonbaiController extends baseController
                     $dukienthuemb->setNam($KyThue);
                     $dukienthuemb->setNguoinopthue($nguoinopthue);
                     $dukienthuemb->setMuclucngansach($muclucngansach);
+                    $dukienthuemb->setDoanhSo($DoanhSo);
                     $dukienthuemb->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $NgayPhaiNop, 'Y-m-d'));
                     $dukienthuemb->setSoTien($SoTien);
                     $dukienthuemb->setTrangThai(0);
+                    $dukienthuemb->setUser($this->getUser());
                     
                     $kq = $model->them($dukienthuemb);
                 } else {
@@ -180,6 +183,7 @@ class DukienthuemonbaiController extends baseController
                         $KyThue = $post->get('_KyThue');
                         $TieuMuc = $post->get('TieuMuc');
                         $NgayPhaiNop = $post->get('NgayPhaiNop');
+                        $DoanhSo = $post->get('DoanhSo');
                         
                         /* @var $nguoinopthue nguoinopthue */
                         /* @var $muclucngansach muclucngansach */
@@ -205,9 +209,11 @@ class DukienthuemonbaiController extends baseController
                         $dukienthuemb->setNam($KyThue);
                         $dukienthuemb->setNguoinopthue($nguoinopthue);
                         $dukienthuemb->setMuclucngansach($muclucngansach);
+                        $dukienthuemb->setDoanhSo($DoanhSo);
                         $dukienthuemb->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $NgayPhaiNop, 'Y-m-d'));
                         $dukienthuemb->setSoTien($SoTien);
                         $dukienthuemb->setTrangThai(0);
+                        $dukienthuemb->setUser($this->getUser());
                         
                         $kq = $model->merge($dukienthuemb);
                     } else {
