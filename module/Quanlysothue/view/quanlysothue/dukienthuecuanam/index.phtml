@@ -131,6 +131,7 @@ $formUp = $this->formUp;
 									<th>Sản lượng</th>
 									<th>Giá tính thuế</th>
 									<th>Số tiền (*)</th>
+									<th>Trang thái</th>
 									
 									
     								<th>Sửa</th>
@@ -159,7 +160,13 @@ $formUp = $this->formUp;
 								<td><?php echo $thue->getSanLuong()?></td>
 								<td><?php echo $thue->getGiaTinhThue()?></td>
 								<td><?php echo $thue->getSoTien()?></td>
-								
+								<td>
+            								<?php if($thue->getTrangThai()==0):?>	
+            								<span style="color:red;">Chờ duyệt</span>
+            								<?php else:?>
+            								<span style="color:green;">Đã duyệt</span>
+            								<?php endif;?>
+            					</td>
 									
 								<td><a class="edit" href="">Edit</a></td>
 								<td><a class="Delete" href="">Delete</a></td>

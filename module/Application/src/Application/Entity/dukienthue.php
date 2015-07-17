@@ -95,6 +95,22 @@ class dukienthue implements InputFilterAwareInterface
 
 
     /**
+     * @return the $user
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+ /**
+     * @param field_type $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+ /**
      * @return the $nguoinopthue
      */
     public function getNguoinopthue()

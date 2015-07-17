@@ -16,6 +16,35 @@ return array(
                 'route' => 'home'
             ),
             array(
+                'label' => 'Quản lý dự kiến thuế',
+                'uri' => 'javascript:;',
+                'pages' => array(
+                    array(
+                        'label' => 'Dự kiến truy thu',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Dukientruythu',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Dukientruythu'
+                    ),
+                    array(
+                        'label' => 'Dự kiến thuế của năm',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Dukienthuecuanam',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
+                    )
+                    ,
+                    array(
+                        'label' => 'Dự kiến thuế môn bài',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Dukienthuemonbai',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Dukienthuemonbai'
+                    )                    
+                )
+              )
+            ,
+            array(
                 'label' => 'Quản lý sổ thuế',
                 'uri' => 'javascript:;',
                 'pages' => array(
@@ -42,35 +71,7 @@ return array(
                         'action' => 'index',
                         'resource' => 'Application\Controller\Index'
                     ),
-                    array(
-                        'label' => 'Dự kiến truy thu',
-                        'route' => 'quanlysothue/default',
-                        'controller' => 'Dukientruythu',
-                        'action' => 'index',
-                        'resource' => 'Quanlysothue\Controller\Dukientruythu'
-                    ),
-                    array(
-                        'label' => 'Dự kiến thuế của năm',
-                        'route' => 'quanlysothue/default',
-                        'controller' => 'Dukienthuecuanam',
-                        'action' => 'index',
-                        'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
-                    )
-                    ,
-/*                     array(
-                        'label' => 'Dự kiến thuế của tháng',
-                        'route' => 'quanlysothue/default',
-                        'controller' => 'Dukienthuecuanam',
-                        'action' => 'index',
-                        //'resource' => 'Quanlysothue\Controller\Dukienthuecuanam'
-                    ) ,*/
-                    array(
-                        'label' => 'Dự kiến thuế môn bài',
-                        'route' => 'quanlysothue/default',
-                        'controller' => 'Dukienthuemonbai',
-                        'action' => 'index',
-                        'resource' => 'Quanlysothue\Controller\Dukienthuemonbai'
-                    ), 
+                    
                     array(
                         'label' => 'Quản lý chứng từ',
                         'route' => 'quanlysothue/default',

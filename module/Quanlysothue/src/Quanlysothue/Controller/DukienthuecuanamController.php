@@ -8,7 +8,6 @@ use Application\Entity\ketqua;
 use Zend\Http\Request;
 use Zend\Form\Form;
 use Quanlysothue\Froms\UploadForm;
-use Quanlysothue\Excel\ImportExcelDuKienThueCuaNam;
 use Application\Models\nganhModel;
 use Application\Entity\dukienthue;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
@@ -116,7 +115,7 @@ class DukienthuecuanamController extends baseController
                     $dukienthuenam->setSoTien($SoTien);
                     $dukienthuenam->setNgayPhaiNop(null);
                     $dukienthuenam->setTrangThai(0);
-                    
+                    $dukienthuenam->setUser($this->getUser());
                     $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
                     $kq = $dukienthuenamModel->them($dukienthuenam);
                 } else {
@@ -263,7 +262,7 @@ class DukienthuecuanamController extends baseController
                         $dukienthuenam->setSoTien($SoTien);
                         $dukienthuenam->setNgayPhaiNop(null);
                         $dukienthuenam->setTrangThai(0);
-                        
+                        $dukienthuenam->setUser($this->getUser());
                         $kq = $dukienthuenamModel->merge($dukienthuenam);
                     } else {
                         $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn hoặc đã nghĩ bỏ kinh doanh không thể lập dự kiến thuế.";
