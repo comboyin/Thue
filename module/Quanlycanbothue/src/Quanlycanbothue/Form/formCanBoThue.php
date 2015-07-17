@@ -29,14 +29,7 @@ class formCanBoThue extends Form
                 "value" => "them"
             )
         ));
-        $this->add(array(
-            'name' => 'MaUserHidden',
-            'type' => 'Zend\Form\Element\Hidden',
-            'attributes' => array(
-                "class" => "MaUserHidden",
-                "id" => "MaUserHidden"
-            )
-        ));
+
         $this->add(array(
             'name' => 'MaUser',
             'type' => 'Zend\Form\Element\Text',
