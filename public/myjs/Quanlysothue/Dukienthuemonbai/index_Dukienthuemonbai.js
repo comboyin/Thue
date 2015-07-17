@@ -42,7 +42,7 @@ var EditableTable = function () {
 
 					
 					data = json.obj; 
-
+					var MaCanBo = $("span.MaCanBo").html();
 					for (i = 0; i < data.length; i++) {
 						oTable
 						.fnAddData([
@@ -51,10 +51,11 @@ var EditableTable = function () {
 								data[i]['nguoinopthue']['TenHKD'],
 								data[i]['muclucngansach']['TieuMuc'],
 								data[i]['muclucngansach']['TenGoi'].substr(13,5),
+								data[i]['DoanhSo'],
 								DateToString(data[i]['NgayPhaiNop']['date']),
 								data[i]['SoTien'],
 								data[i]['TrangThai'],
-								
+								MaCanBo,
 								(data[i]['TrangThai']==0)?'<a class="edit" href="">Edit</a>':'',
 								(data[i]['TrangThai']==0)?'<a class="Delete" href="">Delete</a>':''
 								
@@ -172,21 +173,23 @@ var EditableTable = function () {
 				jqTds[3].innerHTML = '<input style="width:50px;" name="TieuMuc" type="text"   value="'
 					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Chọn</button>';
 					 
-				jqTds[4].innerHTML = '<input style="width:100px;" name="TenGoi" type="text"   value="'
+				jqTds[4].innerHTML = '<input style="width:80px;" name="TenGoi" type="text"   value="'
 					 + aData[4] + ' "disabled>';
-
-
-				jqTds[5].innerHTML = '<input style="width:100px;" name="NgayPhaiNop" type="text"  value="'
+				jqTds[5].innerHTML = '<input style="width:100px;" name="DoanhSo" type="text"  value="'
 					 + aData[5] + '">';
-				
-				jqTds[6].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
-					 + aData[6] + '"disabled>';
-				jqTds[7].innerHTML = '<input style="width:30px;" name="TrangThai" type="text"  value="'
-					 + aData[7] + '"disabled>';
-				
 
-				jqTds[8].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[9].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+
+				jqTds[6].innerHTML = '<input style="width:100px;" name="NgayPhaiNop" type="text"  value="'
+					 + aData[6] + '">';
+				
+				jqTds[7].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
+					 + aData[7] + '"disabled>';
+				jqTds[8].innerHTML = aData[8];
+				jqTds[9].innerHTML = '<input style="width:80px;" name="MaCanBo" type="text" value="'
+					 + aData[9] + '"disabled>';
+
+				jqTds[10].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[11].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 
 				
 				//update kích thước cột
@@ -197,6 +200,7 @@ var EditableTable = function () {
 			function addRow(oTable, nRow) {
 				var aData = oTable.fnGetData(nRow);
 				var jqTds = $('>td', nRow);
+				var MaCanBo = $("span.MaCanBo").html();
 				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
 				// cansua
 				jqTds[1].innerHTML = '<input style="width:65px;" name="masothue" type="text"  value="'
@@ -208,20 +212,23 @@ var EditableTable = function () {
 				jqTds[3].innerHTML = '<input style="width:50px;" name="TieuMuc" type="text"   value="'
 					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Chọn</button>';
 					 
-				jqTds[4].innerHTML = '<input style="width:100px;" name="TenGoi" type="text"   value="'
+				jqTds[4].innerHTML = '<input style="width:80px;" name="TenGoi" type="text"   value="'
 					 + aData[4] + ' "disabled>';
-
-
-				jqTds[5].innerHTML = '<input style="width:100px;" name="NgayPhaiNop" type="text"  value="'
+				jqTds[5].innerHTML = '<input style="width:100px;" name="DoanhSo" type="text"  value="'
 					 + aData[5] + '">';
-				
-				jqTds[6].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
-					 + aData[6] + '"disabled>';
-				jqTds[7].innerHTML = '<input style="width:30px;" name="TrangThai" type="text"  value="'
-					 + aData[7] + '"disabled>';
 
-				jqTds[8].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[9].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+
+				jqTds[6].innerHTML = '<input style="width:100px;" name="NgayPhaiNop" type="text"  value="'
+					 + aData[6] + '">';
+				
+				jqTds[7].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
+					 + aData[7] + '"disabled>';
+				jqTds[8].innerHTML = '<span style="color:red;">'+'Chờ ghi'+'</span>';
+				jqTds[9].innerHTML = '<input style="width:80px;" name="MaCanBo" type="text" value="'
+					 + MaCanBo + '"disabled>';
+
+				jqTds[10].innerHTML = '<a class="edit" href="">Save new</a>';
+				jqTds[11].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
 
@@ -241,11 +248,13 @@ var EditableTable = function () {
 				oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
 				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
 				oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
-
-				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 8,
+				oTable.fnUpdate('<span style="color:red;">'+'Chờ ghi'+'</span>', nRow, 8, false);
+				oTable.fnUpdate(jqInputs[8].value, nRow, 9, false);
+				
+				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 10,
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
-					9, false);
+					11, false);
 				oTable.fnDraw();
 			}
 			
@@ -266,9 +275,11 @@ var EditableTable = function () {
 							'',
 							'',
 							'',
+							0,
 							'',
 							0,
-							0,
+							'',
+							'',
 
 							'<a class="edit" href="">Edit</a>',
 							'<a class="cancel" data-mode="new" href="">Cancel</a>'
@@ -707,14 +718,14 @@ var EditableTable = function () {
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();			
 					var NgayPhaiNop = $("input[name='NgayPhaiNop']", nRow).val().trim();
 					var SoTien  = $("input[name='SoTien']", nRow).val().trim();
-					
+					var DoanhSo  = $("input[name='DoanhSo']", nRow).val().trim();
 	
 					data = {
 							KyThue : _KyThue,
 							MaSoThue : MaSoThue,
 							TieuMuc : TieuMuc,
-							NgayPhaiNop : NgayPhaiNop
-							
+							NgayPhaiNop : NgayPhaiNop,
+							DoanhSo:DoanhSo
 							
 					}
 
@@ -734,7 +745,7 @@ var EditableTable = function () {
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();			
 					var NgayPhaiNop = $("input[name='NgayPhaiNop']", nRow).val().trim();
 					var SoTien  = $("input[name='SoTien']", nRow).val().trim();
-					
+					var DoanhSo  = $("input[name='DoanhSo']", nRow).val().trim();
 					data = {
 						_MaSoThue : _MaSoThue,
 						_KyThue : _KyThue,
@@ -743,7 +754,8 @@ var EditableTable = function () {
 						KyThue : _KyThue,
 						MaSoThue : MaSoThue,
 						TieuMuc : TieuMuc,
-						NgayPhaiNop : NgayPhaiNop
+						NgayPhaiNop : NgayPhaiNop,
+						DoanhSo:DoanhSo
 						
 					}
 

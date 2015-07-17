@@ -9,7 +9,9 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
  /* @var $dsDuKienThueMonBai dukienmb */
 /* @var $formUp UploadForm */
 $formUp = $this->formUp;
-
+use Application\Entity\user;
+/* @var $user user */
+$user = $this->identity();
 ?>
 
 
@@ -125,9 +127,11 @@ $formUp = $this->formUp;
 						            <th>Tên HKD</th>
 						            <th>Tiểu Mục(*)</th>
 									<th>Bậc môn bài</th>
+									<th>Doanh số (*)</th>
 									<th>Ngày phải nộp (*)</th>
 									<th>Số tiền (*)</th>
 									<th>Trạng thái </th>
+									<th>Mã cán bộ lập</th>
 									
     								<th>Sửa</th>
     								<th>Xóa</th>
@@ -149,9 +153,17 @@ $formUp = $this->formUp;
 								<td><?php echo $thue->getNguoinopthue()->getTenHKD()?></td>
 								<td><?php echo $thue->getMuclucngansach()->getTieuMuc()?></td>
 								<td><?php echo mb_substr($thue->getMuclucngansach()->getTenGoi(),13,17,'UTF-8');?></td>
+								<td><?php echo $thue->getDoanhSo()?></td>
 								<td><?php echo $thue->getNgayPhaiNop()?></td>
 								<td><?php echo $thue->getSoTien()?></td>
-								<td><?php echo $thue->getTrangThai()?></td>
+					            <td>
+								<?php if($thue->getTrangThai()==0):?>	
+								<span style="color:red;">Chờ ghi</span>
+								<?php else:?>
+								<span style="color:green;">Đã ghi</span>
+								<?php endif;?>
+								</td>
+								<td><?php echo $thue->getUser()->getMaUser()?></td>
 								
 								<?php if($thue->getTrangThai()==0):?>	
 								<td><a class="edit" href="">Edit</a></td>
@@ -169,7 +181,7 @@ $formUp = $this->formUp;
   
 							</tbody>
 					</table>
-						
+					<span class="MaCanBo" style="display: none;"><?php echo $user->getMaUser()?></span>	
 						
 					</div>
 				</div>

@@ -69,6 +69,9 @@ return array(
                 'Quanlycanbothue\Controller\Canbothue' => array(
                     'all' => 'doitruong'
                 ),
+                'Quanlycanbothue\Controller\Thongtincanhan' => array(
+                    'all' => 'canbothue'
+                ),
                 //end
             )
         )

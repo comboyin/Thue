@@ -121,6 +121,13 @@ return array(
                         'controller' => 'Canbothue',
                         'action' => 'index',
                         'resource' => 'Quanlycanbothue\Controller\Canbothue'
+                    ),
+                    array(
+                        'label' => 'Thông tin cá nhân',
+                        'route' => 'quanlycanbothue/default',
+                        'controller' => 'Thongtincanhan',
+                        'action' => 'index',
+                        'resource' => 'Quanlycanbothue\Controller\Thongtincanhan'
                     )
                     
                 )

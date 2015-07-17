@@ -3,7 +3,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Quanlycanbothue\Controller\Index' => 'Quanlycanbothue\Controller\IndexController',
-            'Quanlycanbothue\Controller\Canbothue' => 'Quanlycanbothue\Controller\CanbothueController'
+            'Quanlycanbothue\Controller\Canbothue' => 'Quanlycanbothue\Controller\CanbothueController',
+            'Quanlycanbothue\Controller\Thongtincanhan' => 'Quanlycanbothue\Controller\ThongtincanhanController'
         ),
     ),
     'router' => array(
