@@ -54,6 +54,17 @@ class formDuKienThueMonBai extends Form
                 'label' => ' '
             )
         ));
+        
+        $this->add(array(
+            'name' => 'DoanhSo',
+            'type' => 'Zend\Form\Element\Number',
+            'attributes' => array(
+                 
+            ),
+            'options' => array(
+                'label' => ' '
+            )
+        ));
     
         $this->add(array(
             'name' => 'NgayPhaiNop',
@@ -155,6 +166,32 @@ class formDuKienThueMonBai extends Form
                         'encoding' => 'UTF-8',
                         'min' => '4',
                         'max' => '4'
+                    )
+                )
+            )
+        ]));
+        
+        $inputFilter->add($factory->createInput([
+            'name' => 'DoanhSo',
+            'required' => true,
+            'filters' => array(
+                array(
+                    'name' => 'StripTags'
+                ),
+                array(
+                    'name' => 'StringTrim'
+                )
+            ),
+            'validators' => array(
+                array(
+                    'name' => '\Zend\Validator\Digits',
+                    'options' => array()
+                ),
+        
+                array(
+                    'name' => 'GreaterThan',
+                    'options' => array(
+                        'min' => -1
                     )
                 )
             )
