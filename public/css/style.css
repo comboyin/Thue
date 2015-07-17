@@ -4807,3 +4807,15 @@ ul.amounts li {
 	width: 1000px;
 	margin-left: -500px;
 }
+
+body#backgroud {  
+    
+	max-width:100%;
+    
+    margin:auto;  
+    background:url(../img/backgroud.jpg);  
+	background-repeat: no-repeat;
+	background-size: 100% auto ;
+}  
+    
+

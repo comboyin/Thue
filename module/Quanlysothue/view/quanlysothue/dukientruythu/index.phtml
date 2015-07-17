@@ -178,7 +178,13 @@ $user = $this->identity();
             								<td><?php echo $truythu->getDoanhSo();?></td>
             								<td><?php echo $truythu->getTiLeTinhThue();?></td>
             								<td><?php echo $truythu->getSoTien()?></td>
-            								<td><?php echo $truythu->getTrangThai()?></td>
+            								<td>
+            								<?php if($truythu->getTrangThai()==0):?>	
+            								<span style="color:red;">Chờ duyệt</span>
+            								<?php else:?>
+            								<span style="color:green;">Đã duyệt</span>
+            								<?php endif;?>
+            								</td>
             								<td><?php echo $truythu->getLyDo()?></td>
             								<td><?php echo $truythu->getUser()->getMaUser()?></td>
             								<?php if($truythu->getTrangThai()==0):?>	
@@ -200,7 +206,7 @@ $user = $this->identity();
   
 							</tbody>
 					</table>
-					<span class="MaCanBo"><?php echo $user->getMaUser()?></span>
+					<span class="MaCanBo" style="display: none;"><?php echo $user->getMaUser()?></span>
 						
 						
 					</div>

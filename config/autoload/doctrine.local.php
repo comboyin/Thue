@@ -1,5 +1,6 @@
 <?php
 
+use Application\Entity\user;
 return array(
     'doctrine' => array(
         // 1) for Aithentication
@@ -14,8 +15,8 @@ return array(
                                                                                        // return my_awesome_check_test($user->getPassword(), $passwordGiven);
                                                                                        // echo '<h1>callback user->getPassword = ' .$user->getPassword() . ' passwordGiven = ' . $passwordGiven . '</h1>';
                                                                                        // - if ($user->getPassword() == md5($passwordGiven)) { // original
-                                                                                       // ToDo find a way to access the Service Manager and get the static salt from config array
-                    if ($user->getMatKhau() == md5($passwordGiven)) {
+                                                                      // ToDo find a way to access the Service Manager and get the static salt from config array
+                    if ($user->getMatKhau() == md5($passwordGiven) && $user->getTrangThai()==1) {
                         return true;
                     } else {
                         return false;

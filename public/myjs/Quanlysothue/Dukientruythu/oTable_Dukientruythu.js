@@ -67,13 +67,13 @@ var EditableTable = function () {
 				
 				$("img.loading").css('display','inline');
 				
-				
+				deleteAllRows();
 
 				//post
 				$.get("dsDKTTJson", {KyThue : _KyThue},
 					function (json) {
 
-					deleteAllRows();
+					
 					data = json.obj;
 					var MaCanBo = $("span.MaCanBo").html();
 					for (i = 0; i < data.length; i++) {
@@ -86,7 +86,7 @@ var EditableTable = function () {
 								data[i]['DoanhSo'],
 								data[i]['TiLeTinhThue'],
 								data[i]['SoTien'],
-								data[i]['TrangThai'],
+								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',
 								data[i]['LyDo'],
 								MaCanBo,
 								(data[i]['TrangThai']==0)?'<a class="edit" href="">Edit</a>':'',
@@ -217,8 +217,7 @@ var EditableTable = function () {
 				
 				jqTds[6].innerHTML = '<input style="width:100px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '"disabled>';
-				jqTds[7].innerHTML = '<input style="width:10px;" name="TrangThai" type="text" value="'
-					 + aData[7] + ' "disabled>';
+				jqTds[7].innerHTML = aData[7];
 				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
 					 + aData[8] + '">';
 				jqTds[9].innerHTML = '<input style="width:120px;" name="MaCanBo" type="text" value="'
@@ -256,8 +255,7 @@ var EditableTable = function () {
 				
 				jqTds[6].innerHTML = '<input style="width:100px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '"disabled>';
-				jqTds[7].innerHTML = '<input style="width:10px;" name="TrangThai" type="text" value="'
-					 + aData[7] + ' "disabled>';
+				jqTds[7].innerHTML = '<span style="color:red;">'+'Chờ duyệt'+'</span>';
 				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
 					 + aData[8] + '">';
 				jqTds[9].innerHTML = '<input style="width:120px;" name="MaCanBo" type="text" value="'
@@ -273,7 +271,7 @@ var EditableTable = function () {
 				var jqInputs = $('input', nRow);
 				
 				oTable.fnUpdate('<input class="check_item" type="checkbox">', nRow, 0, false);
-
+				//var StringTrangThai = ==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>';
 				// cansua
 				oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
 				oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
@@ -282,9 +280,9 @@ var EditableTable = function () {
 
 				oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
 				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
-				oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
-				oTable.fnUpdate(jqInputs[8].value, nRow, 8, false);
-				oTable.fnUpdate(jqInputs[9].value, nRow, 9, false);
+				oTable.fnUpdate('<span style="color:red;">'+'Chờ duyệt'+'</span>', nRow, 7, false);
+				oTable.fnUpdate(jqInputs[7].value, nRow, 8, false);
+				oTable.fnUpdate(jqInputs[8].value, nRow, 9, false);
 
 				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 10,
 					false);
@@ -313,7 +311,7 @@ var EditableTable = function () {
 							0,
 							0,
 							0,
-							0,
+							'',
 							'',
 							'',
 							'<a class="edit" href="">Edit</a>',
@@ -756,7 +754,7 @@ var EditableTable = function () {
 					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
 					var SoTien = $("input[name='SoTien']", nRow).val().trim();
-					var TrangThai = $("input[name='TrangThai']", nRow).val().trim();
+					//var TrangThai = $("input[name='TrangThai']", nRow).val().trim();
 					var LyDo = $("input[name='LyDo']", nRow).val().trim();
 					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
 					var DoanhSo  = $("input[name='DoanhSo']", nRow).val().trim();
@@ -787,7 +785,7 @@ var EditableTable = function () {
 					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
 					var SoTien = $("input[name='SoTien']", nRow).val().trim();
-					var TrangThai = $("input[name='TrangThai']", nRow).val().trim();
+					//var TrangThai = $("input[name='TrangThai']", nRow).val().trim();
 					var LyDo = $("input[name='LyDo']", nRow).val().trim();
 					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
 					var DoanhSo  = $("input[name='DoanhSo']", nRow).val().trim();

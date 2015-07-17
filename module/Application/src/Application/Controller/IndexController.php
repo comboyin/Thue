@@ -12,8 +12,7 @@ use Application\base\baseController;
 use Application\Models\doithueModel;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\Tools\SchemaTool;
-use Application\Entity\doithue;
-use Application\base\baseModel;
+
 
 
 class IndexController extends baseController
@@ -21,9 +20,7 @@ class IndexController extends baseController
 
     public function indexAction()
     {
-        $userModel = new doithueModel($this->getEntityManager());  
-       
- 
+        
 
         $kq = $userModel->getDanhSach();
         var_dump($kq);

@@ -44,18 +44,8 @@ class NguoinopthueController extends baseController
         
         $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
         
-        $dsnguoinopthue = $nguoinopthueModel->DanhSachByIdentity($this->getUser(),'object')
-            ->getObj();
-        
-        /*
-         * if ($post->get("HanhDong") == "xoa") {
-         *
-         * return array(
-         * 'dsnnt' => $dsnguoinopthue,
-         * 'kq' => $kq
-         * );
-         * }
-         */
+        $dsnguoinopthue = $nguoinopthueModel->DanhSachByIdentity($this->getUser(),'object')->getObj();
+
         
         return array(
             'dsnnt' => $dsnguoinopthue
@@ -116,7 +106,7 @@ class NguoinopthueController extends baseController
             // load nganh
             /* @var $nganhs nganh */
             $nganhs = $this->getEntityManager()
-                ->getRepository("Application\Entity\\nganh")
+                ->getRepository('Application\Entity\nganh')
                 ->findAll();
             /* @var $selectNganh Select */
             $selectNganh = $form->get('Nganh');
@@ -248,7 +238,7 @@ class NguoinopthueController extends baseController
         $post = $request->getPost();
         if ($post->get("HanhDong") != null && $post->get("MaSoThue") != null) {
             /* @var $nguoinopthue nguoinopthue */
-            $nguoinopthue = $this->getEntityManager()->find("Application\Entity\\nguoinopthue", $post->get("MaSoThue"));
+            $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $post->get("MaSoThue"));
             // formTTCoBanNNT
             $formTTCoBanNNT = new formTTCoBanNNT();
             
@@ -348,7 +338,7 @@ class NguoinopthueController extends baseController
                             
                             // Thêm 1 Usernnt, set thoigianketthuc = null
                             
-                            $user = $this->getEntityManager()->find("Application\Entity\user", $post->get('MaCanBo'));
+                            $user = $this->getEntityManager()->find('Application\Entity\user', $post->get('MaCanBo'));
                             $UsernntNew = new usernnt();
                             $UsernntNew->setNguoinopthue($nguoinopthue);
                             $UsernntNew->setThoiGianBatDau($today);
@@ -512,7 +502,7 @@ class NguoinopthueController extends baseController
                 ->select(array(
                 "user"
             ))
-                ->from("Application\Entity\user", "user")
+                ->from('Application\Entity\user', "user")
                 ->where("user.coquanthue = ?1")
                 ->andWhere("user not in(" . $this->getEntityManager()
                 ->createQueryBuilder()
