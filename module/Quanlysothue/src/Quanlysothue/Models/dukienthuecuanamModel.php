@@ -123,9 +123,11 @@ class dukienthuecuanamModel extends baseModel
                 $q->select(array(
                     'dukienthue',
                     'nguoinopthue',
-                    'usernnts'
+                    'usernnts',
+                    'user'
                 ))
                 ->from('Application\Entity\dukienthue', 'dukienthue')
+                ->join('dukienthue.user','user')
                 ->join('dukienthue.nguoinopthue', 'nguoinopthue')
                 ->join('nguoinopthue.usernnts', 'usernnts')
     
@@ -139,9 +141,11 @@ class dukienthuecuanamModel extends baseModel
                     $q->select(array(
                         'dukienthue',
                         'nguoinopthue',
-                        'usernnts'
+                        'usernnts',
+                        'user1'
                     ))
                     ->from('Application\Entity\dukienthue', 'dukienthue')
+                    ->join('dukienthue.user','user1')
                     ->join('dukienthue.nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->join('usernnts.user', 'user')

@@ -14,6 +14,35 @@ var EditableTable = function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
 			
+			//duyet du kien thue nam
+			function duyetDukienThueNam(){
+				//
+				var a = $("#chitiet ")
+				
+				
+			}
+			
+			//chon chờ duyệt
+			function chonChoDuyet(){
+				
+				// lay nhung dong dang "Chờ duyệt"
+				var dangChoDuyet_td = $("#chitiet td span");
+				console.log(dangChoDuyet_td);
+				$.each(dangChoDuyet_td,function(key,value){
+					if(value.innerHTML=="Chờ duyệt"){
+						var elemTr =  $(value).parents('tr')[0];
+						var checkbox = $('input',elemTr)[0];
+						
+						$(checkbox).attr('checked','checked');
+					}
+				});
+				
+			}
+			
+			$("#cho_duyet").click(function(){
+				chonChoDuyet();
+			});
+			
 			function TinhTien(){		
 				
 				if($("input[name='TieuMuc']").val().trim() != "")
@@ -241,6 +270,7 @@ var EditableTable = function () {
 								data[i]['GiaTinhThue'],
 								data[i]['SoTien'],
 								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',
+								data[i]['user']['MaUser'],		
 								'<a class="edit" href="">Edit</a>',
 								'<a class="Delete" href="">Delete</a>']);
 					}
@@ -292,7 +322,7 @@ var EditableTable = function () {
 					
 					
 					
-					"iDisplayLength" : 5,
+					"iDisplayLength" : -1,
 					"sDom" : "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"sPaginationType" : "bootstrap",
 					"oLanguage" : {
@@ -383,8 +413,12 @@ var EditableTable = function () {
 					 + aData[10] + '">';
 				
 				jqTds[11].innerHTML = aData[11];
-				jqTds[12].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[13].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				
+				jqTds[12].innerHTML = $("span.MaCB").html();
+				
+				
+				jqTds[13].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[14].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
@@ -423,9 +457,12 @@ var EditableTable = function () {
 				
 				jqTds[10].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
 					 + aData[10] + '">';
+				
 				jqTds[11].innerHTML = '<span style="color:red;">'+'Chờ duyệt'+'</span>';
-				jqTds[12].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[13].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				
+				jqTds[12].innerHTML = $('span.MaCB').html();
+				jqTds[13].innerHTML = '<a class="edit" href="">Save new</a>';
+				jqTds[14].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
 
@@ -433,7 +470,6 @@ var EditableTable = function () {
 
 			function saveRow(oTable, nRow) {
 				var jqInputs = $('input', nRow);
-				
 				oTable.fnUpdate('<input class="check_item" type="checkbox">', nRow, 0, false);
 
 				// cansua
@@ -452,10 +488,13 @@ var EditableTable = function () {
 				
 				oTable.fnUpdate(jqInputs[10].value, nRow, 10, false);
 				oTable.fnUpdate('<span style="color:red;">'+'Chờ duyệt'+'</span>', nRow, 11, false);
-				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 12,
+				oTable.fnUpdate($("span.MaCB").html(), nRow, 12, false);
+				
+				
+				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 13,
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
-					13, false);
+					14, false);
 				oTable.fnDraw();
 			}
 			
@@ -483,6 +522,7 @@ var EditableTable = function () {
 							0,
 							0,
 							0,
+							'',
 							'',
 							'<a class="edit" href="">Edit</a>',
 							'<a class="cancel" data-mode="new" href="">Cancel</a>'
@@ -880,55 +920,109 @@ var EditableTable = function () {
 			});
 
 			$('#editable-sample a.edit').live(
-				'click',
-				function (e) {
+				'click',function (e) {
+					
 				e.preventDefault();
-
 				var nRow = $(this).parents('tr')[0];
+				var aData = oTable.fnGetData(nRow);
+				// Chỉ cho phép cán bộ đã lập dự kiến này sửa
+				
+					if (nEditing !== null && nEditing != nRow) {
+						if(aData[12] == $("span.MaCB").html()){
+							var flag = false;
+							var jqTds = $('>td', nEditing);
+							$.each(jqTds, function (i, val) {
+								if (val.textContent == 'Save new') {
 
-				if (nEditing !== null && nEditing != nRow) {
+									flag = true;
 
-					var flag = false;
-					var jqTds = $('>td', nEditing);
-					$.each(jqTds, function (i, val) {
-						if (val.textContent == 'Save new') {
+							}
+							});
 
-							flag = true;
+							if (flag == true) {
+								oTable.fnDeleteRow(nEditing);
+								editRow(oTable, nRow);
+								nEditing = nRow;
 
+								flag = false;
+							} else {
+								restoreRow(oTable, nEditing);
+								editRow(oTable, nRow);
+								nEditing = nRow;
+							}
+						
 						}
-					});
+						else{
+							DialogTable.showThongBaoUnlimit('Thông báo !','Dự kiến này không thuộc quyền quản trị của bạn !');
+							
+						}
+						
+							
+							
+							
+							
+						
 
-					if (flag == true) {
-						oTable.fnDeleteRow(nEditing);
-						editRow(oTable, nRow);
-						nEditing = nRow;
+					} else if (nEditing == nRow
+						 && this.innerHTML == "Save new") {
+						/* Editing this row and want to save it */
+						var jqInputs = $('input', nRow);
+						
+						//cansua Save new
 
-						flag = false;
-					} else {
-						restoreRow(oTable, nEditing);
-						editRow(oTable, nRow);
-						nEditing = nRow;
-					}
+						//lay du lieu
+						var MaSoThue = $("input[name='masothue']", nRow).val().trim();
+						var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
+						var DoanhThuChiuThue = $("input[name='DoanhThuChiuThue']", nRow).val().trim();				
+						var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
+						var ThueSuat = $("input[name='ThueSuat']", nRow).val().trim();
+						var TenGoi = $("input[name='TenGoi']", nRow).val().trim();
+						var SanLuong  = $("input[name='SanLuong']", nRow).val().trim();
+						var GiaTinhThue  = $("input[name='GiaTinhThue']", nRow).val().trim();
+						var SoTien  = $("input[name='SoTien']", nRow).val().trim();
+		
+						data = {
+								KyThue : _KyThue,
+								MaSoThue : MaSoThue,
+								TieuMuc : TieuMuc,
+								DoanhThuChiuThue : DoanhThuChiuThue,
+								TiLeTinhThue : TiLeTinhThue,
+								ThueSuat : ThueSuat,
+								TenGoi : TenGoi,
+								SanLuong : SanLuong,
+								GiaTinhThue : GiaTinhThue,
+								SoTien : SoTien
+						}
 
-				} else if (nEditing == nRow
-					 && this.innerHTML == "Save new") {
-					/* Editing this row and want to save it */
-					var jqInputs = $('input', nRow);
+						var url = 'them';
+						console.log(nEditing);
+						SaveNew('post', url, data, oTable, nEditing);
 
-					//cansua Save new
+					} else if (nEditing == nRow
+						 && this.innerHTML == "Save edit") {
+						
+						var jqInputs = $('input', nRow);
+						
+						//cansuaedit
 
-					//lay du lieu
-					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
-					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-					var DoanhThuChiuThue = $("input[name='DoanhThuChiuThue']", nRow).val().trim();				
-					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-					var ThueSuat = $("input[name='ThueSuat']", nRow).val().trim();
-					var TenGoi = $("input[name='TenGoi']", nRow).val().trim();
-					var SanLuong  = $("input[name='SanLuong']", nRow).val().trim();
-					var GiaTinhThue  = $("input[name='GiaTinhThue']", nRow).val().trim();
-					var SoTien  = $("input[name='SoTien']", nRow).val().trim();
-	
-					data = {
+						//lay du lieu					
+						var MaSoThue = $("input[name='masothue']", nRow).val().trim();
+						var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
+						var DoanhThuChiuThue = $("input[name='DoanhThuChiuThue']", nRow).val().trim();				
+						var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
+						var ThueSuat = $("input[name='ThueSuat']", nRow).val().trim();
+						var TenGoi = $("input[name='TenGoi']", nRow).val().trim();
+						var SanLuong  = $("input[name='SanLuong']", nRow).val().trim();
+						var GiaTinhThue  = $("input[name='GiaTinhThue']", nRow).val().trim();
+						var SoTien  = $("input[name='SoTien']", nRow).val().trim();
+						
+						
+						
+						data = {
+							_MaSoThue : _MaSoThue,
+							_KyThue : _KyThue,
+							_TieuMuc : _TieuMuc,
+
 							KyThue : _KyThue,
 							MaSoThue : MaSoThue,
 							TieuMuc : TieuMuc,
@@ -939,60 +1033,31 @@ var EditableTable = function () {
 							SanLuong : SanLuong,
 							GiaTinhThue : GiaTinhThue,
 							SoTien : SoTien
+						}
+
+						var url = "sua";
+
+						
+
+						SaveEdit('post', url, data, oTable, nEditing);
+
+					} else {
+						if(aData[12] == $("span.MaCB").html()){
+							editRow(oTable, nRow);
+							nEditing = nRow;
+						}
+						else{
+							DialogTable.showThongBaoUnlimit('Thông báo !','Dự kiến này không thuộc quyền quản trị của bạn !');
+							
+						}
+							
+						
 					}
+				
+				 
+				
 
-					var url = 'them';
-					console.log(nEditing);
-					SaveNew('post', url, data, oTable, nEditing);
-
-				} else if (nEditing == nRow
-					 && this.innerHTML == "Save edit") {
-
-					var jqInputs = $('input', nRow);
-
-					//cansuaedit
-
-					//lay du lieu					
-					var MaSoThue = $("input[name='masothue']", nRow).val().trim();
-					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-					var DoanhThuChiuThue = $("input[name='DoanhThuChiuThue']", nRow).val().trim();				
-					var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-					var ThueSuat = $("input[name='ThueSuat']", nRow).val().trim();
-					var TenGoi = $("input[name='TenGoi']", nRow).val().trim();
-					var SanLuong  = $("input[name='SanLuong']", nRow).val().trim();
-					var GiaTinhThue  = $("input[name='GiaTinhThue']", nRow).val().trim();
-					var SoTien  = $("input[name='SoTien']", nRow).val().trim();
-					
-					
-					
-					data = {
-						_MaSoThue : _MaSoThue,
-						_KyThue : _KyThue,
-						_TieuMuc : _TieuMuc,
-
-						KyThue : _KyThue,
-						MaSoThue : MaSoThue,
-						TieuMuc : TieuMuc,
-						DoanhThuChiuThue : DoanhThuChiuThue,
-						TiLeTinhThue : TiLeTinhThue,
-						ThueSuat : ThueSuat,
-						TenGoi : TenGoi,
-						SanLuong : SanLuong,
-						GiaTinhThue : GiaTinhThue,
-						SoTien : SoTien
-					}
-
-					var url = "sua";
-
-					
-
-					SaveEdit('post', url, data, oTable, nEditing);
-
-				} else {
-
-					editRow(oTable, nRow);
-					nEditing = nRow;
-				}
+				
 			});
 			
 			function loadTyLeTinhThue(MaSoThue,TieuMuc){

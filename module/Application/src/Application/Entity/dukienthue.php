@@ -95,7 +95,7 @@ class dukienthue implements InputFilterAwareInterface
 
 
     /**
-     * @return the $user
+     * @return user
      */
     public function getUser()
     {
