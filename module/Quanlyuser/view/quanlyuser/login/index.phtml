@@ -12,17 +12,13 @@ echo $this->form()->openTag($formThayDoiDiaChiKDNNT);
 ?>
 
 <?php
-
-
-
-
 echo $this->formElementErrors($formThayDoiDiaChiKDNNT->get('remenber'));
 ?>
 
 <div class="lock-header">
 	<!-- BEGIN LOGO -->
-	<a class="center" id="logo" href="index.html"> <img class="center"
-		alt="logo" src="public/img/logo.png">
+	<a class="center" id="logo" href="index.html"> 
+	<img class="center"	alt="logo" src="<?php echo $this->basePath() . '/public/' . 'img/logo.png'?>">
 	</a>
 	<!-- END LOGO -->
 </div>

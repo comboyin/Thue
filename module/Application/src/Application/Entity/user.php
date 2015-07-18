@@ -376,11 +376,7 @@ class user implements InputFilterAwareInterface
                         'options' => array(
                             'encoding' => 'UTF-8',
                             'min' => '6',
-                            'max' => '12',
-                            'messages' => array(
-                                \Zend\Validator\StringLength::TOO_LONG => 'aaaaaaaaaaaaaaaa',
-                                \Zend\Validator\StringLength::TOO_SHORT => 'aaaaaaaaaaaaaaaaaa'
-                            )
+                            'max' => '12'
                         )
                     )
                 )
