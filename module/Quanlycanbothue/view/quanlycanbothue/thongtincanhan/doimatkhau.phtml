@@ -1,0 +1,88 @@
+<?php 
+    $this->headscript()->appendFile($this->basePath() . '/public/' . 'js/jquery.validate.min.js');
+    $this->headscript()->appendFile($this->basePath() . '/public/' . 'js/additional-methods.min.js');
+    $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlycanbothue/Thongtincanhan/formdmk-validation.js');
+?>
+   <script type="text/javascript">
+   var baseFolder = '/'+window.location.pathname.split( '/' )[1]+'/';
+   var logoutUrl = baseFolder + "Quanlyuser/Login/logout";
+   function IdleTimeout() {
+	    window.location = logoutUrl;
+	}
+   </script>     
+   
+                                 <div class="space10"></div>
+
+                                 <h2>Thay Đổi Mật Khẩu</h2>
+                         
+<!-- thong bao -->
+		<div class="row-fluid">
+        	<div class="span12">
+        	<?php /* @var $kq ketqua */?>
+        				<?php if(isset($kq)):?>
+        				    <?php if ($kq!=null):?>
+        				                  <?php if($kq->getKq()==true):?>
+                				        <div class="alert alert-block alert-success fade in">
+        					<button data-dismiss="alert" class="close" type="button">×</button>
+        					<h4 class="alert-heading">Success!</h4>
+        					<p><?php echo $kq->getMessenger();?>. Mời đăng nhập để tiếp tục!</p>
+        					<script type="text/javascript">
+        					setTimeout(IdleTimeout() , 20000);
+        					</script>
+        				</div>
+        				<?php else:?>
+        				<div class="alert alert-block alert-error fade in">
+        					<button data-dismiss="alert" class="close" type="button">×</button>
+        					<h4 class="alert-heading">Error!</h4>
+        					<p><?php echo $kq->getMessenger();?>.</p>
+        				</div>
+        				     <?php endif;?>
+        
+        				<?php endif;?>
+        				    
+        				    
+        				    <?php endif;?>
+        				
+        				   
+	</div>
+</div>
+<!-- end thong bao -->
+
+                                 <div class="widget orange">
+                                     <div class="widget-title">
+                                          <h4><i class="icon-reorder"></i> Sets New Password</h4>
+                                           <span class="tools">
+                                                <a class="icon-chevron-down" href="javascript:;"></a>
+                                                <a class="icon-remove" href="javascript:;"></a>
+                                           </span>
+                                     </div>
+                                     <div class="widget-body ">
+                                        <form id="setpassForm" action="" method="post" class="form-horizontal cmxform">
+                                             <div class="control-group">
+                                                <label for="MatKhauCu" class="control-label">Password hiện tại</label>
+                                                 <div class="controls">
+                                                     <input type="password" name="MatKhauCu" id="MatKhauCu" class="span6 ">
+                                                 </div>
+                                             </div>
+                                             <div class="control-group">
+                                                 <label for="MatKhau" class="control-label">Password mới</label>
+                                                 <div class="controls">
+                                                     <input type="password" name="MatKhau" id="MatKhau" class="span6 ">
+                                                 </div>
+                                             </div>
+                                             
+                                            <div class="control-group ">
+                                                    <label for="confirm_password" class="control-label">Nhập lại Password mới</label>
+                                                    <div class="controls">
+                                                        <input class="span6 " id="confirm_password" name="confirm_password" type="password" />
+                                                    </div>
+                                            </div>
+
+                                             <div class="form-actions">
+                                                 <button type="submit" name="submit" class="btn btn-success">Change Password</button>
+                                                 <button type="button" class="btn">Cancel</button>
+                                             </div>
+
+                                         </form>
+                                     </div>
+                                 </div>
