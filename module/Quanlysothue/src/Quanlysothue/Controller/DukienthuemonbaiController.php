@@ -173,7 +173,7 @@ class DukienthuemonbaiController extends baseController
                 
                 $dukienthuemb = $model->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'))
                 ->getObj();
-                if ($dukienthuemb != null) {
+                if ($dukienthuemb != null  && $dukienthuemb->getTrangThai() == 0) {
                 
                     $MaSoThue = $post->get('MaSoThue');
                     $kt = new nguoinopthueModel($this->getEntityManager());

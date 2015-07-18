@@ -55,6 +55,8 @@ class canbothueModel extends baseModel
         }
     }
     
+    
+    
     /**
      *
      * @param user $user
