@@ -35,6 +35,14 @@ return array(
                     )
                     ,
                     array(
+                        'label' => 'Dự kiến thuế của tháng',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Dukienthuecuathang',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Dukienthuecuathang'
+                    )
+                    ,
+                    array(
                         'label' => 'Dự kiến thuế môn bài',
                         'route' => 'quanlysothue/default',
                         'controller' => 'Dukienthuemonbai',

@@ -27,7 +27,7 @@ class DukienthuecuanamController extends baseController
         
         $dukienthuecuanamModel = new dukienthuecuanamModel($this->getEntityManager());
         
-        // danh sach theo nam
+        // danh sach theo thang
         $dsdkthuecuanam = $dukienthuecuanamModel->dsdukienthuecuanam($today, $this->getUser());
         
         return array(

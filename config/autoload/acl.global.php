@@ -49,7 +49,12 @@ return array(
                 ),
                 'Quanlysothue\Controller\Dukienthuecuanam' => array(
                     'all' => 'canbothue'
-                ),
+                )
+                ,
+                'Quanlysothue\Controller\Dukienthuecuathang' => array(
+                    'all' => 'canbothue'
+                )
+                ,
                 'Quanlysothue\Controller\Dukienthuemonbai' => array(
                     'all' => 'canbothue'
                 ),

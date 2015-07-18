@@ -1,0 +1,217 @@
+<?php
+use Application\Entity\dukienthue;
+use Quanlysothue\Froms\UploadForm;
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Dukienthuecuathang/index_Dukienthuecuathang.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fileDownload.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap/js/bootstrap-fileupload.js');
+$this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/bootstrap/css/bootstrap-fileupload.css');
+
+ /* @var $dsDuKienThueCuaThang dukienthue */
+/* @var $formUp UploadForm */
+$formUp = $this->formUp;
+
+use Application\Entity\user;
+/* @var $user user */
+$user = $this->identity();
+
+?>
+
+
+
+<div class="container-fluid">
+
+
+
+
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN THEME CUSTOMIZER-->
+			<!-- END THEME CUSTOMIZER-->
+			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+			<h3 class="page-title">QUẢN LÝ DỰ KIẾN THUẾ CỦA THÁNG</h3>
+			<ul class="breadcrumb">
+				<li class="active">
+                     <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Dukienthuecuathang','action'=>'index'));?>">Danh sách dự kiến thuế của năm</a>             
+                </li>
+			</ul>
+			<!-- END PAGE TITLE & BREADCRUMB-->
+		</div>
+	</div>
+
+	<!-- BEGIN EDITABLE TABLE widget-->
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN EXAMPLE TABLE widget-->
+
+			<div class="widget red">
+
+				<div class="widget-title">
+					<h4>Danh sách dự kiến thuế của tháng</h4>
+					<span class="tools"> <a href="javascript:;"
+						class="icon-chevron-down"></a>
+					</span>
+				</div>
+				<div class="widget-body">
+					<div>
+						<form action="#" class="form-horizontal">
+							<div class="control-group">
+							<label class="control-label">Kỳ thuế: </label>
+							<div class="controls">
+								<div class="input-append date" id="dpMonths"
+									data-date="102/2012" data-date-format="mm-yyyy"
+									data-date-viewmode="years" data-date-minviewmode="months">
+									
+								<input readonly="readonly" class="m-ctrl-medium" type="text" name="KyThue"  id="kythue" >
+                                
+                                
+                                
+								 <span class="add-on"> <i class="icon-calendar"> </i></span>
+								
+								
+								 <img class="loading" style="margin-left:10px; display : none;" src="<?php echo $this->basePath() . '/public/' . 'img/ajax-loader.gif'?>">
+								</div>
+								<div id="progess_dpmonths" style="width: 247px; display: none;" class="progress progress-striped progress-danger active">
+                                     <div style="width: 100%;" class="bar"></div>
+                                </div>
+								<p class="help-block"></p>
+							</div>
+						</div>
+						</form>
+						<div class="clearfix">
+							<div class="btn-group">
+
+								
+								
+								<button style="margin-left: 5px;"  id="xoa_nhieu"
+									class="btn green">
+									Xóa đã chọn <i class="icon-remove"></i>
+								</button>
+								
+								
+								<button  style="margin-left: 5px;" id="sang_so"
+									class="btn btn-success">
+									   Sang sổ 
+									<i class="icon-adjust"></i>
+							     </button>
+								
+								     
+                                
+							</div>
+
+							<div class="btn-group pull-right">
+								<div class="control-group">
+                                    <div class="controls">
+                                        <div data-provides="fileupload" class="fileupload fileupload-new">
+                                            <div class="input-append">
+                                                <div class="uneditable-input">
+                                                    <i class="icon-file fileupload-exists"></i>
+                                                    <span class="fileupload-preview"></span>
+                                                </div>
+                                               <span class="btn btn-file">
+                                               <span class="fileupload-new">Select file</span>
+                                               <span class="fileupload-exists">Change</span>
+                                               <?php echo $this->formelement($formUp->get("file-excel"))?>
+                                               </span>
+                                                <button style="margin-left: 5px;"  id="Import"
+                            						class="btn btn-file">
+                            						Import <i class="icon-file"></i>
+								                    </button>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+							</div>
+						</div>
+	   <span class="MaCB" style="display: none;"><?php echo $user->getMaUser()?></span>
+						
+						<div class="space12"></div>
+					<table cellspacing="0" class="table table-striped table-bordered"
+						width="100%" id="editable-sample">
+						<thead>
+							<tr>
+								    <th><input id="check_all" type="checkbox"></th>
+									<th>Mã số thuế (*)</th>
+						            <th>Tên HKD</th>
+									<th>Tiểu Mục (*)</th>
+									<th>Doanh thu chịu thuế (*)</th>
+									<th>Tỉ lệ tính thuế (*)</th>
+									<th>Thuế suất (*)</th>
+									<th>Tên gọi</th>
+									<th>Sản lượng</th>
+									<th>Giá tính thuế</th>
+									<th>Số tiền (*)</th>
+									<th>Trang thái</th>
+									<th>Mã CB</th>
+									
+    								<th>Sửa</th>
+    								<th>Xóa</th>
+							</tr>
+						</thead>
+						<tbody id="chitiet">
+										
+										
+										<?php if($dsDuKienThueCuaThang!=null):?>
+										
+        										
+                                       <?php foreach ($dsDuKienThueCuaThang as $thue):?>
+                                       
+                            <tr class="odd">
+                            
+								<td><input class="check_item" type="checkbox"></td>
+								
+								<td><?php echo $thue->getNguoinopthue()->getMaSoThue()?></td>
+								<td><?php echo $thue->getNguoinopthue()->getTenHKD()?></td>
+								<td><?php echo $thue->getMuclucngansach()->getTieuMuc()?></td>
+								<td><?php echo $thue->getDoanhThuChiuThue()?></td>
+								<td><?php echo $thue->getTiLeTinhThue()?></td>
+								<td><?php echo $thue->getThueSuat()?></td>
+								<td><?php echo $thue->getTenGoi()?></td>
+								<td><?php echo $thue->getSanLuong()?></td>
+								<td><?php echo $thue->getGiaTinhThue()?></td>
+								<td><?php echo $thue->getSoTien()?></td>
+								<td>
+            								<?php if($thue->getTrangThai()==0):?>	
+            								<span style="color:red;">Chưa ghi sổ</span>
+            								<?php else:?>
+            								<span style="color:green;">Đã ghi sổ</span>
+            								<?php endif;?>
+            					</td>
+							    <td><?php echo $thue->getUser()->getMaUser()?></td>
+							    
+							    <?php if($thue->getTrangThai()==0):?>	
+								<td><a class="edit" href="">Edit</a></td>
+								<td><a class="Delete" href="">Delete</a></td>
+								<?php else:?>
+								<td></td>
+								<td></td>
+								<?php endif;?>
+							    
+							    
+								
+								
+							</tr>
+                                
+                                <?php endforeach;?>
+        										          
+        										
+        										
+										
+										
+										<?php endif;?>		
+  
+							</tbody>
+					</table>
+						
+						
+					</div>
+				</div>
+			</div>
+			<!-- END EXAMPLE TABLE widget-->
+		</div>
+	</div>
+
+
+	<!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
