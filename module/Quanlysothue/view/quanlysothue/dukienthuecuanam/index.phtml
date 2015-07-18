@@ -69,11 +69,8 @@ $user = $this->identity();
 								 
 								 
 								 
-									<div class="progress progress-striped active"
-										id="progress_kythue"
-										style="width: 219.5px; margin-bottom: 0px; display: none;">
-										<div style="width: 100%;" class="bar"></div>
-									</div>
+									<img class="loading" style="margin-left:10px; display : none;" src="<?php echo $this->basePath() . '/public/' . 'img/ajax-loader.gif'?>">
+                                
 								</div>
 								<div id="progess_dpmonths" style="width: 247px; display: none;" class="progress progress-striped progress-danger active">
                                      <div style="width: 100%;" class="bar"></div>
@@ -95,17 +92,21 @@ $user = $this->identity();
 									Xóa đã chọn <i class="icon-remove"></i>
 								</button>
 								
+								
+								
+								<?php if($user->getLoaiUser()==3):?>
 								<button style="margin-left: 5px;"  id="cho_duyet"
 									class="btn green">
 									Chọn "Chờ duyệt" <i class="icon-remove"></i>
 								</button>
-								
-								 <button  style="margin-left: 5px;" id="duyet"
+								<button  style="margin-left: 5px;" id="duyet"
 									class="btn btn-success">
 									   Duyệt 
 									<i class="icon-adjust"></i>
-								    </button>
-
+							     </button>
+								<?php endif;?>
+								     
+                                
 							</div>
 
 							<div class="btn-group pull-right">
@@ -187,9 +188,18 @@ $user = $this->identity();
             								<span style="color:green;">Đã duyệt</span>
             								<?php endif;?>
             					</td>
-									<td><?php echo $thue->getUser()->getMaUser()?></td>
+							    <td><?php echo $thue->getUser()->getMaUser()?></td>
+							    
+							    <?php if($thue->getTrangThai()==0):?>	
 								<td><a class="edit" href="">Edit</a></td>
 								<td><a class="Delete" href="">Delete</a></td>
+								<?php else:?>
+								<td></td>
+								<td></td>
+								<?php endif;?>
+							    
+							    
+								
 								
 							</tr>
                                 

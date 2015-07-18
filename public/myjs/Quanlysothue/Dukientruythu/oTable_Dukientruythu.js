@@ -86,9 +86,9 @@ var EditableTable = function () {
 								data[i]['DoanhSo'],
 								data[i]['TiLeTinhThue'],
 								data[i]['SoTien'],
-								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',
+								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chưa ghi sổ'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',
 								data[i]['LyDo'],
-								MaCanBo,
+								data[i]['user']['MaUser'],
 								(data[i]['TrangThai']==0)?'<a class="edit" href="">Edit</a>':'',
 								(data[i]['TrangThai']==0)?'<a class="Delete" href="">Delete</a>':''
 								
@@ -255,7 +255,7 @@ var EditableTable = function () {
 				
 				jqTds[6].innerHTML = '<input style="width:100px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '"disabled>';
-				jqTds[7].innerHTML = '<span style="color:red;">'+'Chờ duyệt'+'</span>';
+				jqTds[7].innerHTML = '<span style="color:red;">'+'Chưa ghi sổ'+'</span>';
 				jqTds[8].innerHTML = '<input style="width:120px;" name="LyDo" type="text" value="'
 					 + aData[8] + '">';
 				jqTds[9].innerHTML = '<input style="width:120px;" name="MaCanBo" type="text" value="'
@@ -280,7 +280,7 @@ var EditableTable = function () {
 
 				oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
 				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
-				oTable.fnUpdate('<span style="color:red;">'+'Chờ duyệt'+'</span>', nRow, 7, false);
+				oTable.fnUpdate('<span style="color:red;">'+'Chưa ghi sổ'+'</span>', nRow, 7, false);
 				oTable.fnUpdate(jqInputs[7].value, nRow, 8, false);
 				oTable.fnUpdate(jqInputs[8].value, nRow, 9, false);
 
@@ -715,30 +715,42 @@ var EditableTable = function () {
 				e.preventDefault();
 
 				var nRow = $(this).parents('tr')[0];
+				var MaCB =  $('td',nRow)[9].innerHTML;
 
 				if (nEditing !== null && nEditing != nRow) {
+					
+					if(MaCB == $('span.MaCanBo').html())
+					{
 
-					var flag = false;
-					var jqTds = $('>td', nEditing);
-					$.each(jqTds, function (i, val) {
-						if (val.textContent == 'Save new') {
+						var flag = false;
+						var jqTds = $('>td', nEditing);
+						$.each(jqTds, function (i, val) {
+							if (val.textContent == 'Save new') {
 
-							flag = true;
+								flag = true;
 
+							}
+						});
+
+						if (flag == true) {
+							oTable.fnDeleteRow(nEditing);
+							editRow(oTable, nRow);
+							nEditing = nRow;
+
+							flag = false;
+						} else {
+							restoreRow(oTable, nEditing);
+							editRow(oTable, nRow);
+							nEditing = nRow;
 						}
-					});
-
-					if (flag == true) {
-						oTable.fnDeleteRow(nEditing);
-						editRow(oTable, nRow);
-						nEditing = nRow;
-
-						flag = false;
-					} else {
-						restoreRow(oTable, nEditing);
-						editRow(oTable, nRow);
-						nEditing = nRow;
 					}
+					else{
+						DialogTable.showThongBaoUnlimit('Thông báo',
+								'<span style="color:red" ><h3>Bạn không có quyền sửa dự kiến này !</h3></span>');
+					}
+					
+					
+
 
 				} else if (nEditing == nRow
 					 && this.innerHTML == "Save new") {
@@ -814,9 +826,17 @@ var EditableTable = function () {
 					SaveEdit('post', url, data, oTable, nEditing);
 
 				} else {
-
-					editRow(oTable, nRow);
-					nEditing = nRow;
+					
+					if(MaCB == $('span.MaCanBo').html())
+					{
+						editRow(oTable, nRow);
+						nEditing = nRow;
+					}
+					else{
+						DialogTable.showThongBaoUnlimit('Thông báo',
+								'<span style="color:red" ><h3>Bạn không có quyền sửa dự kiến này !</h3></span>');
+					}
+					
 				}
 			});
 

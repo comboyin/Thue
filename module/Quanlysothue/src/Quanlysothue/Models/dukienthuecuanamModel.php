@@ -35,6 +35,68 @@ class dukienthuecuanamModel extends baseModel
 
     public function getDanhSach()
     {}
+    
+    public function duyet($dsMaSoThue,$dsTieuMuc,$KyThue){
+        
+        $kq= new ketqua();
+        $demDuKienDuyet =0;
+        
+        try {
+            $this->em->getConnection()->beginTransaction();
+            foreach ($dsMaSoThue as $key=>$value){
+                $MaSoThue = $value;
+                $TieuMuc = $dsTieuMuc[$key];
+                /* @var $duKienNam dukienthue */
+                $duKienNam = $this->em->find('Application\Entity\dukienthue', array(
+                    'nguoinopthue'=>$this->em->find('Application\Entity\nguoinopthue', $MaSoThue),
+                    'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
+                    'KyThue' => $KyThue
+                ));
+
+                // khong tim thay
+                if($duKienNam==null){
+                    $kq->setKq(false);
+                    $kq->setMessenger('<span style="color:red;" >'."Không tìm thấy dự kiến năm ".$MaSoThue.'-'.$TieuMuc."-".$KyThue.'<br/></span>');
+                    
+                    $this->em->getConnection()->rollBack();
+                    return $kq;
+                }
+                
+                // du kien nay da duyet
+                if($duKienNam->getTrangThai()==1){
+                    $kq->setKq(false);
+                    $kq->setMessenger('<span style="color:red;" >'."Dự kiến thuế năm ".$MaSoThue.'-'.$TieuMuc."-".$KyThue . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
+                    
+                    $this->em->getConnection()->rollBack();
+                    return $kq;
+                }
+                
+                $duKienNam->setTrangThai(1);
+                $this->em->flush();
+                $demDuKienDuyet++;
+                
+            }
+            
+            
+
+            $this->em->getConnection()->commit();
+            
+            
+            //thanh cong - thong bao bao nhieu du kien da dc duyet
+            $kq->setKq(true);
+            $kq->setMessenger('<span style="color:green;" >Tất cả dự kiến thuế được chọn đã được duyệt hoàn tất<br/>
+                                Tổng số '.$demDuKienDuyet . 'Dự kiến đã được duyệt </span>');
+            
+            return $kq;
+            
+        } catch (\Exception $e) {
+            $kq->setKq(false);
+            $kq->setMessenger('<span style="color:red;" >'.$e->getMessage().'<br/></span>');
+            $this->em->getConnection()->rollBack();
+            return $kq;
+            
+        }
+    }
 
     /**
      * @param dukienthue $obj

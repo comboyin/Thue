@@ -168,9 +168,11 @@ class dukientruythuModel extends baseModel
                 $q->select(array(
                     'dukientruythu',
                     'nguoinopthue',
-                    'usernnts'
+                    'usernnts',
+                    'user1'
                 ))
                     ->from('Application\Entity\dukientruythu', 'dukientruythu')
+                    ->join('dukientruythu.user','user1')
                     ->join('dukientruythu.nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->where('dukientruythu.KyThue = ?1')
@@ -182,9 +184,11 @@ class dukientruythuModel extends baseModel
                     $q->select(array(
                         'dukientruythu',
                         'nguoinopthue',
-                        'usernnts'
+                        'usernnts',
+                        'user1'
                     ))
                         ->from('Application\Entity\dukientruythu', 'dukientruythu')
+                        ->join('dukientruythu.user','user1')
                         ->join('dukientruythu.nguoinopthue', 'nguoinopthue')
                         ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join("usernnts.user", "user")

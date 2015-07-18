@@ -50,16 +50,18 @@
 
 var image = new Image;
 var width,height;
+var imgWidth=0;
+var imgHeight=0;
 image.src = $('body').css('background-image').replace(/url\(|\)$/ig, "");
 image.setAttribute('class','backgroundHide');
 $('body').append(image);
 $('img.backgroundHide').hide();
 var windowWidth = $(window).width();        
 var windowHeight = $(window).height();
-var imgWidth = $('img.backgroundHide').width();
-var imgHeight = $('img.backgroundHide').height();
-console.log(imgHeight); //960
-console.log(windowHeight); //400
+$('img.backgroundHide').on('load', function(){
+	imgWidth = $('img.backgroundHide').width();
+	imgHeight = $('img.backgroundHide').height();
+});
 var background = $('#backgroud');
 var x= 0;
 var y = 0;
@@ -67,6 +69,19 @@ var diChuyenXuong;
 var diChuyenLen;
 var flag=0;
 var tocdo =150;
+
+
+var diChuyenLen = setInterval(function(){
+	background.css('background-position',x+'px'+' '+y+'px');
+	
+	if(y<=0 && flag ==1)
+	    y++;
+	else{
+	 flag =0;
+	}
+},tocdo);
+
+
 var diChuyenXuong = setInterval(function(){
     background.css('background-position',x+'px'+' '+y+'px');
     
@@ -78,14 +93,7 @@ var diChuyenXuong = setInterval(function(){
 	}
 },tocdo);
 
-var diChuyenLen = setInterval(function(){
-			background.css('background-position',x+'px'+' '+y+'px');
-			if(y<=0 && flag ==1)
-			    y++;
-			else{
-			 flag =0;
-			}
-		},tocdo);
+
     
         
 

@@ -14,10 +14,66 @@ var EditableTable = function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
 			
+			
+			
+			
+			
+			
+			
 			//duyet du kien thue nam
 			function duyetDukienThueNam(){
-				//
-				var a = $("#chitiet ")
+				
+				
+				
+				
+				
+				BootstrapDialog.confirm({
+					title : 'Cảnh báo',
+					message : '<span style="color:red">Có thật sự chắc chắn với hành động này?</span>',
+					type : BootstrapDialog.TYPE_WARNING,
+					btnCancelLabel : 'NO',
+					btnOKLabel : 'YES',
+					callback : function (result) {
+						if (result) {
+							//
+							$("img.loading").css('display','inline');
+							var indexMaSoThue = 1;
+							var indexTieuMuc = 3;
+							var dsMaSoThue = [];
+							var dsTieuMuc = [];
+							var row = $("#editable-sample > #chitiet input.check_item:checked").parents('tr');
+							console.log(row);
+							$.each(row,function(key,value){
+								var MaSoThue = $('td',value)[indexMaSoThue].innerHTML.trim();
+								var TieuMuc =  $('td',value)[indexTieuMuc].innerHTML.trim();
+								dsMaSoThue.push(MaSoThue);
+								dsTieuMuc.push(TieuMuc);
+							});
+							
+							
+							data = {
+								dsMaSoThue : dsMaSoThue, 
+								dsTieuMuc : dsTieuMuc,
+								Nam : _KyThue
+							};
+							
+							$.post("duyet",data,function(json){
+								if(json.kq==true){
+									resetTable();
+								}
+								DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
+								$("img.loading").css('display','none');
+							},'json');
+						} else {
+							
+						}
+					}
+				});
+				
+				
+				
+				
+				
 				
 				
 			}
@@ -39,6 +95,9 @@ var EditableTable = function () {
 				
 			}
 			
+			$("#duyet").click(function(){
+				duyetDukienThueNam();
+			});
 			$("#cho_duyet").click(function(){
 				chonChoDuyet();
 			});
@@ -234,7 +293,40 @@ var EditableTable = function () {
 				TinhTien();
 			});
 			
-			
+			function resetTable(){
+				$("img.loading").css('display','inline');
+				
+				/*$("#progess_dpmonths").css('display', 'block');*/
+				deleteAllRows();
+				//post
+				$.get("dsDKTNJson", {KyThue : _KyThue},
+					function (json) {
+
+					
+					data = json.obj; 
+
+					for (i = 0; i < data.length; i++) {
+						oTable
+						.fnAddData([
+								'<th><input class="check_item" type="checkbox"></th>',
+								data[i]['nguoinopthue']['MaSoThue'],
+								data[i]['nguoinopthue']['TenHKD'],
+								data[i]['TieuMuc'],
+								data[i]['DoanhThuChiuThue'],
+								data[i]['TiLeTinhThue'],
+								data[i]['ThueSuat'],
+								data[i]['TenGoi'],
+								data[i]['SanLuong'],
+								data[i]['GiaTinhThue'],
+								data[i]['SoTien'],
+								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',
+								data[i]['user']['MaUser'],		
+								data[i]['TrangThai']==0? '<a class="edit" href="">Edit</a>': ' ',
+								data[i]['TrangThai']==0? '<a class="Delete" href="">Delete</a>' : ' ' ]);
+					}
+					$("img.loading").css('display','none');
+				}, "json");
+			}
 			
 			$('#dpYears').datepicker({
 				    format: " yyyy",
@@ -244,7 +336,7 @@ var EditableTable = function () {
 
 				_KyThue = $.datepicker.formatDate("yy", ev.date);
 				
-				DialogTable.showPropress();
+				$('img.loading').css('display','inline');
 				
 				/*$("#progess_dpmonths").css('display', 'block');*/
 				deleteAllRows();
@@ -275,10 +367,7 @@ var EditableTable = function () {
 								'<a class="Delete" href="">Delete</a>']);
 					}
 
-					/*$("#progess_dpmonths").css(
-						'display',
-						'none');*/
-					DialogTable.hidePropress();
+					$('img.loading').css('display','none');
 				}, "json");
 
 			});
@@ -551,10 +640,10 @@ var EditableTable = function () {
 			}*/
 
 			function SaveNew(method, url, data, oTable, nEditing) {
-
+				$("img.loading").css('display','inline');
 				if (method == "get") {
 					$.get(url, data, function (json) {
-
+						$("img.loading").css('display','none');
 						if (json.kq == false) {
 							BootstrapDialog
 							.confirm({
@@ -580,7 +669,7 @@ var EditableTable = function () {
 					return nEditing;
 				} else if (method == "post") {
 					$.post(url, data, function (json) {
-
+						$("img.loading").css('display','none');
 						if (json.kq == false) {
 							BootstrapDialog
 							.confirm({

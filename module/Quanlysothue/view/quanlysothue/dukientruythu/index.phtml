@@ -71,11 +71,9 @@ $user = $this->identity();
                                 
                                 
 								 <span class="add-on"> <i class="icon-calendar"> </i></span>
-									<div class="progress progress-striped active"
-										id="progress_kythue"
-										style="width: 219.5px; margin-bottom: 0px; display: none;">
-										<div style="width: 100%;" class="bar"></div>
-									</div>
+								
+								
+								 <img class="loading" style="margin-left:10px; display : none;" src="<?php echo $this->basePath() . '/public/' . 'img/ajax-loader.gif'?>">
 								</div>
 								<div id="progess_dpmonths" style="width: 247px; display: none;" class="progress progress-striped progress-danger active">
                                      <div style="width: 100%;" class="bar"></div>
@@ -102,7 +100,7 @@ $user = $this->identity();
 									class="btn btn-file">
 									File mẫu dự kiến <i class="icon-file"></i>
 								</button>
-                                <img class="loading" style="margin-left:10px; display : none;" src="<?php echo $this->basePath() . '/public/' . 'img/ajax-loader.gif'?>">
+                               
                                 
 							</div>
 
@@ -182,9 +180,9 @@ $user = $this->identity();
             								<td><?php echo $truythu->getSoTien()?></td>
             								<td>
             								<?php if($truythu->getTrangThai()==0):?>	
-            								<span style="color:red;">Chờ duyệt</span>
+            								<span style="color:red;">Chưa ghi sổ</span>
             								<?php else:?>
-            								<span style="color:green;">Đã duyệt</span>
+            								<span style="color:green;">Đã ghi sổ</span>
             								<?php endif;?>
             								</td>
             								<td><?php echo $truythu->getLyDo()?></td>

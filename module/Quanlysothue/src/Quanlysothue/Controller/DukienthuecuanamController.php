@@ -14,6 +14,7 @@ use Quanlynguoinopthue\Models\nguoinopthueModel;
 
 class DukienthuecuanamController extends baseController
 {
+
     /**
      * Hiển thị danh sách dự kiến của năm theo kỳ thuế năm hiện tại.
      */
@@ -34,6 +35,33 @@ class DukienthuecuanamController extends baseController
             'dsDuKienThueCuaNam' => $dsdkthuecuanam->getObj()
         );
     }
+
+    public function duyetAction()
+    {
+        if($this->getUser()->getLoaiUser()==3){
+            $dsMaSoThue = $this->getRequest()
+            ->getPost()
+            ->get('dsMaSoThue');
+            $dsTieuMuc = $this->getRequest()
+            ->getPost()
+            ->get('dsTieuMuc');
+            $Nam = $this->getRequest()
+            ->getPost()
+            ->get('Nam');
+            $Model = new dukienthuecuanamModel($this->getEntityManager());
+            
+            $kq = $Model->duyet($dsMaSoThue, $dsTieuMuc, $Nam)->toArray();
+            
+            echo json_encode($kq);
+        }
+        else{
+            $kq = new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger('<span style="color:red">Bạn không sử dụng chức năng này !</span> ');
+        }
+        
+        return $this->response;
+    }
     
     // ajax lay danh sach NNT
     public function themAction()
@@ -45,7 +73,7 @@ class DukienthuecuanamController extends baseController
             /* @var $request Request */
             /* @var $form Form */
             $request = $this->getRequest();
-           
+            
             $dukienthuenam = new dukienthue();
             $form = new formDuKienThueCuaNam();
             $form->setData($request->getPost());
@@ -70,7 +98,7 @@ class DukienthuecuanamController extends baseController
                     $GiaTinhThue = $post->get('GiaTinhThue');
                     
                     if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
-                    {
+{
                         if ($DoanhThuChiuThue * 12 > 100000000) {
                             $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
                         } else
@@ -123,7 +151,7 @@ class DukienthuecuanamController extends baseController
                     $kq->setKq(false);
                     $kq->setMessenger($mss);
                 }
-            }  else {
+            } else {
                 $mss = $this->getErrorMessengerForm($form);
                 $kq->setKq(false);
                 $kq->setMessenger($mss);
@@ -147,24 +175,32 @@ class DukienthuecuanamController extends baseController
             $MaSoThue = $post->get('_MaSoThue');
             $KyThue = $post->get('_KyThue');
             $TieuMuc = $post->get('_TieuMuc');
-    
+            
             // xoa trong csdl
             $model = new dukienthuecuanamModel($this->getEntityManager());
             $dukienthuenam = $model->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj();
-            //kt ton tai
+            // kt ton tai
             if ($dukienthuenam != null) {
+                /* @var $dukienthuenam dukienthue */
+                // dã được duyệt không dc xoa 
+                if($dukienthuenam->getTrangThai()==1){
+                    $kq->setKq(false);
+                    $kq->setMessenger('<span style="color:red;" >'.'Dự kiến này đã được duyệt không được xóa !'.'<br/></span>');
+                    echo json_encode($kq->toArray());
+                    return $this->response;
+                }
+                
+                
                 // kiem tra masothue
                 $kt = new nguoinopthueModel($this->getEntityManager());
-                if($kt->ktNNT($MaSoThue, $this->getUser()) == true)
-                {
+                if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
                     $kq->setKq(true);
                     $kq = $model->remove($dukienthuenam);
-                    
                 } else {
                     $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn.";
                     $kq->setKq(false);
                     $kq->setMessenger($mss);
-                }     
+                }
             } else {
                 $kq->setKq(false);
                 $kq->setMessenger('Không tìm được dự kiến thuế năm !');
@@ -195,9 +231,9 @@ class DukienthuecuanamController extends baseController
                 $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
                 /* @var $dukienthuenam dukienthue */
                 $dukienthuenam = $dukienthuenamModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
-                ->getObj();
+                    ->getObj();
                 if ($dukienthuenam != null) {
-                
+                    
                     $MaSoThue = $post->get('MaSoThue');
                     $kt = new nguoinopthueModel($this->getEntityManager());
                     if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
@@ -217,7 +253,7 @@ class DukienthuecuanamController extends baseController
                         $GiaTinhThue = $post->get('GiaTinhThue');
                         
                         if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
-                        {
+{
                             if ($DoanhThuChiuThue * 12 > 100000000) {
                                 $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
                             } else
@@ -272,8 +308,7 @@ class DukienthuecuanamController extends baseController
                 } else {
                     $kq->setKq(false);
                     $kq->setMessenger('Không tìm được dự kiến truy thu!');
-                }    
-                    
+                }
             } else {
                 $mss = $this->getErrorMessengerForm($form);
                 $kq->setKq(false);
@@ -283,7 +318,6 @@ class DukienthuecuanamController extends baseController
             
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
-
         }
         echo json_encode($kq->toArray());
         return $this->response;
@@ -304,19 +338,17 @@ class DukienthuecuanamController extends baseController
             $model = new dukienthuecuanamModel($this->getEntityManager());
             $dem = 0;
             
-            
             for ($i = 0; $i < count($MaSoThueData); $i ++) {
                 
                 $dukienthue = $model->findByID_($KyThue, $MaSoThueData[$i], $TieuMucData[$i])->getObj();
                 if ($dukienthue != null) {
                     // kiem tra nguoi nop thue co thuoc quyen quan ly cua cbt do khong ?
                     $kt = new nguoinopthueModel($this->getEntityManager());
-                    if ($kt->ktNNT($MaSoThueData[$i], $this->getUser()) == true) 
-                    {
+                    if ($kt->ktNNT($MaSoThueData[$i], $this->getUser()) == true) {
                         $model->remove($dukienthue);
                         $dem ++;
                     } else {
-                        $mss = "Người nộp thuế có mã ".$MaSoThueData[$i]." không thuộc quyền quản lý của bạn.";
+                        $mss = "Người nộp thuế có mã " . $MaSoThueData[$i] . " không thuộc quyền quản lý của bạn.";
                         $kq->setKq(false);
                         $kq->setMessenger($mss);
                         $this->getEntityManager()
@@ -326,15 +358,14 @@ class DukienthuecuanamController extends baseController
                         return $this->response;
                     }
                 } else {
-                    $mss = "Không tìm được dự kiến truy thu có mã ".$MaSoThueData[$i]." !";
+                    $mss = "Không tìm được dự kiến truy thu có mã " . $MaSoThueData[$i] . " !";
                     $kq->setKq(false);
                     $kq->setMessenger($mss);
                     $this->getEntityManager()
-                    ->getConnection()
-                    ->rollBack();
+                        ->getConnection()
+                        ->rollBack();
                     echo json_encode($kq->toArray());
                     return $this->response;
-                
                 }
             }
             
