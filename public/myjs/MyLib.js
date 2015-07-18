@@ -287,6 +287,11 @@ var DialogTable = (function() {
 		setHeadAndMess : function(head,messenger){
 			this.addHead(head);
 			$("#DialogTable > .modal-body").html(messenger);
+			$("#DialogTable_btnOK").unbind("click");
+			$("#DialogTable_btnOK").click(function(){
+				$('#DialogTable').modal('hide');
+			});
+			
 		}
 		
 

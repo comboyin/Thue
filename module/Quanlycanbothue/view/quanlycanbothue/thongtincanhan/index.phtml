@@ -29,7 +29,7 @@ use Application\Entity\user;
                         <!-- BEGIN GRID SAMPLE PORTLET-->
                         <div class="widget green">
                             <div class="widget-title">
-                                <h4><i class="icon-reorder"></i> </h4>
+                                <h4><i class="icon-user"></i> </h4>
                                         <span class="tools">
                                         <a class="icon-chevron-down" href="javascript:;"></a>
                                         <a class="icon-remove" href="javascript:;"></a>
@@ -40,13 +40,32 @@ use Application\Entity\user;
                                 
                                 <div class="span12 biomy">
                                      <h2 class="text-info"><?php echo $user->getTenUser();?></h2>
-                                     <p><label>Mã cán bộ thuế </label>: Jonathan</p>
-                                     <p><label>Tên cán bộ thuế </label>: Smith</p>
-                                     <p><label>Chức vụ </label>: Australia</p>
-                                     <p><label>Email </label>: <a href="#">smith@vectorlab.net</a></p>
-                                     <p><label>Mã cán bộ quản lý </label>:  03 4567890</p>
-                                     <p><label>Tên cán bộ quản lý </label>:  Trần Văn A</p>
-                                     <p><label>Cơ quan trực thuộc </label>: Đội thuế LXP 4</p>
+                                     <p><label>Mã cán bộ thuế </label>: <?php echo $user->getMaUser();?></p>
+                                     <p><label>Tên cán bộ thuế </label>: <?php echo $user->getTenUser();?></p>
+                                     <p><label>Chức vụ </label>:
+                                    <?php 
+    								    switch ($user->getLoaiUser()) {
+    								        case 1:
+    								            echo 'ADMIN';
+    								            break;
+    								        case 2:
+    								            echo 'Chi Cục Trưởng';
+    								            break;
+    								        case 3:
+    							                echo 'Đội Trưởng';
+    							                break;
+    						                case 4:
+    						                    echo 'Cán Bộ Viên';
+    						                    break; 
+    								    }
+								    ?>
+                                     </p>
+                                     
+                                     
+                                     <p><label>Email </label>: <a href="#"><?php echo $user->getEmail()?></a></p>
+                                     <p><label>Mã cán bộ quản lý </label>:  <?php echo $user->getParentUser()->getMaUser();?></p>
+                                     <p><label>Tên cán bộ quản lý </label>:  <?php echo $user->getParentUser()->getTenUser();?></p>
+                                     <p><label>Cơ quan trực thuộc </label>: <?php echo $user->getCoquanthue()->getTenGoi()?></p>
                                  
                                  <div class="space10"></div>
                                  <hr>

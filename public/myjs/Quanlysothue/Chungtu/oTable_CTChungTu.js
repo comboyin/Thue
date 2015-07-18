@@ -243,21 +243,33 @@ var EditableTableChiTietChungTu = function () {
 				if (nEditing != null) {
 					restoreRow(oTable, nEditing);
 				}
+				
+				if($("h1.SoChungTu").html() != "Vui lòng chọn số chứng từ" && $("h1.SoChungTu").html() != "")
+				{
+					// cansua
+					var aiNew = oTable
+						.fnAddData([
+								'',
+								'',
+								'',
+								'',
+								'',
+								'<a class="edit" href="">Edit</a>',
+								'<a class="cancel" data-mode="new" href="">Cancel</a>'
+							]);
+					var nRow = oTable.fnGetNodes(aiNew[0]);
+					addRow(oTable, nRow);
+					nEditing = nRow;
+				}else
+				{
 
-				// cansua
-				var aiNew = oTable
-					.fnAddData([
-							'',
-							'',
-							'',
-							'',
-							'',
-							'<a class="edit" href="">Edit</a>',
-							'<a class="cancel" data-mode="new" href="">Cancel</a>'
-						]);
-				var nRow = oTable.fnGetNodes(aiNew[0]);
-				addRow(oTable, nRow);
-				nEditing = nRow;
+					BootstrapDialog
+					.confirm({
+						title : 'Cảnh báo',
+						message : 'Vui lòng chọn chứng từ cần thêm chi tiết chứng từ',
+					});
+				}
+
 			});
 
 			/*function cancelEditRow(oTable, nRow) {
