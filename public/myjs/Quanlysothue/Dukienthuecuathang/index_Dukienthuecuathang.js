@@ -4,44 +4,185 @@
 var EditableTable = function () {
 
 	//key
+	//Thang
 	var _KyThue = "";
+	//Nam
+	var _KyThueSangSo = $.datepicker.formatDate("yy",new Date());
 	var _TieuMuc = "";
 	var _MaSoThue = "";
+	var otable_sangso=null;
 
 	return {
 
 		init : function () {
 			
+			
 			//*******************ONLY PAGE BEGIN************************//
 			
-			
-			
-			
-			
-			
-			//chon chờ duyệt
-			function chonChoDuyet(){
+			function sangso(){
+				$("img.loading_sangso").css('display','inline');
+				var dsMaSoThue =[];
+				var dsTieuMuc=[];
+				var Row = $("#table_sangso input.check_item:checked").parents("tr");
 				
-				// lay nhung dong dang "Chờ duyệt"
-				var dangChoDuyet_td = $("#chitiet td span");
-				console.log(dangChoDuyet_td);
-				$.each(dangChoDuyet_td,function(key,value){
-					if(value.innerHTML=="Chờ duyệt"){
-						var elemTr =  $(value).parents('tr')[0];
-						var checkbox = $('input',elemTr)[0];
+				$.each(Row,function($key,$value){
+					$MaSoThue = $("td",$value)[1].innerHTML.trim();
+					$TieuMuc = $("td",$value)[3].innerHTML.trim();
 						
-						$(checkbox).attr('checked','checked');
-					}
+					dsMaSoThue.push($MaSoThue);
+					dsTieuMuc.push($TieuMuc);
+					
 				});
+				
+				//post
+				var data = {
+						dsMaSoThue : dsMaSoThue,
+						dsTieuMuc : dsTieuMuc,
+						Thang : _KyThue,
+						Nam : _KyThueSangSo
+				};
+				
+				$.post("sangso",data, function(json){
+					$("img.loading_sangso").css('display','none');
+					$("#DialogSangSo").modal('hide');
+					DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
+					if(json.kq==true)
+					{
+						LoadDSDKThueThang();
+					}
+				},'json');
+				
+				
+				
+				
+				
 				
 			}
 			
-			$("#duyet").click(function(){
-				duyetDukienThueNam();
+			
+			$("button.sangso").click(function(){
+				sangso();
 			});
-			$("#cho_duyet").click(function(){
-				chonChoDuyet();
+			
+			$("#check_all_sangso").click(function (e) {
+				// uncheck to checked
+				if ($("#check_all_sangso").attr("checked") == "checked") {
+					$("#table_sangso input.check_item").each(function () {
+						$(this).attr('checked', true);
+					});
+				} else {
+					$("#table_sangso input.check_item").each(function () {
+						$(this).attr('checked', false);
+					});
+				}
 			});
+			
+			
+			$("button.cancel").click(function(){
+				$("#DialogSangSo").modal('hide');
+				
+			});
+			
+			function loadDanhSachThueNamDaDuyet(){
+						
+				
+				$('img.loading_sangso').css('display','inline');
+				
+				/*$("#progess_dpmonths").css('display', 'block');*/
+				deleteAllRowsSangSo();
+				//post
+				$.get('dsdkcuanamDaDuyet', {KyThueSangSo : _KyThueSangSo,KyThueThang:_KyThue},
+					function (json) {
+
+					
+					data = json.obj; 
+
+					for (i = 0; i < data.length; i++) {
+						oTable_sangso
+						.fnAddData([
+								'<th><input class="check_item" type="checkbox"></th>',
+								data[i]['nguoinopthue']['MaSoThue'],
+								data[i]['nguoinopthue']['TenHKD'],
+								data[i]['TieuMuc'],
+								data[i]['DoanhThuChiuThue'],
+								data[i]['TiLeTinhThue'],
+								data[i]['ThueSuat'],
+								data[i]['TenGoi'],
+								data[i]['SanLuong'],
+								data[i]['GiaTinhThue'],
+								data[i]['SoTien'],
+								data[i]['user']['MaUser']
+								]);
+					}
+
+					$('img.loading_sangso').css('display','none');
+				}, "json");
+				
+				oTable_sangso.fnAdjustColumnSizing();
+
+			}
+			
+			$('#dpYears').datepicker().on('changeDate', function (ev) {
+				_KyThueSangSo = $.datepicker.formatDate("yy", ev.date);
+				loadDanhSachThueNamDaDuyet();
+			});
+			
+			// Khởi tạo oTable
+			oTable_sangso = $('#table_sangso')
+				.dataTable({
+
+					"aLengthMenu" : [[5, 15, 20, -1],
+						[5, 15, 20, "All"]// change per
+						// page values
+						// here
+					],
+					// new 
+					
+					
+					//*************************************
+					"sScrollY": "350px",
+					"sScrollX": "100%",
+					/*"bScrollCollapse": true,*/
+					//*************************************
+					
+					
+					"bAutoWidth":false,
+					"iDisplayLength" : -1,
+					"sDom" : "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+					"sPaginationType" : "bootstrap",
+					"oLanguage" : {
+						"sLengthMenu" : "_MENU_",
+						"oPaginate" : {
+							"sPrevious" : "Prev",
+							"sNext" : "Next"
+						}
+					},
+					"aoColumnDefs" : [{
+							'bSortable' : false,
+							'aTargets' : [0]
+						}
+					]
+				});
+			
+			oTable_sangso.fnAdjustColumnSizing();
+			
+			
+			
+			
+			$("#sang_so").click(function(){
+				SangSo();
+			});
+			
+			function SangSo(){
+				
+				$("#DialogSangSo").modal('show');
+				loadDanhSachThueNamDaDuyet();
+				
+			}
+				
+			
+			
+			
 			
 			function TinhTien(){		
 				
@@ -257,7 +398,7 @@ var EditableTable = function () {
 								data[i]['SanLuong'],
 								data[i]['GiaTinhThue'],
 								data[i]['SoTien'],
-								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chưa ghi sổ'+'</span>':'<span style="color:green;">'+'Đã ghi sổ'+'</span>',
+								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ ghi'+'</span>':'<span style="color:green;">'+'Đã ghi'+'</span>',
 								data[i]['user']['MaUser'],		
 								data[i]['TrangThai']==0? '<a class="edit" href="">Edit</a>': ' ',
 								data[i]['TrangThai']==0? '<a class="Delete" href="">Delete</a>' : ' ' ]);
@@ -266,10 +407,7 @@ var EditableTable = function () {
 				}, "json");
 			}
 			
-			$('#dpMonths').datepicker().on('changeDate', function (ev) {
-
-				_KyThue = $.datepicker.formatDate("mm-yy", ev.date);
-				
+			function LoadDSDKThueThang(){
 				$('img.loading').css('display','inline');
 				
 				/*$("#progess_dpmonths").css('display', 'block');*/
@@ -295,24 +433,34 @@ var EditableTable = function () {
 								data[i]['SanLuong'],
 								data[i]['GiaTinhThue'],
 								data[i]['SoTien'],
-								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',
+								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ ghi'+'</span>':'<span style="color:green;">'+'Đã ghi'+'</span>',
 								data[i]['user']['MaUser'],		
-								'<a class="edit" href="">Edit</a>',
-								'<a class="Delete" href="">Delete</a>']);
+								data[i]['TrangThai']==0?'<a class="edit" href="">Edit</a>':'',
+								data[i]['TrangThai']==0?'<a class="Delete" href="">Delete</a>':'']);
 					}
 
 					$('img.loading').css('display','none');
 				}, "json");
 
+			}
+			
+			$('#dpMonths').datepicker().on('changeDate', function (ev) {
+
+				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
+				LoadDSDKThueThang();
+				
 			});
 
 			if ($("#kythue").val() == "") {
 				var today = new Date();
-				_KyThue = $.datepicker.formatDate("mm-yy", today)
+				_KyThue = $.datepicker.formatDate("mm/yy", today);
 				$("#kythue").val(_KyThue);
 				$("#dpMonths").datepicker('setValue', _KyThue);
 
 			}
+			var today = new Date();
+			_KyThueSangSo = $.datepicker.formatDate("yy", today);
+			$("#dpYears").datepicker('setValue',_KyThue);
 			
 			//*******************ONLY PAGE END************************//
 
@@ -322,6 +470,15 @@ var EditableTable = function () {
 				var iTotalRecords = oSettings.fnRecordsTotal();
 				for (i = 0; i <= iTotalRecords; i++) {
 					oTable.fnDeleteRow(0, null, true);
+				}
+
+			}
+			function deleteAllRowsSangSo() {
+
+				var oSettings = oTable_sangso.fnSettings();
+				var iTotalRecords = oSettings.fnRecordsTotal();
+				for (i = 0; i <= iTotalRecords; i++) {
+					oTable_sangso.fnDeleteRow(0, null, true);
 				}
 
 			}
@@ -481,7 +638,7 @@ var EditableTable = function () {
 				jqTds[10].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
 					 + aData[10] + '">';
 				
-				jqTds[11].innerHTML = '<span style="color:red;">'+'Chờ duyệt'+'</span>';
+				jqTds[11].innerHTML = '<span style="color:red;">'+'Chờ ghi'+'</span>';
 				
 				jqTds[12].innerHTML = $('span.MaCB').html();
 				jqTds[13].innerHTML = '<a class="edit" href="">Save new</a>';
@@ -510,7 +667,7 @@ var EditableTable = function () {
 				oTable.fnUpdate((jqInputs[9].value == 0) ? '':jqInputs[9].value, nRow, 9, false);
 				
 				oTable.fnUpdate(jqInputs[10].value, nRow, 10, false);
-				oTable.fnUpdate('<span style="color:red;">'+'Chờ duyệt'+'</span>', nRow, 11, false);
+				oTable.fnUpdate('<span style="color:red;">'+'Chờ ghi'+'</span>', nRow, 11, false);
 				oTable.fnUpdate($("span.MaCB").html(), nRow, 12, false);
 				
 				
@@ -892,11 +1049,11 @@ var EditableTable = function () {
 			$("#check_all").click(function (e) {
 				// uncheck to checked
 				if ($("#check_all").attr("checked") == "checked") {
-					$("input.check_item").each(function () {
+					$("#editable-sample_wrapper input.check_item").each(function () {
 						$(this).attr('checked', true);
 					});
 				} else {
-					$("input.check_item").each(function () {
+					$("#editable-sample_wrapper input.check_item").each(function () {
 						$(this).attr('checked', false);
 					});
 				}

@@ -31,7 +31,7 @@ $user = $this->identity();
 			<h3 class="page-title">QUẢN LÝ DỰ KIẾN THUẾ CỦA THÁNG</h3>
 			<ul class="breadcrumb">
 				<li class="active">
-                     <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Dukienthuecuathang','action'=>'index'));?>">Danh sách dự kiến thuế của năm</a>             
+                     <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Dukienthuecuathang','action'=>'index'));?>">Danh sách dự kiến thuế của tháng</a>             
                 </li>
 			</ul>
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -58,7 +58,7 @@ $user = $this->identity();
 							<label class="control-label">Kỳ thuế: </label>
 							<div class="controls">
 								<div class="input-append date" id="dpMonths"
-									data-date="102/2012" data-date-format="mm-yyyy"
+									data-date="102/2012" data-date-format="mm/yyyy"
 									data-date-viewmode="years" data-date-minviewmode="months">
 									
 								<input readonly="readonly" class="m-ctrl-medium" type="text" name="KyThue"  id="kythue" >
@@ -98,31 +98,9 @@ $user = $this->identity();
                                 
 							</div>
 
-							<div class="btn-group pull-right">
-								<div class="control-group">
-                                    <div class="controls">
-                                        <div data-provides="fileupload" class="fileupload fileupload-new">
-                                            <div class="input-append">
-                                                <div class="uneditable-input">
-                                                    <i class="icon-file fileupload-exists"></i>
-                                                    <span class="fileupload-preview"></span>
-                                                </div>
-                                               <span class="btn btn-file">
-                                               <span class="fileupload-new">Select file</span>
-                                               <span class="fileupload-exists">Change</span>
-                                               <?php echo $this->formelement($formUp->get("file-excel"))?>
-                                               </span>
-                                                <button style="margin-left: 5px;"  id="Import"
-                            						class="btn btn-file">
-                            						Import <i class="icon-file"></i>
-								                    </button>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-							</div>
+							
 						</div>
+						
 	   <span class="MaCB" style="display: none;"><?php echo $user->getMaUser()?></span>
 						
 						<div class="space12"></div>
@@ -171,11 +149,11 @@ $user = $this->identity();
 								<td><?php echo $thue->getGiaTinhThue()?></td>
 								<td><?php echo $thue->getSoTien()?></td>
 								<td>
-            								<?php if($thue->getTrangThai()==0):?>	
-            								<span style="color:red;">Chưa ghi sổ</span>
-            								<?php else:?>
-            								<span style="color:green;">Đã ghi sổ</span>
-            								<?php endif;?>
+    								<?php if($thue->getTrangThai()==0):?>	
+    								<span style="color:red;">chờ ghi</span>
+    								<?php else:?>
+    								<span style="color:green;">Đã ghi</span>
+    								<?php endif;?>
             					</td>
 							    <td><?php echo $thue->getUser()->getMaUser()?></td>
 							    
@@ -215,3 +193,81 @@ $user = $this->identity();
 	<!-- END PAGE -->
 </div>
 <!-- END CONTAINER -->
+
+
+<div id="DialogSangSo" style="width: 800px; margin-left: -400px;"
+            	class="modal hide fade" tabindex="-1" role="dialog"
+            	aria-labelledby="myModalLabel1" aria-hidden="false"
+            	style="display: block;">
+            	<div class="modal-header">
+            		<button type="button" class="close" data-dismiss="modal"
+            			aria-hidden="true">×</button>
+            		<h3>Thêm Cán Bộ Thuế</h3>
+            	</div>
+            	
+            <!-- BEGIN FORM-->
+              
+        <div class="modal-body"> 		
+                            
+            		<div>
+            		<form action="#" class="form-horizontal">
+							<div class="control-group">
+							<label class="control-label">Năm: </label>
+							<div class="controls">
+								<div class="input-append date" id="dpYears"
+									data-date="102/2012" data-date-format=" yyyy"
+									data-date-viewmode="years" data-date-minviewmode="years">
+									
+								<input readonly="readonly" class="m-ctrl-medium" type="text" name="KyThueSangSo" id="KyThueSangSo" >
+                                 
+                                 
+                                
+								 <span class="add-on"> <i class="icon-calendar"> </i></span>
+								 
+								 
+								 
+								<img class="loading_sangso" style="margin-left:10px; display : none;" src="<?php echo $this->basePath() . '/public/' . 'img/ajax-loader.gif'?>">
+                                
+								</div>
+								
+								<p class="help-block"></p>
+							</div>
+						</div>
+						</form>
+            		
+            		</div>
+            		
+            		<table cellspacing="0" class="table table-striped table-bordered" width="100%" id="table_sangso" style="margin-left: 0px; width: 740px;">
+						<thead>
+							<tr>
+								    <th><input id="check_all_sangso" type="checkbox"></th>
+									<th>Mã số thuế</th>
+						            <th>Tên HKD</th>
+									<th>Tiểu Mục (*)</th>
+									<th>Doanh thu chịu thuế</th>
+									<th>Tỉ lệ tính thuế</th>
+									<th>Thuế suất</th>
+									<th>Tên gọi</th>
+									<th>Sản lượng</th>
+									<th>Giá tính thuế</th>
+									<th>Số tiền</th>
+									<th>Mã CB</th>
+							</tr>
+						</thead>
+						<tbody>
+                        </tbody>
+					</table>
+            		
+            		
+            		
+
+                 
+                 
+
+        </div>
+        <div class="modal-footer">
+		 <button type="button"  class="btn btn-success sangso">Sang sổ</button>
+         <button type="button" class="btn cancel">Cancel</button>
+        </div>
+       
+</div>
