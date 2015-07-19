@@ -5,6 +5,12 @@ use Application\base\baseController;
 use Quanlysothue\Models\dukienthuecuanamModel;
 use Application\Forms\UploadForm;
 use Quanlysothue\Models\dukienthuecuathangModel;
+use Application\Entity\ketqua;
+use Application\Models\nganhModel;
+use Application\Entity\dukienthue;
+use Quanlysothue\Froms\formDuKienThueCuaNam;
+use Quanlynguoinopthue\Models\nguoinopthueModel;
+use Application\Unlity\Unlity;
 
 
 class DukienthuecuathangController extends baseController
@@ -99,6 +105,7 @@ class DukienthuecuathangController extends baseController
                         $TenGoi = $post->get('TenGoi');
                         $SanLuong = $post->get('SanLuong');
                         $GiaTinhThue = $post->get('GiaTinhThue');
+                        $NgayPhaiNop = $post->get('NgayPhaiNop');
         
                         if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
                         {
@@ -144,7 +151,8 @@ class DukienthuecuathangController extends baseController
                             $dukienthuenam->setGiaTinhThue($GiaTinhThue);
         
                         $dukienthuenam->setSoTien($SoTien);
-                        $dukienthuenam->setNgayPhaiNop(null);
+                        
+                        $dukienthuenam->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $NgayPhaiNop, 'Y-m-d'));
                         $dukienthuenam->setTrangThai(0);
                         $dukienthuenam->setUser($this->getUser());
                         $kq = $dukienthuenamModel->merge($dukienthuenam);

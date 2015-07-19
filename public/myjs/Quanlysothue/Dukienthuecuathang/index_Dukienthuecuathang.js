@@ -11,13 +11,23 @@ var EditableTable = function () {
 	var _TieuMuc = "";
 	var _MaSoThue = "";
 	var otable_sangso=null;
-
+	var oTable;
 	return {
 
 		init : function () {
 			
 			
 			//*******************ONLY PAGE BEGIN************************//
+			
+			
+			
+			$("input[name='NgayPhaiNop']").live('focus', function(){
+			    if (false == $(this).hasClass('hasDatepicker')) {
+			    	$(this).datepicker({ 
+				    	format: 'dd-mm-yyyy'
+				    });
+			    }
+			});
 			
 			function sangso(){
 				$("img.loading_sangso").css('display','inline');
@@ -429,10 +439,11 @@ var EditableTable = function () {
 								data[i]['DoanhThuChiuThue'],
 								data[i]['TiLeTinhThue'],
 								data[i]['ThueSuat'],
-								data[i]['TenGoi'],
-								data[i]['SanLuong'],
-								data[i]['GiaTinhThue'],
+								data[i]['TenGoi']==null?'':data[i]['TenGoi'],
+								data[i]['SanLuong']==null?'':data[i]['SanLuong'],
+								data[i]['GiaTinhThue']==null?'':data[i]['GiaTinhThue'],
 								data[i]['SoTien'],
+								$.datepicker.formatDate("dd-mm-yy",new Date(data[i]['NgayPhaiNop'].date)) ,
 								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ ghi'+'</span>':'<span style="color:green;">'+'Đã ghi'+'</span>',
 								data[i]['user']['MaUser'],		
 								data[i]['TrangThai']==0?'<a class="edit" href="">Edit</a>':'',
@@ -493,7 +504,7 @@ var EditableTable = function () {
 					],
 					// new 
 					
-					
+						
 					//*************************************
 					"sScrollY": "350px",
 					"sScrollX": "100%",
@@ -591,62 +602,24 @@ var EditableTable = function () {
 				
 				jqTds[10].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
 					 + aData[10] + '">';
+				jqTds[11].innerHTML = '<input style="width:90px;" name="NgayPhaiNop" type="text"  value="'
+					 + aData[11] + '">';
+				jqTds[12].innerHTML = aData[12];
 				
-				jqTds[11].innerHTML = aData[11];
-				
-				jqTds[12].innerHTML = $("span.MaCB").html();
+				jqTds[13].innerHTML = $("span.MaCB").html();
 				
 				
-				jqTds[13].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[14].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				jqTds[14].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[15].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
-				oTable.fnAdjustColumnSizing();
+				oTable.fnAdjustColumnSizing();	
+				$("div.dataTables_scrollHead").css("width","initial");
+				$("div.dataTables_scrollBody").css("width","initial");
+				
 
 			}
 
-			function addRow(oTable, nRow) {
-				var aData = oTable.fnGetData(nRow);
-				var jqTds = $('>td', nRow);
-				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
-				// cansua
-				jqTds[1].innerHTML = '<input style="width:65px;" name="masothue" type="text"  value="'
-					 + aData[1] + ' "disabled><button style="margin:0 10px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
-				jqTds[2].innerHTML = '<input style="width:100px;" name="TenHKD" type="text"  value="'
-
-					 + aData[2] + '"disabled>';
-					 
-				jqTds[3].innerHTML = '<input style="width:50px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Chọn</button>';
-
-
-				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhThuChiuThue" type="text"  value="'
-					 + aData[4] + '">';
-				
-				jqTds[5].innerHTML = '<input style="width:35px;" name="TiLeTinhThue" type="text"  value="'
-					 + aData[5] + '"disabled>';
-				
-				jqTds[6].innerHTML = '<input style="width:20px;" name="ThueSuat" type="text" value="'
-					 + aData[6] + '">';
-				jqTds[7].innerHTML = '<input style="width:60px;" name="TenGoi" type="text" value="'
-					 + aData[7] + '">';
-				jqTds[8].innerHTML = '<input style="width:60px;" name="SanLuong" type="text" value="'
-					 + aData[8] + '">';
-				jqTds[9].innerHTML = '<input style="width:60px;" name="GiaTinhThue" type="text" value="'
-					 + aData[9] + '">';
-				
-				jqTds[10].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
-					 + aData[10] + '">';
-				
-				jqTds[11].innerHTML = '<span style="color:red;">'+'Chờ ghi'+'</span>';
-				
-				jqTds[12].innerHTML = $('span.MaCB').html();
-				jqTds[13].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[14].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
-				
-				oTable.fnAdjustColumnSizing();
-
-			}
 
 			function saveRow(oTable, nRow) {
 				var jqInputs = $('input', nRow);
@@ -667,14 +640,17 @@ var EditableTable = function () {
 				oTable.fnUpdate((jqInputs[9].value == 0) ? '':jqInputs[9].value, nRow, 9, false);
 				
 				oTable.fnUpdate(jqInputs[10].value, nRow, 10, false);
-				oTable.fnUpdate('<span style="color:red;">'+'Chờ ghi'+'</span>', nRow, 11, false);
-				oTable.fnUpdate($("span.MaCB").html(), nRow, 12, false);
+				
+				oTable.fnUpdate(jqInputs[11].value, nRow, 11, false);
+				
+				oTable.fnUpdate('<span style="color:red;">'+'Chờ ghi'+'</span>', nRow, 12, false);
+				oTable.fnUpdate($("span.MaCB").html(), nRow, 13, false);
 				
 				
-				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 13,
+				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 14,
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
-					14, false);
+					15, false);
 				oTable.fnDraw();
 			}
 			
@@ -1094,7 +1070,7 @@ var EditableTable = function () {
 				};
 				
 				
-				var url = "xoa";
+				var url = baseUrl("quanlysothue/Dukienthuecuanam/xoa");
 				Xoa('post', url, data, oTable, nRow);
 
 			});
@@ -1108,7 +1084,7 @@ var EditableTable = function () {
 				// Chỉ cho phép cán bộ đã lập dự kiến này sửa
 				
 					if (nEditing !== null && nEditing != nRow) {
-						if(aData[12] == $("span.MaCB").html()){
+						if(aData[13] == $("span.MaCB").html()){
 							var flag = false;
 							var jqTds = $('>td', nEditing);
 							$.each(jqTds, function (i, val) {
@@ -1195,6 +1171,7 @@ var EditableTable = function () {
 						var SanLuong  = $("input[name='SanLuong']", nRow).val().trim();
 						var GiaTinhThue  = $("input[name='GiaTinhThue']", nRow).val().trim();
 						var SoTien  = $("input[name='SoTien']", nRow).val().trim();
+						var NgayPhaiNop  = $("input[name='NgayPhaiNop']", nRow).val().trim();
 						
 						
 						
@@ -1212,7 +1189,8 @@ var EditableTable = function () {
 							TenGoi : TenGoi,
 							SanLuong : SanLuong,
 							GiaTinhThue : GiaTinhThue,
-							SoTien : SoTien
+							SoTien : SoTien,
+							NgayPhaiNop : NgayPhaiNop
 						}
 
 						var url = "sua";
@@ -1222,7 +1200,7 @@ var EditableTable = function () {
 						SaveEdit('post', url, data, oTable, nEditing);
 
 					} else {
-						if(aData[12] == $("span.MaCB").html()){
+						if(aData[13] == $("span.MaCB").html()){
 							editRow(oTable, nRow);
 							nEditing = nRow;
 						}
@@ -1362,9 +1340,7 @@ var EditableTable = function () {
 				    }else if(json.sucess==true){
 				    	
 				    }
-				    
 				    DialogTable.setHeadAndMess('Thông báo',json.mess);
-				    
 				  }
 				});
 			});

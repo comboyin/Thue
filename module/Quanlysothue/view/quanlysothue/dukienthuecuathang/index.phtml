@@ -119,6 +119,7 @@ $user = $this->identity();
 									<th>Sản lượng</th>
 									<th>Giá tính thuế</th>
 									<th>Số tiền (*)</th>
+									<th>Ngày phải nộp (*)</th>
 									<th>Trang thái</th>
 									<th>Mã CB</th>
 									
@@ -148,6 +149,7 @@ $user = $this->identity();
 								<td><?php echo $thue->getSanLuong()?></td>
 								<td><?php echo $thue->getGiaTinhThue()?></td>
 								<td><?php echo $thue->getSoTien()?></td>
+								<td><?php echo $thue->getNgayPhaiNop()?></td>
 								<td>
     								<?php if($thue->getTrangThai()==0):?>	
     								<span style="color:red;">chờ ghi</span>

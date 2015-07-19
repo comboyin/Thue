@@ -158,17 +158,17 @@ class formDuKienThueCuaNam extends Form
                     'name' => '\Zend\Validator\StringLength',
                     'options' => array(
                         'min' => 4, // Minimum length
-                        'max' => 4, // Maximum length, null if there is no length limitation
+                        'max' => 7, // Maximum length, null if there is no length limitation
                         'encoding' => 'UTF-8'
                     )
-                ), // Encoding to use
+                )/* , // Encoding to use
         
                 array(
                     'name' => '\Zend\Validator\Date',
                     'options' => array(
                         'format' => 'Y'
                     )
-                )
+                ) */
             )
         ]));
         
