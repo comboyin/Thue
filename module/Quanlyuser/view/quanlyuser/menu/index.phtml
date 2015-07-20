@@ -1,9 +1,137 @@
-<h1>
+<?php 
 
-THỬ MENU
+use Application\Entity\chat;
+use Application\Entity\user;
+/* @var $user user */
+$user = $this->identity();
+/* @var $dsChat chat */
+?>
+    
+     <div class="space12"></div>
+     <div class="space12"></div>
+     <div class="space12"></div>
+                <div class="row-fluid">
+                
+                
+<div class="span6">
+                     <!-- BEGIN CHAT PORTLET-->
+                     <div class="widget green">
+                         <div class="widget-title">
+                             <h4><i class="icon-comments-alt"></i> Chats</h4>
+									<span class="tools">
+									<a href="javascript:;" class="icon-chevron-down"></a>
+									<a href="javascript:;" class="icon-remove"></a>
+									</span>
+                         </div>
+                         <div class="widget-body">
+                             <div class="timeline-messages">
+                             
+                             
+                             
+<?php if($dsChat!=null):?>
+<?php foreach ($dsChat as $chat):?>
+                                 <!-- Comment -->
+                                 <div class="msg-time-chat">
+                                    
+                                     <div class="message-body 
+                                     <?php 
+                                     if($chat->getUser()->getMaUser() == $user->getMaUser())
+                                         echo "msg-in";
+                                     else
+                                         echo "msg-out";
+                                     ?>
+                                     ">
+                                         <span class="arrow"></span>
+                                         <div class="text">
+                                             <p class="attribution"><a href="#"><?php echo $chat->getUser()->getTenUser();?></a> at 1:55, 13th April 2013</p>
+                                             <p><?php echo $chat->getNoiDung();?></p>
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <!-- /comment -->
+<?php endforeach;?>
+<?php endif;?>
 
-</h1>
+                     
+                     
+                     
+                             </div>
+                             <div class="chat-form">
+                                 <div class="input-cont">
+                                     <input type="text" placeholder="Type a message here..." />
+                                 </div>
+                                 <div class="btn-cont">
+                                     <a href="javascript:;" class="btn btn-primary">Send</a>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     <!-- END CHAT PORTLET-->
+</div>
+                 
+                 <div class="span6">
+                     <!-- BEGIN NOTIFICATIONS PORTLET-->
+                     <div class="widget red">
+                         <div class="widget-title">
+                             <h4><i class="icon-bell"></i> Thông báo </h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                               <a href="javascript:;" class="icon-remove"></a>
+                           </span>
+                         </div>
+                         <div class="widget-body">
+                             <ul class="item-list scroller padding"  style="overflow: hidden; width: auto; height: auto;" data-always-visible="1">
+                                 <li>
+                                     <span class="label label-warning"><i class="icon-user"></i></span>
+                                     <span>Hiện tại đội thuế có 3 hộ đang tạm nghĩ kinh doanh.</span>
 
-<p>
+                                 </li>
+                                 <li>
+                                     <span class="label label-success"><i class="icon-user"></i></span>
+                                     <span>Có 5 hộ mới đăng ký chưa có dự kiến thuế.</span>
 
-</p>
+                                 </li>
+                                 <li>
+                                     <span class="label label-warning"><i class="icon-bell"></i></span>
+                                     <span>Còn lại 7 thuế môn bài chưa được duyệt.</span>
+
+                                 </li>
+                                 <li>
+                                     <span class="label label-warning"><i class="icon-bell"></i></span>
+                                     <span>Còn lại 8 thuế khoán chưa được duyệt.</span>
+
+                                 </li>
+                                 <li>
+                                     <span class="label label-info"><i class="icon-list"></i></span>
+                                     <span>Còn lại 20 thuế tiêu thụ đặc biệt chưa được duyệt.</span>
+
+                                 </li>
+                                 <li>
+                                     <span class="label label-info"><i class="icon-list"></i></span>
+                                     <span>Còn lại 8 thuế tài nguyên chưa được duyệt.</span>
+
+                                 </li>
+                                 <li>
+                                     <span class="label label-info"><i class="icon-list"></i></span>
+                                     <span>Còn lại 12 thuế bảo vệ môi trường chưa được duyệt.</span>
+
+                                 </li>
+                                 <li>
+                                     <span class="label label-important"><i class="icon-calendar"></i></span>
+                                     <span>Còn lại 9 dự kiến thuế của năm chưa được duyệt.</span>
+
+                                 </li>
+                             </ul>
+                             <div class="space10"></div>
+                             <a href="#" class="pull-right"></a>
+                             <div class="clearfix no-top-space no-bottom-space"></div>
+                         </div>
+                     </div>
+                     <!-- END NOTIFICATIONS PORTLET-->
+                 </div>
+
+             </div>
+    <div class="clearfix"></div>
+    
+    <?php var_dump($dsChat)?> 
+   

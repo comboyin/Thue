@@ -9,6 +9,7 @@
 namespace Quanlyuser\Controller;
 
 use Application\base\baseController;
+use Application\Models\chatModel;
 
 
 class menuController extends baseController
@@ -17,8 +18,12 @@ class menuController extends baseController
     // login
     public function indexAction()
     {
+        $model = new chatModel($this->getEntityManager());
         
-        
+        $dsChat = $model->DanhSachChat($this->getUser());
+        return array(
+            'dsChat' => $dsChat->getObj()
+        );
     }
 
 }

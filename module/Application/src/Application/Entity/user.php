@@ -68,6 +68,10 @@ class user implements InputFilterAwareInterface
     private $TrangThai;
     
     /**
+     * @ORM\OneToMany(targetEntity="Application\Entity\chat", mappedBy="user")
+     */
+    private $chats;
+    /**
      * @ORM\OneToMany(targetEntity="Application\Entity\dukientruythu", mappedBy="user")
      */
     private $dukientruythus;
