@@ -62,16 +62,11 @@ return array(
                         'action' => 'index',
                         'resource' => 'Application\Controller\Index'
                     ), array(
-                        'label' => 'Thuế GTGT',
-                        'route' => 'application',
+                        'label' => 'Thuế khoán',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Thuekhoan',
                         'action' => 'index',
-                        'resource' => 'Application\Controller\Index'
-                    ),
-                    array(
-                        'label' => 'Thuế TNCN',
-                        'route' => 'application',
-                        'action' => 'index',
-                        'resource' => 'Application\Controller\Index'
+                        'resource' => 'Quanlysothue\Controller\Thuekhoan'
                     ),
                     array(
                         'label' => 'Thuế khác',
