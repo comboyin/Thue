@@ -1070,8 +1070,8 @@ var EditableTable = function () {
 				};
 				
 				
-				var url = baseUrl("quanlysothue/Dukienthuecuanam/xoa");
-				Xoa('post', url, data, oTable, nRow);
+				var url = 'xoa';
+				Xoa('post', url, data, oTableThueKhoan, nRow);
 
 			});
 

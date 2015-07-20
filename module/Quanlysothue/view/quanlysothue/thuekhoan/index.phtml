@@ -81,8 +81,7 @@ $user = $this->identity();
 						<div class="clearfix">
 							<div class="btn-group">
 
-								
-								
+								<?php if($user->getLoaiUser()==3):?>
 								<button 
 									class="btn btn-link ChonChoDuyet">
 									  Chọn "Chờ duyệt" 
@@ -95,6 +94,9 @@ $user = $this->identity();
 									  Duyệt
 									<i class="icon-adjust"></i>
 							     </button>
+								<?php endif;?>
+								
+								
 							     
 							     <button  style="margin-left: 5px;"
 									class="btn btn-success GhiSo">
@@ -161,8 +163,8 @@ $user = $this->identity();
 							    
 							    
 							    <?php if($thue->getTrangThai()==0):?>	
-								<td><a class="edit" href="">Edit</a></td>
-								<td><a class="Delete" href="">Delete</a></td>
+								<?php echo $user->getLoaiUser()==3?'<td><a class="edit" href="">Edit</a></td>':'<td></td>'?>
+								<?php echo $user->getLoaiUser()==3?'<td><a class="Delete" href="">Delete</a></td>':'<td></td>'?>
 								<?php else:?>
 								<td></td>
 								<td></td>
