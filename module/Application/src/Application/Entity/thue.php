@@ -295,7 +295,7 @@ class thue
      */
     public function setNgayPhaiNop($NgayPhaiNop)
     {
-        $this->NgayPhaiNop = $NgayPhaiNop;
+        $this->NgayPhaiNop = \DateTime::createFromFormat('Y-m-d', $NgayPhaiNop) ;
     }
 
  /**

@@ -69,13 +69,7 @@ var EditableTable = function () {
 						}
 					}
 				});
-				
-				
-				
-				
-				
-				
-				
+
 			}
 			
 			//chon chờ duyệt

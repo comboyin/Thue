@@ -16,6 +16,89 @@ var EditableTable = function () {
 			
 			
 			//*******************ONLY PAGE BEGIN************************//
+			$("button.ChonChoDuyet").click(function(){
+				chonChoDuyet();
+			});
+			
+			
+			//chon chờ duyệt
+			function chonChoDuyet(){
+				
+				// lay nhung dong dang "Chờ duyệt"
+				var dangChoDuyet_td = $("#TableThueKhoan td span");
+				
+				$.each(dangChoDuyet_td,function(key,value){
+					if(value.innerHTML=="chờ duyệt"){
+						var elemTr =  $(value).parents('tr')[0];
+						var checkbox = $('input',elemTr)[0];
+						
+						$(checkbox).attr('checked','checked');
+					}
+				});
+				
+			}
+			$("button.Duyet").click(function(){
+				duyetThueKhoan();
+			});
+			
+			
+
+			
+			//duyet du kien thue nam
+			function duyetThueKhoan(){
+				
+				var row = $("#TableThueKhoan input.check_item:checked").parents('tr');
+				if(row.length==0){
+					DialogTable.showThongBaoUnlimit('Thông báo !','Vui lòng chọn ít nhất một để duyệt !');
+					return;
+				}
+				
+				
+				
+				BootstrapDialog.confirm({
+					title : 'Cảnh báo',
+					message : '<span style="color:red">Có thật sự chắc chắn với hành động này?</span>',
+					type : BootstrapDialog.TYPE_WARNING,
+					btnCancelLabel : 'NO',
+					btnOKLabel : 'YES',
+					callback : function (result) {
+						if (result) {
+							//
+							$("img.loading").css('display','inline');
+							var indexMaSoThue = 1;
+							var indexTieuMuc = 3;
+							var dsMaSoThue = [];
+							var dsTieuMuc = [];
+							var row = $("#TableThueKhoan input.check_item:checked").parents('tr');
+							
+							$.each(row,function(key,value){
+								var MaSoThue = $('td',value)[indexMaSoThue].innerHTML.trim();
+								var TieuMuc =  $('td',value)[indexTieuMuc].innerHTML.trim();
+								dsMaSoThue.push(MaSoThue);
+								dsTieuMuc.push(TieuMuc);
+							});
+							
+							
+							data = {
+								dsMaSoThue : dsMaSoThue, 
+								dsTieuMuc : dsTieuMuc,
+								Thang : _KyThueThueKhoan
+							};
+							
+							$.post("duyet",data,function(json){
+								if(json.kq==true){
+									resetTable();
+								}
+								DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
+								$("img.loading").css('display','none');
+							},'json');
+						} else {
+							
+						}
+					}
+				});
+
+			}
 			
 			$("#check_all_ghiso").click(function (e) {
 				// uncheck to checked
@@ -29,6 +112,47 @@ var EditableTable = function () {
 					});
 				}
 			});
+			
+			
+			$("#GhiSo").click(function(){
+				GhiSo();
+			});
+			function GhiSo(){
+				$("img.loading_GhiSo").css('display','inline');
+				var dsMaSoThue =[];
+				var dsTieuMuc=[];
+				var Row = $("#TableGhiSo input.check_item:checked").parents("tr");
+				if(Row.length==0){
+					$("#DialogGhiSo").modal('hide');
+					DialogTable.showThongBaoUnlimit('Thông báo !','Cần chọn trước khi click ghi sổ !');
+				}
+				$.each(Row,function($key,$value){
+					$MaSoThue = $("td",$value)[1].innerHTML.trim();
+					$TieuMuc = $("td",$value)[3].innerHTML.trim();	
+						
+					dsMaSoThue.push($MaSoThue);
+					dsTieuMuc.push($TieuMuc);
+					
+				});
+				
+				//post
+				var data = {
+						dsMaSoThue : dsMaSoThue,
+						dsTieuMuc : dsTieuMuc,
+						Thang : _KyThueThueKhoan
+				};
+				
+				$.post("ghiso",data, function(json){
+					$("img.loading_GhiSo").css('display','none');
+					$("#DialogGhiSo").modal('hide');
+					DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
+					if(json.kq==true)
+					{
+						LoadDSThueKhoan();
+					}
+				},'json');
+	
+			}
 			
 			
 			$("#dpGhiSo").datepicker();
@@ -931,7 +1055,7 @@ var EditableTable = function () {
 				e.preventDefault();
 
 				var nRow = $(this).parents('tr')[0];
-				var aData = oTable.fnGetData(nRow);
+				var aData = oTableThueKhoan.fnGetData(nRow);
 
 				// cansuaxoa
 				
@@ -941,7 +1065,7 @@ var EditableTable = function () {
 				
 				data = {
 					_MaSoThue : _MaSoThue,
-					_KyThue : _KyThue,
+					_KyThue : _KyThueThueKhoan,
 					_TieuMuc : _TieuMuc
 				};
 				

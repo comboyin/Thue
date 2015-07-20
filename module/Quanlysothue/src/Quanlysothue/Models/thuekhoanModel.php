@@ -3,11 +3,14 @@ namespace Quanlysothue\Models;
 
 use Application\base\baseModel;
 use Application\Entity\ketqua;
+use Application\Entity\thue;
+use Application\Entity\dukienthue;
+use Application\Unlity\Unlity;
 
 class thuekhoanModel extends baseModel
 {
 
-    public function dsThueKhoan($thang,$user,$type)
+    public function dsThueKhoan($thang, $user, $type)
     {
         $q = $this->em->createQueryBuilder();
         try {
@@ -16,54 +19,49 @@ class thuekhoanModel extends baseModel
                     'thue',
                     'nguoinopthue',
                     'usernnts'
-                    
-                ))
-                ->from('Application\Entity\thue', 'thue')
-                ->join('thue.nguoinopthue', 'nguoinopthue')
-                
-                
-                ->join('nguoinopthue.usernnts', 'usernnts')
-        
-                ->where('thue.KyThue = ?1')
-                ->andWhere('usernnts.user = ?2')
-                ->andWhere('usernnts.ThoiGianKetThuc is null')
-                ->setParameter(2, $user)
-                ->setParameter(1, $thang);
-            } else
+                )
+                )
+                    ->from('Application\Entity\thue', 'thue')
+                    ->join('thue.nguoinopthue', 'nguoinopthue')
+                    ->
+                join('nguoinopthue.usernnts', 'usernnts')
+                    ->
+                where('thue.KyThue = ?1')
+                    ->andWhere('usernnts.user = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->setParameter(2, $user)
+                    ->setParameter(1, $thang);
+            } else 
                 if ($user->getLoaiUser() == 3) {
                     $q->select(array(
                         'thue',
                         'nguoinopthue',
                         'usernnts'
-                        
-                    ))
-                    ->from('Application\Entity\thue', 'thue')
-                    ->join('thue.nguoinopthue', 'nguoinopthue')
-                    
-                    
-                    ->join('nguoinopthue.usernnts', 'usernnts')
-                    ->join('usernnts.user', 'user')
-                    ->where('thue.KyThue = ?1')
-                    ->andWhere('user.parentUser = ?2')
-                    ->andWhere('usernnts.ThoiGianKetThuc is null')
-                    ->setParameter(2, $user)
-                    ->setParameter(1, $thang);
+                    )
+                    )
+                        ->from('Application\Entity\thue', 'thue')
+                        ->join('thue.nguoinopthue', 'nguoinopthue')
+                        ->
+                    join('nguoinopthue.usernnts', 'usernnts')
+                        ->join('usernnts.user', 'user')
+                        ->where('thue.KyThue = ?1')
+                        ->andWhere('user.parentUser = ?2')
+                        ->andWhere('usernnts.ThoiGianKetThuc is null')
+                        ->setParameter(2, $user)
+                        ->setParameter(1, $thang);
                 }
             $this->kq->setKq(true);
-            if($type=='array')
-            {
+            if ($type == 'array') {
                 $this->kq->setObj($q->getQuery()
                     ->getArrayResult());
-            }
-            else if($type=='object'){
-                $this->kq->setObj($q->getQuery()
-                    ->getResult());
-            }
+            } else 
+                if ($type == 'object') {
+                    $this->kq->setObj($q->getQuery()
+                        ->getResult());
+                }
             
-           
             $this->kq->setMessenger('Lấy danh sách dự thuế của tháng ' . $thang . ' thành công !');
             return $this->kq;
-        
         } catch (\Exception $e) {
             var_dump($e->getMessage());
             $this->kq->setKq(false);
@@ -72,6 +70,130 @@ class thuekhoanModel extends baseModel
         }
     }
 
+    public function ghiso($dsMaSoThue, $dsTieuMuc, $Thang)
+    {
+        $kq = new ketqua();
+        $dem = 0;
+        
+        try {
+            $this->em->getConnection()->beginTransaction();
+            foreach ($dsMaSoThue as $key => $value) {
+                // tim du kien nam
+                $dukienthuethang = $this->em->find('Application\Entity\dukienthue', array(
+                    'nguoinopthue' => $this->em->find('Application\Entity\nguoinopthue', $value),
+                    'muclucngansach' => $this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]),
+                    'KyThue' => $Thang
+                ));
+                if ($dukienthuethang == null) {
+                    $this->em->getConnection()->rollBack();
+                    $kq->setKq(false);
+                    $kq->setMessenger('<span style="color:red">' . "Không tìm thấy dự kiến thuế " . $value . " - " . $dsTieuMuc[$key] . " - " . $Thang . '</span>');
+                    return $kq;
+                }
+                /* @var $dukienthuethang dukienthue */
+                $thuekhoan = new thue();
+                $thuekhoan->setNguoinopthue($this->em->find('Application\Entity\nguoinopthue', $value));
+                $thuekhoan->setMuclucngansach($this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]));
+                $thuekhoan->setKyThue($Thang);
+                $thuekhoan->setTenGoi($dukienthuethang->getTenGoi());
+                $thuekhoan->setSanLuong($dukienthuethang->getSanLuong());
+                
+                $thuekhoan->setDoanhThuChiuThue($dukienthuethang->getDoanhThuChiuThue());
+                
+                $thuekhoan->setGiaTinhThue($dukienthuethang->getGiaTinhThue());
+                
+                $thuekhoan->setTiLeTinhThue($dukienthuethang->getTiLeTinhThue());
+                
+                $thuekhoan->setThueSuat($dukienthuethang->getThueSuat());
+                
+                $thuekhoan->setSoTien($dukienthuethang->getSoTien());
+                
+                $thuekhoan->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $dukienthuethang->getNgayPhaiNop(), 'Y-m-d')); // 2015-07-28
+                $thuekhoan->setTrangThai(0);
+                
+                //set trạng thái cho dự kiến tháng - đã ghi
+                //$dukienthuethang->setTrangThai(1);
+                $this->em->persist($thuekhoan);
+                $this->em->merge($dukienthuethang);
+                $this->em->flush();
+                $dem ++;
+            }
+            
+            $kq->setKq(true);
+            $kq->setMessenger('<span style="color:green">' . 'Tẩt cả dự kiến tháng ' . $Thang . ' được chọn đã ghi sổ thành công <br/>
+                                Tổng cộng có ' . $dem . ' dự kiến tháng được ghi sổ !' . '</span>');
+            
+            $this->em->getConnection()->commit();
+            
+            return $kq;
+        } catch (\Exception $e) {
+            $this->em->getConnection()->rollBack();
+            $kq->setKq(false);
+            $kq->setMessenger('<span style="color:red">' . $e->getMessage() . '</span>');
+            return $kq;
+        }
+    }
+    public function duyet($dsMaSoThue,$dsTieuMuc,$Thang){
+        $kq= new ketqua();
+        $dem =0;
+        
+        try {
+            $this->em->getConnection()->beginTransaction();
+            foreach ($dsMaSoThue as $key=>$value){
+                $MaSoThue = $value;
+                $TieuMuc = $dsTieuMuc[$key];
+                
+                /* @var $thue thue */
+                $thue = $this->em->find('Application\Entity\thue', array(
+                    'nguoinopthue'=>$this->em->find('Application\Entity\nguoinopthue', $MaSoThue),
+                    'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
+                    'KyThue' => $Thang
+                ));
+        
+                // khong tim thay
+                if($thue==null){
+                    $kq->setKq(false);
+                    $kq->setMessenger('<span style="color:red;" >'."Không tìm thấy ".$MaSoThue.'-'.$TieuMuc."-".$Thang.'<br/></span>');
+        
+                    $this->em->getConnection()->rollBack();
+                    return $kq;
+                }
+        
+                //thue da duoc duyet
+                if($thue->getTrangThai()==1){
+                    $kq->setKq(false);
+                    $kq->setMessenger('<span style="color:red;" >'."Dự kiến thuế ".$MaSoThue.'-'.$TieuMuc."-".$Thang . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
+        
+                    $this->em->getConnection()->rollBack();
+                    return $kq;
+                }
+        
+                $thue->setTrangThai(1);
+                $this->em->flush();
+                $dem++;
+        
+            }
+        
+        
+        
+            $this->em->getConnection()->commit();
+        
+        
+            //thanh cong - thong bao bao nhieu du kien da dc duyet
+            $kq->setKq(true);
+            $kq->setMessenger('<span style="color:green;" >Tất cả thuế được chọn đã được duyệt hoàn tất<br/>
+                                Tổng số '.$dem . 'thuế đã được duyệt </span>');
+        
+            return $kq;
+        
+        } catch (\Exception $e) {
+            $kq->setKq(false);
+            $kq->setMessenger('<span style="color:red;" >'.$e->getMessage().'<br/></span>');
+            $this->em->getConnection()->rollBack();
+            return $kq;
+        
+        }
+    }
 }
 
 ?>

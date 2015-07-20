@@ -20,7 +20,6 @@ var EditableTable = function () {
 			//*******************ONLY PAGE BEGIN************************//
 			
 			
-			
 			$("input[name='NgayPhaiNop']").live('focus', function(){
 			    if (false == $(this).hasClass('hasDatepicker')) {
 			    	$(this).datepicker({ 
@@ -61,12 +60,7 @@ var EditableTable = function () {
 						LoadDSDKThueThang();
 					}
 				},'json');
-				
-				
-				
-				
-				
-				
+	
 			}
 			
 			

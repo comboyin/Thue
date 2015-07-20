@@ -35,6 +35,28 @@ class ThuekhoanController extends baseController
         return $this->response;
         
     }
+    public function ghisoAction(){
+        $dsMaSoThue = $this->getRequest()->getPost()->get('dsMaSoThue');
+        $dsTieuMuc = $this->getRequest()->getPost()->get('dsTieuMuc');
+        $Thang = $this->getRequest()->getPost()->get('Thang');
+        $model = new thuekhoanModel($this->getEntityManager());
+        $kq = $model->ghiso($dsMaSoThue,$dsTieuMuc,$Thang)->toArray();
+        
+        echo json_encode($kq);
+        return $this->response;
+    }
+    
+    public function duyetAction(){
+        $dsMaSoThue = $this->getRequest()->getPost()->get('dsMaSoThue');
+        $dsTieuMuc = $this->getRequest()->getPost()->get('dsTieuMuc');
+        $Thang = $this->getRequest()->getPost()->get('Thang');
+        $model = new thuekhoanModel($this->getEntityManager());
+        $kq = $model->duyet($dsMaSoThue,$dsTieuMuc,$Thang)->toArray();
+        
+        echo json_encode($kq);
+        return $this->response;
+        
+    }
 }
 
 ?>
