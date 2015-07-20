@@ -47,6 +47,22 @@ class miengiamthue
      */
     private $nguoinopthue;
  /**
+     * @return the $NgayCoHieuLuc
+     */
+    public function getNgayCoHieuLuc()
+    {
+        return $this->NgayCoHieuLuc;
+    }
+
+ /**
+     * @param field_type $NgayCoHieuLuc
+     */
+    public function setNgayCoHieuLuc($NgayCoHieuLuc)
+    {
+        $this->NgayCoHieuLuc = \DateTime::createFromFormat("Y-m-d", $NgayCoHieuLuc);
+    }
+
+ /**
      * @return the $thongtinngungnghi
      */
     public function getThongtinngungnghi()
@@ -70,13 +86,6 @@ class miengiamthue
         return $this->SoQDMG;
     }
 
- /**
-     * @return the $NgayNopDon
-     */
-    public function getNgayNopDon()
-    {
-        return $this->NgayNopDon;
-    }
 
 
 
@@ -114,14 +123,6 @@ class miengiamthue
     public function setSoQDMG($SoQDMG)
     {
         $this->SoQDMG = $SoQDMG;
-    }
-
- /**
-     * @param field_type $NgayNopDon
-     */
-    public function setNgayNopDon($NgayNopDon)
-    {
-        $this->NgayNopDon = $NgayNopDon;
     }
 
 

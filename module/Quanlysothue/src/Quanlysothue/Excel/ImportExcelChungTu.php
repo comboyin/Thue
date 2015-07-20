@@ -13,7 +13,7 @@ class ImportExcelChungTu extends baseExcel
 {
 
     /**
-     * Validation file dự kiến import vào
+     * Validation file import vào
      *
      * @param string $fileName            
      * @param EntityManager $EntityManager            
@@ -24,7 +24,7 @@ class ImportExcelChungTu extends baseExcel
         $kq = new ketqua();
         $boolErr = 0;
         
-        $messKeyExist = "Doanh số này đã được dự kiến !";
+        $messKeyExist = "Chứng từ này đã tồn tại !";
         $messMaSoThueNotExist = "Mã số thuế không tồn tại !";
         $messTieuMucNotExist = "Tiểu mục không tồn tại !";
         $messNNTKhongThuocQuanLy = "Người nộp thuế này không thuộc quản lý của bạn hoặc đã nghĩ kinh doanh!";

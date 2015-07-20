@@ -34,14 +34,7 @@ class FormCTMienGiam extends Form
                 'label' => 'Kỳ thuế'
             )
         ));
-         //ngay hach toan
-         $this->add(array(
-             'name' => 'NgayHachToan',
-             'type' => 'Zend\Form\Element\Text',
-             'attributes' => array(
-                  
-             )
-         ));
+
         
        
         //TieuMuc
@@ -141,27 +134,7 @@ class FormCTMienGiam extends Form
             ]));
         
         
-        //NgayHachToan
-        $inputFilter->add($factory->createInput([
-            'name' => 'NgayHachToan',
-            'required' => true,
-            'filters' => array(
-                array(
-                    'name' => 'StripTags'
-                ),
-                array(
-                    'name' => 'StringTrim'
-                )
-            ),
-            'validators' => array(
-                array(
-                    'name' => '\Zend\Validator\Date',
-                    'options' => array(
-                        'format' => 'd-m-Y'
-                    )
-                )
-            )
-        ]));
+
         
         //SoTien
          $inputFilter->add($factory->createInput([

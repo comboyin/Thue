@@ -1,7 +1,7 @@
 <?php
 
-$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Chungtu/oTable_Chungtu.js');
-$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Chungtu/oTable_CTChungtu.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlynguoinopthue/Miengiam/oTable_Miengiam.js');
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlynguoinopthue/Miengiam/oTable_CTMiengiam.js');
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fileDownload.js');
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap-daterangepicker/moment.js');
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap-daterangepicker/daterangepicker.js');
@@ -29,11 +29,11 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 			<!-- BEGIN THEME CUSTOMIZER-->
 			<!-- END THEME CUSTOMIZER-->
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-			<h3 class="page-title">QUẢN LÝ CHỨNG TỪ</h3>
+			<h3 class="page-title">QUẢN LÝ MIỄN GIẢM</h3>
 			<ul class="breadcrumb">
 			
 				 <li class="active">
-                           <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Dukientruythu','action'=>'index'));?>">Danh sách dự kiến truy thu theo kỳ thuế</a>
+                           <a href="<?php echo $this->url('quanlynguoinopthue/default',array('controller'=>'Miengiam','action'=>'index'));?>">Danh sách miễn giảm</a>
                            
                        </li>
                       
@@ -51,7 +51,7 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 			<div class="widget purple">
 
 				<div class="widget-title">
-					<h4>Danh sách chứng từ</h4>
+					<h4>Danh sách miễn giảm</h4>
 					<span class="tools"> <a href="javascript:;"
 						class="icon-chevron-down"></a>
 					</span>
@@ -141,9 +141,9 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 							<div class="btn-group">
                                 
 								
-								<button  id="editable-chungtu_new"
+								<button  id="editable-miengiam_new"
 									class="btn btn-success">
-									Thêm mới chứng từ <i class="icon-plus"></i>
+									Thêm mới miễn giảm <i class="icon-plus"></i>
 								</button>
 							
                                 
@@ -172,39 +172,40 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 
 						
 						      <table cellspacing="0" class="table table-striped table-bordered"
-						width="100%" id="editable-chungtu">
+						width="100%" id="editable-miengiam">
 						<thead>
 							<tr>
 								    <th></th>
-									<th>Số chứng từ (*)</th>
-						            <th>Ngày chứng từ</th>
-								
+									<th>Số QDMG (*)</th>
+						            <th>Ngày có hiệu lực</th>
+								    <th>LyDo</th>
 									<th>Mã số thuế</th>
 									<th>Tên HKD</th>
+									<th>Mã TT ngưng nghĩ</th>
     								<th>Sửa</th>
     								<th>Xóa</th>
 							</tr>
     						</thead>
-            				        <tbody id="tablechungtu">
+            				        <tbody id="tablemiengiam">
         							</tbody>
     					    </table>
 						</div>
 						
 						
 						<div class="span6" style="border: 1px solid #9D4A9C; padding: 10px">
-						<div style="display: none;" class="progressSoChungTu progress progress-striped progress-success active">
+						<div style="display: none;" class="progressSoMienGiam progress progress-striped progress-success active">
                                 <div style="width: 100%; " class="bar" ></div>
                             </div>
 						<div class="profile-side-box red">
-                                     <h1 class="SoChungTu">Vui lòng chọn số chứng từ</h1>
+                                     <h1 class="SoQDMG">Vui lòng chọn số QDMG</h1>
                                  </div> 
 						<div class="clearfix">
 							<div class="btn-group">
                                 
 								
-								<button  id="editable-chitietchungtu_new"
+								<button  id="editable-chitietmiengiam_new"
 									class="btn btn-success">
-									Thêm chi tiết chứng từ <i class="icon-plus"></i>
+									Thêm chi tiết miễn giảm <i class="icon-plus"></i>
 								</button>
 								
 								<button style="margin-left: 5px;"  id="xoa_nhieu"
@@ -229,13 +230,12 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
 						
 						
 						      <table cellspacing="0" class="table table-striped table-bordered"
-						width="100%" id="editable-chitietchungtu">
+						width="100%" id="editable-chitietmiengiam">
 						<thead>
 							<tr>
 								    
 									<th>Kỳ thuế (*)</th>
 						            <th>Tiểu mục (*)</th>
-									<th>Ngày hạch toán</th>
 									<th>Số tiền</th>
     								<th>Sửa</th>
     								<th>Xóa</th>

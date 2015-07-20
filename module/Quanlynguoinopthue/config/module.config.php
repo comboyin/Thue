@@ -4,7 +4,8 @@ return array(
         'invokables' => array(
             'Quanlynguoinopthue\Controller\Index' => 'Quanlynguoinopthue\Controller\IndexController',
 			'Quanlynguoinopthue\Controller\Nguoinopthue' => 'Quanlynguoinopthue\Controller\NguoinopthueController',
-            'Quanlynguoinopthue\Controller\Thongtinngungnghi' => 'Quanlynguoinopthue\Controller\ThongtinngungnghiController'
+            'Quanlynguoinopthue\Controller\Thongtinngungnghi' => 'Quanlynguoinopthue\Controller\ThongtinngungnghiController',
+            'Quanlynguoinopthue\Controller\Miengiam' => 'Quanlynguoinopthue\Controller\MiengiamController'
             
             
         ),

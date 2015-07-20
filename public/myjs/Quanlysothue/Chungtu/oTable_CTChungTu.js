@@ -733,7 +733,7 @@ var EditableTableChiTietChungTu = function () {
 					//lay du lieu					
 					var KyThue = $("input[name='KyThue']", nRow).val().trim();
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-					var NgayHachToan =$("input[name='NgayHachToan']", nRow).val().trim()
+					var NgayHachToan =$("input[name='NgayHachToan']", nRow).val().trim();
 					var SoTien = $("input[name='SoTien']", nRow).val().trim();
 					var _SoChungTu = $("h1.SoChungTu").html().trim();
 					
