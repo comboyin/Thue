@@ -77,8 +77,8 @@ echo $this->headLink(array(
 								<b class="caret"></b>
 						</a>
 							<ul class="dropdown-menu extended logout">
-								<li><a href="#"><i class="icon-user"></i>Thông tin cá nhân</a></li>
-								<li><a href="#"><i class="icon-cog"></i>Cài đặt</a></li>
+								<li><a href="<?php echo $this->url('quanlycanbothue/default',array('controller'=>'Thongtincanhan','action'=>'index'))?>"><i class="icon-user"></i>Thông tin cá nhân</a></li>
+								<li><a href="<?php echo $this->url('quanlycanbothue/default',array('controller'=>'Thongtincanhan','action'=>'doimatkhau'))?>"><i class="icon-cog"></i>Đổi mật khẩu</a></li>
 								<li><a
 									href="<?php echo $this->url('quanlyuser',array('controller'=>'Login','action'=>'logout'))?>"><i
 										class="icon-key"></i> Đăng xuất</a></li>

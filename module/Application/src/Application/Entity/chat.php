@@ -58,7 +58,7 @@ class chat
      */
     public function getTime()
     {
-        return $this->Time;
+        return $this->Time->format('h:m:s - d/m/Y');
     }
 
  /**

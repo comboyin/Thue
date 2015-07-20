@@ -28,7 +28,7 @@ var EditableTable = function () {
 				var dangChoDuyet_td = $("#TableThueKhoan td span");
 				
 				$.each(dangChoDuyet_td,function(key,value){
-					if(value.innerHTML=="chờ duyệt"){
+					if(value.innerHTML=="Chờ duyệt"){
 						var elemTr =  $(value).parents('tr')[0];
 						var checkbox = $('input',elemTr)[0];
 						
@@ -87,7 +87,7 @@ var EditableTable = function () {
 							
 							$.post("duyet",data,function(json){
 								if(json.kq==true){
-									resetTable();
+									LoadDSThueKhoan();
 								}
 								DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
 								$("img.loading").css('display','none');
