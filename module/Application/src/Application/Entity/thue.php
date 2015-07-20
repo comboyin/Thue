@@ -83,6 +83,22 @@ class thue
     private $TrangThai;
     
     /**
+     * @return the $TrangThai
+     */
+    public function getTrangThai()
+    {
+        return $this->TrangThai;
+    }
+
+ /**
+     * @param field_type $TrangThai
+     */
+    public function setTrangThai($TrangThai)
+    {
+        $this->TrangThai = $TrangThai;
+    }
+
+ /**
      * @return the $KyThue
      */
     public function getKyThue()
@@ -169,7 +185,7 @@ class thue
      */
     public function getNgayPhaiNop()
     {
-        return $this->NgayPhaiNop;
+        return $this->NgayPhaiNop->format('d-m-Y');
     }
 
  /**

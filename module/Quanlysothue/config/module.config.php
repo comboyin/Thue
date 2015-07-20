@@ -7,7 +7,10 @@ return array(
             'Quanlysothue\Controller\Dukienthuecuanam' => 'Quanlysothue\Controller\DukienthuecuanamController',
             'Quanlysothue\Controller\Chungtu' => 'Quanlysothue\Controller\ChungtuController',
             'Quanlysothue\Controller\Dukienthuemonbai' => 'Quanlysothue\Controller\DukienthuemonbaiController',
-            'Quanlysothue\Controller\Dukienthuecuathang' => 'Quanlysothue\Controller\DukienthuecuathangController'
+            'Quanlysothue\Controller\Dukienthuecuathang' => 'Quanlysothue\Controller\DukienthuecuathangController',
+            
+            
+            'Quanlysothue\Controller\Thuekhoan' => 'Quanlysothue\Controller\ThuekhoanController'
             
         ),
     ),
