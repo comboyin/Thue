@@ -470,7 +470,7 @@ var EditableTable = function () {
 
 					deleteAllRows();
 					data = json.obj; 
-
+					LoaiUser = $("span.LoaiUser").html();
 					for (i = 0; i < data.length; i++) {
 						oTableThueKhoan
 						.fnAddData([
@@ -483,8 +483,8 @@ var EditableTable = function () {
 								data[i]['SoTien'],
 								$.datepicker.formatDate("dd-mm-yy",new Date(data[i]['NgayPhaiNop'].date)) ,
 								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',	
-								data[i]['TrangThai']==0?'<a class="edit" href="">Edit</a>':'',
-								data[i]['TrangThai']==0?'<a class="Delete" href="">Delete</a>':'']);
+										LoaiUser==3?(data[i]['TrangThai']==0?'<a class="edit" href="">Edit</a>':''):(''),
+												LoaiUser==3?(data[i]['TrangThai']==0?'<a class="Delete" href="">Delete</a>':''):('')]);
 					}
 
 					$('img.loading').css('display','none');
