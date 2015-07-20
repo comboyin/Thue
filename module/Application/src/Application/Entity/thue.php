@@ -154,13 +154,7 @@ class thue
         return $this->DoanhThuChiuThue;
     }
 
- /**
-     * @return the $DoanhSo
-     */
-    public function getDoanhSo()
-    {
-        return $this->DoanhSo;
-    }
+
 
  /**
      * @return the $TiLeTinhThue
@@ -258,13 +252,7 @@ class thue
         $this->DoanhThuChiuThue = $DoanhThuChiuThue;
     }
 
- /**
-     * @param field_type $DoanhSo
-     */
-    public function setDoanhSo($DoanhSo)
-    {
-        $this->DoanhSo = $DoanhSo;
-    }
+
 
  /**
      * @param field_type $TiLeTinhThue
