@@ -69,6 +69,9 @@ return array(
                 'Quanlynguoinopthue\Controller\Thongtinngungnghi' => array(
                     'all' => 'canbothue'
                 ),
+                'Quanlynguoinopthue\Controller\Miengiam' => array(
+                    'all' => 'canbothue'
+                ),
                 
                 //Module Quanlycanbothue
                 'Quanlycanbothue\Controller\Canbothue' => array(

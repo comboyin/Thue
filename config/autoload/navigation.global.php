@@ -111,9 +111,9 @@ return array(
                     array(
                         'label' => 'Miễn giảm',
                         'route' => 'quanlynguoinopthue/default',
-                        'controller' => 'menu',
+                        'controller' => 'Miengiam',
                         'action' => 'index',
-                        'resource' => 'Quanlyuser\Controller\Menu'
+                        'resource' => 'Quanlynguoinopthue\Controller\Miengiam'
                     )
                     
                 )

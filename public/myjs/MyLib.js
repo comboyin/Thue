@@ -265,6 +265,11 @@ var DialogTable = (function() {
 							$('#DialogTable').modal('hide');
 						}
 				}, 3000);
+				
+				$("#DialogTable_btnOK").unbind("click");
+				$("#DialogTable_btnOK").click(function(){
+					$('#DialogTable').modal('hide');
+				});
 			}
 		},
 		
@@ -274,6 +279,10 @@ var DialogTable = (function() {
 				$("#DialogTable > .modal-body").html(messenger);
 				$("#DialogTable").modal("show");
 				
+				$("#DialogTable_btnOK").unbind("click");
+				$("#DialogTable_btnOK").click(function(){
+					$('#DialogTable').modal('hide');
+				});
 				
 			}
 		},
