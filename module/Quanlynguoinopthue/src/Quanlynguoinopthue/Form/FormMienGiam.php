@@ -25,7 +25,7 @@ class FormMienGiam extends Form
         
         //SoChungTu
         $this->add(array(
-            'name' => 'SoChungTu',
+            'name' => 'SoQDMG',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array()
         ));
@@ -39,9 +39,9 @@ class FormMienGiam extends Form
             'attributes' => array()
         ));
         
-        //NgayChungTu
+        //NgayCoHieuLuc
         $this->add(array(
-            'name' => 'NgayChungTu',
+            'name' => 'NgayCoHieuLuc',
             'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
             )
@@ -114,9 +114,9 @@ class FormMienGiam extends Form
         ]));
         
         
-        //NgayChungTu
+        //NgayCoHieuLuc
         $inputFilter->add($factory->createInput([
-            'name' => 'NgayChungTu',
+            'name' => 'NgayCoHieuLuc',
             'required' => true,
             'filters' => array(
                 array(

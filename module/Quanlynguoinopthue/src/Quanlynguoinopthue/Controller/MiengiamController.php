@@ -101,6 +101,8 @@ class MiengiamController extends baseController
             $TieuMuc = $post->get('TieuMuc');
             $SoTien = $post->get('SoTien');
             $SoQDMG = $post->get('SoQDMG');
+            
+            
             if($this->checkSoQD($SoQDMG, $kq)==false){
                 echo json_encode($kq->toArray());
                 return $this->response;
@@ -111,9 +113,9 @@ class MiengiamController extends baseController
             $ChiTietMg->setKyThue($KyThue);
             $ChiTietMg->setMuclucngansach($this->getEntityManager()
                 ->find('Application\Entity\muclucngansach', $TieuMuc));
-            $ChiTietMg->setSoTien($SoTien);
-            $ChiTietMg->setChungtu($this->getEntityManager()
-                ->find('Application\Entity\chungtu', $SoQDMG));
+            $ChiTietMg->setSoTienMG($SoTien);
+            $ChiTietMg->setMiengiamthue($this->getEntityManager()
+                ->find('Application\Entity\miengiamthue', $SoQDMG));
             
             //$ChiTietCt->setNgayHachToan(Unlity::ConverDate('d-m-Y', $NgayHachToan, 'Y-m-d'));
             
@@ -219,7 +221,7 @@ class MiengiamController extends baseController
             // validation thanh cong
             if ($form->isValid()) {
                 $MaSoThue = $post->get('MaSoThue');
-                $SoQDMG = $post->get('NgayChungTu');
+                $SoQDMG = $post->get('SoQDMG');
                 if($this->checkMaSoThue($MaSoThue, $kq)==false){
                     echo json_encode($kq->toArray());
                     return $this->response;
@@ -231,21 +233,31 @@ class MiengiamController extends baseController
                     return $this->response;
                 }
                 
-                /* @var $ChungTu chungtu */
-                $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $post->get('_SoQDMG'));
+                /* @var $MienGiam miengiamthue */
+                $MienGiam = $this->getEntityManager()->find('Application\Entity\miengiamthue', $post->get('_SoQDMG'));
                 
-                if ($ChungTu != null) {
+                if ($MienGiam != null) {
                     
                     $miengiamModel = new miengiamModel($this->getEntityManager());
-                    $ChungTu->setSoQDMG($post->get('SoQDMG'));
-                    $ChungTu->setNgayChungTu(Unlity::ConverDate('m-d-Y', $post->get('NgayChungTu'), 'Y-m-d'));
-                    $ChungTu->setNguoinopthue($this->getEntityManager()
+                    $MienGiam->setSoQDMG($post->get('SoQDMG'));
+                    $MienGiam->setNgayCoHieuLuc(Unlity::ConverDate('m-d-Y', $post->get('NgayCoHieuLuc'), 'Y-m-d'));
+                    $MienGiam->setLyDo($post->get('LyDo'));
+                    $MienGiam->setNguoinopthue($this->getEntityManager()
                         ->find('Application\Entity\nguoinopthue', $post->get('MaSoThue')));
-                    $kq = $miengiamModel->merge($ChungTu);
+                    
+                    $MaTTNgungNghi = $post->get('MaTTNgungNghi');
+                    
+                    if($MaTTNgungNghi != null && $MaTTNgungNghi != "")
+                    {
+                        $MienGiam->setThongtinngungnghi($this->getEntityManager()
+                            ->find('Application\Entity\thongtinngungnghi', $MaTTNgungNghi));
+                    }
+
+                    $kq = $miengiamModel->merge($MienGiam);
                 } else {
                     
                     $kq->setKq(false);
-                    $kq->appentMessenger("Sô chứng từ không tồn tại !");
+                    $kq->appentMessenger("Sô quyết định miễn giảm không tồn tại !");
                 }
             }             
 
@@ -286,19 +298,27 @@ class MiengiamController extends baseController
             $post = $request->getPost();
             
             // them
-            $NgayChungTu = $post->get('NgayChungTu');
+            $NgayCoHieuLuc = $post->get('NgayCoHieuLuc');
             $SoQDMG = $post->get('SoQDMG');
             $MaSoThue = $post->get('MaSoThue');
+            $MaTTNgungnghi = $post->get('MaTTNgungnghi');
             
             $kt = new nguoinopthueModel($this->getEntityManager());
             if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
-                $chungtu = new chungtu();
-                $chungtu->setSoQDMG($SoQDMG);
-                $chungtu->setNgayChungTu(Unlity::ConverDate('d-m-Y', $NgayChungTu, 'Y-m-d'));
-                $chungtu->setNguoinopthue($this->getEntityManager()
+                $miengiam = new miengiamthue();
+                $miengiam->setSoQDMG($SoQDMG);
+                $miengiam->setNgayCoHieuLuc(Unlity::ConverDate('d-m-Y', $NgayCoHieuLuc, 'Y-m-d'));
+                $miengiam->setLyDo($post->get('LyDo'));
+                $miengiam->setNguoinopthue($this->getEntityManager()
                     ->find('Application\Entity\nguoinopthue', $MaSoThue));
+                if($MaTTNgungnghi != null && $MaTTNgungnghi != "")
+                {
+                    $miengiam->setThongtinngungnghi($this->getEntityManager()
+                    ->find('Application\Entity\thongtinngungnghi', $MaTTNgungnghi));
+                }
                 
-                $kq = $miengiamModel->them($chungtu);
+                
+                $kq = $miengiamModel->them($miengiam);
             } else {
                 $kq->setKq(false);
                 $kq->setMessenger("Mã số thuế $MaSoThue không thuộc quản lý của bạn !");
@@ -314,7 +334,7 @@ class MiengiamController extends baseController
         return $this->response;
     }
 
-    public function suaCTChungTuAction()
+    public function suaCTMienGiamAction()
     {
         // error_reporting(0);
         try {
@@ -341,31 +361,31 @@ class MiengiamController extends baseController
                 $TieuMuc = $post->get('TieuMuc');
                 //$NgayHachToan = Unlity::ConverDate('d-m-Y', $post->get('NgayHachToan'), 'Y-m-d');
                 $SoTien = $post->get('SoTien');
-                $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $SoQDMG);
+                $MienGiam = $this->getEntityManager()->find('Application\Entity\miengiamthue', $SoQDMG);
                 $MucLuc = $this->getEntityManager()->find('Application\Entity\muclucngansach', $_TieuMuc);
-                /* @var $CTChungTu kythuemg */
-                $CTChungTu = $this->getEntityManager()->find('Application\Entity\kythuemg', array(
-                    'chungtu' => $ChungTu,
+                /* @var $CTMienGiam kythuemg */
+                $CTMienGiam = $this->getEntityManager()->find('Application\Entity\kythuemg', array(
+                    'miengiamthue' => $MienGiam,
                     'muclucngansach' => $MucLuc,
                     'KyThue' => $_KyThue
                 ))
 
                 ;
                 
-                if ($CTChungTu != null) {
+                if ($CTMienGiam != null) {
                     
                     $miengiamModel = new miengiamModel($this->getEntityManager());
-                    $CTChungTu->setMuclucngansach($MucLuc);
-                    $CTChungTu->setChungtu($ChungTu);
+                    $CTMienGiam->setMuclucngansach($MucLuc);
+                    $CTMienGiam->setMiengiamthue($MienGiam);
                     //$CTChungTu->setNgayHachToan($NgayHachToan);
-                    $CTChungTu->setKyThue($KyThue);
-                    $CTChungTu->setSoTien($SoTien);
+                    $CTMienGiam->setKyThue($KyThue);
+                    $CTMienGiam->setSoTienMG($SoTien);
                     
-                    $kq = $miengiamModel->merge($CTChungTu);
+                    $kq = $miengiamModel->merge($CTMienGiam);
                 } else {
                     
                     $kq->setKq(false);
-                    $kq->appentMessenger("Chi tiết chứng từ không tồn tại !");
+                    $kq->appentMessenger("Chi tiết miễn giảm không tồn tại !");
                 }
             }             
 
@@ -391,15 +411,15 @@ class MiengiamController extends baseController
     /**
      * AjAx
      */
-    public function SoChiTietCuaChungTuAction()
+    public function SoChiTietCuaMienGiamAction()
     {
         $SoQDMG = $this->getRequest()
             ->getQuery()
             ->get('SoQDMG');
-        /* @var $ChungTu chungtu */
-        $ChungTu = $this->getEntityManager()->find('Application\Entity\chungtu', $SoQDMG);
+        /* @var $MienGiam miengiamthue */
+        $MienGiam = $this->getEntityManager()->find('Application\Entity\miengiamthue', $SoQDMG);
         
-        $count = $ChungTu->getkythuemgs()->count();
+        $count = $MienGiam->getKythuemgs()->count();
         
         echo json_encode(array(
             'count' => $count
@@ -409,9 +429,9 @@ class MiengiamController extends baseController
 
     /**
      * AJAX
-     * Trả về danh sách chứng từ giữa 2 ngày
+     * Trả về danh sách miễn giảm giữa 2 ngày
      */
-    public function danhSachChungTuGiuaNgayAction()
+    public function danhSachMienGiamGiuaNgayAction()
     {
         $start = $this->getRequest()
             ->getQuery()
@@ -420,10 +440,10 @@ class MiengiamController extends baseController
             ->getQuery()
             ->get('end');
         
-        $chugtuModel = new miengiamModel($this->getEntityManager());
+        $miengiamModel = new miengiamModel($this->getEntityManager());
         
-        $danhsachchungtuArray = $chugtuModel->DanhSachChungTuGiuaNgay($start, $end, $this->getUser(), 'array');
-        echo json_encode($danhsachchungtuArray->toArray());
+        $danhsachmiengiamArray = $miengiamModel->DanhSachMienGiamGiuaNgay($start, $end, $this->getUser(), 'array');
+        echo json_encode($danhsachmiengiamArray->toArray());
         return $this->response;
     }
 
@@ -444,11 +464,11 @@ class MiengiamController extends baseController
     private function checkSoQD($SoQDMG,&$kq)
     {
         
-        $ktSCT = new miengiamModel($this->getEntityManager());
+        $ktSQD = new miengiamModel($this->getEntityManager());
         
-        if ($ktSCT->KiemTraSoChungCuaUser($SoQDMG, $this->getUser()) == false) {
+        if ($ktSQD->KiemTraSoQDMGCuaUser($SoQDMG, $this->getUser()) == false) {
             $kq->setKq(false);
-            $kq->setMessenger("Số chứng từ $SoQDMG không thuộc quyền quản lý của bạn !");
+            $kq->setMessenger("Số quyết định miễn giảm $SoQDMG không thuộc quyền quản lý của bạn !");
             return false;
         }
         return true;

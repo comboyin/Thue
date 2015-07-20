@@ -4,10 +4,10 @@
 
 
 
-var EditableTableChiTietChungTu = function () {
+var EditableTableChiTietMienGiam = function () {
 
 	//key
-	var _SoChungTu = "";
+	var _SoQDMG = "";
 	var _TieuMuc = "";
 	var _KyThue = "";
 	var oTable = null;
@@ -18,7 +18,7 @@ var EditableTableChiTietChungTu = function () {
 			
 			//*******************ONLY PAGE BEGIN************************//
 			
-			$("#editable-chitietchungtu input[name='KyThue']").live('focus', function(){
+			$("#editable-chitietmiengiam input[name='KyThue']").live('focus', function(){
 			    if (false == $(this).hasClass('hasDatepicker')) {
 			    	$(this).datepicker({ 
 				    	format: 'mm/yyyy'
@@ -27,18 +27,10 @@ var EditableTableChiTietChungTu = function () {
 			});
 			
 			
-			$("#editable-chitietchungtu  input[name='NgayHachToan']").live('focus', function(){
-			    if (false == $(this).hasClass('hasDatepicker')) {
-			    	$(this).datepicker({ 
-				    	format: 'dd-mm-yyyy'
-				    });
-			    }
-			});
 			
 			
-			
-			//chọn số chứng từ
-			$("#tablechungtu a.CTChungTu").live('click', function(e){
+			//chọn số miễn giảm
+			$("#tablemiengiam a.CTMienGiam").live('click', function(e){
 				/*var tbody = $(this).parents('tr')[0];
 				console.log(tbody);*/
 				e.preventDefault();
@@ -46,13 +38,13 @@ var EditableTableChiTietChungTu = function () {
 				var nRow = $(this).parents('tr')[0];
 
 				
-				SoChungTu =($('td',nRow)[1]).textContent ;
+				SoQDMG =($('td',nRow)[1]).textContent ;
 				deleteAllRows();
-				$("div.progressSoChungTu").css('display','block');
-				$("h1.SoChungTu").html(SoChungTu);
+				$("div.progressSoQDMG").css('display','block');
+				$("h1.SoQDMG").html(SoQDMG);
     			 
-			    $.get(baseUrl('application/Service/danhSachChiTietChungTu'),{
-			    	SoChungTu:SoChungTu
+			    $.get(baseUrl('application/Service/danhSachChiTietMienGiam'),{
+			    	SoQDMG:SoQDMG
 			    },function(json){
 			    	if(json.kq==true){
 			    		data = json.obj;
@@ -64,7 +56,6 @@ var EditableTableChiTietChungTu = function () {
     			    		oTable.fnAddData([
     			    		         value.KyThue,
     			    		         value.TieuMuc,
-    			    		         $.datepicker.formatDate('dd-mm-yy',new Date(value.NgayHachToan.date)),
     			    		         value.SoTien,
     			    		         '<a class="edit" href="">Edit</a>', '<a class="Delete" href="">Delete</a>'
     				                  ]);
@@ -74,7 +65,7 @@ var EditableTableChiTietChungTu = function () {
 			    		
 			    	}
 			    	
-			    	$("div.progressSoChungTu").css('display','none');
+			    	$("div.progressSoQDMG").css('display','none');
 			    },'json');
 			});
 			
@@ -90,7 +81,7 @@ var EditableTableChiTietChungTu = function () {
 
 			}
 			// Khởi tạo oTable
-			oTable = $('#editable-chitietchungtu')
+			oTable = $('#editable-chitietmiengiam')
 				.dataTable({
 
 					"aLengthMenu" : [[5, 15, 20, -1],
@@ -156,7 +147,7 @@ var EditableTableChiTietChungTu = function () {
 
 				// cansua
 				//lưu các biến key
-				_SoChungTu = $("h1.SoChungTu").html().trim();
+				_SoQDMG = $("h1.SoQDMG").html().trim();
 				_KyThue = aData[0].trim();
 				_TieuMuc = aData[1].trim();
 				
@@ -175,16 +166,15 @@ var EditableTableChiTietChungTu = function () {
 				jqTds[1].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"  value="'
 					 + aData[1] + '"disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogTieuMuc">Chọn</button>';
 
-				jqTds[2].innerHTML = '<input style="width:80px;" name="NgayHachToan" type="text"  value="'
-					 + aData[2] + '">';
+
 
 				
-				jqTds[3].innerHTML = '<input style="width:80px;" type="text" name="SoTien" value="'
-					 + aData[3] + '">';
+				jqTds[2].innerHTML = '<input style="width:80px;" type="text" name="SoTien" value="'
+					 + aData[2] + '">';
 				
 				
-				jqTds[4].innerHTML = '<a class="edit" href="">Save edit</a>';
-				jqTds[5].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
+				jqTds[3].innerHTML = '<a class="edit" href="">Save edit</a>';
+				jqTds[4].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
 				oTable.fnAdjustColumnSizing();
@@ -200,16 +190,13 @@ var EditableTableChiTietChungTu = function () {
 				jqTds[1].innerHTML = '<input style="width:80px;" name="TieuMuc" type="text"  value="'
 					 + aData[1] + '"disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogTieuMuc">Chọn</button>';
 
-				jqTds[2].innerHTML = '<input style="width:80px;" name="NgayHachToan" type="text"  value="'
+				
+				jqTds[2].innerHTML = '<input style="width:80px;" type="text" name="SoTien" value="'
 					 + aData[2] + '">';
-
-				
-				jqTds[3].innerHTML = '<input style="width:80px;" type="text" name="SoTien" value="'
-					 + aData[3] + '">';
 				
 
-				jqTds[4].innerHTML = '<a class="edit" href="">Save new</a>';
-				jqTds[5].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
+				jqTds[3].innerHTML = '<a class="edit" href="">Save new</a>';
+				jqTds[4].innerHTML = '<a class="cancel" data-mode="new" href="">Cancel</a>';
 				
 				oTable.fnAdjustColumnSizing();
 
@@ -224,33 +211,30 @@ var EditableTableChiTietChungTu = function () {
 				oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
 				oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
 				oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
-				oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
 
 
-				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow,4,
+				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow,3,
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
-					5, false);
+					4, false);
 				oTable.fnDraw();
 			}
 			
 			
 			var nEditing = null;
 			//Thêm 1 dòng mới
-			$('#editable-chitietchungtu_new').click(
+			$('#editable-chitietmiengiam_new').click(
 				function (e) {
 				e.preventDefault();
 				if (nEditing != null) {
 					restoreRow(oTable, nEditing);
 				}
 				
-				if($("h1.SoChungTu").html() != "Vui lòng chọn số chứng từ" && $("h1.SoChungTu").html() != "")
+				if($("h1.SoQDMG").html() != "Vui lòng chọn số QDMG" && $("h1.SoQDMG").html() != "")
 				{
 					// cansua
 					var aiNew = oTable
 						.fnAddData([
-								'',
-								'',
 								'',
 								'',
 								'',
@@ -266,7 +250,7 @@ var EditableTableChiTietChungTu = function () {
 					BootstrapDialog
 					.confirm({
 						title : 'Cảnh báo',
-						message : 'Vui lòng chọn chứng từ cần thêm chi tiết chứng từ',
+						message : 'Vui lòng chọn miễn giảm cần thêm chi tiết miễn giảm',
 					});
 				}
 
@@ -500,10 +484,10 @@ var EditableTableChiTietChungTu = function () {
 
 			}
 
-			jQuery('#editable-chitietchungtu_wrapper .dataTables_filter input')
+			jQuery('#editable-chitietmiengiam_wrapper .dataTables_filter input')
 			.addClass(" span6"); // modify
 
-			jQuery('#editable-chitietchungtu_wrapper .dataTables_length select')
+			jQuery('#editable-chitietmiengiam_wrapper .dataTables_length select')
 			.addClass(" xsmall"); // modify
 
 
@@ -574,7 +558,7 @@ var EditableTableChiTietChungTu = function () {
 			}
 
 			$("#xoa_nhieu").click(function (e) {
-				var checkboxs = $("#editable-chitietchungtu input.check_item:checked").parents('tr');
+				var checkboxs = $("#editable-chitietmiengiam input.check_item:checked").parents('tr');
 				console.log(checkboxs);
 				if (checkboxs.length > 0) {
 
@@ -621,7 +605,7 @@ var EditableTableChiTietChungTu = function () {
 
 			
 
-			$('#editable-chitietchungtu a.cancel').live('click', function (e) {
+			$('#editable-chitietmiengiam a.cancel').live('click', function (e) {
 				e.preventDefault();
 
 				if ($(this).attr("data-mode") == "new") {
@@ -635,7 +619,7 @@ var EditableTableChiTietChungTu = function () {
 				}
 			});
 
-			$('#editable-chitietchungtu a.Delete').live('click', function (e) {
+			$('#editable-chitietmiengiam a.Delete').live('click', function (e) {
 				e.preventDefault();
 
 				var nRow = $(this).parents('tr')[0];
@@ -644,7 +628,7 @@ var EditableTableChiTietChungTu = function () {
 				// cansuaxoa
 				
 				//dang lam
-				SoChungTu = $("h1.SoChungTu").html();
+				SoQDMG = $("h1.SoQDMG").html();
 				
 				KyThue = aData[0].trim();
 				TieuMuc = aData[1].trim();
@@ -652,18 +636,18 @@ var EditableTableChiTietChungTu = function () {
 				
 				
 				data = {
-					SoChungTu : SoChungTu,
+					SoQDMG : SoQDMG,
 					KyThue : KyThue,
 					TieuMuc : TieuMuc
 				};
 				
 				
-				var url = "xoaCTChungTu";
+				var url = "xoaCTMienGiam";
 				Xoa('post', url, data, oTable, nRow);
 
 			});
 
-			$('#editable-chitietchungtu a.edit').live(
+			$('#editable-chitietmiengiam a.edit').live(
 				'click',
 				function (e) {
 				e.preventDefault();
@@ -708,18 +692,16 @@ var EditableTableChiTietChungTu = function () {
 					var KyThue = $("input[name='KyThue']", nRow).val().trim();
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
 					var SoTien = $("input[name='SoTien']", nRow).val().trim();
-					var SoChungTu = $("h1.SoChungTu").html().trim();
-					var NgayHachToan = $("input[name='NgayHachToan']",nRow).val().trim();
+					var SoQDMG = $("h1.SoQDMG").html().trim();
 					
 					data = {
 						KyThue : KyThue,
 						TieuMuc:TieuMuc,
-						SoTien:SoTien,
-						SoChungTu:SoChungTu,
-						NgayHachToan:NgayHachToan
+						SoTien : SoTien,
+						SoQDMG:SoQDMG
 					}
 
-					var url = 'themChiTietChungTu';
+					var url = 'themkythuemg';
 					
 					SaveNew('post', url, data, oTable, nEditing);
 
@@ -733,23 +715,21 @@ var EditableTableChiTietChungTu = function () {
 					//lay du lieu					
 					var KyThue = $("input[name='KyThue']", nRow).val().trim();
 					var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-					var NgayHachToan =$("input[name='NgayHachToan']", nRow).val().trim()
 					var SoTien = $("input[name='SoTien']", nRow).val().trim();
-					var _SoChungTu = $("h1.SoChungTu").html().trim();
+					var _SoQDMG = $("h1.SoQDMG").html().trim();
 					
 					data = {
 						_KyThue : _KyThue,
 						_TieuMuc : _TieuMuc,
 						
 						
-						SoChungTu : _SoChungTu,
+						SoQDMG : _SoQDMG,
 						KyThue : KyThue,
 						TieuMuc : TieuMuc,
-						NgayHachToan : NgayHachToan,
 						SoTien : SoTien
 					}
 
-					var url = "suaCTChungTu";
+					var url = "suaCTMienGiam";
 
 					
 
@@ -763,15 +743,9 @@ var EditableTableChiTietChungTu = function () {
 			});
 
 			
-			function loadTyLeTinhThue(MaSoThue,TieuMuc){
-				
-				$.get('loadTyLeTinhThue',{MaSoThue:MaSoThue,TieuMuc:TieuMuc},function(json){
-					$("input[name='TiLeTinhThue']").val(json.TyLeTinhThue);
-				},'json');
-			}
 			
 			// dialogTable
-			$('#editable-chitietchungtu button.DialogNNT').live('click', function (e) {
+			$('#editable-chitietmiengiam button.DialogNNT').live('click', function (e) {
 				//lấy dòng được chọn
 				var nRow = $(this).parents('tr')[0];
 				//get input có name là "masothue"
@@ -790,8 +764,7 @@ var EditableTableChiTietChungTu = function () {
 						
 						MaSoThue.val(MaSoThueString);
 						TenHKD.val(TenHKDString);
-						TieuMuc = $("input[name='TieuMuc']").val();
-						loadTyLeTinhThue(MaSoThueString,TieuMuc);
+						//TieuMuc = $("input[name='TieuMuc']").val();
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
 					}
@@ -824,7 +797,7 @@ var EditableTableChiTietChungTu = function () {
 			//
 			
 
-			$('#editable-chitietchungtu button.DialogTieuMuc').live('click', function (e) {
+			$('#editable-chitietmiengiam button.DialogTieuMuc').live('click', function (e) {
 
 				var nRow = $(this).parents('tr')[0];
 
@@ -841,8 +814,7 @@ var EditableTableChiTietChungTu = function () {
 						$("#DialogTable").modal("hide");
 						
 						TieuMuc.val(TieuMucString);
-						MaSoThue = $("input[name='masothue']").val();
-						loadTyLeTinhThue(MaSoThue,TieuMucString);
+						//MaSoThue = $("input[name='masothue']").val();
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
 					}
@@ -860,6 +832,6 @@ var EditableTableChiTietChungTu = function () {
 ();
 jQuery(document).ready(function () {
 
-	EditableTableChiTietChungTu.init();
-	console.log(EditableTableChiTietChungTu.oTable);
+	EditableTableChiTietMienGiam.init();
+	console.log(EditableTableChiTietMienGiam.oTable);
 });

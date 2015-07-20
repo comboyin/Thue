@@ -131,6 +131,28 @@ class ServiceController extends baseController
 
         return $this->response;
     }
+    
+    /**
+     * AJAX
+     *
+     * Trả về danh sách chi tiết miễn giảm theo Số QDMG
+     */
+    public function danhSachChiTietMienGiamAction()
+    {
+        error_reporting(0);
+        $SoQDMG = $this->getRequest()
+        ->getQuery()
+        ->get('SoQDMG');
+        $miengiamModel = new miengiamModel($this->getEntityManager());
+    
+    
+    
+         
+        echo json_encode($miengiamModel->DanhSachChiTietChungTu($SoQDMG)->toArray());
+    
+        return $this->response;
+    }
+    
     /**
      * AJAX
      * Lấy danh sách mục luc ngân sách
@@ -140,6 +162,32 @@ class ServiceController extends baseController
         $bq = $this->getEntityManager()->createQueryBuilder();
         $bq->select('tieumuc')->from('Application\Entity\muclucngansach', 'tieumuc');
         echo json_encode($bq->getQuery()->getArrayResult());
+        return $this->response;
+    }
+    
+    /**
+     * AJAX
+     * Lấy danh sách thông tin ngưng nghĩ
+     * @return \Zend\Mvc\Controller\Response  */
+    public function thongtinngungnghiAction()
+    {
+        $MaSoThue = $this->getRequest()
+        ->getQuery()
+        ->get("MaSoThue");
+    
+        $ttnn = $this->getEntityManager()
+        ->createQueryBuilder()
+        ->select(array(
+            "thongtinngungnghi"
+        ))
+        ->from('Application\Entity\thongtinngungnghi', "thongtinngungnghi")
+        ->join('thongtinngungnghi.nguoinopthue', "nguoinopthue")
+        ->where("nguoinopthue.MaSoThue = ?1")
+        ->setParameter(1, $MaSoThue)
+        ->getQuery()
+        ->getArrayResult();
+        echo json_encode($ttnn);
+    
         return $this->response;
     }
     

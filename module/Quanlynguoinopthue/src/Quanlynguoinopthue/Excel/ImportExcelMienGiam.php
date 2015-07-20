@@ -5,8 +5,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Application\base\baseExcel;
 use Application\Unlity\Unlity;
-use Application\Entity\chungtu;
-use Application\Entity\chitietchungtu;
+use Application\Entity\miengiamthue;
+use Application\Entity\kythuemg;
 use Application\Entity\ketqua;
 
 class ImportExcelMienGiam extends baseExcel
@@ -165,35 +165,35 @@ class ImportExcelMienGiam extends baseExcel
                             
                             $em->persist($chungtuTemp);
                             $chungtuTemp = $em->find('Application\Entity\chungtu', $SoChungTu);
-                            $chitietchungtuTemp = new chitietchungtu();
-                            $chitietchungtuTemp->setChungtu($chungtuTemp);
+                            $kythuemgTemp = new kythuemg();
+                            $kythuemgTemp->setChungtu($chungtuTemp);
                             
-                            $chitietchungtuTemp->setNgayHachToan($NgayHachToan);
-                            $chitietchungtuTemp->setKyThue($KyThue);
-                            $chitietchungtuTemp->setSoTien($SoTien);
-                            $chitietchungtuTemp->setMuclucngansach($muclucngansach);
+                            $kythuemgTemp->setNgayHachToan($NgayHachToan);
+                            $kythuemgTemp->setKyThue($KyThue);
+                            $kythuemgTemp->setSoTien($SoTien);
+                            $kythuemgTemp->setMuclucngansach($muclucngansach);
                             
-                            $em->persist($chitietchungtuTemp);
+                            $em->persist($kythuemgTemp);
                         } else {
                             // chung tu
                             // tieu muc
                             // ky thue
                             
-                            $chitietchungtuTemp = $em->find('Application\Entity\chitietchungtu', array(
+                            $kythuemgTemp = $em->find('Application\Entity\kythuemg', array(
                                 'KyThue' => $KyThue,
                                 'muclucngansach' => $muclucngansach,
                                 'chungtu' => $chungtu
                             ));
-                            if ($chitietchungtuTemp == null) {
+                            if ($kythuemgTemp == null) {
                                 
-                                $chitietchungtuTemp = new chitietchungtu();
-                                $chitietchungtuTemp->setChungtu($chungtu);
+                                $kythuemgTemp = new kythuemg();
+                                $kythuemgTemp->setChungtu($chungtu);
                                 
-                                $chitietchungtuTemp->setNgayHachToan($NgayHachToan);
-                                $chitietchungtuTemp->setKyThue($KyThue);
-                                $chitietchungtuTemp->setSoTien($SoTien);
-                                $chitietchungtuTemp->setMuclucngansach($muclucngansach);
-                                $em->persist($chitietchungtuTemp);
+                                $kythuemgTemp->setNgayHachToan($NgayHachToan);
+                                $kythuemgTemp->setKyThue($KyThue);
+                                $kythuemgTemp->setSoTien($SoTien);
+                                $kythuemgTemp->setMuclucngansach($muclucngansach);
+                                $em->persist($kythuemgTemp);
                             }
                         }
                     }

@@ -220,7 +220,7 @@ class ChungtuController extends baseController
             // validation thanh cong
             if ($form->isValid()) {
                 $MaSoThue = $post->get('MaSoThue');
-                $SoChungTu = $post->get('NgayChungTu');
+                $SoChungTu = $post->get('SoChungTu');
                 if($this->checkMaSoThue($MaSoThue, $kq)==false){
                     echo json_encode($kq->toArray());
                     return $this->response;
