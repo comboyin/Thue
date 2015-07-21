@@ -1,13 +1,12 @@
 <?php
-use Application\Entity\dukienthue;
 use Quanlysothue\Froms\UploadForm;
-use Application\Entity\thue;
-$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Thuekhoan/index_Thuekhoan.js');
+use Application\Entity\truythu;
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Thuetruythu/index_Thuetruythu.js');
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fileDownload.js');
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'assets/bootstrap/js/bootstrap-fileupload.js');
 $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/bootstrap/css/bootstrap-fileupload.css');
 
- /* @var $dsThueKhoan thue */
+ /* @var $dsThueTruyThu truythu */
 /* @var $formUp UploadForm */
 $formUp = $this->formUp;
 
@@ -29,10 +28,10 @@ $user = $this->identity();
 			<!-- BEGIN THEME CUSTOMIZER-->
 			<!-- END THEME CUSTOMIZER-->
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-			<h3 class="page-title">QUẢN LÝ THUẾ KHOÁN</h3>
+			<h3 class="page-title">QUẢN LÝ THUẾ TRUY THU</h3>
 			<ul class="breadcrumb">
 				<li class="active">
-                     <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Thuekhoan','action'=>'index'));?>">Danh sách thuế khoán</a>             
+                     <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Thuetruythu','action'=>'index'));?>">Danh sách truy thu</a>             
                 </li>
 			</ul>
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -47,7 +46,7 @@ $user = $this->identity();
 			<div class="widget red">
 
 				<div class="widget-title">
-					<h4>Danh sách thuế khoán</h4>
+					<h4>Danh sách thuế truy thu</h4>
 					<span class="tools"> <a href="javascript:;"
 						class="icon-chevron-down"></a>
 					</span>
@@ -58,7 +57,7 @@ $user = $this->identity();
 							<div class="control-group">
 							<label class="control-label">Kỳ thuế: </label>
 							<div class="controls">
-								<div class="input-append date" id="dpThueKhoan"
+								<div class="input-append date" id="dpThueTruyThu"
 									data-date="102/2012" data-date-format="mm/yyyy"
 									data-date-viewmode="years" data-date-minviewmode="months">
 									
@@ -115,17 +114,17 @@ $user = $this->identity();
 						
 						<div class="space12"></div>
 					<table cellspacing="0" class="table table-striped table-bordered"
-						width="100%" id="TableThueKhoan">
+						width="100%" id="TableThueTruyThu">
 						<thead>
 							<tr>
 								    <th><input id="check_all" type="checkbox"></th>
 									<th>Mã số thuế (*)</th>
 						            <th>Tên HKD</th>
 									<th>Tiểu Mục (*)</th>
-									<th>Doanh thu chịu thuế (*)</th>
-									<th>Tỉ lệ tính thuế (*)</th>
+									<th>Doanh thu<br>chịu thuế (*)</th>
+									<th>Tỉ lệ<br>tính thuế (*)</th>
 									<th>Số tiền (*)</th>
-									<th>Ngày phải nộp (*)</th>
+									<th>Lý Do</th>
 									<th>Trang thái</th>
 									
 									
@@ -136,10 +135,10 @@ $user = $this->identity();
 						<tbody>
 										
 										
-										<?php if($dsThueKhoan!=null):?>
+										<?php if($dsThueTruyThu!=null):?>
 										
         										
-                                       <?php foreach ($dsThueKhoan as $thue):?>
+                                       <?php foreach ($dsThueTruyThu as $thue):?>
                                        
                             <tr class="odd">
                             
@@ -148,11 +147,11 @@ $user = $this->identity();
 								<td><?php echo $thue->getNguoinopthue()->getMaSoThue()?></td>
 								<td><?php echo $thue->getNguoinopthue()->getTenHKD()?></td>
 								<td><?php echo $thue->getMuclucngansach()->getTieuMuc()?></td>
-								<td><?php echo $thue->getDoanhThuChiuThue()?></td>
+								<td><?php echo $thue->getDoanhSo()?></td>
 								<td><?php echo $thue->getTiLeTinhThue()?></td>
 								
 								<td><?php echo $thue->getSoTien()?></td>
-								<td><?php echo $thue->getNgayPhaiNop()?></td>
+								<td><?php echo $thue->getLyDo()?></td>
 								<td>
     								<?php if($thue->getTrangThai()==0):?>	
     								<span style="color:red;">Chờ duyệt</span>
@@ -221,7 +220,7 @@ $user = $this->identity();
 									<th>Doanh thu chịu thuế</th>
 									<th>Tỉ lệ tính thuế</th>
 									<th>Số tiền</th>
-									<th>Ngày phải nộp</th>
+									<th>Lý do</th>
 									<th>Mã CB</th>
 							</tr>
 						</thead>

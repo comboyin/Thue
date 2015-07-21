@@ -2,6 +2,10 @@
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
 
 /**
  * @ORM\Entity
@@ -60,6 +64,22 @@ class truythu
      * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
      */
     private $nguoinopthue;
+ /**
+     * @return the $TrangThai
+     */
+    public function getTrangThai()
+    {
+        return $this->TrangThai;
+    }
+
+ /**
+     * @param field_type $TrangThai
+     */
+    public function setTrangThai($TrangThai)
+    {
+        $this->TrangThai = $TrangThai;
+    }
+
  /**
      * @return the $KyThue
      */
@@ -170,6 +190,230 @@ class truythu
     public function setNguoinopthue($nguoinopthue)
     {
         $this->nguoinopthue = $nguoinopthue;
+    }
+    
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+        throw new \Exception("Not used");
+    }
+    
+    public function getInputFilter()
+    {
+        if (! $this->inputFilter) {
+            $inputFilter = new InputFilter();
+            $factory = new InputFactory();
+    
+            $inputFilter->add($factory->createInput([
+                'name' => 'KyThue',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+    
+                    array(
+                        'name' => '\Zend\Validator\StringLength',
+                        'options' => array(
+                            'min' => 7, // Minimum length
+                            'max' => 7, // Maximum length, null if there is no length limitation
+                            'encoding' => 'UTF-8'
+                        )
+                    ), // Encoding to use
+    
+                    array(
+                        'name' => '\Zend\Validator\Date',
+                        'options' => array(
+                            'format' => 'm/Y'
+                        )
+                    )
+                )
+            ]));
+    
+            $inputFilter->add($factory->createInput([
+                'name' => 'MaSoThue',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => '8',
+                            'max' => '20'
+                        )
+                    )
+                )
+            ]));
+    
+            $inputFilter->add($factory->createInput([
+                'name' => 'TieuMuc',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => '4',
+                            'max' => '4'
+                        )
+                    )
+                )
+            ]));
+    
+            $inputFilter->add($factory->createInput([
+                'name' => 'SoTien',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => '\Zend\Validator\Digits',
+                        'options' => array()
+                    ),
+    
+                    array(
+                        'name' => 'GreaterThan',
+                        'options' => array(
+                            'min' => 0
+                        )
+                    )
+                )
+            ]));
+    
+            /*             $inputFilter->add($factory->createInput([
+             'name' => 'TrangThai',
+             'required' => false,
+             'filters' => array(
+             array(
+             'name' => 'StripTags'
+             ),
+             array(
+             'name' => 'StringTrim'
+             )
+             ),
+             'validators' => array(
+             array(
+             'name' => '\Zend\Validator\Digits',
+             'options' => array()
+             )
+             )
+            ])); */
+    
+            $inputFilter->add($factory->createInput([
+                'name' => 'LyDo',
+                'required' => false, //true quan trong k dc bo trong
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'StringLength',
+                        'options' => array(
+                            'encoding' => 'UTF-8',
+                            'min' => '0',
+                            'max' => '255'
+                        )
+                    )
+                )
+            ]));
+    
+            $inputFilter->add($factory->createInput([
+                'name' => 'TiLeTinhThue',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => '\Zend\Validator\Step',
+                        'options' => array(
+                            'baseValue' => 0.000,
+                            'step' => 0.001
+                        )
+                    ),
+                    array(
+                        'name' => '\Zend\I18n\Validator\IsFloat',
+                        'options' => array(
+                            'min' => 0,
+                            'locale' => 'en'
+                        )
+                    ),
+                    array(
+                        'name' => 'GreaterThan',
+                        'options' => array(
+                            'min' => 0
+                        )
+                    )
+                )
+            ]
+            ));
+    
+            $inputFilter->add($factory->createInput([
+                'name' => 'DoanhSo',
+                'required' => true,
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => '\Zend\Validator\Digits',
+                        'options' => array()
+                    ),
+    
+                    array(
+                        'name' => 'GreaterThan',
+                        'options' => array(
+                            'min' => 0
+                        )
+                    )
+                )
+            ]));
+    
+            $this->inputFilter = $inputFilter;
+        }
+    
+        return $this->inputFilter;
     }
 
 }

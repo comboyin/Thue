@@ -5,11 +5,11 @@ var EditableTable = function () {
 
 	//key
 	//Thang
-	var _KyThueThueKhoan = "";
+	var _KyThueThueTruyThu = "";
 	var _TieuMuc = "";
 	var _MaSoThue = "";
 	var oTableGhiSo=null;
-	var oTableThueKhoan=null;
+	var oTableThueTruyThu=null;
 	return {
 
 		init : function () {
@@ -25,7 +25,7 @@ var EditableTable = function () {
 			function chonChoDuyet(){
 				
 				// lay nhung dong dang "Chờ duyệt"
-				var dangChoDuyet_td = $("#TableThueKhoan td span");
+				var dangChoDuyet_td = $("#TableThueTruyThu td span");
 				
 				$.each(dangChoDuyet_td,function(key,value){
 					if(value.innerHTML=="Chờ duyệt"){
@@ -38,16 +38,16 @@ var EditableTable = function () {
 				
 			}
 			$("button.Duyet").click(function(){
-				duyetThueKhoan();
+				duyetThueTruyThu();
 			});
 			
 			
 
 			
 			//duyet du kien thue nam
-			function duyetThueKhoan(){
+			function duyetThueTruyThu(){
 				
-				var row = $("#TableThueKhoan input.check_item:checked").parents('tr');
+				var row = $("#TableThueTruyThu input.check_item:checked").parents('tr');
 				if(row.length==0){
 					DialogTable.showThongBaoUnlimit('Thông báo !','Vui lòng chọn ít nhất một để duyệt !');
 					return;
@@ -69,7 +69,7 @@ var EditableTable = function () {
 							var indexTieuMuc = 3;
 							var dsMaSoThue = [];
 							var dsTieuMuc = [];
-							var row = $("#TableThueKhoan input.check_item:checked").parents('tr');
+							var row = $("#TableThueTruyThu input.check_item:checked").parents('tr');
 							
 							$.each(row,function(key,value){
 								var MaSoThue = $('td',value)[indexMaSoThue].innerHTML.trim();
@@ -82,12 +82,12 @@ var EditableTable = function () {
 							data = {
 								dsMaSoThue : dsMaSoThue, 
 								dsTieuMuc : dsTieuMuc,
-								Thang : _KyThueThueKhoan
+								Thang : _KyThueThueTruyThu
 							};
 							
 							$.post("duyet",data,function(json){
 								if(json.kq==true){
-									LoadDSThueKhoan();
+									LoadDSThueTruyThu();
 								}
 								DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
 								$("img.loading").css('display','none');
@@ -139,7 +139,7 @@ var EditableTable = function () {
 				var data = {
 						dsMaSoThue : dsMaSoThue,
 						dsTieuMuc : dsTieuMuc,
-						Thang : _KyThueThueKhoan
+						Thang : _KyThueThueTruyThu
 				};
 				
 				$.post("ghiso",data, function(json){
@@ -148,7 +148,7 @@ var EditableTable = function () {
 					DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
 					if(json.kq==true)
 					{
-						LoadDSThueKhoan();
+						LoadDSThueTruyThu();
 					}
 				},'json');
 	
@@ -176,33 +176,33 @@ var EditableTable = function () {
 			});
 			$("button.GhiSo").click(function(){
 				$("#DialogGhiSo").modal('show');
-				LoadDSDKThueKhoan();
+				LoadDSDKThueTruyThu();
 			});
 			
 			
 			if ($("#kythue").val() == "") {
 				var today = new Date();
-				_KyThueThueKhoan = $.datepicker.formatDate("mm/yy", today);
-				$("#dpThueKhoan").datepicker('setValue', _KyThueThueKhoan);
+				_KyThueThueTruyThu = $.datepicker.formatDate("mm/yy", today);
+				$("#dpThueTruyThu").datepicker('setValue', _KyThueThueTruyThu);
 			}
 			
 			
 			
 			$('#dpGhiSo').datepicker().on('changeDate', function (ev) {
 				_KyThueGhiSo = $.datepicker.formatDate("mm/yy", ev.date);
-				LoadDSDKThueKhoan();
+				LoadDSDKThueTruyThu();
 			});
 			
-			function LoadDSDKThueKhoan(){
+			function LoadDSDKThueTruyThu(){
 				$("img.loading_GhiSo").css("display","inline");
 				
 				data = {
-					Thang : _KyThueThueKhoan	
+					Thang : _KyThueThueTruyThu	
 				}
 				
 				deleteAllRowsGhiSo();
 				
-				$.post('DSDKThueKhoan',data,function(json){
+				$.post('DSDKThueTruyThu',data,function(json){
 
 					data = json.obj; 
 				
@@ -213,10 +213,11 @@ var EditableTable = function () {
 								data[i]['nguoinopthue']['MaSoThue'],
 								data[i]['nguoinopthue']['TenHKD'],
 								data[i]['TieuMuc'],
-								data[i]['DoanhThuChiuThue'],
+								data[i]['DoanhSo'],
 								data[i]['TiLeTinhThue'],
 								data[i]['SoTien'],
-								$.datepicker.formatDate('dd-mm-yy',new Date(data[i]['NgayPhaiNop'].date)),
+								//$.datepicker.formatDate('dd-mm-yy',new Date(data[i]['NgayPhaiNop'].date)),
+								data[i]['LyDo'],
 								data[i]['user']['MaUser']]);
 					}
 					$("img.loading_GhiSo").css('display','none');
@@ -269,219 +270,56 @@ var EditableTable = function () {
 			
 			
 			
-			function TinhTien(){		
-				
-				if($("input[name='TieuMuc']").val().trim() != "")
-				{
-					
-					//$("input[name='SoTien']").attr( 'class', 'popovers' );
-					//$("input[name='SoTien']").attr( 'data-trigger', 'hover' );
-					//$("input[name='SoTien']").attr( 'data-container', 'body' );
-					//$("input[name='SoTien']").removeAttr('data-content');
-					
-					if($("input[name='masothue']").val().trim() != "" && ($("input[name='TieuMuc']").val().trim() == '1003' || $("input[name='TieuMuc']").val().trim() == '1701'))
-					{
-						
-						//TNCN&GTGT
-						d = $("input[name='DoanhThuChiuThue']").val().trim();
-						t = $("input[name='TiLeTinhThue']").val().trim();
-						if(d*12>100000000)
-						{
-							$("input[name='SoTien']").val(parseInt(d*t));
-							//$("input[name='SoTien']").attr( 'data-content', 'Doanh Thu x Tỷ Lệ');
-						}
-						else
-						{
-							$("input[name='SoTien']").val(0);
-							//$("input[name='SoTien']").attr( 'data-content', 'Diện không phải nộp thuế!');
-						}
-
-					}
-					else if($("input[name='TieuMuc']").val().trim() == '2601')
-					{
-						//BVMT
-						s = $("input[name='SanLuong']").val().trim();
-						g = $("input[name='GiaTinhThue']").val().trim();
-						$("input[name='SoTien']").val(parseInt(s*g));
-						//$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá');
-					}
-					else if($("input[name='TieuMuc']").val().trim() == '3801')
-					{
-						//TN
-						s = $("input[name='SanLuong']").val().trim();
-						g = $("input[name='GiaTinhThue']").val().trim();
-						ts = $("input[name='ThueSuat']").val().trim()
-						$("input[name='SoTien']").val(parseInt(s*g*ts));
-						//$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá x Thuế Suất');
-					}
-					else if($("input[name='TieuMuc']").val().trim() == '1757')
-					{
-						//TTDB
-						g = $("input[name='GiaTinhThue']").val().trim();
-						ts = $("input[name='ThueSuat']").val().trim()
-						$("input[name='SoTien']").val(parseInt(g*ts));
-						//$("input[name='SoTien']").attr( 'data-content', 'Giá x Thuế Suất');
-					}
-					
-					//$('.popovers').popover();
-				}
+			function TinhTien(){
+				doanhso = $("input[name='DoanhSo']").val();
+				tile = $("input[name='TiLeTinhThue']").val();
+				$("input[name='SoTien']").val(parseInt(doanhso*tile));
 			}
 			
-			//DoanhThuChiuThue
-			$("input[name='DoanhThuChiuThue']").live('blur',function(){
-				if($("input[name='DoanhThuChiuThue']").val() == '')
-				{
-					$("input[name='DoanhThuChiuThue']").val(0);
-				}
-			});
-			
-			$("input[name='DoanhThuChiuThue']").live('focus',function(){
-				if($("input[name='DoanhThuChiuThue']").val() == 0)
-				{
-					$("input[name='DoanhThuChiuThue']").val('');
-				}
-			});
-			
-			$("input[name='DoanhThuChiuThue']").live('input',function(){
-
-				if($("input[name='masothue']").val().trim() == "" || $("input[name='TieuMuc']").val().trim() == "")
-				{
-					alert("Vui lòng chọn tiểu mục và mã số thuế trước !");
-					$("input[name='DoanhThuChiuThue']").val(0);
-				}
-			});
-			
-			$("input[name='DoanhThuChiuThue']").live('keyup',function(){
-					TinhTien();
-			});
-
-			
-			//SanLuong
-			$("input[name='SanLuong']").live('blur',function(){
-				if($("input[name='SanLuong']").val() == '')
+			$("input[name='DoanhSo']").live('blur',function(){
+				if($("input[name='DoanhSo']").val() == '')
 					{
-					$("input[name='SanLuong']").val(0);
+					$("input[name='DoanhSo']").val(0);
 					}
 			});
-			$("input[name='SanLuong']").live('focus',function(){
-				if($("input[name='SanLuong']").val() == 0)
+			
+			$("input[name='DoanhSo']").live('focus',function(){
+				if($("input[name='DoanhSo']").val() == 0)
 				{
-					$("input[name='SanLuong']").val('');
+					$("input[name='DoanhSo']").val('');
 				}
-			});
-			$("input[name='SanLuong']").live('input',function(){
-
-				if($("input[name='TieuMuc']").val().trim() == "")
-				{
-					alert("Vui lòng chọn tiểu mục trước !");
-					$("input[name='SanLuong']").val(0);
-				}
-			});
-			$("input[name='SanLuong']").live('keyup',function(){
-				TinhTien();
 			});
 			
-			//GiaTinhThue
-			$("input[name='GiaTinhThue']").live('blur',function(){
-				if($("input[name='GiaTinhThue']").val() == '')
-					{
-					$("input[name='GiaTinhThue']").val(0);
-					}
-			});
-			$("input[name='GiaTinhThue']").live('focus',function(){
-				if($("input[name='GiaTinhThue']").val() == 0)
-				{
-					$("input[name='GiaTinhThue']").val('');
-				}
-			});
-			$("input[name='GiaTinhThue']").live('input',function(){
-
-				if($("input[name='TieuMuc']").val().trim() == "")
-				{
-					alert("Vui lòng chọn tiểu mục trước !");
-					$("input[name='GiaTinhThue']").val(0);
-				}
-			});
-			$("input[name='GiaTinhThue']").live('keyup',function(){
-				TinhTien();
-			});
-			
-			//SoTien
-			$("input[name='SoTien']").live('blur',function(){
-				if($("input[name='SoTien']").val() == '')
-					{
-					$("input[name='SoTien']").val(0);
-					}
-			});
-			$("input[name='SoTien']").live('focus',function(){
-				if($("input[name='SoTien']").val() == 0)
-				{
-					$("input[name='SoTien']").val('');
-				}
-				TinhTien();
-			});
-			$("input[name='SoTien']").live('input',function(){
-
-				if($("input[name='TieuMuc']").val().trim() == "")
-				{
-					alert("Vui lòng chọn tiểu mục trước !");
-					$("input[name='SoTien']").val(0);
-				}
-			});
-			$("input[name='SoTien']").live('keyup',function(){
-				TinhTien();
-			});
-			
-			//ThueSuat
-			$("input[name='ThueSuat']").live('blur',function(){
-				if($("input[name='ThueSuat']").val() == '')
-					{
-					$("input[name='ThueSuat']").val(1);
-					}
-			});
-			$("input[name='ThueSuat']").live('focus',function(){
-				if($("input[name='ThueSuat']").val() == 1)
-				{
-					$("input[name='ThueSuat']").val('');
-				}
-			});
-			$("input[name='ThueSuat']").live('input',function(){
-
-				if($("input[name='TieuMuc']").val().trim() == "")
-				{
-					alert("Vui lòng chọn tiểu mục trước !");
-					$("input[name='ThueSuat']").val(1);
-				}
-			});
-			$("input[name='ThueSuat']").live('keyup',function(){
+			$("input[name='DoanhSo']").live('keyup',function(){
 				TinhTien();
 			});
 			
 			
 			
-			function LoadDSThueKhoan(){
+			function LoadDSThueTruyThu(){
 				$('img.loading').css('display','inline');
 				
 				/*$("#progess_dpmonths").css('display', 'block');*/
 				deleteAllRows();
 				//post
-				$.get('dsThueKhoan', {Thang : _KyThueThueKhoan},
+				$.get('dsThueTruyThu', {Thang : _KyThueThueTruyThu},
 					function (json) {
 
 					deleteAllRows();
 					data = json.obj; 
 					LoaiUser = $("input:hidden[name='LoaiUser']").val();
 					for (i = 0; i < data.length; i++) {
-						oTableThueKhoan
+						oTableThueTruyThu
 						.fnAddData([
 								'<th><input class="check_item" type="checkbox"></th>',
 								data[i]['nguoinopthue']['MaSoThue'],
 								data[i]['nguoinopthue']['TenHKD'],
 								data[i]['TieuMuc'],
-								data[i]['DoanhThuChiuThue'],
+								data[i]['DoanhSo'],
 								data[i]['TiLeTinhThue'],
 								data[i]['SoTien'],
-								$.datepicker.formatDate("dd-mm-yy",new Date(data[i]['NgayPhaiNop'].date)) ,
+								data[i]['LyDo'],
+								//$.datepicker.formatDate("dd-mm-yy",new Date(data[i]['NgayPhaiNop'].date)) ,
 								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',	
 										LoaiUser==3?(data[i]['TrangThai']==0?'<a class="edit" href="">Edit</a>':''):(''),
 												LoaiUser==3?(data[i]['TrangThai']==0?'<a class="Delete" href="">Delete</a>':''):('')]);
@@ -489,13 +327,19 @@ var EditableTable = function () {
 
 					$('img.loading').css('display','none');
 				}, "json");
+				
+				//oTableThueTruyThu.fnDraw();
+				//update kích thước cột
+				oTableThueTruyThu.fnAdjustColumnSizing();	
+				$("div.dataTables_scrollHead").css("width","initial");
+				$("div.dataTables_scrollBody").css("width","initial");
 
 			}
 			
-			$('#dpThueKhoan').datepicker().on('changeDate', function (ev) {
+			$('#dpThueTruyThu').datepicker().on('changeDate', function (ev) {
 
-				_KyThueThueKhoan = $.datepicker.formatDate("mm/yy", ev.date);
-				LoadDSThueKhoan();
+				_KyThueThueTruyThu = $.datepicker.formatDate("mm/yy", ev.date);
+				LoadDSThueTruyThu();
 				
 			});
 
@@ -521,10 +365,10 @@ var EditableTable = function () {
 
 			function deleteAllRows() {
 
-				var oSettings = oTableThueKhoan.fnSettings();
+				var oSettings = oTableThueTruyThu.fnSettings();
 				var iTotalRecords = oSettings.fnRecordsTotal();
 				for (i = 0; i <= iTotalRecords; i++) {
-					oTableThueKhoan.fnDeleteRow(0, null, true);
+					oTableThueTruyThu.fnDeleteRow(0, null, true);
 				}
 
 			}
@@ -538,7 +382,7 @@ var EditableTable = function () {
 
 			}
 			// Khởi tạo oTable
-			oTableThueKhoan = $('#TableThueKhoan')
+			oTableThueTruyThu = $('#TableThueTruyThu')
 				.dataTable({
 
 					"aLengthMenu" : [[5, 15, 20, -1],
@@ -626,16 +470,16 @@ var EditableTable = function () {
 					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 6px;margin-top:2px">Chọn</button>';
 
 
-				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhThuChiuThue" type="text"  value="'
+				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhSo" type="text"  value="'
 					 + aData[4] + '">';
 				
-				jqTds[5].innerHTML = '<input style="width:35px;" name="TiLeTinhThue" type="text"  value="'
-					 + aData[5] + '"disabled>';
+				jqTds[5].innerHTML = '<input style="width:40px;" name="TiLeTinhThue" type="text"  value="'
+					 + aData[5] + '"disabled><button class="btn btn-primary DialogTiLeTinhThue" style="margin:0 0px;margin-top:2px">Chọn</button>';
 				
 				
 				jqTds[6].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'
 					 + aData[6] + '">';
-				jqTds[7].innerHTML = '<input style="width:90px;" name="NgayPhaiNop" type="text"  value="'
+				jqTds[7].innerHTML = '<input style="width:90px;" name="LyDo" type="text"  value="'
 					 + aData[7] + '">';
 				jqTds[8].innerHTML = aData[8];
 				
@@ -646,7 +490,7 @@ var EditableTable = function () {
 				jqTds[10].innerHTML = '<a class="cancel" data-mode="edit" href="">Cancel</a>';
 				
 				//update kích thước cột
-				oTableThueKhoan.fnAdjustColumnSizing();	
+				oTableThueTruyThu.fnAdjustColumnSizing();	
 				$("div.dataTables_scrollHead").css("width","initial");
 				$("div.dataTables_scrollBody").css("width","initial");
 				
@@ -657,7 +501,7 @@ var EditableTable = function () {
 			
 			var nEditing = null;
 			//Thêm 1 dòng mới
-			$('#TableThueKhoan_new').click(
+			$('#TableThueTruyThu_new').click(
 				function (e) {
 				e.preventDefault();
 				if (nEditing != null) {
@@ -667,15 +511,15 @@ var EditableTable = function () {
 				// cansua
 				var aiNew = oTable
 					.fnAddData([
-							'',
-							'',
-							'',
-							'',
-							0,
-							0,
-							0,
-							'',
-							'',
+								'',
+								'',
+								'',
+								'',
+								0,
+								0,
+								0,
+								'',
+								'',
 							'<a class="edit" href="">Edit</a>',
 							'<a class="cancel" data-mode="new" href="">Cancel</a>'
 						]);
@@ -704,8 +548,9 @@ var EditableTable = function () {
 			
 			function saveRow(oTable, nRow) {
 				var jqInputs = $('input', nRow);
+				
 				oTable.fnUpdate('<input class="check_item" type="checkbox">', nRow, 0, false);
-
+				//var StringTrangThai = ==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>';
 				// cansua
 				oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
 				oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
@@ -715,7 +560,6 @@ var EditableTable = function () {
 				oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
 				oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
 				oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
-								
 				oTable.fnUpdate('<span style="color:red;">'+'Chờ duyệt'+'</span>', nRow, 8, false);
 
 				oTable.fnUpdate('<a class="edit" href="">Edit</a>', nRow, 9,
@@ -935,15 +779,15 @@ var EditableTable = function () {
 
 			}
 
-			jQuery('#TableThueKhoan_wrapper .dataTables_filter input')
+			jQuery('#TableThueTruyThu_wrapper .dataTables_filter input')
 			.addClass(" medium"); // modify
 
-			jQuery('#TableThueKhoan_wrapper .dataTables_length select')
+			jQuery('#TableThueTruyThu_wrapper .dataTables_length select')
 			.addClass(" xsmall"); // modify
 
 
 			// Khai báo chỉ số cột muốn sắp xếp, 'asc' là kiểu 
-			oTableThueKhoan.fnSort([[1, 'asc']]);
+			oTableThueTruyThu.fnSort([[1, 'asc']]);
 			
 			function XoaNhieuDong(oTable,Rows)
 			{
@@ -1009,7 +853,7 @@ var EditableTable = function () {
 			}
 
 			$("#xoa_nhieu").click(function (e) {
-				var checkboxs = $("#TableThueKhoan input.check_item:checked").parents('tr');
+				var checkboxs = $("#TableThueTruyThu input.check_item:checked").parents('tr');
 				console.log(checkboxs);
 				if (checkboxs.length > 0) {
 
@@ -1025,7 +869,7 @@ var EditableTable = function () {
 					}
 
 					data = {
-						_KyThue : _KyThueThueKhoan,
+						_KyThue : _KyThue,
 						MaSoThueData : MaSoThueData,
 						TieuMucData : TieuMucData
 					};
@@ -1044,11 +888,11 @@ var EditableTable = function () {
 			$("#check_all").click(function (e) {
 				// uncheck to checked
 				if ($("#check_all").attr("checked") == "checked") {
-					$("#TableThueKhoan input.check_item").each(function () {
+					$("#TableThueTruyThu input.check_item").each(function () {
 						$(this).attr('checked', true);
 					});
 				} else {
-					$("#TableThueKhoan input.check_item").each(function () {
+					$("#TableThueTruyThu input.check_item").each(function () {
 						$(this).attr('checked', false);
 					});
 				}
@@ -1056,25 +900,25 @@ var EditableTable = function () {
 
 			
 
-			$('#TableThueKhoan a.cancel').live('click', function (e) {
+			$('#TableThueTruyThu a.cancel').live('click', function (e) {
 				e.preventDefault();
 
 				if ($(this).attr("data-mode") == "new") {
 					var nRow = $(this).parents('tr')[0];
 
-					oTableThueKhoan.fnDeleteRow(nRow);
+					oTableThueTruyThu.fnDeleteRow(nRow);
 				} else {
 
-					restoreRow(oTableThueKhoan, nEditing);
+					restoreRow(oTableThueTruyThu, nEditing);
 					nEditing = null;
 				}
 			});
 
-			$('#TableThueKhoan a.Delete').live('click', function (e) {
+			$('#TableThueTruyThu a.Delete').live('click', function (e) {
 				e.preventDefault();
 
 				var nRow = $(this).parents('tr')[0];
-				var aData = oTableThueKhoan.fnGetData(nRow);
+				var aData = oTableThueTruyThu.fnGetData(nRow);
 
 				// cansuaxoa
 				
@@ -1084,22 +928,22 @@ var EditableTable = function () {
 				
 				data = {
 					_MaSoThue : _MaSoThue,
-					_KyThue : _KyThueThueKhoan,
+					_KyThue : _KyThueThueTruyThu,
 					_TieuMuc : _TieuMuc
 				};
 				
 				
 				var url = 'xoa';
-				Xoa('post', url, data, oTableThueKhoan, nRow);
+				Xoa('post', url, data, oTableThueTruyThu, nRow);
 
 			});
 
-			$('#TableThueKhoan a.edit').live(
+			$('#TableThueTruyThu a.edit').live(
 				'click',function (e) {
 					
 				e.preventDefault();
 				var nRow = $(this).parents('tr')[0];
-				var aData = oTableThueKhoan.fnGetData(nRow);
+				var aData = oTableThueTruyThu.fnGetData(nRow);
 				// Chỉ cho phép cán bộ đã lập dự kiến này sửa
 				
 					
@@ -1115,14 +959,14 @@ var EditableTable = function () {
 							});
 
 							if (flag == true) {
-								oTableThueKhoan.fnDeleteRow(nEditing);
-								editRow(oTableThueKhoan, nRow);
+								oTableThueTruyThu.fnDeleteRow(nEditing);
+								editRow(oTableThueTruyThu, nRow);
 								nEditing = nRow;
 
 								flag = false;
 							} else {
-								restoreRow(oTableThueKhoan, nEditing);
-								editRow(oTableThueKhoan, nRow);
+								restoreRow(oTableThueTruyThu, nEditing);
+								editRow(oTableThueTruyThu, nRow);
 								nEditing = nRow;
 							}
 						
@@ -1144,30 +988,27 @@ var EditableTable = function () {
 						//lay du lieu
 						var MaSoThue = $("input[name='masothue']", nRow).val().trim();
 						var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-						var DoanhThuChiuThue = $("input[name='DoanhThuChiuThue']", nRow).val().trim();				
+						var DoanhSo = $("input[name='DoanhSo']", nRow).val().trim();				
 						var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-						var ThueSuat = $("input[name='ThueSuat']", nRow).val().trim();
-						var TenGoi = $("input[name='TenGoi']", nRow).val().trim();
-						var SanLuong  = $("input[name='SanLuong']", nRow).val().trim();
-						var GiaTinhThue  = $("input[name='GiaTinhThue']", nRow).val().trim();
-						var SoTien  = $("input[name='SoTien']", nRow).val().trim();
+
 		
 						data = {
-								KyThue : _KyThueThueKhoan,
+								KyThue : _KyThue,
 								MaSoThue : MaSoThue,
 								TieuMuc : TieuMuc,
-								DoanhThuChiuThue : DoanhThuChiuThue,
+								DoanhSo : DoanhSo,
 								TiLeTinhThue : TiLeTinhThue,
 								ThueSuat : ThueSuat,
 								TenGoi : TenGoi,
 								SanLuong : SanLuong,
 								GiaTinhThue : GiaTinhThue,
-								SoTien : SoTien
+								SoTien : SoTien,
+								NgayPhaiNop : NgayPhaiNop
 						}
 
 						var url = 'them';
 						console.log(nEditing);
-						SaveNew('post', url, data, oTableThueKhoan, nEditing);
+						SaveNew('post', url, data, oTableThueTruyThu, nEditing);
 
 					} else if (nEditing == nRow
 						 && this.innerHTML == "Save edit") {
@@ -1179,36 +1020,37 @@ var EditableTable = function () {
 						//lay du lieu					
 						var MaSoThue = $("input[name='masothue']", nRow).val().trim();
 						var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
-						var DoanhThuChiuThue = $("input[name='DoanhThuChiuThue']", nRow).val().trim();				
+						var SoTien = $("input[name='SoTien']", nRow).val().trim();
+						//var TrangThai = $("input[name='TrangThai']", nRow).val().trim();
+						var LyDo = $("input[name='LyDo']", nRow).val().trim();
 						var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
-						var SoTien  = $("input[name='SoTien']", nRow).val().trim();
-						var NgayPhaiNop  = $("input[name='NgayPhaiNop']", nRow).val().trim();
-						
+						var DoanhSo  = $("input[name='DoanhSo']", nRow).val().trim();
 						
 						
 						data = {
 							_MaSoThue : _MaSoThue,
-							_KyThue : _KyThueThueKhoan,
+							_KyThue : _KyThueThueTruyThu,
 							_TieuMuc : _TieuMuc,
 
-							KyThue : _KyThueThueKhoan,
+							KyThue : _KyThueThueTruyThu,
 							MaSoThue : MaSoThue,
 							TieuMuc : TieuMuc,
-							DoanhThuChiuThue : DoanhThuChiuThue,
-							TiLeTinhThue : TiLeTinhThue,
 							SoTien : SoTien,
-							NgayPhaiNop : NgayPhaiNop
+							//TrangThai : TrangThai,
+							LyDo : LyDo,
+							TiLeTinhThue:TiLeTinhThue,
+							DoanhSo:DoanhSo
 						}
 
 						var url = "sua";
 
 						
 
-						SaveEdit('post', url, data, oTableThueKhoan, nEditing);
+						SaveEdit('post', url, data, oTableThueTruyThu, nEditing);
 
 					} else {
 						
-							editRow(oTableThueKhoan, nRow);
+							editRow(oTableThueTruyThu, nRow);
 							nEditing = nRow;
 						
 						
@@ -1219,20 +1061,9 @@ var EditableTable = function () {
 
 				
 			});
-			
-			function loadTyLeTinhThue(MaSoThue,TieuMuc){
-				
-				$.get('loadTyLeTinhThue',{MaSoThue:MaSoThue,TieuMuc:TieuMuc},function(json){
-					$("input[name='TiLeTinhThue']").val(json.TyLeTinhThue);
-					TinhTien();
-				},'json');
-
-				
-
-			}
 
 			// dialogTable
-			$('#TableThueKhoan button.DialogNNT').live('click', function (e) {
+			$('#TableThueTruyThu button.DialogNNT').live('click', function (e) {
 				//lấy dòng được chọn
 				var nRow = $(this).parents('tr')[0];
 				//get input có name là "masothue"
@@ -1251,8 +1082,7 @@ var EditableTable = function () {
 						
 						MaSoThue.val(MaSoThueString);
 						TenHKD.val(TenHKDString);
-						TieuMuc = $("input[name='TieuMuc']").val();
-						loadTyLeTinhThue(MaSoThueString,TieuMuc);
+						//TieuMuc = $("input[name='TieuMuc']").val();
 						
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
@@ -1286,13 +1116,13 @@ var EditableTable = function () {
 			//
 			
 
-			$('#TableThueKhoan button.DialogTieuMuc').live('click', function (e) {
+			$('#TableThueTruyThu button.DialogTieuMuc').live('click', function (e) {
 
 				var nRow = $(this).parents('tr')[0];
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
 
-				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnsthue'),{}, function () {
+				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnstruythu'),{}, function () {
 					
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
@@ -1303,8 +1133,7 @@ var EditableTable = function () {
 						$("#DialogTable").modal("hide");
 						
 						TieuMuc.val(TieuMucString);
-						MaSoThue = $("input[name='masothue']").val();
-						loadTyLeTinhThue(MaSoThue,TieuMucString);
+						//MaSoThue = $("input[name='masothue']").val();
 						
 					} else {
 						alert("Vui lòng chọn ít nhất một !");
@@ -1313,6 +1142,41 @@ var EditableTable = function () {
 
 			});
 			
+			//DialogTiLeTinhThue
+			$('#TableThueTruyThu button.DialogTiLeTinhThue').live('click', function (e) {
+console.log('a');
+				var nRow = $(this).parents('tr')[0];
+				var TieuMuc = $("input[name='TieuMuc']", nRow).val().trim();
+				//console.log(TieuMuc);
+				if(TieuMuc == ""){
+					alert("Vui lòng chọn tiểu mục trước !");
+				} else{
+					
+					TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow);
+					data = {
+							TieuMuc : TieuMuc
+					};
+					DialogTable.showFromUrl('get',baseUrl('application/Service/tiletinhthuetm'),data, function () {
+						
+						checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
+
+						if (checkboxs.length == 1) {
+							
+							var TiLeTinhThueString = $('td', checkboxs[0])[3].textContent;
+							
+							$("#DialogTable").modal("hide");
+							
+							TiLeTinhThue.val(TiLeTinhThueString);
+							TinhTien();
+							//MaSoThue = $("input[name='masothue']", nRow).val();
+							//loadTyLeTinhThue(MaSoThue,TieuMucString);
+						} else {
+							alert("Vui lòng chọn ít nhất một !");
+						}
+					});
+				}
+
+			});
 			
 			//upload
 			

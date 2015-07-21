@@ -58,6 +58,7 @@ return array(
                 'Quanlysothue\Controller\Dukienthuemonbai' => array(
                     'all' => 'canbothue'
                 ),
+                //sothue
                 'Quanlysothue\Controller\Thuekhoan' => array(
                     'all' => 'canbothue'
                 ),
@@ -76,9 +77,11 @@ return array(
                 'Quanlysothue\Controller\Thuetainguyen' => array(
                     'all' => 'canbothue'
                 ),
+
                 'Quanlysothue\Controller\Xuatbangke' => array(
                     'all' => 'canbothue'
                 ),
+
 				
 				////Module Quanlynguoinopthue
                 'Quanlynguoinopthue\Controller\Nguoinopthue' => array(

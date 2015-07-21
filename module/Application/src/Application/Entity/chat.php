@@ -90,7 +90,7 @@ class chat
      */
     public function setTime($Time)
     {
-        $this->Time = $Time;
+        $this->Time = \DateTime::createFromFormat('Y-m-d h:m:s', $Time);
     }
 
  /**

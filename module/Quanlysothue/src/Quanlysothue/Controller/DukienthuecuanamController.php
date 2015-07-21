@@ -253,7 +253,7 @@ class DukienthuecuanamController extends baseController
                         $GiaTinhThue = $post->get('GiaTinhThue');
                         
                         if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
-{
+                        {
                             if ($DoanhThuChiuThue * 12 > 100000000) {
                                 $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
                             } else

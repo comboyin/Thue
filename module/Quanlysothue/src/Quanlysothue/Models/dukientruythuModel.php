@@ -210,4 +210,70 @@ class dukientruythuModel extends baseModel
             return $this->kq;
         }
     }
+    
+    public function DSDKThueTruyThu($Thang, $user, $type)
+    {
+        $q = $this->em->createQueryBuilder();
+        try {
+            if ($user->getLoaiUser() == 4) {
+                $q->select(array(
+                    'dukientruythu',
+                    'nguoinopthue',
+                    'usernnts',
+                    'user'
+                ))
+                ->from('Application\Entity\dukientruythu', 'dukientruythu')
+                ->join('dukientruythu.muclucngansach', 'muclucngansach')
+                ->join('dukientruythu.user', 'user')
+                ->join('dukientruythu.nguoinopthue', 'nguoinopthue')
+                ->join('nguoinopthue.usernnts', 'usernnts')
+                ->where('dukientruythu.KyThue = ?1')
+                ->andWhere('dukientruythu.TrangThai = ?3')
+                ->andWhere('usernnts.user = ?2')
+                ->andWhere('usernnts.ThoiGianKetThuc is null')
+                ->setParameter(1, $Thang)
+                ->setParameter(3, 0)
+                ->setParameter(2, $user);
+            } else
+                if ($user->getLoaiUser() == 3) {
+                    $q->select(array(
+                        'dukientruythu',
+                        'nguoinopthue',
+                        'usernnts',
+                        'user1'
+                    ))
+                    ->from('Application\Entity\dukientruythu', 'dukientruythu')
+                    ->join('dukientruythu.muclucngansach', 'muclucngansach')
+                    ->join('dukientruythu.user', 'user1')
+                    ->join('dukientruythu.nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where('dukientruythu.KyThue = ?1')
+                    ->andWhere('dukientruythu.TrangThai = ?3')
+                    ->andWhere('user.parentUser = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->setParameter(1, $Thang)
+                    ->setParameter(3, 0)
+                    ->setParameter(2, $user);
+                }
+            $this->kq->setKq(true);
+            if($type=='array'){
+                $this->kq->setObj($q->getQuery()
+                    ->getArrayResult());
+            }
+            else if($type=='object'){
+                $this->kq->setObj($q->getQuery()
+                    ->getResult());
+            }
+    
+    
+            $this->kq->setMessenger('Lấy danh sách dự thuế của tháng ' . $Thang . ' thành công !');
+            return $this->kq->toArray();
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            $this->kq->setKq(false);
+            $this->kq->setMessenger($e->getMessage());
+            return $this->kq;
+        }
+    }
 }
