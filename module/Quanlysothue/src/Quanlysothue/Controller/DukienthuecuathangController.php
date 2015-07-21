@@ -178,6 +178,23 @@ class DukienthuecuathangController extends baseController
         echo json_encode($kq->toArray());
         return $this->response;
     }
+    
+    public function loadTyLeTinhThueAction()
+    {
+        $MaSoThue = $this->getRequest()
+        ->getQuery()
+        ->get('MaSoThue');
+        $TieuMuc = $this->getRequest()
+        ->getQuery()
+        ->get('TieuMuc');
+    
+        $nganhModel = new nganhModel($this->getEntityManager());
+        $TyLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
+        echo json_encode(array(
+            'TyLeTinhThue' => $TyLeTinhThue
+        ));
+        return $this->response;
+    }
 }
 
 ?>

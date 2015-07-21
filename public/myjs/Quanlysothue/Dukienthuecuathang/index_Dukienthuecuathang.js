@@ -193,10 +193,10 @@ var EditableTable = function () {
 				if($("input[name='TieuMuc']").val().trim() != "")
 				{
 					
-					$("input[name='SoTien']").attr( 'class', 'popovers' );
-					$("input[name='SoTien']").attr( 'data-trigger', 'hover' );
-					$("input[name='SoTien']").attr( 'data-container', 'body' );
-					$("input[name='SoTien']").removeAttr('data-content');
+					//$("input[name='SoTien']").attr( 'class', 'popovers' );
+					//$("input[name='SoTien']").attr( 'data-trigger', 'hover' );
+					//$("input[name='SoTien']").attr( 'data-container', 'body' );
+					//$("input[name='SoTien']").removeAttr('data-content');
 					
 					if($("input[name='masothue']").val().trim() != "" && ($("input[name='TieuMuc']").val().trim() == '1003' || $("input[name='TieuMuc']").val().trim() == '1701'))
 					{
@@ -207,12 +207,12 @@ var EditableTable = function () {
 						if(d*12>100000000)
 						{
 							$("input[name='SoTien']").val(parseInt(d*t));
-							$("input[name='SoTien']").attr( 'data-content', 'Doanh Thu x Tỷ Lệ');
+							//$("input[name='SoTien']").attr( 'data-content', 'Doanh Thu x Tỷ Lệ');
 						}
 						else
 						{
 							$("input[name='SoTien']").val(0);
-							$("input[name='SoTien']").attr( 'data-content', 'Diện không phải nộp thuế!');
+							//$("input[name='SoTien']").attr( 'data-content', 'Diện không phải nộp thuế!');
 						}
 
 					}
@@ -222,7 +222,7 @@ var EditableTable = function () {
 						s = $("input[name='SanLuong']").val().trim();
 						g = $("input[name='GiaTinhThue']").val().trim();
 						$("input[name='SoTien']").val(parseInt(s*g));
-						$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá');
+						//$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá');
 					}
 					else if($("input[name='TieuMuc']").val().trim() == '3801')
 					{
@@ -231,7 +231,7 @@ var EditableTable = function () {
 						g = $("input[name='GiaTinhThue']").val().trim();
 						ts = $("input[name='ThueSuat']").val().trim()
 						$("input[name='SoTien']").val(parseInt(s*g*ts));
-						$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá x Thuế Suất');
+						//$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá x Thuế Suất');
 					}
 					else if($("input[name='TieuMuc']").val().trim() == '1757')
 					{
@@ -239,10 +239,10 @@ var EditableTable = function () {
 						g = $("input[name='GiaTinhThue']").val().trim();
 						ts = $("input[name='ThueSuat']").val().trim()
 						$("input[name='SoTien']").val(parseInt(g*ts));
-						$("input[name='SoTien']").attr( 'data-content', 'Giá x Thuế Suất');
+						//$("input[name='SoTien']").attr( 'data-content', 'Giá x Thuế Suất');
 					}
 					
-					$('.popovers').popover();
+					//$('.popovers').popover();
 				}
 			}
 			

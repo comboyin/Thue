@@ -58,10 +58,12 @@ return array(
                 'pages' => array(
                     array(
                         'label' => 'Thuế môn bài',
-                        'route' => 'application',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Thuemonbai',
                         'action' => 'index',
-                        'resource' => 'Application\Controller\Index'
-                    ), array(
+                        'resource' => 'Quanlysothue\Controller\Thuemonbai'
+                    ),
+                    array(
                         'label' => 'Thuế khoán',
                         'route' => 'quanlysothue/default',
                         'controller' => 'Thuekhoan',
@@ -69,10 +71,32 @@ return array(
                         'resource' => 'Quanlysothue\Controller\Thuekhoan'
                     ),
                     array(
-                        'label' => 'Thuế khác',
-                        'route' => 'application',
+                        'label' => 'Thuế truy thu',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Thuetruythu',
                         'action' => 'index',
-                        'resource' => 'Application\Controller\Index'
+                        'resource' => 'Quanlysothue\Controller\Thuetruythu'
+                    ),
+                    array(
+                        'label' => 'Thuế tiêu thụ đặc biệt',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Thuetieuthudacbiet',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Thuetieuthudacbiet'
+                    ),
+                    array(
+                        'label' => 'Thuế bảo vệ môi trường',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Thuebaovemoitruong',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Thuebaovemoitruong'
+                    ),
+                    array(
+                        'label' => 'Thuế tài nguyên',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Thuetainguyen',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Thuetainguyen'
                     ),
                     
                     array(

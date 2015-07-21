@@ -101,10 +101,10 @@ var EditableTable = function () {
 				if($("input[name='TieuMuc']").val().trim() != "")
 				{
 					
-					$("input[name='SoTien']").attr( 'class', 'popovers' );
-					$("input[name='SoTien']").attr( 'data-trigger', 'hover' );
-					$("input[name='SoTien']").attr( 'data-container', 'body' );
-					$("input[name='SoTien']").removeAttr('data-content');
+					//$("input[name='SoTien']").attr( 'class', 'popovers' );
+					//$("input[name='SoTien']").attr( 'data-trigger', 'hover' );
+					//$("input[name='SoTien']").attr( 'data-container', 'body' );
+					//$("input[name='SoTien']").removeAttr('data-content');
 					
 					if($("input[name='masothue']").val().trim() != "" && ($("input[name='TieuMuc']").val().trim() == '1003' || $("input[name='TieuMuc']").val().trim() == '1701'))
 					{
@@ -115,12 +115,12 @@ var EditableTable = function () {
 						if(d*12>100000000)
 						{
 							$("input[name='SoTien']").val(parseInt(d*t));
-							$("input[name='SoTien']").attr( 'data-content', 'Doanh Thu x Tỷ Lệ');
+							//$("input[name='SoTien']").attr( 'data-content', 'Doanh Thu x Tỷ Lệ');
 						}
 						else
 						{
 							$("input[name='SoTien']").val(0);
-							$("input[name='SoTien']").attr( 'data-content', 'Diện không phải nộp thuế!');
+							//$("input[name='SoTien']").attr( 'data-content', 'Diện không phải nộp thuế!');
 						}
 
 					}
@@ -130,7 +130,7 @@ var EditableTable = function () {
 						s = $("input[name='SanLuong']").val().trim();
 						g = $("input[name='GiaTinhThue']").val().trim();
 						$("input[name='SoTien']").val(parseInt(s*g));
-						$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá');
+						//$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá');
 					}
 					else if($("input[name='TieuMuc']").val().trim() == '3801')
 					{
@@ -139,7 +139,7 @@ var EditableTable = function () {
 						g = $("input[name='GiaTinhThue']").val().trim();
 						ts = $("input[name='ThueSuat']").val().trim()
 						$("input[name='SoTien']").val(parseInt(s*g*ts));
-						$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá x Thuế Suất');
+						//$("input[name='SoTien']").attr( 'data-content', 'Sản Lượng x Giá x Thuế Suất');
 					}
 					else if($("input[name='TieuMuc']").val().trim() == '1757')
 					{
@@ -147,10 +147,10 @@ var EditableTable = function () {
 						g = $("input[name='GiaTinhThue']").val().trim();
 						ts = $("input[name='ThueSuat']").val().trim()
 						$("input[name='SoTien']").val(parseInt(g*ts));
-						$("input[name='SoTien']").attr( 'data-content', 'Giá x Thuế Suất');
+						//$("input[name='SoTien']").attr( 'data-content', 'Giá x Thuế Suất');
 					}
 					
-					$('.popovers').popover();
+					//$('.popovers').popover();
 				}
 			}
 			
@@ -357,8 +357,8 @@ var EditableTable = function () {
 								data[i]['SoTien'],
 								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ duyệt'+'</span>':'<span style="color:green;">'+'Đã duyệt'+'</span>',
 								data[i]['user']['MaUser'],		
-								'<a class="edit" href="">Edit</a>',
-								'<a class="Delete" href="">Delete</a>']);
+								data[i]['TrangThai']==0?'<a class="edit" href="">Edit</a>':'',
+								data[i]['TrangThai']==0?'<a class="Delete" href="">Delete</a>':'']);
 					}
 
 					$('img.loading').css('display','none');
@@ -482,14 +482,14 @@ var EditableTable = function () {
 				
 				jqTds[6].innerHTML = '<input style="width:20px;" name="ThueSuat" type="text" value="'
 					 + aData[6] + '">';
-				jqTds[7].innerHTML = '<input style="width:60px;" name="TenGoi" type="text" value="'
+				jqTds[7].innerHTML = (aData[7]=='' || aData[7]==null)?'<input style="width:60px;" name="TenGoi" type="text" value="">':'<input style="width:60px;" name="TenGoi" type="text" value="'
 					 + aData[7] + '">';
 				
-				jqTds[8].innerHTML = (aData[8]=='')?'<input style="width:60px;" name="SanLuong" type="text" value="0">':'<input style="width:60px;" name="SanLuong" type="text" value="'
+				jqTds[8].innerHTML = (aData[8]=='' || aData[8]==null)?'<input style="width:60px;" name="SanLuong" type="text" value="0">':'<input style="width:60px;" name="SanLuong" type="text" value="'
 					 + aData[8] + '">';
 				
 				
-				jqTds[9].innerHTML = (aData[9]=='')?'<input style="width:60px;" name="GiaTinhThue" type="text" value="0">':'<input style="width:60px;" name="GiaTinhThue" type="text" value="'
+				jqTds[9].innerHTML = (aData[9]=='' || aData[8]==null)?'<input style="width:60px;" name="GiaTinhThue" type="text" value="0">':'<input style="width:60px;" name="GiaTinhThue" type="text" value="'
 					 + aData[9] + '">';
 				
 				jqTds[10].innerHTML = '<input style="width:90px;" name="SoTien" type="text"  value="'

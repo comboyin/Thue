@@ -291,8 +291,10 @@ class dukienthue implements InputFilterAwareInterface
      */
     public function setNgayPhaiNop($NgayPhaiNop)
     {
-        
-        $this->NgayPhaiNop =  \DateTime::createFromFormat('Y-m-d', $NgayPhaiNop);
+        if($NgayPhaiNop != null && $NgayPhaiNop != "")
+            $this->NgayPhaiNop =  \DateTime::createFromFormat('Y-m-d', $NgayPhaiNop);
+        else 
+            $this->NgayPhaiNop = $NgayPhaiNop;
     }
 
  /**
