@@ -63,7 +63,13 @@ class thuemonbai
         return $this->Nam;
     }
 
-
+ /**
+     * @return the $DoanhSo
+     */
+    public function getDoanhSo()
+    {
+        return $this->DoanhSo;
+    }
 
  /**
      * @return the $SoTien
@@ -78,18 +84,16 @@ class thuemonbai
      */
     public function getNgayPhaiNop()
     {
-        return $this->NgayPhaiNop;
+        return $this->NgayPhaiNop->format('d-m-Y');
     }
 
  /**
-     * @return the $KetSo
+     * @return the $TrangThai
      */
-    public function getKetSo()
+    public function getTrangThai()
     {
-        return $this->KetSo;
+        return $this->TrangThai;
     }
-
-
 
  /**
      * @return the $muclucngansach
@@ -115,7 +119,13 @@ class thuemonbai
         $this->Nam = $Nam;
     }
 
-
+ /**
+     * @param field_type $DoanhSo
+     */
+    public function setDoanhSo($DoanhSo)
+    {
+        $this->DoanhSo = $DoanhSo;
+    }
 
  /**
      * @param field_type $SoTien
@@ -130,18 +140,16 @@ class thuemonbai
      */
     public function setNgayPhaiNop($NgayPhaiNop)
     {
-        $this->NgayPhaiNop = $NgayPhaiNop;
+        $this->NgayPhaiNop = \DateTime::createFromFormat('Y-m-d', $NgayPhaiNop);
     }
 
  /**
-     * @param field_type $KetSo
+     * @param field_type $TrangThai
      */
-    public function setKetSo($KetSo)
+    public function setTrangThai($TrangThai)
     {
-        $this->KetSo = $KetSo;
+        $this->TrangThai = $TrangThai;
     }
-
-
 
  /**
      * @param field_type $muclucngansach
@@ -158,5 +166,6 @@ class thuemonbai
     {
         $this->nguoinopthue = $nguoinopthue;
     }
+
 
 }

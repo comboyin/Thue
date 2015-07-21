@@ -64,7 +64,7 @@ class thuetruythuModel extends baseModel
                         ->getResult());
                 }
             
-            $this->kq->setMessenger('Lấy danh sách dự truy thu truy thu ' . $thang . ' thành công !');
+            $this->kq->setMessenger('Lấy danh sách thuế truy thu ' . $thang . ' thành công !');
             return $this->kq;
         } catch (\Exception $e) {
             var_dump($e->getMessage());
@@ -158,7 +158,7 @@ class thuetruythuModel extends baseModel
                 //truythu da duoc duyet
                 if($truythu->getTrangThai()==1){
                     $kq->setKq(false);
-                    $kq->setMessenger('<span style="color:red;" >'."Dự kiến truy thu ".$MaSoThue.'-'.$TieuMuc."-".$Thang . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
+                    $kq->setMessenger('<span style="color:red;" >'."Thuế truy thu ".$MaSoThue.'-'.$TieuMuc."-".$Thang . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
         
                     $this->em->getConnection()->rollBack();
                     return $kq;

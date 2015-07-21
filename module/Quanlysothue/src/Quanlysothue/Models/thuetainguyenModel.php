@@ -7,10 +7,10 @@ use Application\Entity\thue;
 use Application\Entity\dukienthue;
 use Application\Unlity\Unlity;
 
-class thuekhoanModel extends baseModel
+class thuetainguyenModel extends baseModel
 {
 
-    public function dsThueKhoan($thang, $user, $type)
+    public function dsThueTaiNguyen($thang, $user, $type)
     {
         $q = $this->em->createQueryBuilder();
         try {
@@ -30,7 +30,7 @@ class thuekhoanModel extends baseModel
                 where('thue.KyThue = ?1')
                     ->andWhere('usernnts.user = ?2')
                     ->andWhere('usernnts.ThoiGianKetThuc is null')
-                    ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
+                    ->andWhere("muclucngansach.TieuMuc like '3801'")
                     ->setParameter(2, $user)
                     ->setParameter(1, $thang);
             } else 
@@ -50,7 +50,7 @@ class thuekhoanModel extends baseModel
                         ->where('thue.KyThue = ?1')
                         ->andWhere('user.parentUser = ?2')
                         ->andWhere('usernnts.ThoiGianKetThuc is null')
-                        ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
+                        ->andWhere("muclucngansach.TieuMuc like '3801'")
                         ->setParameter(2, $user)
                         ->setParameter(1, $thang);
                 }
@@ -64,7 +64,7 @@ class thuekhoanModel extends baseModel
                         ->getResult());
                 }
             
-            $this->kq->setMessenger('Lấy danh sách thuế khoán ' . $thang . ' thành công !');
+            $this->kq->setMessenger('Lấy danh sách thuế tài nguyên ' . $thang . ' thành công !');
             return $this->kq;
         } catch (\Exception $e) {
             var_dump($e->getMessage());
@@ -82,7 +82,7 @@ class thuekhoanModel extends baseModel
         try {
             $this->em->getConnection()->beginTransaction();
             foreach ($dsMaSoThue as $key => $value) {
-                // tim du kien nam
+                // tim du kien thang
                 $dukienthuethang = $this->em->find('Application\Entity\dukienthue', array(
                     'nguoinopthue' => $this->em->find('Application\Entity\nguoinopthue', $value),
                     'muclucngansach' => $this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]),
@@ -95,37 +95,37 @@ class thuekhoanModel extends baseModel
                     return $kq;
                 }
                 /* @var $dukienthuethang dukienthue */
-                $thuekhoan = new thue();
-                $thuekhoan->setNguoinopthue($this->em->find('Application\Entity\nguoinopthue', $value));
-                $thuekhoan->setMuclucngansach($this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]));
-                $thuekhoan->setKyThue($Thang);
-                $thuekhoan->setTenGoi($dukienthuethang->getTenGoi());
-                $thuekhoan->setSanLuong($dukienthuethang->getSanLuong());
+                $thuetainguyen = new thue();
+                $thuetainguyen->setNguoinopthue($this->em->find('Application\Entity\nguoinopthue', $value));
+                $thuetainguyen->setMuclucngansach($this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]));
+                $thuetainguyen->setKyThue($Thang);
+                $thuetainguyen->setTenGoi($dukienthuethang->getTenGoi());
+                $thuetainguyen->setSanLuong($dukienthuethang->getSanLuong());
                 
-                $thuekhoan->setDoanhThuChiuThue($dukienthuethang->getDoanhThuChiuThue());
+                $thuetainguyen->setDoanhThuChiuThue($dukienthuethang->getDoanhThuChiuThue());
                 
-                $thuekhoan->setGiaTinhThue($dukienthuethang->getGiaTinhThue());
+                $thuetainguyen->setGiaTinhThue($dukienthuethang->getGiaTinhThue());
                 
-                $thuekhoan->setTiLeTinhThue($dukienthuethang->getTiLeTinhThue());
+                $thuetainguyen->setTiLeTinhThue($dukienthuethang->getTiLeTinhThue());
                 
-                $thuekhoan->setThueSuat($dukienthuethang->getThueSuat());
+                $thuetainguyen->setThueSuat($dukienthuethang->getThueSuat());
                 
-                $thuekhoan->setSoTien($dukienthuethang->getSoTien());
+                $thuetainguyen->setSoTien($dukienthuethang->getSoTien());
                 
-                $thuekhoan->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $dukienthuethang->getNgayPhaiNop(), 'Y-m-d')); // 2015-07-28
-                $thuekhoan->setTrangThai(0);
+                $thuetainguyen->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $dukienthuethang->getNgayPhaiNop(), 'Y-m-d')); // 2015-07-28
+                $thuetainguyen->setTrangThai(0);
                 
                 //set trạng thái cho dự kiến tháng - đã ghi
                 //$dukienthuethang->setTrangThai(1);
-                $this->em->persist($thuekhoan);
+                $this->em->persist($thuetainguyen);
                 $this->em->merge($dukienthuethang);
                 $this->em->flush();
                 $dem ++;
             }
             
             $kq->setKq(true);
-            $kq->setMessenger('<span style="color:green">' . 'Tẩt cả dự kiến thuế khoán ' . $Thang . ' được chọn đã ghi sổ thành công <br/>
-                                Tổng cộng có ' . $dem . ' dự kiến thuế khoán được ghi sổ !' . '</span>');
+            $kq->setMessenger('<span style="color:green">' . 'Tẩt cả dự kiến tài nguyên ' . $Thang . ' được chọn đã ghi sổ thành công <br/>
+                                Tổng cộng có ' . $dem . ' dự kiến tài nguyên được ghi sổ !' . '</span>');
             
             $this->em->getConnection()->commit();
             
@@ -166,7 +166,7 @@ class thuekhoanModel extends baseModel
                 //thue da duoc duyet
                 if($thue->getTrangThai()==1){
                     $kq->setKq(false);
-                    $kq->setMessenger('<span style="color:red;" >'."Thuế khoán".$MaSoThue.'-'.$TieuMuc."-".$Thang . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
+                    $kq->setMessenger('<span style="color:red;" >'."Thuế tài nguyên ".$MaSoThue.'-'.$TieuMuc."-".$Thang . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
         
                     $this->em->getConnection()->rollBack();
                     return $kq;
@@ -185,8 +185,8 @@ class thuekhoanModel extends baseModel
         
             //thanh cong - thong bao bao nhieu du kien da dc duyet
             $kq->setKq(true);
-            $kq->setMessenger('<span style="color:green;" >Tất cả thuế được chọn đã được duyệt hoàn tất<br/>
-                                Tổng số '.$dem . 'thuế đã được duyệt </span>');
+            $kq->setMessenger('<span style="color:green;" >Tất cả thuế tài nguyên được chọn đã được duyệt hoàn tất<br/>
+                                Tổng số '.$dem . 'thuế tài nguyên đã được duyệt </span>');
         
             return $kq;
         

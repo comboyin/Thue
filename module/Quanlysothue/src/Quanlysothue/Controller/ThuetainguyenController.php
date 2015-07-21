@@ -2,49 +2,49 @@
 namespace Quanlysothue\Controller;
 
 use Application\base\baseController;
-use Quanlysothue\Models\thuetruythuModel;
-use Quanlysothue\Models\dukientruythuModel;
-use Quanlysothue\Froms\formDuKienTruyThu;
+use Quanlysothue\Models\thuetainguyenModel;
+use Quanlysothue\Models\dukienthuecuathangModel;
 use Application\Entity\ketqua;
-use Application\Entity\truythu;
+use Application\Entity\thue;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
-use Application\Models\nganhModel;
+use Application\Unlity\Unlity;
+use Quanlysothue\Froms\formDuKienThueCuaNam;
 
-class ThuetruythuController extends baseController
+class ThuetainguyenController extends baseController
 {
 
     public function indexAction()
     {
-        $thuetruythuModel = new thuetruythuModel($this->getEntityManager());
+        $thuetainguyenModel = new thuetainguyenModel($this->getEntityManager());
         $temp = explode('/', (new \DateTime())->format('d/m/Y'));
         $Thang = $temp[1] . '/' . $temp[2];
         
-        $dsThueTruyThu = $thuetruythuModel->dsThueTruyThu($Thang, $this->getUser(), 'object')
+        $dsThueTaiNguyen = $thuetainguyenModel->dsThueTaiNguyen($Thang, $this->getUser(), 'object')
             ->getObj();
         
         return array(
-            'dsThueTruyThu' => $dsThueTruyThu
+            'dsThueTaiNguyen' => $dsThueTaiNguyen
         );
     }
 
-    public function dsThueTruyThuAction()
+    public function dsThueTaiNguyenAction()
     {
         $Thang = $this->getRequest()
             ->getQuery()
             ->get('Thang');
-        $model = new thuetruythuModel($this->getEntityManager());
-        echo json_encode($model->dsThueTruyThu($Thang, $this->getUser(), 'array')
+        $model = new thuetainguyenModel($this->getEntityManager());
+        echo json_encode($model->dsThueTaiNguyen($Thang, $this->getUser(), 'array')
             ->toArray());
         return $this->response;
     }
 
-    public function DSDKThueTruyThuAction()
+    public function DSDKThueTaiNguyenAction()
     {
         $Thang = $this->getRequest()
             ->getPost()
             ->get('Thang');
-        $model = new dukientruythuModel($this->getEntityManager());
-        echo json_encode($model->DSDKThueTruyThu($Thang, $this->getUser(), 'array'));
+        $model = new dukienthuecuathangModel($this->getEntityManager());
+        echo json_encode($model->DSDKThueTaiNguyen($Thang, $this->getUser(), 'array'));
         return $this->response;
     }
 
@@ -59,7 +59,7 @@ class ThuetruythuController extends baseController
         $Thang = $this->getRequest()
             ->getPost()
             ->get('Thang');
-        $model = new thuetruythuModel($this->getEntityManager());
+        $model = new thuetainguyenModel($this->getEntityManager());
         $kq = $model->ghiso($dsMaSoThue, $dsTieuMuc, $Thang)->toArray();
         
         echo json_encode($kq);
@@ -77,7 +77,7 @@ class ThuetruythuController extends baseController
         $Thang = $this->getRequest()
             ->getPost()
             ->get('Thang');
-        $model = new thuetruythuModel($this->getEntityManager());
+        $model = new thuetainguyenModel($this->getEntityManager());
         $kq = $model->duyet($dsMaSoThue, $dsTieuMuc, $Thang)->toArray();
         
         echo json_encode($kq);
@@ -86,7 +86,7 @@ class ThuetruythuController extends baseController
 
     public function xoaAction()
     {
-        $model = new thuetruythuModel($this->getEntityManager());
+        $model = new thuetainguyenModel($this->getEntityManager());
         $kq= new ketqua();
         $MaSoThue = $this->getRequest()
             ->getPost()
@@ -98,14 +98,14 @@ class ThuetruythuController extends baseController
             ->getPost()
             ->get('_TieuMuc');
         
-        /* @var $truythu truythu */
-        $truythu = $this->em->find('Application\Entity\truythu', array(
+        /* @var $thue thue */
+        $thue = $this->em->find('Application\Entity\thue', array(
             'nguoinopthue' => $this->em->find('Application\Entity\nguoinopthue', $MaSoThue),
             'muclucngansach' => $this->em->find('Application\Entity\muclucngansach', $TieuMuc),
             'KyThue' => $KyThue
         ));
         
-        if($truythu==null){
+        if($thue==null){
             $kq->setKq(false);
             $kq->setMessenger('<span style="color : red;">Không tìm thấy thuế !</span>');
             echo json_encode($kq->toArray());
@@ -113,69 +113,77 @@ class ThuetruythuController extends baseController
             
         }
         
-        $kq = $model->remove($truythu)->toArray();    
+        $kq = $model->remove($thue)->toArray();    
         
         echo json_encode($kq);
         return $this->response;
     }
     
-    public function suaAction()
-    {
+    public function suaAction(){
+    
         error_reporting(E_ERROR | E_PARSE);
+    
         $kq = new ketqua();
         try {
             /* @var $request Request */
             /* @var $form Form */
             $request = $this->getRequest();
             $post = $request->getPost();
-            $truythu = new truythu();
-            $form = new formDuKienTruyThu();
-            $form->setInputFilter($truythu->getInputFilter());
+            $thuetainguyen = new thue();
+            $form = new formDuKienThueCuaNam();
             $form->setData($post);
     
             // validation thanh cong
             if ($form->isValid()) {
+                $thuetainguyenModel = new thuetainguyenModel($this->getEntityManager());
+                /* @var $thuekhoan thue */
+                $thuetainguyen = $thuetainguyenModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))->getObj();
+                if ($thuetainguyen != null && $thuetainguyen->getTrangThai() == 0) {
     
-                // tim dukientruythu
-                $thuetruythuModel = new thuetruythuModel($this->getEntityManager());
-                /* @var $dukientruythu dukientruythu */
-                $truythu = $thuetruythuModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
-                ->getObj();
-                if ($truythu != null && $truythu->getTrangThai() == 0) {
                     $MaSoThue = $post->get('MaSoThue');
                     $kt = new nguoinopthueModel($this->getEntityManager());
                     if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
                         // sua
-                        $KyThue = $post->get('_KyThue');
     
+
+    
+                        $KyThue = $post->get('_KyThue');
                         $TieuMuc = $post->get('TieuMuc');
-                        $SoTien = $post->get('SoTien');
-                        $TrangThai = 0;
-                        $LyDo = $post->get('LyDo');
-                        $TiLeTinhThue = $post->get('TiLeTinhThue');
-                        $DoanhSo = $post->get('DoanhSo');
+                        $ThueSuat = $post->get('ThueSuat');
+                        $TenGoi = $post->get('TenGoi');
+                        $SanLuong = $post->get('SanLuong');
+                        $GiaTinhThue = $post->get('GiaTinhThue');
+                        $NgayPhaiNop = $post->get('NgayPhaiNop');
+
+                        if ($TieuMuc == '3801') // TN
+                            $SoTien = intval($SanLuong * $GiaTinhThue * $ThueSuat);
+                        else
+                            $SoTien = $post->get('SoTien');
     
                         $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
                         $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
     
-                        $truythu->setNguoinopthue($nguoinopthue);
-                        $truythu->setMuclucngansach($muclucngansach);
-                        $truythu->setKyThue($KyThue);
-                        $truythu->setSoTien($SoTien);
-                        $truythu->setDoanhSo($DoanhSo);
-                        $truythu->setTrangThai($TrangThai);
-                        $truythu->setLyDo($LyDo);
-                        $truythu->setTiLeTinhThue($TiLeTinhThue);
-    
-                        $kq = $thuetruythuModel->merge($truythu);
+                        $thuetainguyen->setKyThue($KyThue);
+                        $thuetainguyen->setNguoinopthue($nguoinopthue);
+                        $thuetainguyen->setMuclucngansach($muclucngansach);
+                        $thuetainguyen->setDoanhThuChiuThue(0);
+                        $thuetainguyen->setTiLeTinhThue(0);
+                        $thuetainguyen->setThueSuat($ThueSuat);
+                        $thuetainguyen->setTenGoi($TenGoi);
+                        $thuetainguyen->setSanLuong($SanLuong);
+                        $thuetainguyen->setGiaTinhThue($GiaTinhThue);
+                        $thuetainguyen->setSoTien($SoTien);
+                        $thuetainguyen->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $NgayPhaiNop, 'Y-m-d'));
+                        $thuetainguyen->setTrangThai(0);
+                        $kq = $thuetainguyenModel->merge($thuetainguyen);
                     } else {
-                        $mss = "Người nộp thuế này không thuộc quản lý của bạn hoặc đã nghĩ kinh doanh !";
+                        $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn hoặc đã nghĩ bỏ kinh doanh.";
                         $kq->setKq(false);
                         $kq->setMessenger($mss);
                     }
                 } else {
                     $kq->setKq(false);
-                    $kq->setMessenger('Không tìm được thuế');
+                    $kq->setMessenger('Không tìm được thuế tài nguyên!');
                 }
             } else {
                 $mss = $this->getErrorMessengerForm($form);
@@ -187,8 +195,6 @@ class ThuetruythuController extends baseController
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
         }
-    
-        // trả về json
         echo json_encode($kq->toArray());
         return $this->response;
     }

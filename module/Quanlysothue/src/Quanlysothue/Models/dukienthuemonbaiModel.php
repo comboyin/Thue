@@ -264,6 +264,73 @@ class dukienthuemonbaiModel extends baseModel
         }
     }
     
+    public function DSDKThueMonBai($Nam, $user, $type)
+    {
+        $q = $this->em->createQueryBuilder();
+        try {
+            if ($user->getLoaiUser() == 4) {
+                $q->select(array(
+                    'dukienmb',
+                    'nguoinopthue',
+                    'usernnts',
+                    'user',
+                    'muclucngansach'
+                ))
+                ->from('Application\Entity\dukienmb', 'dukienmb')
+                ->join('dukienmb.muclucngansach', 'muclucngansach')
+                ->join('dukienmb.user', 'user')
+                ->join('dukienmb.nguoinopthue', 'nguoinopthue')
+                ->join('nguoinopthue.usernnts', 'usernnts')
+                ->where('dukienmb.Nam = ?1')
+                ->andWhere('dukienmb.TrangThai = ?3')
+                ->andWhere('usernnts.user = ?2')
+                ->andWhere('usernnts.ThoiGianKetThuc is null')
+                ->setParameter(1, $Nam)
+                ->setParameter(3, 0)
+                ->setParameter(2, $user);
+            } else
+                if ($user->getLoaiUser() == 3) {
+                    $q->select(array(
+                        'dukienmb',
+                        'nguoinopthue',
+                        'usernnts',
+                        'user1',
+                        'muclucngansach'
+                    ))
+                    ->from('Application\Entity\dukienmb', 'dukienmb')
+                    ->join('dukienmb.muclucngansach', 'muclucngansach')
+                    ->join('dukienmb.user', 'user1')
+                    ->join('dukienmb.nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where('dukienmb.Nam = ?1')
+                    ->andWhere('dukienmb.TrangThai = ?3')
+                    ->andWhere('user.parentUser = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->setParameter(1, $Nam)
+                    ->setParameter(3, 0)
+                    ->setParameter(2, $user);
+                }
+            $this->kq->setKq(true);
+            if($type=='array'){
+                $this->kq->setObj($q->getQuery()
+                    ->getArrayResult());
+            }
+            else if($type=='object'){
+                $this->kq->setObj($q->getQuery()
+                    ->getResult());
+            }
+    
+    
+            $this->kq->setMessenger('Lấy danh sách dự thuế môn bài ' . $Nam . ' thành công !');
+            return $this->kq->toArray();
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            $this->kq->setKq(false);
+            $this->kq->setMessenger($e->getMessage());
+            return $this->kq;
+        }
+    }
     
    
 }

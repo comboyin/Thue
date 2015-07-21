@@ -8,6 +8,8 @@ use Application\Entity\ketqua;
 use Application\Entity\thue;
 use Quanlysothue\Froms\formDuKienThueCuaNam;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
+use Application\Models\nganhModel;
+use Application\Unlity\Unlity;
 
 class ThuekhoanController extends baseController
 {
@@ -137,7 +139,7 @@ class ThuekhoanController extends baseController
                 $thuekhoanModel = new thuekhoanModel($this->getEntityManager());
                 /* @var $thuekhoan thue */
                 $thuekhoan = $thuekhoanModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))->getObj();
-                if ($thuekhoan != null) {
+                if ($thuekhoan != null && $thuekhoan->getTrangThai() == 0) {
     
                     $MaSoThue = $post->get('MaSoThue');
                     $kt = new nguoinopthueModel($this->getEntityManager());
@@ -204,16 +206,15 @@ class ThuekhoanController extends baseController
     
                         $thuekhoan->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $NgayPhaiNop, 'Y-m-d'));
                         $thuekhoan->setTrangThai(0);
-                        $thuekhoan->setUser($this->getUser());
                         $kq = $thuekhoanModel->merge($thuekhoan);
                     } else {
-                        $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn hoặc đã nghĩ bỏ kinh doanh không thể lập dự kiến thuế.";
+                        $mss = "Người nộp thuế này không thuộc quyền quản lý của bạn hoặc đã nghĩ bỏ kinh doanh.";
                         $kq->setKq(false);
                         $kq->setMessenger($mss);
                     }
                 } else {
                     $kq->setKq(false);
-                    $kq->setMessenger('Không tìm được dự kiến truy thu!');
+                    $kq->setMessenger('Không tìm được thuế môn bài');
                 }
             } else {
                 $mss = $this->getErrorMessengerForm($form);

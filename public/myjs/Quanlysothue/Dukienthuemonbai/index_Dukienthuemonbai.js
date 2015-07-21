@@ -7,6 +7,7 @@ var EditableTable = function () {
 	var _KyThue = "";
 	var _MaSoThue = "";
 	var _flag = ""; //cho loadSoTien
+	var MaCanBo = $("span.MaCanBo").html();
 	return {
 
 		init : function () {
@@ -681,9 +682,9 @@ var EditableTable = function () {
 				e.preventDefault();
 
 				var nRow = $(this).parents('tr')[0];
-
+				var aData = oTable.fnGetData(nRow);
 				if (nEditing !== null && nEditing != nRow) {
-
+					if(aData[9] == $("span.MaCB").html()){
 					var flag = false;
 					var jqTds = $('>td', nEditing);
 					$.each(jqTds, function (i, val) {
@@ -704,6 +705,11 @@ var EditableTable = function () {
 						restoreRow(oTable, nEditing);
 						editRow(oTable, nRow);
 						nEditing = nRow;
+					}
+					}
+					else{
+						DialogTable.showThongBaoUnlimit('Thông báo !','Dự kiến này không thuộc quyền quản trị của bạn !');
+						
 					}
 
 				} else if (nEditing == nRow
@@ -766,9 +772,15 @@ var EditableTable = function () {
 					SaveEdit('post', url, data, oTable, nEditing);
 
 				} else {
-
-					editRow(oTable, nRow);
-					nEditing = nRow;
+					
+					if(aData[9] == $("span.MaCB").html()){
+						editRow(oTable, nRow);
+						nEditing = nRow;
+					}
+					else{
+						DialogTable.showThongBaoUnlimit('Thông báo !','Dự kiến này không thuộc quyền quản trị của bạn !');
+						
+					}
 				}
 			});
 			

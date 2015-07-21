@@ -503,7 +503,7 @@ var EditableTable = function () {
 				var today = new Date();
 				_KyThueThueTruyThu = $.datepicker.formatDate("mm/yy", today);
 				$("#kythue").val(_KyThueThueTruyThu);
-				$("#dpMonths").datepicker('setValue', _KyThueThueTruyThu);
+				$("#dpThueKhoan").datepicker('setValue', _KyThueThueTruyThu);
 
 			}
 			
@@ -1100,7 +1100,7 @@ var EditableTable = function () {
 				e.preventDefault();
 				var nRow = $(this).parents('tr')[0];
 				var aData = oTableThueKhoan.fnGetData(nRow);
-				// Chỉ cho phép cán bộ đã lập dự kiến này sửa
+				
 				
 					
 						if(aData[13] == $("span.MaCB").html()){
@@ -1183,8 +1183,8 @@ var EditableTable = function () {
 						var TiLeTinhThue = $("input[name='TiLeTinhThue']", nRow).val().trim();
 						var SoTien  = $("input[name='SoTien']", nRow).val().trim();
 						var NgayPhaiNop  = $("input[name='NgayPhaiNop']", nRow).val().trim();
-						
-						
+						var ThueSuat = 1;
+						var SanLuong = 0;
 						
 						data = {
 							_MaSoThue : _MaSoThue,
@@ -1197,7 +1197,9 @@ var EditableTable = function () {
 							DoanhThuChiuThue : DoanhThuChiuThue,
 							TiLeTinhThue : TiLeTinhThue,
 							SoTien : SoTien,
-							NgayPhaiNop : NgayPhaiNop
+							NgayPhaiNop : NgayPhaiNop,
+							SanLuong : SanLuong,
+							ThueSuat : ThueSuat
 						}
 
 						var url = "sua";
@@ -1292,7 +1294,7 @@ var EditableTable = function () {
 
 				TieuMuc = $("input[name='TieuMuc']", nRow);
 
-				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnsthue'),{}, function () {
+				DialogTable.showFromUrl('get',baseUrl('application/Service/mlnstruythu'),{}, function () {
 					
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 

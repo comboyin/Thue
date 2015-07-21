@@ -3,54 +3,55 @@ namespace Quanlysothue\Models;
 
 use Application\base\baseModel;
 use Application\Entity\ketqua;
-use Application\Entity\thue;
-use Application\Entity\dukienthue;
+use Application\Entity\thuemonbai;
+use Application\Entity\dukienmb;
 use Application\Unlity\Unlity;
 
-class thuekhoanModel extends baseModel
+class thuemonbaiModel extends baseModel
 {
 
-    public function dsThueKhoan($thang, $user, $type)
+    public function dsThueMonBai($thang, $user, $type)
     {
         $q = $this->em->createQueryBuilder();
         try {
             if ($user->getLoaiUser() == 4) {
                 $q->select(array(
-                    'thue',
+                    'thuemonbai',
                     'nguoinopthue',
-                    'usernnts'
+                    'usernnts',
+                    'muclucngansach'
                 )
                 )
-                    ->from('Application\Entity\thue', 'thue')
-                    ->join('thue.muclucngansach', 'muclucngansach')
-                    ->join('thue.nguoinopthue', 'nguoinopthue')
+                    ->from('Application\Entity\thuemonbai', 'thuemonbai')
+                    ->join('thuemonbai.muclucngansach', 'muclucngansach')
+                    ->join('thuemonbai.nguoinopthue', 'nguoinopthue')
                     ->
                 join('nguoinopthue.usernnts', 'usernnts')
                     ->
-                where('thue.KyThue = ?1')
+                where('thuemonbai.Nam = ?1')
                     ->andWhere('usernnts.user = ?2')
                     ->andWhere('usernnts.ThoiGianKetThuc is null')
-                    ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
+                    //->andWhere("muclucngansach.TieuMuc like '180_'")
                     ->setParameter(2, $user)
                     ->setParameter(1, $thang);
             } else 
                 if ($user->getLoaiUser() == 3) {
                     $q->select(array(
-                        'thue',
+                        'thuemonbai',
                         'nguoinopthue',
-                        'usernnts'
+                        'usernnts',
+                        'muclucngansach'
                     )
                     )
-                        ->from('Application\Entity\thue', 'thue')
-                        ->join('thue.muclucngansach', 'muclucngansach')
-                        ->join('thue.nguoinopthue', 'nguoinopthue')
+                        ->from('Application\Entity\thuemonbai', 'thuemonbai')
+                        ->join('thuemonbai.muclucngansach', 'muclucngansach')
+                        ->join('thuemonbai.nguoinopthue', 'nguoinopthue')
                         ->
                     join('nguoinopthue.usernnts', 'usernnts')
                         ->join('usernnts.user', 'user')
-                        ->where('thue.KyThue = ?1')
+                        ->where('thuemonbai.Nam = ?1')
                         ->andWhere('user.parentUser = ?2')
                         ->andWhere('usernnts.ThoiGianKetThuc is null')
-                        ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
                         ->setParameter(2, $user)
                         ->setParameter(1, $thang);
                 }
@@ -64,7 +65,7 @@ class thuekhoanModel extends baseModel
                         ->getResult());
                 }
             
-            $this->kq->setMessenger('Lấy danh sách thuế khoán ' . $thang . ' thành công !');
+            $this->kq->setMessenger('Lấy danh sách thuế môn bài ' . $thang . ' thành công !');
             return $this->kq;
         } catch (\Exception $e) {
             var_dump($e->getMessage());
@@ -74,7 +75,7 @@ class thuekhoanModel extends baseModel
         }
     }
 
-    public function ghiso($dsMaSoThue, $dsTieuMuc, $Thang)
+    public function ghiso($dsMaSoThue, $Nam)
     {
         $kq = new ketqua();
         $dem = 0;
@@ -82,50 +83,40 @@ class thuekhoanModel extends baseModel
         try {
             $this->em->getConnection()->beginTransaction();
             foreach ($dsMaSoThue as $key => $value) {
-                // tim du kien nam
-                $dukienthuethang = $this->em->find('Application\Entity\dukienthue', array(
+                // tim du kien mon bai
+                $dukienthuemonbai = $this->em->find('Application\Entity\dukienmb', array(
                     'nguoinopthue' => $this->em->find('Application\Entity\nguoinopthue', $value),
-                    'muclucngansach' => $this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]),
-                    'KyThue' => $Thang
+                    //'muclucngansach' => $this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]),
+                    'Nam' => $Nam
                 ));
-                if ($dukienthuethang == null) {
+                if ($dukienthuemonbai == null) {
                     $this->em->getConnection()->rollBack();
                     $kq->setKq(false);
-                    $kq->setMessenger('<span style="color:red">' . "Không tìm thấy dự kiến thuế " . $value . " - " . $dsTieuMuc[$key] . " - " . $Thang . '</span>');
+                    $kq->setMessenger('<span style="color:red">' . "Không tìm thấy dự kiến thuế " . $value . " - " . $Nam . '</span>');
                     return $kq;
                 }
-                /* @var $dukienthuethang dukienthue */
-                $thuekhoan = new thue();
-                $thuekhoan->setNguoinopthue($this->em->find('Application\Entity\nguoinopthue', $value));
-                $thuekhoan->setMuclucngansach($this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]));
-                $thuekhoan->setKyThue($Thang);
-                $thuekhoan->setTenGoi($dukienthuethang->getTenGoi());
-                $thuekhoan->setSanLuong($dukienthuethang->getSanLuong());
+                /* @var $dukienthuemonbai dukienmb */
+                $thuemonbai = new thuemonbai();
+                $thuemonbai->setNguoinopthue($this->em->find('Application\Entity\nguoinopthue', $value));
+                $thuemonbai->setMuclucngansach($dukienthuemonbai->getMuclucngansach());
+                $thuemonbai->setNam($Nam);
                 
-                $thuekhoan->setDoanhThuChiuThue($dukienthuethang->getDoanhThuChiuThue());
+                $thuemonbai->setDoanhSo($dukienthuemonbai->getDoanhSo());
+                $thuemonbai->setSoTien($dukienthuemonbai->getSoTien());
+                $thuemonbai->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $dukienthuemonbai->getNgayPhaiNop(), 'Y-m-d')); // 2015-07-28
+                $thuemonbai->setTrangThai(0);
                 
-                $thuekhoan->setGiaTinhThue($dukienthuethang->getGiaTinhThue());
-                
-                $thuekhoan->setTiLeTinhThue($dukienthuethang->getTiLeTinhThue());
-                
-                $thuekhoan->setThueSuat($dukienthuethang->getThueSuat());
-                
-                $thuekhoan->setSoTien($dukienthuethang->getSoTien());
-                
-                $thuekhoan->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $dukienthuethang->getNgayPhaiNop(), 'Y-m-d')); // 2015-07-28
-                $thuekhoan->setTrangThai(0);
-                
-                //set trạng thái cho dự kiến tháng - đã ghi
+                //set trạng thái cho dự kiến môn bài - đã ghi
                 //$dukienthuethang->setTrangThai(1);
-                $this->em->persist($thuekhoan);
-                $this->em->merge($dukienthuethang);
+                $this->em->persist($thuemonbai);
+                //$this->em->merge($dukienthuemonbai);
                 $this->em->flush();
                 $dem ++;
             }
             
             $kq->setKq(true);
-            $kq->setMessenger('<span style="color:green">' . 'Tẩt cả dự kiến thuế khoán ' . $Thang . ' được chọn đã ghi sổ thành công <br/>
-                                Tổng cộng có ' . $dem . ' dự kiến thuế khoán được ghi sổ !' . '</span>');
+            $kq->setMessenger('<span style="color:green">' . 'Tẩt cả dự kiến môn bài ' . $Nam . ' được chọn đã ghi sổ thành công <br/>
+                                Tổng cộng có ' . $dem . ' dự kiến môn bài được ghi sổ !' . '</span>');
             
             $this->em->getConnection()->commit();
             
@@ -137,7 +128,7 @@ class thuekhoanModel extends baseModel
             return $kq;
         }
     }
-    public function duyet($dsMaSoThue,$dsTieuMuc,$Thang){
+    public function duyet($dsMaSoThue,$Nam){
         $kq= new ketqua();
         $dem =0;
         
@@ -145,34 +136,34 @@ class thuekhoanModel extends baseModel
             $this->em->getConnection()->beginTransaction();
             foreach ($dsMaSoThue as $key=>$value){
                 $MaSoThue = $value;
-                $TieuMuc = $dsTieuMuc[$key];
+                //$TieuMuc = $dsTieuMuc[$key];
                 
-                /* @var $thue thue */
-                $thue = $this->em->find('Application\Entity\thue', array(
+                /* @var $thuemonbai thuemonbai */
+                $thuemonbai = $this->em->find('Application\Entity\thuemonbai', array(
                     'nguoinopthue'=>$this->em->find('Application\Entity\nguoinopthue', $MaSoThue),
-                    'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
-                    'KyThue' => $Thang
+                    //'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
+                    'Nam' => $Nam
                 ));
         
                 // khong tim thay
-                if($thue==null){
+                if($thuemonbai==null){
                     $kq->setKq(false);
-                    $kq->setMessenger('<span style="color:red;" >'."Không tìm thấy ".$MaSoThue.'-'.$TieuMuc."-".$Thang.'<br/></span>');
+                    $kq->setMessenger('<span style="color:red;" >'."Không tìm thấy ".$MaSoThue.'-'.$Nam.'<br/></span>');
         
                     $this->em->getConnection()->rollBack();
                     return $kq;
                 }
         
-                //thue da duoc duyet
-                if($thue->getTrangThai()==1){
+                //thuemonbai da duoc duyet
+                if($thuemonbai->getTrangThai()==1){
                     $kq->setKq(false);
-                    $kq->setMessenger('<span style="color:red;" >'."Thuế khoán".$MaSoThue.'-'.$TieuMuc."-".$Thang . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
+                    $kq->setMessenger('<span style="color:red;" >'."Thuế môn bài".$MaSoThue.'-'.$Nam . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
         
                     $this->em->getConnection()->rollBack();
                     return $kq;
                 }
         
-                $thue->setTrangThai(1);
+                $thuemonbai->setTrangThai(1);
                 $this->em->flush();
                 $dem++;
         
@@ -201,30 +192,30 @@ class thuekhoanModel extends baseModel
     
     /**
      *
-     * @param string $kythue
+     * @param string $nam
      * @param string $masothue
      * @param string $user
      * @param string $tieumuc
      * @return ketqua
      */
-    public function findByID_($kythue, $masothue,$tieumuc)
+    public function findByID_($nam, $masothue)
     {
         /* @var $user user */
         try {
             $kq = new ketqua();
             $qb = $this->em->createQueryBuilder();
     
-            $qb->select('thue')
-            ->from('Application\Entity\thue', 'thue')
-            ->join('thue.nguoinopthue', 'nguoinopthue')
-            ->join('thue.muclucngansach', 'muclucngansach')
+            $qb->select('thuemonbai')
+            ->from('Application\Entity\thuemonbai', 'thuemonbai')
+            ->join('thuemonbai.nguoinopthue', 'nguoinopthue')
+            //->join('thuemonbai.muclucngansach', 'muclucngansach')
             ->where('nguoinopthue.MaSoThue = ?1')
-            ->andWhere('muclucngansach.TieuMuc = ?2')
-            ->andWhere('thue.KyThue = ?3')
-            ->setParameter(3, $kythue)
+            //->andWhere('muclucngansach.TieuMuc = ?2')
+            ->andWhere('thuemonbai.Nam = ?2')
+            ->setParameter(2, $nam)
     
-            ->setParameter(1, $masothue)
-            ->setParameter(2, $tieumuc);
+            ->setParameter(1, $masothue);
+            //->setParameter(2, $tieumuc);
     
             $kq->setObj($qb->getQuery()
                 ->getSingleResult());
