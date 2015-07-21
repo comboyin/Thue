@@ -57,6 +57,7 @@ class NguoinopthueController extends baseController
      */
     public function persitAction()
     {
+        $kq = new ketqua();
         try {
             // khởi tạo form
             $form = new formNguoiNopThue();
@@ -142,24 +143,27 @@ class NguoinopthueController extends baseController
                             /* @var $phuongs phuong */
                             $phuongModel = new phuongModel($this->getEntityManager());
                             
-                            $phuongs = $phuongModel->DanhSachPhuongThuocQuan($post->get("Quan"));
+                            $phuongs = $phuongModel->DanhSachPhuongThuocQuan($post->get("Quan"))->getObj();
                             $selectPhuong = $form->get('Phuong');
                             $options = $selectPhuong->getValueOptions();
+                            
                             foreach ($phuongs as $phuong) {
                                 
                                 $items = array();
                                 $items['value'] = $phuong->getMaPhuong();
                                 $items['label'] = $phuong->getTenPhuong();
+                                
                                 array_push($options, $items);
                             }
+                            
+                            
                         }
                         
                         $selectPhuong->setValueOptions($options);
                         
                         $nguoinopthue = new nguoinopthue();
                         $form->setInputFilter($nguoinopthue->getInputFilter());
-                        $form->setData($this->getRequest()
-                            ->getPost());
+                        $form->setData($this->getRequest()->getPost());
                         
                         if ($form->isValid()) {
                             
@@ -203,6 +207,15 @@ class NguoinopthueController extends baseController
                                 }
                             }
                             
+                            return array(
+                                'kq' => $kq,
+                                'form' => $form
+                            );
+                        }
+                        else{
+                            
+                            $kq->setKq(false);
+                            $kq->setMessenger($this->getErrorMessengerForm($form));
                             return array(
                                 'kq' => $kq,
                                 'form' => $form
@@ -530,11 +543,11 @@ class NguoinopthueController extends baseController
         $nganhs = $this->getEntityManager()
             ->createQueryBuilder()
             ->select("nganh")
-            ->from("Application\Entity\\nganh", "nganh")
+            ->from('Application\Entity\nganh', "nganh")
             ->where("nganh not in (" . $this->getEntityManager()
             ->createQueryBuilder()
             ->select("nganh1")
-            ->from("Application\Entity\\nganh", "nganh1")
+            ->from('Application\Entity\nganh', "nganh1")
             ->where("nganh1.MaNganh = ?1")
             ->getDQL() . ")")
             ->setParameter(1, $MaNganhCu)
@@ -620,7 +633,7 @@ class NguoinopthueController extends baseController
         $MaCoQuan = $this->getRequest()
             ->getQuery()
             ->get('MaCoQuan');
-        $ChiCucThue = $this->getEntityManager()->find("Application\Entity\coquanthue", $MaCoQuan);
+        $ChiCucThue = $this->getEntityManager()->find('Application\Entity\coquanthue', $MaCoQuan);
         if ($ChiCucThue != null) {
             $qb = $this->getEntityManager()->createQueryBuilder();
             $qb->select(array(

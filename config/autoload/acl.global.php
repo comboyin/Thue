@@ -61,6 +61,24 @@ return array(
                 'Quanlysothue\Controller\Thuekhoan' => array(
                     'all' => 'canbothue'
                 ),
+                'Quanlysothue\Controller\Thuemonbai' => array(
+                    'all' => 'canbothue'
+                ),
+                'Quanlysothue\Controller\Thuetruythu' => array(
+                    'all' => 'canbothue'
+                ),
+                'Quanlysothue\Controller\Thuetieuthudacbiet' => array(
+                    'all' => 'canbothue'
+                ),
+                'Quanlysothue\Controller\Thuebaovemoitruong' => array(
+                    'all' => 'canbothue'
+                ),
+                'Quanlysothue\Controller\Thuetainguyen' => array(
+                    'all' => 'canbothue'
+                ),
+                'Quanlysothue\Controller\Xuatbangke' => array(
+                    'all' => 'canbothue'
+                ),
 				
 				////Module Quanlynguoinopthue
                 'Quanlynguoinopthue\Controller\Nguoinopthue' => array(

@@ -84,7 +84,14 @@ class ketqua
      */
     public function setMessenger($messenger)
     {
-        $this->messenger = $messenger;
+        if($this->kq==false)
+        {
+            $this->messenger = '<span style="color=red;">'.$messenger.'</span>';
+        }
+        else if($this->kq==true) {
+            $this->messenger = '<span style="color=green;">'.$messenger.'</span>';
+        }
+        
     }
 }
 

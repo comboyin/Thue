@@ -9,8 +9,14 @@ return array(
             'Quanlysothue\Controller\Dukienthuemonbai' => 'Quanlysothue\Controller\DukienthuemonbaiController',
             'Quanlysothue\Controller\Dukienthuecuathang' => 'Quanlysothue\Controller\DukienthuecuathangController',
             
+            'Quanlysothue\Controller\Xuatbangke' => 'Quanlysothue\Controller\XuatbangkeController',
             
-            'Quanlysothue\Controller\Thuekhoan' => 'Quanlysothue\Controller\ThuekhoanController'
+            'Quanlysothue\Controller\Thuekhoan' => 'Quanlysothue\Controller\ThuekhoanController',
+            'Quanlysothue\Controller\Thuetruythu' => 'Quanlysothue\Controller\ThuetruythuController',
+            'Quanlysothue\Controller\Thuemonbai' => 'Quanlysothue\Controller\ThuemonbaiController',
+            'Quanlysothue\Controller\Thuetainguyen' => 'Quanlysothue\Controller\ThuetainguyenController',
+            'Quanlysothue\Controller\Thuebaovemoitruong' => 'Quanlysothue\Controller\ThuebaovemoitruongController',
+            'Quanlysothue\Controller\Thuetieuthudacbiet' => 'Quanlysothue\Controller\ThuetieuthudacbietController'
             
         ),
     ),

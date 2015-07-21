@@ -14,7 +14,8 @@ var EditableTable = function () {
 
 		init : function () {
 			function changeQuan(){
-				DialogTable.showPropress();
+				$("img.loading").css("display","inline");
+				
 				$MaCoQuan = $("select[name='Quan']").val();
 				$.get('dsPhuongForQuan',{MaCoQuan:$MaCoQuan},function(json){
 					$("select[name='Phuong']").find('option:not(:first)').remove();
@@ -27,7 +28,8 @@ var EditableTable = function () {
 						    }));
 						
 						}
-					DialogTable.hidePropress();
+					$("img.loading").css("display","none");
+					
 				},'json');
 			}
 			$(document).on('submit','#formNguoiNopThue',function(){
