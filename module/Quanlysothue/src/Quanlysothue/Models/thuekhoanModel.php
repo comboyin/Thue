@@ -22,6 +22,7 @@ class thuekhoanModel extends baseModel
                 )
                 )
                     ->from('Application\Entity\thue', 'thue')
+                    ->join('thue.muclucngansach', 'muclucngansach')
                     ->join('thue.nguoinopthue', 'nguoinopthue')
                     ->
                 join('nguoinopthue.usernnts', 'usernnts')
@@ -29,6 +30,7 @@ class thuekhoanModel extends baseModel
                 where('thue.KyThue = ?1')
                     ->andWhere('usernnts.user = ?2')
                     ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
                     ->setParameter(2, $user)
                     ->setParameter(1, $thang);
             } else 
@@ -40,6 +42,7 @@ class thuekhoanModel extends baseModel
                     )
                     )
                         ->from('Application\Entity\thue', 'thue')
+                        ->join('thue.muclucngansach', 'muclucngansach')
                         ->join('thue.nguoinopthue', 'nguoinopthue')
                         ->
                     join('nguoinopthue.usernnts', 'usernnts')
@@ -47,6 +50,7 @@ class thuekhoanModel extends baseModel
                         ->where('thue.KyThue = ?1')
                         ->andWhere('user.parentUser = ?2')
                         ->andWhere('usernnts.ThoiGianKetThuc is null')
+                        ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
                         ->setParameter(2, $user)
                         ->setParameter(1, $thang);
                 }
