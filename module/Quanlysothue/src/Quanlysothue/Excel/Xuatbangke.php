@@ -5,19 +5,44 @@ use Application\base\baseModel;
 use Application\Entity\BangKe;
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Entity\chitietbangke;
-use Application\Entity\chitietchungtu;
+use Application\Entity\ketqua;
 
 class Xuatbangke extends baseModel
 {
-    
-    
-    public function XuatBangKe($dsMaSoThue, $KyThue){
-        $KyThue = \DateTime::createFromFormat('d/Y', $KyThue);
+
+    public function dowloadBangKe($dsMaSoThue, $KyThue)
+    {
+        $Ngay = explode('/', $KyThue)[0];
+        $Nam = explode('/', $KyThue)[1];
+        $KyLapBo = "";
+        if ($Ngay == "01") {
+            $KyLapBo = "12" . "/" . ($Nam - 1);
+        } else {
+            $Ngay = $Ngay - 1;
+            if (strlen($Ngay) == 1) {
+                $Ngay = "0" . $Ngay;
+            }
+            $KyLapBo = $Ngay . '/' . $Nam;
+        }
         
         
+        $arrayBangKe = new ArrayCollection();
         
+        foreach ($dsMaSoThue as $MaSoThue){
+            $arrayBangKe->add($this->phatsinh($MaSoThue, $KyThue));
+            
+            $arrayBangKeSono = $this->sono($MaSoThue, $KyLapBo);
+            foreach ($arrayBangKeSono->getValues() as $array){
+                $arrayBangKe->add($array);
+            }
+            
+        }
         
-        $KyLapBo = 
+        $kq=new ketqua();
+        $kq->setKq(true);
+        $kq->setObj($this->TaoZipNhieuBangKe($arrayBangKe));
+        
+        return $kq->toArray();
         
         
     }
@@ -229,29 +254,32 @@ class Xuatbangke extends baseModel
         
         return $BangKes;
     }
-    /**
-     * 
-     * @param ArrayCollection $dsBangKe 
-     * @return array  */
-    public function CreateMultiBangKe($dsBangKe){
-        $dsFileBangKe = [];
 
+    /**
+     *
+     * @param ArrayCollection $dsBangKe            
+     * @return array
+     */
+    public function CreateMultiBangKe($dsBangKe)
+    {
+        $dsFileBangKe = [];
+        
         $Bangkes = $dsBangKe->getValues();
         /* @var $Bangke BangKe */
-        foreach ($Bangkes as $Bangke)
-        {
+        foreach ($Bangkes as $Bangke) {
             array_push($dsFileBangKe, $this->CreateOneBangKe($Bangke));
         }
         
         $this->ZipBangKe($dsFileBangKe);
     }
-/**
- * 
- * @param BangKe $bangke
- * @return string  */
+
+    /**
+     *
+     * @param BangKe $bangke            
+     * @return string
+     */
     public function CreateOneBangKe($bangke)
     {
-
         $NameDirResources = './data/MauImport/01BKNT_A5.docx';
         $NameDirResults = './data/filetmp/';
         
@@ -266,8 +294,9 @@ class Xuatbangke extends baseModel
     }
 
     /**
-     * 
-     * @param ArrayCollection $DanhSachBangKe  */
+     *
+     * @param ArrayCollection $DanhSachBangKe            
+     */
     public function TaoZipNhieuBangKe($DanhSachBangKe)
     {
         $FileNames = array();
@@ -277,13 +306,12 @@ class Xuatbangke extends baseModel
             array_push($FileNames, $this->CreateOneBangKe($row));
         }
         
-        $this->ZipBangKe($FileNames);
+        return $this->ZipBangKe($FileNames);
     }
 
-    
-    
     /**
      * return file name
+     * 
      * @param BangKe $bangke            
      * @param string $fileMau            
      * @param string $NameDirResults            
@@ -325,7 +353,7 @@ class Xuatbangke extends baseModel
             $count ++;
         }
         
-        $templateProcessor->setValue('Thang', explode('-', (new \DateTime())->format('d-m-Y'))[1]  );
+        $templateProcessor->setValue('Thang', explode('-', (new \DateTime())->format('d-m-Y'))[1]);
         $templateProcessor->setValue('Nam', explode('-', (new \DateTime())->format('d-m-Y'))[2]);
         
         $templateProcessor->setValue('tongTien', number_format($bangke->getTongTien()));
@@ -360,7 +388,7 @@ class Xuatbangke extends baseModel
         
         $zip->close();
         
-        if (file_exists($zip_name) && $fd = fopen($zip_name, "r")) {
+        /* if (file_exists($zip_name) && $fd = fopen($zip_name, "r")) {
             
             $fileSize = filesize($zip_name);
             // push to download the zip
@@ -386,6 +414,8 @@ class Xuatbangke extends baseModel
             unlink($zip_name);
             exit();
         }
+ */
+        return $zip_name;
     }
 }
 

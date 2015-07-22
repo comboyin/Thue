@@ -4,11 +4,9 @@ namespace Quanlysothue\Controller;
 use Application\base\baseController;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Quanlysothue\Excel\Xuatbangke;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class XuatbangkeController extends baseController
 {
-
     public function indexAction()
     {
         $request = $this->getRequest();
@@ -24,20 +22,14 @@ class XuatbangkeController extends baseController
         );
     }
 
-    public function testAction()
+    public function downloadBangKeAction()
     {
-        $mod = new Xuatbangke($this->getEntityManager());
-
-        $array = new ArrayCollection();
+        $dsMaSoThue = $this->getRequest()->getPost()->get("dsMaSoThue");
+        $KyThue = $this->getRequest()->getPost()->get("KyThue");
+        $model = new Xuatbangke($this->getEntityManager());
+        $kq = $model->dowloadBangKe($dsMaSoThue, $KyThue);
         
-        $bangke = $mod->phatsinh('0301528964', '07/2015');
-        $array->add($bangke);
-        $bangkesono = $mod->sono('0301528964', '06/2015');
-        foreach ($bangkesono->getValues() as $b){
-            $array->add($b);
-        }
-        
-        $mod->TaoZipNhieuBangKe($array);
+        echo json_encode($kq);
         
         return $this->response;
     }

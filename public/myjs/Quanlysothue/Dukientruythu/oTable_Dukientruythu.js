@@ -981,7 +981,7 @@ var EditableTable = function () {
 				  contentType: false,
 				  type: 'POST',
 				  success: function(json){
-					  console.log( );
+					  
 				    if(json.sucess==false && typeof(json.fileNameErr) == 'string'){
 				    	$.fileDownload(baseUrl("application/Service/downloadFile"), {
 							successCallback : function(url) {

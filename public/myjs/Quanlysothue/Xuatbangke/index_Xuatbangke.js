@@ -4,7 +4,7 @@
 var EditableTable = function () {
 
 	//key
-	var _MaSoThue = "";
+	var _KyThue = "";
 
 	return {
 
@@ -19,8 +19,56 @@ var EditableTable = function () {
 				$("#dpMonths").datepicker('update', _KyThue);
 
 			}
+			$('#dpMonths').datepicker().on('changeDate', function (ev) {
 
-			
+				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
+				
+
+			});
+			$("#TaoBangKe").click(function(){
+
+				$("img.loading").css('display','inline');
+				var dsMaSoThue =[];
+				
+				var Row = $("#editable-sample input.check_item:checked").parents("tr");
+				if(Row.length==0){
+					$("#DialogGhiSo").modal('hide');
+					DialogTable.showThongBaoUnlimit('Thông báo !','Cần chọn trước !');
+					return;
+				}
+				$.each(Row,function($key,$value){
+					$MaSoThue = $("td",$value)[1].innerHTML.trim();
+					dsMaSoThue.push($MaSoThue);
+				});
+				
+				//post
+				var data = {
+						dsMaSoThue : dsMaSoThue,
+						KyThue : _KyThue
+				};
+				
+				
+				$.post(baseUrl("quanlysothue/Xuatbangke/downloadBangKe"),data,function(json){
+					
+					if(json.kq==true){
+				    	$.fileDownload(baseUrl("application/Service/downloadFile"), {
+							successCallback : function(url) {
+							},
+							failCallback : function(responseHtml, url) {
+							},
+							httpMethod : "GET",
+							data : 'filename='+json.obj
+						});
+				    }else{
+				    	
+				    }
+					
+					$("img.loading").css('display','none');
+				},'json');
+				
+				
+				
+			});
 
 			
 			
