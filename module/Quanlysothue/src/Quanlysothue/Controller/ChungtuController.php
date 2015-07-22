@@ -356,7 +356,7 @@ class ChungtuController extends baseController
                 if ($CTChungTu != null) {
                     
                     $chungtuModel = new chungtuModel($this->getEntityManager());
-                    $CTChungTu->setMuclucngansach($MucLuc);
+                    $CTChungTu->setMuclucngansach($this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc));
                     $CTChungTu->setChungtu($ChungTu);
                     $CTChungTu->setNgayHachToan($NgayHachToan);
                     $CTChungTu->setKyThue($KyThue);
