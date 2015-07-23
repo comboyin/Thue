@@ -23,6 +23,14 @@ class ketqua
      * Nối chuổi mesenger
      * @param string $stringMess  */
     public function appentMessenger($stringMess){
+        if($this->kq==false)
+        {
+            $stringMess = '<span style="color=red;">'.$stringMess.'</span>';
+        }
+        else if($this->kq==true) {
+            $stringMess = '<span style="color=green;">'.$stringMess.'</span>';
+        }
+        
         $this->messenger = $this->messenger.'<br/>'.$stringMess;
     }
 

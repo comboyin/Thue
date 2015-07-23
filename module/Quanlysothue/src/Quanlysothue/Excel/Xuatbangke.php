@@ -30,12 +30,10 @@ class Xuatbangke extends baseModel
         
         foreach ($dsMaSoThue as $MaSoThue){
             $arrayBangKe->add($this->phatsinh($MaSoThue, $KyThue));
-            
             $arrayBangKeSono = $this->sono($MaSoThue, $KyLapBo);
             foreach ($arrayBangKeSono->getValues() as $array){
                 $arrayBangKe->add($array);
-            }
-            
+            } 
         }
         
         $kq=new ketqua();
@@ -46,12 +44,50 @@ class Xuatbangke extends baseModel
         
         
     }
+    
+    private function ValidationXuatBanKe($dsMaSoThue, $KyThue){
+        
+    }
+    
+    private function KiemTraSoThue($MaSoThue,$KyThue){
+        $kq=new ketqua();
+        $qb = $this->em->createQueryBuilder();
+        $qb->select(array(
+            'nguoinopthue.MaSoThue',
+            'nguoinopthue.TenHKD',
+            'thongtinnnt.DiaChiKD',
+            'muclucngansach.TieuMuc',
+            'muclucngansach.TenGoi',
+            'thue.SoTien',
+            'thue.KyThue'
+        ))
+            ->from('Application\Entity\thue', 'thue')
+            ->join('thue.muclucngansach', 'muclucngansach')
+            ->join('thue.nguoinopthue', 'nguoinopthue')
+            ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
+            ->where('thongtinnnt.ThoiGianKetThuc is null')
+            ->andWhere('thue.TrangThai = 1')
+            ->andWhere('nguoinopthue.MaSoThue = ?1')
+            ->andWhere('thue.KyThue = ?2')
+            ->setParameter(1, $MaSoThue)
+            ->setParameter(2, $KyThue);
+        
+        $kqs = $qb->getQuery()->getResult();
+        if(count($kqs)==0){
+            $kq->setKq(false);
+            $kq->setMessenger("$MaSoThue trong kỳ thuế $KyThue chưa được lập sổ thuể !");
+        }else{
+            $kq->setKq(true);
+        }
+        
+        return $kq;
+    }
 
     /**
      *
      * @param string $MaSoThue            
      * @param string $KyThue            
-     * @return BangKe
+     * @return BangKe|null
      *
      */
     public function phatsinh($MaSoThue, $KyThue)
@@ -71,31 +107,36 @@ class Xuatbangke extends baseModel
             ->join('thue.nguoinopthue', 'nguoinopthue')
             ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
             ->where('thongtinnnt.ThoiGianKetThuc is null')
+            ->andWhere('thue.TrangThai = 1')
             ->andWhere('nguoinopthue.MaSoThue = ?1')
             ->andWhere('thue.KyThue = ?2')
             ->setParameter(1, $MaSoThue)
             ->setParameter(2, $KyThue);
         
         $kqs = $qb->getQuery()->getResult();
-        
-        $BangKe = new BangKe();
-        $BangKe->setMaSoThue($kqs[0]['MaSoThue']);
-        $BangKe->setTenHKD($kqs[0]['TenHKD']);
-        $BangKe->setDiaChiKD($kqs[0]['DiaChiKD']);
-        $BangKe->setKyThue($KyThue);
-        
-        $chitietbangkes = new ArrayCollection();
-        foreach ($kqs as $kq) {
-            $chitietbangke = new chitietbangke();
-            $chitietbangke->setKyThue($kq['KyThue']);
-            $chitietbangke->setNoiDung($kq['TenGoi']);
-            $chitietbangke->setSoTien($kq['SoTien']);
-            $chitietbangke->setTieuMuc($kq['TieuMuc']);
-            $BangKe->getChiTietBangKe()->add($chitietbangke);
+        if(count($kqs)>0){
+            $BangKe = new BangKe();
+            $BangKe->setMaSoThue($kqs[0]['MaSoThue']);
+            $BangKe->setTenHKD($kqs[0]['TenHKD']);
+            $BangKe->setDiaChiKD($kqs[0]['DiaChiKD']);
+            $BangKe->setKyThue($KyThue);
+            
+            $chitietbangkes = new ArrayCollection();
+            foreach ($kqs as $kq) {
+                $chitietbangke = new chitietbangke();
+                $chitietbangke->setKyThue($kq['KyThue']);
+                $chitietbangke->setNoiDung($kq['TenGoi']);
+                $chitietbangke->setSoTien($kq['SoTien']);
+                $chitietbangke->setTieuMuc($kq['TieuMuc']);
+                $BangKe->getChiTietBangKe()->add($chitietbangke);
+            }
+            $this->truythu($BangKe);
+            $this->monbai($BangKe);
+            return $BangKe;
         }
-        $this->truythu($BangKe);
-        $this->monbai($BangKe);
-        return $BangKe;
+        
+        return null;
+       
     }
 
     /**

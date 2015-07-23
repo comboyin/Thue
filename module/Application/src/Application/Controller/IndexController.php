@@ -48,4 +48,13 @@ class IndexController extends baseController
         var_dump($tool);
         return $this->response;
     }
+    
+    public function testAction(){
+        $dateBir = \DateTime::createFromFormat('d-m-Y','03-11-1992');
+        $today = new \DateTime();
+        var_dump(floor(strtotime('1992-07-23')/(365*60*60*24)) ) ;
+        return $this->response;
+
+        
+    }
 }
