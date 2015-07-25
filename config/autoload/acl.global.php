@@ -103,6 +103,10 @@ return array(
                 ),
                 'Quanlycanbothue\Controller\Thongtincanhan' => array(
                     'all' => 'canbothue'
+                )
+                ,
+                'Xuatbaocao\Controller\Index' => array(
+                    'all' => 'canbothue'
                 ),
                 //end
             )

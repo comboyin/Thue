@@ -5,7 +5,7 @@ return array(
         'Application',
         /* 'ZendDeveloperTools', */
         'DoctrineModule',
-        'DoctrineORMModule','Quanlyuser','Quanlysothue','Quanlynguoinopthue','Quanlycanbothue'
+        'DoctrineORMModule','Quanlyuser','Quanlysothue','Quanlynguoinopthue','Quanlycanbothue','Xuatbaocao'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
@@ -16,7 +16,7 @@ return array(
         // Module class.
         'module_paths' => array(
             './module',
-            './vendor','./module','./module','./module','./module','./module','./module','./module','./module',
+            './vendor','./module','./module','./module','./module','./module','./module','./module','./module','./module',
         ),
 
         // An array of paths from which to glob configuration files after

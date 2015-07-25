@@ -478,6 +478,9 @@ class NguoinopthueController extends baseController
                                                 $nguoinopthue->getThongtinnnts()->add((new thongtinnntModel($this->getEntityManager()))->ThongtinnntDangHoatDong($nguoinopthue->getMaSoThue())
                                                     ->getObj());
                                             }
+                                            else{
+                                                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $nguoinopthue->getMaSoThue());
+                                            }
                                         }
                                     } else {
                                         $kq->appentMessenger($this->getErrorMessengerForm($formThayDoiDiaChiKDNNT));

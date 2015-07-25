@@ -22,7 +22,7 @@ class thongtinnntModel extends baseModel
             
             $thongtinnnt = $this->em->createQueryBuilder()
                 ->select("thongtinnnt")
-                ->from("Application\Entity\\thongtinnnt", "thongtinnnt")
+                ->from('Application\Entity\thongtinnnt', 'thongtinnnt')
                 ->join("thongtinnnt.nguoinopthue", "nguoinopthue")
                 ->where("nguoinopthue.MaSoThue = ?1")
                 ->andWhere("thongtinnnt.ThoiGianKetThuc is null")
