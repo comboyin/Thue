@@ -13,7 +13,11 @@ return array(
         'default' => array(
             array(
                 'label' => 'Home',
-                'route' => 'home'
+                'route' => 'quanlyuser',
+                'controller' => 'menu',
+                'action' => 'index',
+                'resource' => 'Quanlyuser\Controller\Menu'
+                
             ),
             array(
                 'label' => 'Quản lý dự kiến thuế',
@@ -170,24 +174,9 @@ array(
             
             array(
                 'label' => 'Báo cáo',
-                'uri' => 'javascript:;',
-                'pages' => array(
-                    array(
-                        'label' => '01/trHKD',
-                        'route' => 'application',
-                        'action' => 'index',
-                        'resource' => 'Application\Controller\Index'
-                    )
-                    ,
-                    array(
-                        'label' => '02/trHKD',
-                        'route' => 'quanlyuser',
-                        'controller' => 'menu',
-                        'action' => 'index',
-                        'resource' => 'Quanlyuser\Controller\Menu'
-                    )
-                    
-                )
+                'route' => 'xuatbaocao',
+                'action' => 'index',
+                'resource' => 'Application\Controller\Index'
             )
         )
     )
