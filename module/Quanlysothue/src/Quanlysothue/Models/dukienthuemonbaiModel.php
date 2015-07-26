@@ -263,7 +263,12 @@ class dukienthuemonbaiModel extends baseModel
             return false;
         }
     }
-    
+    /**
+     * 
+     * @param unknown $Nam
+     * @param unknown $user
+     * @param unknown $type
+     * @return multitype:boolean string Ambigous <NULL, field_type> |\Application\Entity\ketqua  */
     public function DSDKThueMonBai($Nam, $user, $type)
     {
         $q = $this->em->createQueryBuilder();
@@ -290,6 +295,10 @@ class dukienthuemonbaiModel extends baseModel
                 ->setParameter(2, $user);
             } else
                 if ($user->getLoaiUser() == 3) {
+                    
+                    
+                    
+                    
                     $q->select(array(
                         'dukienmb',
                         'nguoinopthue',

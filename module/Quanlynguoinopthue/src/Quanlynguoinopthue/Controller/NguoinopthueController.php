@@ -434,6 +434,7 @@ class NguoinopthueController extends baseController
                                     if ($formThayDoiDiaChiKDNNT->isValid()) {
                                         $thongtinnntModel = new thongtinnntModel($this->getEntityManager());
                                         $thongtinnntOld = $nguoinopthue->getThongtinnnt();
+                                        
                                         if ($post->get('SubmitCapNhat') != null) {
                                             
                                             $thongtinnntOld->setDiaChiKD($DiaChiKD);
@@ -479,7 +480,7 @@ class NguoinopthueController extends baseController
                                                     ->getObj());
                                             }
                                             else{
-                                                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $nguoinopthue->getMaSoThue());
+                                                $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $nguoinopthue->getMaSoThue());   
                                             }
                                         }
                                     } else {

@@ -12,9 +12,6 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Table(
  * name="dukientruythu",
  * indexes={
- * @ORM\Index(name="fk_dukientruythu_nguoinopthue1_idx", columns={"MaSoThue"}),
- * @ORM\Index(name="fk_dukientruythu_muclucngansach1_idx", columns={"TieuMuc"}),
- * @ORM\Index(name="fk_dukientruythu_user1_idx", columns={"MaUser"})
  * }
  * )
  */
@@ -23,9 +20,10 @@ class dukientruythu implements InputFilterAwareInterface
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string",length=7,nullable=false)
-     */
-    private $KyThue;
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO") 
+     * */
+    private $IdDukienTruyThu;
 
     /**
      * @ORM\Column(type="integer",nullable=false)
@@ -51,27 +49,26 @@ class dukientruythu implements InputFilterAwareInterface
      * @ORM\Column(type="string", nullable=true)
      */
     private $LyDo;
-
-    /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Application\Entity\muclucngansach", inversedBy="dukientruythus")
-     * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc", nullable=false, onDelete="restrict")
-     */
-    private $muclucngansach;
-
-    /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Application\Entity\nguoinopthue", inversedBy="dukientruythus")
-     * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
-     */
-    private $nguoinopthue;
     
+
     
     /**
      * @ORM\ManyToOne(targetEntity="Application\Entity\user", inversedBy="dukientruythus")
      * @ORM\JoinColumn(name="MaUser", referencedColumnName="MaUser", nullable=false, onDelete="restrict")
      */
     private $user;
+    
+    
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Application\Entity\dukienthue", inversedBy="dukientruythu")
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue",nullable=true),
+     * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc",nullable=true),
+     * @ORM\JoinColumn(name="KyThue", referencedColumnName="KyThue",nullable=true)
+     * })
+     **/
+    private $dukienthue;
 
     private $inputFilter;
 

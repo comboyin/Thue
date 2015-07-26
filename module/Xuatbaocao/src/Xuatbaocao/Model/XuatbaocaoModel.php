@@ -4,6 +4,7 @@ namespace Xuatbaocao\Model;
 use Application\Entity\ketqua;
 use Application\base\baseModel;
 use Application\Entity\user;
+use Application\Entity\thongtinngungnghi;
 
 class XuatbaocaoModel extends baseModel
 {
@@ -13,7 +14,7 @@ class XuatbaocaoModel extends baseModel
      * @param user $user            
      * @return \Application\Entity\ketqua
      */
-    public function QTrHKD01($user)
+    public function QTrHKD01($user,$Nam)
     {
         if ($user->getLoaiUser() == 3) {
             $kq = new ketqua();
@@ -22,25 +23,24 @@ class XuatbaocaoModel extends baseModel
                 $qb = $this->em->createQueryBuilder();
                 
                 
+         
                 
-                // Danh sách cán bộ viên của thuộc quản lý của đội trưởng
-                $DQL_CanBoVien =  $this->em->createQueryBuilder()
-                ->select("canbovien")
-                ->from('Application\Entity\user', 'canbovien')
-                ->where('canbovien.parentUser = ?1')
-                ->getDQL();
-                
-                
+                // HKD nghĩ kinh doanh
                 $DQL_HKD_NghiKD = $this->em->createQueryBuilder()
-                ->select('nguoinopthue1')
-                ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
-                ->leftjoin('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis1')
+                ->select('thongtinngungnghi1.MaTTNgungNghi')
+                ->from('Application\Entity\thongtinngungnghi', 'thongtinngungnghi1')
+                ->join('thongtinngungnghi1.nguoinopthue', 'nguoinopthue1')
                 ->join('nguoinopthue1.usernnts', 'usernnts1')
                 ->join('usernnts1.user', 'user1')
-                ->andWhere('user1.parentUser = ?1')
-                ->andWhere('thongtinngungnghis1.DenNgay is null')
+                ->Where('user1.parentUser = ?1')
+                ->andWhere('thongtinngungnghi1.DenNgay is null')
                 ->getDQL();
                 
+                
+                // Danh sach ngưng nghĩ
+                $DQL_TTNgungNghi = 'select thongtinngungnghids.MaTTNgungNghi
+                                                            from Application\Entity\thongtinngungnghi thongtinngungnghids 
+                                                            where thongtinngungnghids.nguoinopthue = nguoinopthue';
                 
                 $qb->select(array(
                     'nguoinopthue.MaSoThue',
@@ -59,40 +59,16 @@ class XuatbaocaoModel extends baseModel
                 ->leftJoin('nguoinopthue.thongtinnnt', 'thongtinnnt')
                 ->leftJoin('nguoinopthue.thongtinngungnghis', 'thongtinngungnghis')
                 ->leftJoin('nguoinopthue.thuemonbais', 'thuemonbais')
-                ->andWhere('user.parentUser = ?1')
-                ->where("usernnts.ThoiGianKetThuc is null OR nguoinopthue in ($DQL_HKD_NghiKD)")
-                ->andwhere("user in ($DQL_CanBoVien)")
+                ->Where('user.parentUser = ?1')
+                ->andWhere("usernnts.ThoiGianKetThuc is null")
+                ->andwhere("thongtinnnt.ThoiGianKetThuc is null  OR thongtinngungnghis.MaTTNgungNghi in ($DQL_HKD_NghiKD)")
+                ->andWhere("thongtinngungnghis.MaTTNgungNghi >= ALL($DQL_TTNgungNghi)")
+                ->andWhere("nguoinopthue.ThoiDiemBDKD < '$Nam-12-30'")
+                ->andWhere("thuemonbais.Nam = $Nam")
                 ->setParameter(1, $user);
                 
                 
-                
-                
-                
-                
-                
-                
-                
-                
-                
-               /*  
-                $qb->select(array(
-                    'nguoinopthue.MaSoThue',
-                    'nguoinopthue.TenHKD',
-                    'thongtinnnt.DiaChiKD',
-                    'nguoinopthue.NgheKD',
-                    'thuemonbais.DoanhSo',
-                    'nguoinopthue.ThoiDiemBDKD',
-                    'thongtinngungnghis.TuNgay',
-                    'thongtinngungnghis.DenNgay'
-                ))
-                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
-                    ->join('nguoinopthue.usernnts', 'usernnts')
-                    ->join('usernnts.user', 'user')
-                    ->leftJoin('nguoinopthue.thongtinnnt', 'thongtinnnt')
-                    ->leftJoin('nguoinopthue.thongtinngungnghis', 'thongtinngungnghis')
-                    ->leftJoin('nguoinopthue.thuemonbais', 'thuemonbais')
-                    ->Where('user.parentUser = ?1')
-                    ->setParameter(1, $user); */
+
                 
                 $kqs = $qb->getQuery()->getArrayResult();
                 
@@ -102,10 +78,32 @@ class XuatbaocaoModel extends baseModel
                     $fileNameCreate = './data/filetmp/01Qtr-HKD.xls';
                     $fileTemplate = './data/MauImport/01Qtr-HKD.xls';
                     if (file_exists($fileTemplate)) {
-                        $baseRow = 14;
+                        
                         $objReader = \PHPExcel_IOFactory::createReader('Excel5');
                         $objPHPExcel = $objReader->load($fileTemplate);
-                        $a = 10;
+                        
+                        
+                        $IndexCucThue = 'A3';
+                        $IndexChiCucThue = 'A4';
+                        $IndexDoiThue = 'A5';
+                        $IndexNam = 'A9';
+                        
+                        $objPHPExcel->getActiveSheet()
+                        ->setCellValue($IndexChiCucThue,"CỤC THUẾ: TP.HỒ CHÍ MINH");
+
+                        $objPHPExcel->getActiveSheet()
+                        ->setCellValue($IndexCucThue,'CHI CỤC THUẾ: '.$user->getCoquanthue()->getChicucthue()->getTenGoi());
+
+                        $objPHPExcel->getActiveSheet()
+                        ->setCellValue($IndexDoiThue,'ĐỘI THUẾ: '.$user->getCoquanthue()->getTenGoi());
+                        
+                        $objPHPExcel->getActiveSheet()
+                        ->setCellValue($IndexNam,"Năm: $Nam");
+                        
+                        
+                        
+                        $baseRow = 14;
+                        
                         foreach($kqs as $r => $dataRow) {
                             $row = $baseRow + $r;
                             $objPHPExcel->getActiveSheet()->insertNewRowBefore($row,1);
@@ -137,10 +135,14 @@ class XuatbaocaoModel extends baseModel
                         $kq->setMessenger('Không tìm thấy File mẫu !');
                     }
                 }
+                else{
+                    $kq->setKq(false);
+                    $kq->setMessenger("Không tìm thấy hộ kinh doanh nào trong năm $Nam !");
+                }
 
                 return $kq;
             } catch (\Exception $e) {
-                var_dump($e->getMessage());
+                
                 $kq->setKq(false);
                 $kq->setMessenger($e->getMessage());
                 return $kq;

@@ -21,7 +21,13 @@ var xuatbaocao = function () {
 				$('img',$tr).css('display','inline');
 				
 				
-				$.post(baseUrl("Xuatbaocao/index/QTrHKD01"),{Mau : Mau, KyThue : KyThue},function(json){
+				
+				if(KyThue.length == 0 ){
+					DialogTable.showThongBaoUnlimit('Thông báo','Vui lòng chọn kỳ thuế !');
+					$('img',$tr).css('display','none');
+					return ;
+				}
+				$.post(baseUrl("Xuatbaocao/index/xuatbaocao"),{Mau : Mau, KyThue : KyThue},function(json){
 					
 					DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
 					// new true - download file ve

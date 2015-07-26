@@ -12,6 +12,7 @@ namespace Xuatbaocao\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Xuatbaocao\Model\XuatbaocaoModel;
 use Application\base\baseController;
+use Application\Entity\ketqua;
 
 class IndexController extends baseController
 {
@@ -20,10 +21,27 @@ class IndexController extends baseController
         return array();
     }
 
-    public function QTrHKD01Action(){
-        $model = new XuatbaocaoModel($this->getEntityManager());
-        $kq = $model->QTrHKD01($this->getUser());
+    public function xuatbaocaoAction(){
+        $Mau = $this->getRequest()->getPost()->get('Mau');
+        
+        $KyThue = $this->getRequest()->getPost()->get('KyThue'); 
+        $kq=null;
+        
+        switch ($Mau) {
+            case "01/QTr-HKD":
+                $model = new XuatbaocaoModel($this->getEntityManager());
+                $kq = $model->QTrHKD01($this->getUser(),$KyThue);
+                
+                break;
+        }
+        
+        if($kq==null){
+            $kq=new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger('Tên mẫu không phù hợp lệ !');
+        }
         echo json_encode($kq->toArray());
         return $this->response;
+        
     }
 }

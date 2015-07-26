@@ -25,10 +25,10 @@ class ketqua
     public function appentMessenger($stringMess){
         if($this->kq==false)
         {
-            $stringMess = '<span style="color=red;">'.$stringMess.'</span>';
+            $stringMess = '<span style="color:red;">'.$stringMess.'</span>';
         }
         else if($this->kq==true) {
-            $stringMess = '<span style="color=green;">'.$stringMess.'</span>';
+            $stringMess = '<span style="color:green;">'.$stringMess.'</span>';
         }
         
         $this->messenger = $this->messenger.'<br/>'.$stringMess;
@@ -94,10 +94,10 @@ class ketqua
     {
         if($this->kq==false)
         {
-            $this->messenger = '<span style="color=red;">'.$messenger.'</span>';
+            $this->messenger = '<span style="color:red;">'.$messenger.'</span>';
         }
         else if($this->kq==true) {
-            $this->messenger = '<span style="color=green;">'.$messenger.'</span>';
+            $this->messenger = '<span style="color:green;">'.$messenger.'</span>';
         }
         
     }

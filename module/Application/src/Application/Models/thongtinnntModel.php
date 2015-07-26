@@ -10,15 +10,17 @@ use Application\Entity\thongtinnnt;
 
 class thongtinnntModel extends baseModel
 {
+
     /**
      * đối số là mã số thuế
      * trả về thongtinnnt đang hoạt động của HKD có mã số thuế đó
-     * @param string $MaSoThue  
-     * @return ketqua*/
+     * 
+     * @param string $MaSoThue            
+     * @return ketqua
+     */
     public function ThongtinnntDangHoatDong($MaSoThue)
     {
         try {
-            
             
             $thongtinnnt = $this->em->createQueryBuilder()
                 ->select("thongtinnnt")
@@ -26,17 +28,15 @@ class thongtinnntModel extends baseModel
                 ->join("thongtinnnt.nguoinopthue", "nguoinopthue")
                 ->where("nguoinopthue.MaSoThue = ?1")
                 ->andWhere("thongtinnnt.ThoiGianKetThuc is null")
-                
-                ->setParameter(1, $MaSoThue)
+                ->
+            setParameter(1, $MaSoThue)
                 ->getQuery()
                 ->getSingleResult();
             
             $this->kq->setKq(true);
             $this->kq->setObj($thongtinnnt);
             return $this->kq;
-           
         } catch (\Exception $e) {
-            
             
             $this->kq->setKq(false);
             $this->kq->setMessenger($e->getMessage());
@@ -45,44 +45,57 @@ class thongtinnntModel extends baseModel
             return $this->kq;
         }
     }
-    
+
     /**
-     * 
+     *
      * Thay đổi thông tin người nộp thuế
-     * @param thongtinnnt $thongtinnntOld
-     * @param thongtinnnt $thongtinnntNew
-     * @param string $MaSoThue
-     * @return ketqua*/
-    public function ThayDoiDiaChiKD($thongtinnntOld,$thongtinnntNew,$MaSoThue)
+     * 
+     * @param thongtinnnt $thongtinnntOld            
+     * @param thongtinnnt $thongtinnntNew            
+     * @param string $MaSoThue            
+     * @return ketqua
+     */
+    public function ThayDoiDiaChiKD($thongtinnntOld, $thongtinnntNew, $MaSoThue)
     {
-        $kq=new ketqua();
+        $kq = new ketqua();
         try {
-            
-            //giả sử tất của quá trình đều đúng
+           
+            // giả sử tất của quá trình đều đúng
             $kq->setKq(true);
             $kq->setMessenger("Thay đổi địa chỉ thành công !");
             
-            //Sua thoigianketthuc = null 
-
+            // Sua thoigianketthuc = null
             $this->merge($thongtinnntOld);
-            if($this->ThongtinnntDangHoatDong($MaSoThue)->getObj()==null){
-                //them thong tin thay doi
+            
+            
+            
+            // begin validation
+            // nếu merge thành công
+            if ($this->ThongtinnntDangHoatDong($MaSoThue)->getObj() == null) {
+                // them thong tin thay doi
                 $this->them($thongtinnntNew);
-                if($this->ThongtinnntDangHoatDong($MaSoThue)->getObj()==null){
+                // loi : nếu không thêm được thông tin
+                if ($this->ThongtinnntDangHoatDong($MaSoThue)->getObj() == null) {
                     $thongtinnntOld->setThoiGianKetThuc(null);
-                    $this->merge($thongtinnntOld);
+                    $this->getEntityManager()->merge($thongtinnntOld);
                     $kq->setKq(false);
                     $kq->setMessenger("Thay đổi chỉ thất bại, trong lúc thêm mới địa chỉ gặp phải lỗi.");
+                    
+                    return $kq;
                 }
+            } else {
+                // loi 
                 
-            }
-            else{
                 $kq->setKq(false);
-                $kq->setMessenger("Thay đổi địa chỉ thất bại. Thời gian kết thúc kinh doanh tại địa chỉ củ không được hoàn tất !");
+                $kq->setMessenger("Thay đổi địa chỉ thất bại, Thời điểm thay đổi phải sau thời gian bắt đầu !");
+                return $kq;
             }
-    
-           
-           return $kq;  
+            // end validation
+            
+            // thanh cong
+            
+            return $kq;
+            
         } catch (\Exception $e) {
             
             $kq = new ketqua();

@@ -91,6 +91,11 @@ class dukienthue implements InputFilterAwareInterface
      */
     private $user;
     
+    /**
+     * @ORM\OneToOne(targetEntity="Application\Entity\dukientruythu", mappedBy="dukienthue")
+     */
+    private $dukientruythu;
+    
     protected $inputFilter;
 
 
