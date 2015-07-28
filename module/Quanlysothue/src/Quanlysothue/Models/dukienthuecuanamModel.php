@@ -133,9 +133,10 @@ class dukienthuecuanamModel extends baseModel
                     'usernnts'
                 ))
                 ->from('Application\Entity\dukienthue', 'dukienthue')
+                ->join('dukienthue.user', 'user')
+                
                 ->join('dukienthue.nguoinopthue', 'nguoinopthue')
                 ->join('nguoinopthue.usernnts', 'usernnts')
-                
                 ->where('dukienthue.KyThue = ?1')
                 ->andWhere('usernnts.user = ?2')
                 ->andWhere('usernnts.ThoiGianKetThuc is null')

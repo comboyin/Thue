@@ -167,27 +167,27 @@ $user = $this->identity();
 										<?php if($dsDuKienTruyThu!=null):?>
 										
         										
-                                       <?php foreach ($dsDuKienTruyThu as $truythu):?>
+                                       <?php foreach ($dsDuKienTruyThu as $DKtruythu):?>
                                         <tr class="odd">
                                         
             								<td><input class="check_item" type="checkbox"></td>
             								
-            								<td class=" sorting_1"><?php echo $truythu->getNguoinopthue()->getMaSoThue()?></td>
-            								<td><?php echo $truythu->getNguoinopthue()->getTenHKD()?></td>
-            								<td><?php echo $truythu->getMuclucngansach()->getTieuMuc()?></td>
-            								<td><?php echo $truythu->getDoanhSo();?></td>
-            								<td><?php echo $truythu->getTiLeTinhThue();?></td>
-            								<td><?php echo $truythu->getSoTien()?></td>
+            								<td><?php echo $DKtruythu->getDukienthue()->getNguoinopthue()->getMaSoThue()?></td>
+            								<td><?php echo $DKtruythu->getDukienthue()->getNguoinopthue()->getTenHKD()?></td>
+            								<td><?php echo $DKtruythu->getDukienthue()->getMuclucngansach()->getTieuMuc()?></td>
+            								<td><?php echo $DKtruythu->getDoanhSo();?></td>
+            								<td><?php echo $DKtruythu->getTiLeTinhThue();?></td>
+            								<td><?php echo $DKtruythu->getSoTien()?></td>
             								<td>
-            								<?php if($truythu->getTrangThai()==0):?>	
+            								<?php if($DKtruythu->getTrangThai()==0):?>	
             								<span style="color:red;">Chưa ghi sổ</span>
             								<?php else:?>
             								<span style="color:green;">Đã ghi sổ</span>
             								<?php endif;?>
             								</td>
-            								<td><?php echo $truythu->getLyDo()?></td>
-            								<td><?php echo $truythu->getUser()->getMaUser()?></td>
-            								<?php if($truythu->getTrangThai()==0):?>	
+            								<td><?php echo $DKtruythu->getLyDo()?></td>
+            								<td><?php echo $DKtruythu->getUser()->getMaUser()?></td>
+            								<?php if($DKtruythu->getTrangThai()==0):?>	
             								<td><a class="edit" href="">Edit</a></td>
             								<td><a class="Delete" href="">Delete</a></td>
             								<?php else:?>

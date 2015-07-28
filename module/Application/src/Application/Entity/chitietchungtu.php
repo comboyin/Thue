@@ -44,6 +44,14 @@ class chitietchungtu
      * @ORM\JoinColumn(name="SoChungTu", referencedColumnName="SoChungTu", nullable=false, onDelete="restrict")
      */
     private $chungtu;
+    
+    
+    
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=false,options={"default":"0"})
+     */
+    private $TrangThai;
+    
  /**
      * @return the $NgayHachToan
      */

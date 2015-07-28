@@ -4,7 +4,6 @@ namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
 /**
@@ -12,8 +11,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Table(
  * name="truythu",
  * indexes={
- * @ORM\Index(name="fk_truythu_nguoinopthue1_idx", columns={"MaSoThue"}),
- * @ORM\Index(name="fk_truythu_muclucngansach1_idx", columns={"TieuMuc"})
+
  * }
  * )
  */
@@ -22,10 +20,11 @@ class truythu
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=7)
-     */
-    private $KyThue;
-
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * */
+    private $IdTruyThu;
+    
     /**
      * @ORM\Column(type="integer",nullable=false, options={"default":"0"})
      */
@@ -52,18 +51,17 @@ class truythu
     private $LyDo;
     
     /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Application\Entity\muclucngansach", inversedBy="truythus")
-     * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc", nullable=false, onDelete="restrict")
-     */
-    private $muclucngansach;
+     * @ORM\OneToOne(targetEntity="Application\Entity\thue", inversedBy="truythu")
+     * @ORM\JoinColumns({
+     * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue",nullable=true),
+     * @ORM\JoinColumn(name="KyThue", referencedColumnName="KyThue",nullable=true),
+     * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc",nullable=true)
+     
+     * })
+     **/
+    private $thue;
     
-    /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Application\Entity\nguoinopthue", inversedBy="truythus")
-     * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
-     */
-    private $nguoinopthue;
+
  /**
      * @return the $TrangThai
      */

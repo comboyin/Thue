@@ -55,6 +55,17 @@ class thuemonbai
      * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue", nullable=false, onDelete="restrict")
      */
     private $nguoinopthue;
+    
+    
+    
+    
+    /**
+     *
+     * @ORM\Column(type="string", length=50,nullable=true,options={"default":NULL})
+     */
+    private $SoChungTu;
+    
+    
  /**
      * @return the $Nam
      */

@@ -80,9 +80,9 @@ var EditableTable = function () {
 						oTable
 						.fnAddData([
 								'<th><input class="check_item" type="checkbox"></th>',
-								data[i]['nguoinopthue']['MaSoThue'],
-								data[i]['nguoinopthue']['TenHKD'],
-								data[i]['TieuMuc'],
+								data[i]['dukienthue']['nguoinopthue']['MaSoThue'],
+								data[i]['dukienthue']['nguoinopthue']['TenHKD'],
+								data[i]['dukienthue']['muclucngansach']['TieuMuc'],
 								data[i]['DoanhSo'],
 								data[i]['TiLeTinhThue'],
 								data[i]['SoTien'],
@@ -238,13 +238,13 @@ var EditableTable = function () {
 				jqTds[0].innerHTML = '<input class="check_item" type="checkbox">';
 				// cansua
 				jqTds[1].innerHTML = '<input style="width:80px;" name="masothue" type="text"  value="'
-					 + aData[1] + ' "disabled><button style="margin:0 20px;margin-top:2px" class="btn btn-primary DialogNNT">Chọn</button>';
+					 + aData[1] + ' "disabled>';
 				jqTds[2].innerHTML = '<input style="width:110px;" name="TenHKD" type="text"  value="'
 
 					 + aData[2] + '"disabled>';
 					 
 				jqTds[3].innerHTML = '<input style="width:60px;" name="TieuMuc" type="text"   value="'
-					 + aData[3] + ' "disabled><button class="btn btn-primary DialogTieuMuc" style="margin:0 13px;margin-top:2px">Chọn</button>';
+					 + aData[3] + ' "disabled>';
 
 
 				jqTds[4].innerHTML = '<input style="width:90px;" name="DoanhSo" type="text"  value="'
@@ -301,25 +301,49 @@ var EditableTable = function () {
 					restoreRow(oTable, nEditing);
 				}
 
-				// cansua
-				var aiNew = oTable
-					.fnAddData([
-							'',
-							'',
-							'',
-							'',
-							0,
-							0,
-							0,
-							'',
-							'',
-							'',
-							'<a class="edit" href="">Edit</a>',
-							'<a class="cancel" data-mode="new" href="">Cancel</a>'
-						]);
-				var nRow = oTable.fnGetNodes(aiNew[0]);
-				addRow(oTable, nRow);
-				nEditing = nRow;
+				data = {
+					KyThue : _KyThue
+				};
+				DialogTable.showFromUrl('post',baseUrl('quanlysothue/Dukientruythu/DSDuKienThueNotTruyThu'),data, function () {
+					
+					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
+
+					if (checkboxs.length == 1) {
+						$("#DialogTable").modal("hide");
+						
+						var TieuMucString = $('td', checkboxs[0])[2].textContent;
+						var MaSoThueString = $('td', checkboxs[0])[3].textContent;
+						var TenHKDString = $('td', checkboxs[0])[4].textContent;
+						
+						// cansua
+						var aiNew = oTable
+							.fnAddData([
+									'',
+									MaSoThueString,
+									TenHKDString,
+									TieuMucString,
+									0,
+									0,
+									0,
+									'',
+									'',
+									'',
+									'<a class="edit" href="">Edit</a>',
+									'<a class="cancel" data-mode="new" href="">Cancel</a>'
+								]);
+						var nRow = oTable.fnGetNodes(aiNew[0]);
+						addRow(oTable, nRow);
+						nEditing = nRow;
+						
+						
+						
+					} else {
+						alert("Vui lòng chọn ít nhất một !");
+					}
+				});
+				
+				
+				
 			});
 
 			/*function cancelEditRow(oTable, nRow) {
@@ -782,8 +806,8 @@ var EditableTable = function () {
 						DoanhSo:DoanhSo
 					}
 
-					var url = 'them';
-					console.log(nEditing);
+					var url = baseUrl('quanlysothue/Dukientruythu/them');
+				
 					SaveNew('post', url, data, oTable, nEditing);
 
 				} else if (nEditing == nRow

@@ -4,6 +4,7 @@ namespace Quanlysothue\Models;
 use Application\base\baseModel;
 use Application\Entity\ketqua;
 use Application\Entity\dukienthue;
+use Application\Entity\user;
 
 class dukienthuecuathangModel extends baseModel
 {
@@ -410,6 +411,99 @@ class dukienthuecuathangModel extends baseModel
             return $this->kq->toArray();
         } catch (\Exception $e) {
             var_dump($e->getMessage());
+            $this->kq->setKq(false);
+            $this->kq->setMessenger($e->getMessage());
+            return $this->kq;
+        }
+    }
+    
+/**
+ * Trả về danh sách dự kiến thuế của tháng chưa được truy thu
+ * @param string $Thang
+ * @param user $user
+ * @param string $type
+ * @return multitype:boolean string Ambigous <NULL, field_type> |\Application\Entity\ketqua  */
+   public function DSDuKienThueNotTruyThu($Thang, $user, $type)
+    {
+        $q = $this->em->createQueryBuilder();
+        try {
+            if ($user->getLoaiUser() == 4) {
+                
+                //Danh sach dukienthue co dukientruythu
+                
+                
+                
+                $q->select(
+                    'dukienthue.KyThue',
+                    'muclucngansach.TieuMuc',
+                    'nguoinopthue.MaSoThue',
+                    'nguoinopthue.TenHKD',
+                    'dukienthue.DoanhThuChiuThue',
+                    'dukienthue.TiLeTinhThue',
+                    'dukienthue.SoTien',
+                    'dukienthue.NgayPhaiNop'
+                )
+                    ->from('Application\Entity\dukienthue', 'dukienthue')
+                    ->join('dukienthue.muclucngansach', 'muclucngansach')
+                    ->join('dukienthue.user', 'user')
+                    ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->where('dukienthue.KyThue = ?1')
+                    ->andWhere('usernnts.user = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
+                    ->andWhere('not exists (select dukientruythu1 from Application\Entity\dukientruythu dukientruythu1
+                                                join dukientruythu1.dukienthue dukienthue1 
+                                            where dukienthue1.KyThue = dukienthue.KyThue and 
+                                                    dukienthue1.nguoinopthue = nguoinopthue and
+                                                    dukienthue1.muclucngansach = muclucngansach)')
+                    ->setParameter(1, $Thang)
+                    ->setParameter(2, $user);
+            } else 
+                if ($user->getLoaiUser() == 3) {
+                    $q->select(array(
+                        'dukienthue.KyThue',
+                    'muclucngansach.TieuMuc',
+                    'nguoinopthue.MaSoThue',
+                    'nguoinopthue.TenHKD',
+                    'dukienthue.DoanhThuChiuThue',
+                    'dukienthue.TiLeTinhThue',
+                    'dukienthue.SoTien',
+                    'dukienthue.NgayPhaiNop'
+                    ))
+                        ->from('Application\Entity\dukienthue', 'dukienthue')
+                        ->join('dukienthue.muclucngansach', 'muclucngansach')
+                        ->join('dukienthue.user', 'user1')
+                        ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                        ->join('nguoinopthue.usernnts', 'usernnts')
+                        ->join('usernnts.user', 'user')
+                        ->where('dukienthue.KyThue = ?1')
+                        ->andWhere('user.parentUser = ?2')
+                        ->andWhere('usernnts.ThoiGianKetThuc is null')
+                        ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
+                        ->andWhere('not exists (select dukientruythu1 from Application\Entity\dukientruythu dukientruythu1
+                                                join dukientruythu1.dukienthue dukienthue1
+                                            where dukienthue1.KyThue = dukienthue.KyThue and
+                                                    dukienthue1.nguoinopthue = nguoinopthue and
+                                                    dukienthue1.muclucngansach = muclucngansach)')
+                        
+                        ->setParameter(1, $Thang)
+                        ->setParameter(2, $user);
+                }
+            $this->kq->setKq(true);
+            if($type=='array'){
+                $this->kq->setObj($q->getQuery()
+                    ->getArrayResult());
+            }
+            else if($type=='object'){
+                $this->kq->setObj($q->getQuery()
+                    ->getResult());
+            }
+            
+            
+            $this->kq->setMessenger('Lấy danh sách dự kiến thuế của tháng ' . $Thang . ' thành công !');
+            return $this->kq->toArray();
+        } catch (\Exception $e) {
             $this->kq->setKq(false);
             $this->kq->setMessenger($e->getMessage());
             return $this->kq;

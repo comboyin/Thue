@@ -35,6 +35,8 @@ class DukienthuecuanamController extends baseController
             'dsDuKienThueCuaNam' => $dsdkthuecuanam->getObj()
         );
     }
+    
+
 
     public function duyetAction()
     {
@@ -424,6 +426,17 @@ class DukienthuecuanamController extends baseController
         echo json_encode(array(
             'TyLeTinhThue' => $TyLeTinhThue
         ));
+        return $this->response;
+    }
+    
+    public function testAction(){
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        $qb->select('dukienthue')
+        ->from('Application\Entity\dukienthue', 'dukienthue')
+        ->join('dukienthue.nguoinopthue', 'nguoinopthue');
+        
+        var_dump($qb->getQuery()->getResult());
         return $this->response;
     }
 }

@@ -12,6 +12,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Table(
  * name="dukientruythu",
  * indexes={
+ *   @ORM\Index(name="fk_dukientruythu_dukienthue1_idx", columns={"MaSoThue","TieuMuc","KyThue"})
  * }
  * )
  */
@@ -63,9 +64,9 @@ class dukientruythu implements InputFilterAwareInterface
     /**
      * @ORM\OneToOne(targetEntity="Application\Entity\dukienthue", inversedBy="dukientruythu")
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue",nullable=true),
-     * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc",nullable=true),
-     * @ORM\JoinColumn(name="KyThue", referencedColumnName="KyThue",nullable=true)
+     * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue",nullable=false,onDelete="restrict"),
+     * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc",nullable=false,onDelete="restrict"),
+     * @ORM\JoinColumn(name="KyThue", referencedColumnName="KyThue",nullable=false,onDelete="restrict")
      * })
      **/
     private $dukienthue;
@@ -73,6 +74,22 @@ class dukientruythu implements InputFilterAwareInterface
     private $inputFilter;
 
     /**
+     * @return dukienthue
+     */
+    public function getDukienthue()
+    {
+        return $this->dukienthue;
+    }
+
+ /**
+     * @param field_type $dukienthue
+     */
+    public function setDukienthue($dukienthue)
+    {
+        $this->dukienthue = $dukienthue;
+    }
+
+ /**
      * @return user
      */
     public function getUser()

@@ -33,6 +33,11 @@ class thue
      * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc", nullable=false, onDelete="restrict")
      */
     private $muclucngansach;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Application\Entity\truythu", mappedBy="thue")
+     */
+    private $truythu;
 
     /**
      * @ORM\Column(type="string",length=255,nullable=true)
@@ -82,6 +87,11 @@ class thue
      */
     private $TrangThai;
     
+    /**
+     * 
+     * @ORM\Column(type="string", length=50,nullable=true,options={"default":NULL})
+     */
+    private $SoChungTu;
     /**
      * @return the $TrangThai
      */

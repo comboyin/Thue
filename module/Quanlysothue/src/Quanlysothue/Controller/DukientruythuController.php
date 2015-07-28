@@ -11,6 +11,7 @@ use Zend\Http\Request;
 use Zend\Form\Form;
 use Quanlysothue\Froms\UploadForm;
 use Quanlysothue\Excel\ImportExcelDuKienTruyThu;
+use Quanlysothue\Models\dukienthuecuathangModel;
 
 class DukientruythuController extends baseController
 {
@@ -43,7 +44,7 @@ class DukientruythuController extends baseController
 
     public function themAction()
     {
-        error_reporting(E_ERROR | E_PARSE);
+        //error_reporting(E_ERROR | E_PARSE);
         $kq = new ketqua();
         
         try {
@@ -67,6 +68,15 @@ class DukientruythuController extends baseController
                     $KyThue = $post->get('KyThue');
                     
                     $TieuMuc = $post->get('TieuMuc');
+                    
+                    $duKienThue = $this->getEntityManager()->find('Application\Entity\dukienthue', array(
+                        'KyThue' => $KyThue,
+                        'nguoinopthue' => $this->getEntityManager()
+                            ->find('Application\Entity\nguoinopthue', $MaSoThue),
+                        'muclucngansach' => $this->getEntityManager()
+                            ->find('Application\Entity\muclucngansach', $TieuMuc)
+                    ));
+                    
                     $DoanhSo = $post->get('DoanhSo');
                     
                     $TrangThai = 0;
@@ -77,9 +87,7 @@ class DukientruythuController extends baseController
                     $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
                     $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
                     
-                    $dukientruythu->setNguoinopthue($nguoinopthue);
-                    $dukientruythu->setMuclucngansach($muclucngansach);
-                    $dukientruythu->setKyThue($KyThue);
+                    $dukientruythu->setDukienthue($duKienThue);
                     $dukientruythu->setSoTien($SoTien);
                     $dukientruythu->setDoanhSo($DoanhSo);
                     $dukientruythu->setTrangThai($TrangThai);
@@ -122,6 +130,7 @@ class DukientruythuController extends baseController
             // xoa trong csdl
             $mo = new dukientruythuModel($this->getEntityManager());
             /* @var $dukientruythu dukientruythu */
+            
             $dukientruythu = $mo->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj();
             // kt ton tai
             if ($dukientruythu != null && $dukientruythu->getTrangThai() == 0) {
@@ -329,7 +338,7 @@ class DukientruythuController extends baseController
                 $ImportData = new ImportExcelDuKienTruyThu();
                 
                 // validation file
-                $fileNameErr = $ImportData->CheckFileImport($fileName, $this->getEntityManager(),$this->getUser());
+                $fileNameErr = $ImportData->CheckFileImport($fileName, $this->getEntityManager(), $this->getUser());
                 
                 // nếu lỗi
                 if ($fileNameErr->getKq() == false) {
@@ -337,16 +346,15 @@ class DukientruythuController extends baseController
                     // file sai ràng buộc database
                     if ($fileNameErr->getObj() != null && file_exists($fileNameErr->getObj())) {
                         echo json_encode(array(
-                            'sucess'=>false,
-                            'mess'=>$fileNameErr->getMessenger(),
-                            'fileNameErr'=>$fileNameErr->getObj()
+                            'sucess' => false,
+                            'mess' => $fileNameErr->getMessenger(),
+                            'fileNameErr' => $fileNameErr->getObj()
                         ));
-                    }
-                    else{
+                    } else {
                         // File sai dinh dang
                         echo json_encode(array(
-                            'sucess'=>false,
-                            'mess'=>$fileNameErr->getMessenger()
+                            'sucess' => false,
+                            'mess' => $fileNameErr->getMessenger()
                         ));
                     }
                     
@@ -354,7 +362,7 @@ class DukientruythuController extends baseController
                     return $this->response;
                 } else {
                     
-                    $aray = $ImportData->PersitToArrayCollection($fileName,$this->getUser());
+                    $aray = $ImportData->PersitToArrayCollection($fileName, $this->getUser());
                     $model->PersitArrayTruyThu($aray);
                     // xóa file
                     unlink($fileName);
@@ -369,6 +377,22 @@ class DukientruythuController extends baseController
                 }
             }
         }
+        return $this->response;
+    }
+
+    /**
+     * Tra ve danh sach du kien thue (1003,1701) khong co truy thu
+     * 
+     * @return \Zend\Mvc\Controller\Response
+     */
+    public function DSDuKienThueNotTruyThuAction()
+    {
+        $KyThue = $this->getRequest()
+            ->getPost()
+            ->get('KyThue');
+        $model = new dukienthuecuathangModel($this->getEntityManager());
+        $kq = $model->DSDuKienThueNotTruyThu('07/2015', $this->getUser(), 'array');
+        echo json_encode($kq['obj']);
         return $this->response;
     }
 }
