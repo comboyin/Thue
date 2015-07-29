@@ -28,17 +28,12 @@ class DukientruythuController extends baseController
         
         $model = new dukientruythuModel($this->getEntityManager());
         
-        // danh sach theo ky thue
-        $dsDuKienTruyThu = $model->dsdukiendsbykythue($today, $this->getUser());
+        $dukientruythus = $model->dsDKTTJson($today, $this->getUser());
         
-        /*
-         * var_dump($dsDuKienTruyThu);
-         *
-         * return $this->response;
-         */
+        
         return array(
             'formUp' => $formUp,
-            'dsDuKienTruyThu' => $dsDuKienTruyThu->getObj()
+            'dsDuKienTruyThu' => $dukientruythus['obj']
         );
     }
 
@@ -316,7 +311,9 @@ class DukientruythuController extends baseController
             return $this->response;
         }
     }
-
+/**
+ * import dữ liệu bằng file 
+ * @return \Zend\Mvc\Controller\Response  */
     public function uploadFormAction()
     {
         $form = new UploadForm('upload-form');
@@ -329,6 +326,7 @@ class DukientruythuController extends baseController
             // var_dump($post);
             
             $form->setData($post);
+            $array = [];
             
             if ($form->isValid()) {
                 $data = $form->getData();
@@ -343,7 +341,7 @@ class DukientruythuController extends baseController
                 // nếu lỗi
                 if ($fileNameErr->getKq() == false) {
                     
-                    // file sai ràng buộc database
+                        // file sai ràng buộc database
                     if ($fileNameErr->getObj() != null && file_exists($fileNameErr->getObj())) {
                         echo json_encode(array(
                             'sucess' => false,
@@ -358,24 +356,30 @@ class DukientruythuController extends baseController
                         ));
                     }
                     
-                    unlink($fileName);
-                    return $this->response;
-                } else {
                     
-                    $aray = $ImportData->PersitToArrayCollection($fileName, $this->getUser());
-                    $model->PersitArrayTruyThu($aray);
-                    // xóa file
-                    unlink($fileName);
+                    
+                } else {
+
                     // Form is valid, save the form!
                     // var_dump($data);
                     
-                    echo json_encode(array(
-                        'sucess' => true,
-                        'mess' => 'Import thành công vui lòng chọn kỳ thuế để kiểm tra !'
-                    ));
-                    return $this->response;
+                    $kq = $ImportData->PersitToArrayCollection($fileName, $this->getUser(),$this->getEntityManager());
+                    
+                    $array['sucess'] = $kq->getKq();
+                    $array['mess'] = $kq->getMessenger();
+                    
+                    $array['KyThue']  = $kq->getObj();
+                
+                    echo json_encode($array);
+                    
                 }
+                
+                
+               
             }
+        }
+        if(file_exists($fileName)){
+            unlink($fileName);
         }
         return $this->response;
     }

@@ -11,7 +11,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @ORM\Table(
  * name="truythu",
  * indexes={
-
+*   @ORM\Index(name="fk_truythu_thue1_idx", columns={"MaSoThue","KyThue","TieuMuc"})
  * }
  * )
  */
@@ -53,9 +53,9 @@ class truythu
     /**
      * @ORM\OneToOne(targetEntity="Application\Entity\thue", inversedBy="truythu")
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue",nullable=true),
-     * @ORM\JoinColumn(name="KyThue", referencedColumnName="KyThue",nullable=true),
-     * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc",nullable=true)
+     * @ORM\JoinColumn(name="MaSoThue", referencedColumnName="MaSoThue",nullable=false,onDelete="restrict"),
+     * @ORM\JoinColumn(name="KyThue", referencedColumnName="KyThue",nullable=false,onDelete="restrict"),
+     * @ORM\JoinColumn(name="TieuMuc", referencedColumnName="TieuMuc",nullable=false,onDelete="restrict")
      
      * })
      **/

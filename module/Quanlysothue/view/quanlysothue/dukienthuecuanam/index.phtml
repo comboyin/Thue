@@ -169,26 +169,26 @@ $user = $this->identity();
                             
 								<td><input class="check_item" type="checkbox"></td>
 								
-								<td><?php echo $thue->getNguoinopthue()->getMaSoThue()?></td>
-								<td><?php echo $thue->getNguoinopthue()->getTenHKD()?></td>
-								<td><?php echo $thue->getMuclucngansach()->getTieuMuc()?></td>
-								<td><?php echo $thue->getDoanhThuChiuThue()?></td>
-								<td><?php echo $thue->getTiLeTinhThue()?></td>
-								<td><?php echo $thue->getThueSuat()?></td>
-								<td><?php echo $thue->getTenGoi()?></td>
-								<td><?php echo $thue->getSanLuong()?></td>
-								<td><?php echo $thue->getGiaTinhThue()?></td>
-								<td><?php echo $thue->getSoTien()?></td>
+								<td><?php echo $thue['nguoinopthue']['MaSoThue']?></td>
+								<td><?php echo $thue['nguoinopthue']['TenHKD']?></td>
+								<td><?php echo $thue['muclucngansach']['TieuMuc']?></td>
+								<td><?php echo $thue['DoanhThuChiuThue']?></td>
+								<td><?php echo $thue['TiLeTinhThue']?></td>
+								<td><?php echo $thue['ThueSuat']?></td>
+								<td><?php echo $thue['TenGoi']?></td>
+								<td><?php echo $thue['SanLuong']?></td>
+								<td><?php echo $thue['GiaTinhThue']?></td>
+								<td><?php echo $thue['SoTien']?></td>
 								<td>
-            								<?php if($thue->getTrangThai()==0):?>	
+            								<?php if($thue['TrangThai']==0):?>	
             								<span style="color:red;">Chờ duyệt</span>
             								<?php else:?>
             								<span style="color:green;">Đã duyệt</span>
             								<?php endif;?>
             					</td>
-							    <td><?php echo $thue->getUser()->getMaUser()?></td>
+							    <td><?php echo $thue['user']['MaUser']?></td>
 							    
-							    <?php if($thue->getTrangThai()==0):?>	
+							    <?php if($thue['TrangThai']==0):?>	
 								<td><a class="edit" href="">Edit</a></td>
 								<td><a class="Delete" href="">Delete</a></td>
 								<?php else:?>

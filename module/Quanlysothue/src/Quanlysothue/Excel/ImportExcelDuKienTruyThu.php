@@ -10,6 +10,7 @@ use Application\base\baseExcel;
 use Application\Entity\ketqua;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Entity\user;
+use Quanlysothue\Models\dukientruythuModel;
 
 class ImportExcelDuKienTruyThu extends baseExcel
 {
@@ -32,6 +33,7 @@ class ImportExcelDuKienTruyThu extends baseExcel
         $messTieuMucNotExist = "Tiểu mục không tồn tại !";
         $messNNTKhongThuocQuanLy = "Người nộp thuế này không thuộc quản lý của bạn hoặc đã nghĩ kinh doanh!";
         $messKiemTraTieuMuc = "Dự kiến chỉ truy thu 1003 và 1701 !";
+        $messChuaDuKienThue = "Không tìm thấy dự kiến thuế !";
         $ColMaSoThue = 1;
         $ColTenHKD = 2;
         $ColTieuMuc = 3;
@@ -64,13 +66,23 @@ class ImportExcelDuKienTruyThu extends baseExcel
                     
                     
                     //**************begin check********************//
+                    
+                    // check dukienthue
+                    $dukienthue = $EntityManager->find('Application\Entity\dukienthue', array(
+                       'KyThue'=>$KyThue,
+                        'nguoinopthue'=>$EntityManager->find('Application\Entity\nguoinopthue',$MaSoThue),
+                        'muclucngansach'=> $EntityManager->find('Application\Entity\muclucngansach',$TieuMuc)
+                    ));
+                    if($dukienthue==null){
+                        $arrayMessErro[]=$messChuaDuKienThue;
+                    }
+                    
                     // check tieumuc
                     /* @var $checkTieuMuc muclucngansach */
                     $checkTieuMuc = $EntityManager->find('Application\Entity\muclucngansach', $TieuMuc);
                     if ($checkTieuMuc == null) {
                         $arrayMessErro[] = $messTieuMucNotExist;
                     }else if($checkTieuMuc->getTieuMuc() != "1003" && $checkTieuMuc->getTieuMuc() != "1701" ){
-                        
                         $arrayMessErro[] = $messKiemTraTieuMuc;
                     }
                     
@@ -86,11 +98,8 @@ class ImportExcelDuKienTruyThu extends baseExcel
                     }
                     // check key
                     if ($checkTieuMuc != null && $checkMaSoThue != null) {
-                        $checkKey = $EntityManager->find('Application\Entity\dukientruythu', array(
-                            'KyThue' => $KyThue,
-                            'nguoinopthue' => $checkMaSoThue,
-                            'muclucngansach' => $checkTieuMuc
-                        ));
+                        $dukientruythuModel = new dukientruythuModel($EntityManager);
+                        $checkKey = $dukientruythuModel->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj(); 
                         if ($checkKey != null) {
                             $arrayMessErro[] = $messKeyExist;
                         }
@@ -141,75 +150,80 @@ class ImportExcelDuKienTruyThu extends baseExcel
 
     /**
      * Đọc dữ liệu từ file excel và thêm vào arrayconllection
-     *
+     *@param EntityManager $entityManager
      * @param string $fileName   
      * @param user $user         
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ketqua
      */
-    public function PersitToArrayCollection($fileName,$user)
+    public function PersitToArrayCollection($fileName,$user,$entityManager)
     {
-        $arrayCollection = new ArrayCollection();
-        $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
-        
-        foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
-            $worksheetTitle = $worksheet->getTitle();
-            $highestRow = $worksheet->getHighestRow(); // e.g. 10
-            $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
-            $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-            /*
-             * $nrColumns = ord($highestColumn) - 64;
-             * echo "<br>The worksheet ".$worksheetTitle." has ";
-             * echo $nrColumns . ' columns (A-' . $highestColumn . ') ';
-             * echo ' and ' . $highestRow . ' row.';
-             * echo '<br>Data: <table border="1"><tr>';
-             */
+        try {
+            $dem=0;
+            $arrayCollection = new ArrayCollection();
+            $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
+            $entityManager->getConnection()->beginTransaction();
+            foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+                $worksheetTitle = $worksheet->getTitle();
+                $highestRow = $worksheet->getHighestRow(); // e.g. 10
+                $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
+                $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
             
-            $tempStr = $worksheet->getCellByColumnAndRow(0, 1)->getValue();
-            $KyThue = trim(substr($tempStr, strripos($tempStr, '-') + 1));
             
-            for ($row = 5; $row <= $highestRow; ++ $row) {
-                
-                // echo $worksheet->getCellByColumnAndRow(2, 1)->getValue();
-                // $cell = $worksheet->getCellByColumnAndRow(2, $row);
-                // echo $cell->getValue();
-                // $dataType = \PHPExcel_Cell_DataType::dataTypeForValue($val);
-                $MaSoThue = $worksheet->getCellByColumnAndRow(1, $row)->getValue() . '';
-                $TieuMuc = $worksheet->getCellByColumnAndRow(3, $row)->getValue() . '';
-                $DoanhSo = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
-                $TiLeTinhThue = $worksheet->getCellByColumnAndRow(5, $row)->getValue();
-                $SoTien = $DoanhSo * $TiLeTinhThue;
-                $TrangThai = 0;
-                $LyDo = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
-                // new dukientruythu
-                $dukientruythuTemp = new dukientruythu();
-                
-                // set nguoinopthue
-                $nguoinopthue = new nguoinopthue();
-                $nguoinopthue->setMaSoThue($MaSoThue);
-                $dukientruythuTemp->setNguoinopthue($nguoinopthue);
-                // set muclucngansach
-                $muclucngansach = new muclucngansach();
-                $muclucngansach->setTieuMuc($TieuMuc);
-                $dukientruythuTemp->setMuclucngansach($muclucngansach);
-                
-                // set kythue
-                $dukientruythuTemp->setKyThue($KyThue);
-                $dukientruythuTemp->setUser($user);
-                
-                $dukientruythuTemp->setDoanhSo($DoanhSo);
-                $dukientruythuTemp->setTiLeTinhThue($TiLeTinhThue);
-                $dukientruythuTemp->setSoTien($SoTien);
-                $dukientruythuTemp->setTrangThai($TrangThai);
-                $dukientruythuTemp->setLyDo($LyDo);
-                
-                // add vao array
-                
-                $arrayCollection->add($dukientruythuTemp);
+                $tempStr = $worksheet->getCellByColumnAndRow(0, 1)->getValue();
+                $KyThue = trim(substr($tempStr, strripos($tempStr, '-') + 1));
+            
+                for ($row = 5; $row <= $highestRow; ++ $row) {
+            
+            
+                    $MaSoThue = $worksheet->getCellByColumnAndRow(1, $row)->getValue() . '';
+                    $TieuMuc = $worksheet->getCellByColumnAndRow(3, $row)->getValue() . '';
+                    $DoanhSo = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
+                    $TiLeTinhThue = $worksheet->getCellByColumnAndRow(5, $row)->getValue();
+                    $SoTien = $DoanhSo * $TiLeTinhThue;
+                    $TrangThai = 0;
+                    $LyDo = $worksheet->getCellByColumnAndRow(6, $row)->getValue();
+                    // new dukientruythu
+                    $dukientruythuTemp = new dukientruythu();
+                    //set dukienthue
+                    $dukienthue = $entityManager->find('Application\Entity\dukienthue', array(
+                        'KyThue'=>$KyThue,
+                        'nguoinopthue'=>$entityManager->find('Application\Entity\nguoinopthue',$MaSoThue),
+                        'muclucngansach'=> $entityManager->find('Application\Entity\muclucngansach',$TieuMuc)
+                    ));
+                    
+                    $dukientruythuTemp->setDukienthue($dukienthue);
+            
+                    $dukientruythuTemp->setUser($user);
+            
+                    $dukientruythuTemp->setDoanhSo($DoanhSo);
+                    $dukientruythuTemp->setTiLeTinhThue($TiLeTinhThue);
+                    $dukientruythuTemp->setSoTien($SoTien);
+                    $dukientruythuTemp->setTrangThai($TrangThai);
+                    $dukientruythuTemp->setLyDo($LyDo);
+            
+                    // add vao array
+            
+                    $entityManager->persist($dukientruythuTemp);
+                    
+                    $dem++;
+                }
             }
+            $entityManager->flush();
+            $entityManager->getConnection()->commit();
+            $kq = new ketqua();
+            $kq->setKq(true);
+            $kq->setObj($KyThue);
+            $kq->setMessenger("Import dữ liệu thành công, có $dem dự kiến truy thu được thêm thành công !");
+            return $kq;
+            
+        } catch (\Exception $e) {
+            $entityManager->getConnection()->rollBack();
+            $kq = new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger($e->getMessage());
+            return $kq;
         }
-        
-        return $arrayCollection;
-    }
+     }
 }
 
 ?>
