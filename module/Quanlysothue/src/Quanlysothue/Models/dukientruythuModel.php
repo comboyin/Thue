@@ -5,6 +5,7 @@ use Application\base\baseModel;
 use Application\Entity\ketqua;
 use Application\Entity\user;
 use Application\Entity\dukientruythu;
+use Application\Entity\truythu;
 
 class dukientruythuModel extends baseModel
 {
@@ -165,7 +166,92 @@ class dukientruythuModel extends baseModel
             return $kq;
         }
     }
-
+    /**
+     * Danh sách dự kiến truy thu theo kỳ thuế và của user chưa ghi sổ
+     * trả về array ketqua
+     *
+     * @param unknown $kythue
+     * @param unknown $user
+     * @return \Application\Entity\ketqua
+     */
+    public function dsDKTTJsonChuaGhiSo($kythue, $user)
+    {
+        $q = $this->em->createQueryBuilder();
+        try {
+    
+            if ($user->getLoaiUser() == 4) {
+                /*
+                 * Danh sach du kien truy thu cua Can Bo Vien cua DOI Truong do.
+                 *   */
+                $q->select(array(
+                    'dukientruythu',
+                    'dukienthue',
+                    'nguoinopthue',
+                    'muclucngansach',
+                    'usernnts',
+                    'user1'
+                ))
+                ->from('Application\Entity\dukientruythu', 'dukientruythu')
+                ->join('dukientruythu.dukienthue', 'dukienthue')
+                ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                ->join('dukienthue.muclucngansach', 'muclucngansach')
+                ->join('nguoinopthue.usernnts', 'usernnts')
+                ->join('usernnts.user', 'user')
+                ->join('dukientruythu.user', 'user1')
+                ->where('dukienthue.KyThue = ?1')
+                ->andWhere('usernnts.ThoiGianKetThuc is null')
+                ->andWhere('user = ?2')
+                ->andWhere('not exists(select truythu.IdTruyThu from Application\Entity\truythu truythu 
+                                join truythu.thue thue where thue.KyThue = dukienthue.KyThue 
+                                            and thue.nguoinopthue = nguoinopthue and thue.muclucngansach = muclucngansach)')
+                ->setParameter(2, $user)
+                ->setParameter(1, $kythue);
+            } else
+                if ($user->getLoaiUser() == 3) {
+    
+                    /*
+                     * Danh sach du kien truy thu cua Doi Truong va Can Bo Vien cua DOI Truong do.
+                     *   */
+    
+                    $q->select(array(
+                        'dukientruythu',
+                        'dukienthue',
+                        'nguoinopthue',
+                        'muclucngansach',
+                        'usernnts',
+                        'user1'
+                    ))
+                    ->from('Application\Entity\dukientruythu', 'dukientruythu')
+    
+                    ->join('dukientruythu.dukienthue', 'dukienthue')
+                    ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                    ->join('dukienthue.muclucngansach', 'muclucngansach')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join("usernnts.user", "user")
+                    ->join('dukientruythu.user','user1')
+                    ->where('dukienthue.KyThue = ?1')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->andWhere("user.parentUser = ?2")
+                    ->andWhere('not exists(select truythu.IdTruyThu from Application\Entity\truythu truythu
+                                join truythu.thue thue where thue.KyThue = dukienthue.KyThue
+                                            and thue.nguoinopthue = nguoinopthue and thue.muclucngansach = muclucngansach)')
+                    ->setParameter(2, $user)
+                    ->setParameter(1, $kythue);
+                }
+    
+            $this->kq->setKq(true);
+    
+            $this->kq->setObj($q->getQuery()
+                ->getArrayResult());
+    
+            $this->kq->setMessenger('Lấy danh sách dự kiến truy thu của kỳ thuế ' . $kythue . ' thành công !');
+            return $this->kq->toArray();
+        } catch (\Exception $e) {
+            $this->kq->setKq(false);
+            $this->kq->setMessenger($e->getMessage());
+            return $this->kq;
+        }
+    }
     /**
      * Danh sách dự kiến truy thu theo kỳ thuế và của user
      * trả về array ketqua

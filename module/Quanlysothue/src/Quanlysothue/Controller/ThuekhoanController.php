@@ -45,7 +45,7 @@ class ThuekhoanController extends baseController
             ->getPost()
             ->get('Thang');
         $model = new dukienthuecuathangModel($this->getEntityManager());
-        echo json_encode($model->DSDKThueKhoan($Thang, $this->getUser(), 'array'));
+        echo json_encode($model->DSDKThueKhoanChuaGhiSo($Thang, $this->getUser(), 'array'));
         return $this->response;
     }
 
@@ -214,7 +214,7 @@ class ThuekhoanController extends baseController
                     }
                 } else {
                     $kq->setKq(false);
-                    $kq->setMessenger('Không tìm được thuế môn bài');
+                    $kq->setMessenger('Không tìm được thuế khoán');
                 }
             } else {
                 $mss = $this->getErrorMessengerForm($form);

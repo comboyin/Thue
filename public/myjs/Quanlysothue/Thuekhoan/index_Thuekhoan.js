@@ -797,11 +797,13 @@ var EditableTable = function () {
 					btnOKClass : 'OK !',
 					callback : function (result) {
 						if (result) {
-
+							$('img.loading').css('display','inline');
 							if (method == "get") {
 
 								$.get(url, data, function (json) {
+									$('img.loading').css('display','none');
 									if (json.kq == false) {
+										
 										restoreRow(oTable, nEditing);
 										BootstrapDialog.confirm({
 											title : 'Cảnh báo',
@@ -823,8 +825,9 @@ var EditableTable = function () {
 								return nEditing;
 							} else {
 								$.post(url, data, function (json) {
+									$('img.loading').css('display','none');
 									if (json.kq == false) {
-
+										
 										restoreRow(oTable, nEditing);
 										BootstrapDialog.confirm({
 											title : 'Cảnh báo',
@@ -881,11 +884,12 @@ var EditableTable = function () {
 						// result will be true if button was click, while it
 						// will be false
 						// if users close the dialog directly.
+						$('img.loading').css('display','inline');
 						if (result) {
 
 							if (method == "get") {
 								$.get(url, data, function (json) {
-
+									$('img.loading').css('display','none');
 									if (json.kq == false) {
 
 										BootstrapDialog.confirm({
@@ -907,7 +911,7 @@ var EditableTable = function () {
 								}, "json");
 							} else if (method == "post") {
 								$.post(url, data, function (json) {
-
+									$('img.loading').css('display','none');	
 									if (json.kq == false) {
 
 										BootstrapDialog.confirm({

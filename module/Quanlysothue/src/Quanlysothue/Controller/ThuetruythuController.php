@@ -44,7 +44,7 @@ class ThuetruythuController extends baseController
             ->getPost()
             ->get('Thang');
         $model = new dukientruythuModel($this->getEntityManager());
-        echo json_encode($model->dsDKTTJson($Thang, $this->getUser()));
+        echo json_encode($model->dsDKTTJsonChuaGhiSo($Thang, $this->getUser()));
         return $this->response;
     }
 
@@ -99,18 +99,14 @@ class ThuetruythuController extends baseController
             ->get('_TieuMuc');
         
         /* @var $truythu truythu */
-        $truythu = $this->em->find('Application\Entity\truythu', array(
-            'nguoinopthue' => $this->em->find('Application\Entity\nguoinopthue', $MaSoThue),
-            'muclucngansach' => $this->em->find('Application\Entity\muclucngansach', $TieuMuc),
-            'KyThue' => $KyThue
-        ));
+        $truythuModel = new thuetruythuModel($this->getEntityManager());
+        $truythu = $truythuModel->findByID_($KyThue, $MaSoThue, $TieuMuc)->getObj();
         
         if($truythu==null){
             $kq->setKq(false);
             $kq->setMessenger('<span style="color : red;">Không tìm thấy thuế !</span>');
             echo json_encode($kq->toArray());
             return $this->response;
-            
         }
         
         $kq = $model->remove($truythu)->toArray();    

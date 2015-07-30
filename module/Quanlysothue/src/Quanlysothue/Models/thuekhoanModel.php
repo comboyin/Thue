@@ -213,22 +213,12 @@ class thuekhoanModel extends baseModel
         /* @var $user user */
         try {
             $kq = new ketqua();
-            $qb = $this->em->createQueryBuilder();
-    
-            $qb->select('thue')
-            ->from('Application\Entity\thue', 'thue')
-            ->join('thue.nguoinopthue', 'nguoinopthue')
-            ->join('thue.muclucngansach', 'muclucngansach')
-            ->where('nguoinopthue.MaSoThue = ?1')
-            ->andWhere('muclucngansach.TieuMuc = ?2')
-            ->andWhere('thue.KyThue = ?3')
-            ->setParameter(3, $kythue)
-    
-            ->setParameter(1, $masothue)
-            ->setParameter(2, $tieumuc);
-    
-            $kq->setObj($qb->getQuery()
-                ->getSingleResult());
+            $obj = $this->em->find('Application\Entity\thue', array(
+                'KyThue'=>$kythue,
+                'nguoinopthue'=>$this->em->find('Application\Entity\nguoinopthue', $masothue),
+                'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $tieumuc)
+            ));
+            $kq->setObj($obj);
             $kq->setKq(true);
             return $kq;
         } catch (\Exception $e) {

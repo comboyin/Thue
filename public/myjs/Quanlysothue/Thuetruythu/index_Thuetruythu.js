@@ -640,11 +640,13 @@ var EditableTable = function () {
 					btnOKLabel : 'OK !',
 					btnOKClass : 'OK !',
 					callback : function (result) {
+						$("img.loading").css('display','inline');
 						if (result) {
 
 							if (method == "get") {
 
 								$.get(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 										restoreRow(oTable, nEditing);
 										BootstrapDialog.confirm({
@@ -667,6 +669,7 @@ var EditableTable = function () {
 								return nEditing;
 							} else {
 								$.post(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										restoreRow(oTable, nEditing);
@@ -725,11 +728,12 @@ var EditableTable = function () {
 						// result will be true if button was click, while it
 						// will be false
 						// if users close the dialog directly.
+						$("img.loading").css('display','inline');
 						if (result) {
 
 							if (method == "get") {
 								$.get(url, data, function (json) {
-
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										BootstrapDialog.confirm({
@@ -751,7 +755,7 @@ var EditableTable = function () {
 								}, "json");
 							} else if (method == "post") {
 								$.post(url, data, function (json) {
-
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										BootstrapDialog.confirm({
