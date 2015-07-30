@@ -172,22 +172,22 @@ $user = $this->identity();
                                         
             								<td><input class="check_item" type="checkbox"></td>
             								
-            								<td><?php echo $DKtruythu->getDukienthue()->getNguoinopthue()->getMaSoThue()?></td>
-            								<td><?php echo $DKtruythu->getDukienthue()->getNguoinopthue()->getTenHKD()?></td>
-            								<td><?php echo $DKtruythu->getDukienthue()->getMuclucngansach()->getTieuMuc()?></td>
-            								<td><?php echo $DKtruythu->getDoanhSo();?></td>
-            								<td><?php echo $DKtruythu->getTiLeTinhThue();?></td>
-            								<td><?php echo $DKtruythu->getSoTien()?></td>
+            								<td><?php echo $DKtruythu['dukienthue']['nguoinopthue']['MaSoThue']?></td>
+            								<td><?php echo $DKtruythu['dukienthue']['nguoinopthue']['TenHKD']?></td>
+            								<td><?php echo $DKtruythu['dukienthue']['muclucngansach']['TieuMuc']?></td>
+            								<td><?php echo $DKtruythu['DoanhSo'];?></td>
+            								<td><?php echo $DKtruythu['TiLeTinhThue'];?></td>
+            								<td><?php echo $DKtruythu['SoTien']?></td>
             								<td>
-            								<?php if($DKtruythu->getTrangThai()==0):?>	
+            								<?php if($DKtruythu['TrangThai']==0):?>	
             								<span style="color:red;">Chưa ghi sổ</span>
             								<?php else:?>
             								<span style="color:green;">Đã ghi sổ</span>
             								<?php endif;?>
             								</td>
-            								<td><?php echo $DKtruythu->getLyDo()?></td>
-            								<td><?php echo $DKtruythu->getUser()->getMaUser()?></td>
-            								<?php if($DKtruythu->getTrangThai()==0):?>	
+            								<td><?php echo $DKtruythu['LyDo']?></td>
+            								<td><?php echo $DKtruythu['user']['MaUser']?></td>
+            								<?php if($DKtruythu['TrangThai']==0):?>	
             								<td><a class="edit" href="">Edit</a></td>
             								<td><a class="Delete" href="">Delete</a></td>
             								<?php else:?>

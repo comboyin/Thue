@@ -66,7 +66,7 @@ class dukienthue implements InputFilterAwareInterface
     private $TiLeTinhThue;
 
     /**
-     * @ORM\Column(type="integer",nullable=false,options={"default":"1"})
+     * @ORM\Column(type="float",nullable=false,options={"default":"1"})
      */
     private $ThueSuat;
 

@@ -35,28 +35,25 @@ class DukienthuecuanamController extends baseController
             'dsDuKienThueCuaNam' => $dsdkthuecuanam->getObj()
         );
     }
-    
-
 
     public function duyetAction()
     {
-        if($this->getUser()->getLoaiUser()==3){
+        if ($this->getUser()->getLoaiUser() == 3) {
             $dsMaSoThue = $this->getRequest()
-            ->getPost()
-            ->get('dsMaSoThue');
+                ->getPost()
+                ->get('dsMaSoThue');
             $dsTieuMuc = $this->getRequest()
-            ->getPost()
-            ->get('dsTieuMuc');
+                ->getPost()
+                ->get('dsTieuMuc');
             $Nam = $this->getRequest()
-            ->getPost()
-            ->get('Nam');
+                ->getPost()
+                ->get('Nam');
             $Model = new dukienthuecuanamModel($this->getEntityManager());
             
             $kq = $Model->duyet($dsMaSoThue, $dsTieuMuc, $Nam)->toArray();
             
             echo json_encode($kq);
-        }
-        else{
+        } else {
             $kq = new ketqua();
             $kq->setKq(false);
             $kq->setMessenger('<span style="color:red">Bạn không sử dụng chức năng này !</span> ');
@@ -98,9 +95,8 @@ class DukienthuecuanamController extends baseController
                     $TenGoi = $post->get('TenGoi');
                     $SanLuong = $post->get('SanLuong');
                     $GiaTinhThue = $post->get('GiaTinhThue');
-                    
-                    if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
-{
+                    // TNCN&GTGT
+                    if ($TieuMuc == '1003' || $TieuMuc == '1701') {
                         if ($DoanhThuChiuThue * 12 > 100000000) {
                             $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
                         } else
@@ -184,14 +180,13 @@ class DukienthuecuanamController extends baseController
             // kt ton tai
             if ($dukienthuenam != null) {
                 /* @var $dukienthuenam dukienthue */
-                // dã được duyệt không dc xoa 
-                if($dukienthuenam->getTrangThai()==1){
+                // dã được duyệt không dc xoa
+                if ($dukienthuenam->getTrangThai() == 1) {
                     $kq->setKq(false);
-                    $kq->setMessenger('<span style="color:red;" >'.'Dự kiến này đã được duyệt không được xóa !'.'<br/></span>');
+                    $kq->setMessenger('<span style="color:red;" >' . 'Dự kiến này đã được duyệt không được xóa !' . '<br/></span>');
                     echo json_encode($kq->toArray());
                     return $this->response;
                 }
-                
                 
                 // kiem tra masothue
                 $kt = new nguoinopthueModel($this->getEntityManager());
@@ -253,9 +248,8 @@ class DukienthuecuanamController extends baseController
                         $TenGoi = $post->get('TenGoi');
                         $SanLuong = $post->get('SanLuong');
                         $GiaTinhThue = $post->get('GiaTinhThue');
-                        
-                        if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
-                        {
+                        // TNCN&GTGT
+                        if ($TieuMuc == '1003' || $TieuMuc == '1701') {
                             if ($DoanhThuChiuThue * 12 > 100000000) {
                                 $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
                             } else
@@ -309,7 +303,7 @@ class DukienthuecuanamController extends baseController
                     }
                 } else {
                     $kq->setKq(false);
-                    $kq->setMessenger('Không tìm được dự kiến truy thu!');
+                    $kq->setMessenger('Không tìm được dự kiến cua nam !');
                 }
             } else {
                 $mss = $this->getErrorMessengerForm($form);
@@ -428,13 +422,14 @@ class DukienthuecuanamController extends baseController
         ));
         return $this->response;
     }
-    
-    public function testAction(){
+
+    public function testAction()
+    {
         $qb = $this->getEntityManager()->createQueryBuilder();
         
         $qb->select('dukienthue')
-        ->from('Application\Entity\dukienthue', 'dukienthue')
-        ->join('dukienthue.nguoinopthue', 'nguoinopthue');
+            ->from('Application\Entity\dukienthue', 'dukienthue')
+            ->join('dukienthue.nguoinopthue', 'nguoinopthue');
         
         var_dump($qb->getQuery()->getResult());
         return $this->response;

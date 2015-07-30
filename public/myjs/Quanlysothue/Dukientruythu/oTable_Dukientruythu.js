@@ -61,10 +61,7 @@ var EditableTable = function () {
 				});
 			});
 			
-			$('#dpMonths').datepicker().on('changeDate', function (ev) {
-
-				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
-				
+			function loadDSDK(){
 				$("img.loading").css('display','inline');
 				
 				deleteAllRows();
@@ -98,6 +95,13 @@ var EditableTable = function () {
 
 					$("img.loading").css('display','none');
 				}, "json");
+			}
+			
+			$('#dpMonths').datepicker().on('changeDate', function (ev) {
+
+				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
+				loadDSDK();
+				
 
 			});
 
@@ -1005,7 +1009,9 @@ var EditableTable = function () {
 				  contentType: false,
 				  type: 'POST',
 				  success: function(json){
-					  
+
+					DialogTable.setHeadAndMess('Thông báo',json.mess);
+					
 				    if(json.sucess==false && typeof(json.fileNameErr) == 'string'){
 				    	$.fileDownload(baseUrl("application/Service/downloadFile"), {
 							successCallback : function(url) {
@@ -1015,11 +1021,19 @@ var EditableTable = function () {
 							httpMethod : "GET",
 							data : 'filename='+json.fileNameErr
 						});
-				    }else if(json.sucess==true){
-				    	
 				    }
+				    else if(json.sucess == true){
+				    	KyThue = json.KyThue;
+				    	thang = KyThue.split('/')[0];
+				    	nam = KyThue.split('/')[1]; 
+				    	var today = new Date(nam+'-'+thang+'-01');
+						_KyThue = $.datepicker.formatDate("mm/yy", today)
+						$("#kythue").val(_KyThue);
+						$("#dpMonths").datepicker('update', _KyThue);
+						loadDSDK();
+				    }
+				    	
 				    
-				    DialogTable.setHeadAndMess('Thông báo',json.mess);
 				    
 				  }
 				});

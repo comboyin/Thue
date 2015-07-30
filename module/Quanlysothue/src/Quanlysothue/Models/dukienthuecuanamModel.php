@@ -130,12 +130,14 @@ class dukienthuecuanamModel extends baseModel
                 $q->select(array(
                     'dukienthue',
                     'nguoinopthue',
-                    'usernnts'
+                    'muclucngansach',
+                    'usernnts',
+                    'user'
                 ))
                 ->from('Application\Entity\dukienthue', 'dukienthue')
                 ->join('dukienthue.user', 'user')
-                
                 ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                ->join('dukienthue.muclucngansach', 'muclucngansach')
                 ->join('nguoinopthue.usernnts', 'usernnts')
                 ->where('dukienthue.KyThue = ?1')
                 ->andWhere('usernnts.user = ?2')
@@ -147,14 +149,18 @@ class dukienthuecuanamModel extends baseModel
                     $q->select(array(
                         'dukienthue',
                         'nguoinopthue',
-                        'usernnts'
+                        'muclucngansach',
+                        'usernnts',
+                        'user'
                     ))
                     ->from('Application\Entity\dukienthue', 'dukienthue')
+                    ->join('dukienthue.user', 'user')
                     ->join('dukienthue.nguoinopthue', 'nguoinopthue')
+                    ->join('dukienthue.muclucngansach', 'muclucngansach')
                     ->join('nguoinopthue.usernnts', 'usernnts')
-                    ->join('usernnts.user', 'user')
+                    ->join('usernnts.user', 'user1')
                     ->where('dukienthue.KyThue = ?1')
-                    ->andWhere('user.parentUser = ?2')
+                    ->andWhere('user1.parentUser = ?2')
                     ->andWhere('usernnts.ThoiGianKetThuc is null')
                     ->setParameter(2, $user)
                     ->setParameter(1, $nam);
@@ -162,7 +168,7 @@ class dukienthuecuanamModel extends baseModel
             
             $this->kq->setKq(true);
             $this->kq->setObj($q->getQuery()
-                ->getResult());
+                ->getArrayResult());
             $this->kq->setMessenger('Lấy danh sách dự thuế của năm ' . $nam . ' thành công !');
             return $this->kq;
             
@@ -246,23 +252,15 @@ class dukienthuecuanamModel extends baseModel
         /* @var $user user */
         try {
             $kq = new ketqua();
-            $qb = $this->em->createQueryBuilder();
             
-            $qb->select('dukienthue')
-                ->from('Application\Entity\dukienthue', 'dukienthue')
-                ->join('dukienthue.nguoinopthue', 'nguoinopthue')
-                ->join('dukienthue.muclucngansach', 'muclucngansach')
-                ->where('nguoinopthue.MaSoThue = ?1')
-                ->andWhere('muclucngansach.TieuMuc = ?2')
-                ->andWhere('dukienthue.KyThue = ?3')
-                ->setParameter(3, $nam)
-                
-                ->setParameter(1, $masothue)
-                ->setParameter(2, $tieumuc);
             
-            $kq->setObj($qb->getQuery()
-                ->getSingleResult());
-            $kq->setKq(true);
+            $kq->setObj($this->em->find('Application\Entity\dukienthue', array(
+               'KyThue'=>$nam,
+                'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $tieumuc),
+                  'nguoinopthue'=>$this->em->find('Application\Entity\nguoinopthue', $masothue) 
+            ))
+            ); 
+            
             return $kq;
         } catch (\Exception $e) {
             $kq = new ketqua();

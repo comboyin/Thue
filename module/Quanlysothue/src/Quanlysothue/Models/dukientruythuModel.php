@@ -180,6 +180,9 @@ class dukientruythuModel extends baseModel
         try {
             
             if ($user->getLoaiUser() == 4) {
+                /*
+                 * Danh sach du kien truy thu cua Can Bo Vien cua DOI Truong do.
+                 *   */
                 $q->select(array(
                     'dukientruythu',
                     'dukienthue',
@@ -189,18 +192,24 @@ class dukientruythuModel extends baseModel
                     'user1'
                 ))
                     ->from('Application\Entity\dukientruythu', 'dukientruythu')
-                    ->join('dukientruythu.user','user1')
                     ->join('dukientruythu.dukienthue', 'dukienthue')
                     ->join('dukienthue.nguoinopthue', 'nguoinopthue')
                     ->join('dukienthue.muclucngansach', 'muclucngansach')
                     ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->join('dukientruythu.user', 'user1')
                     ->where('dukienthue.KyThue = ?1')
-                    ->andWhere('user1 = ?2')
-                    ->orWhere('user1.parentUser = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->andWhere('user = ?2')
                     ->setParameter(2, $user)
                     ->setParameter(1, $kythue);
             } else 
                 if ($user->getLoaiUser() == 3) {
+                    
+                    /*
+                     * Danh sach du kien truy thu cua Doi Truong va Can Bo Vien cua DOI Truong do.
+                     *   */
+                    
                     $q->select(array(
                         'dukientruythu',
                         'dukienthue',
@@ -210,15 +219,16 @@ class dukientruythuModel extends baseModel
                         'user1'
                     ))
                         ->from('Application\Entity\dukientruythu', 'dukientruythu')
-                        ->join('dukientruythu.user','user1')
+                        
                         ->join('dukientruythu.dukienthue', 'dukienthue')
                         ->join('dukienthue.nguoinopthue', 'nguoinopthue')
                         ->join('dukienthue.muclucngansach', 'muclucngansach')
                         ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join("usernnts.user", "user")
+                        ->join('dukientruythu.user','user1')
                         ->where('dukienthue.KyThue = ?1')
-                        ->andWhere("user1.parentUser = ?2")
-                        ->orWhere('user1 = ?2')
+                        ->andWhere('usernnts.ThoiGianKetThuc is null')
+                        ->andWhere("user.parentUser = ?2")
                         ->setParameter(2, $user)
                         ->setParameter(1, $kythue);
                 }
