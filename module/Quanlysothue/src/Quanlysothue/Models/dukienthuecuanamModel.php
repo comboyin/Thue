@@ -252,23 +252,15 @@ class dukienthuecuanamModel extends baseModel
         /* @var $user user */
         try {
             $kq = new ketqua();
-            $qb = $this->em->createQueryBuilder();
             
-            $qb->select('dukienthue')
-                ->from('Application\Entity\dukienthue', 'dukienthue')
-                ->join('dukienthue.nguoinopthue', 'nguoinopthue')
-                ->join('dukienthue.muclucngansach', 'muclucngansach')
-                ->where('nguoinopthue.MaSoThue = ?1')
-                ->andWhere('muclucngansach.TieuMuc = ?2')
-                ->andWhere('dukienthue.KyThue = ?3')
-                ->setParameter(3, $nam)
-                
-                ->setParameter(1, $masothue)
-                ->setParameter(2, $tieumuc);
             
-            $kq->setObj($qb->getQuery()
-                ->getSingleResult());
-            $kq->setKq(true);
+            $kq->setObj($this->em->find('Application\Entity\dukienthue', array(
+               'KyThue'=>$nam,
+                'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $tieumuc),
+                  'nguoinopthue'=>$this->em->find('Application\Entity\nguoinopthue', $masothue) 
+            ))
+            ); 
+            
             return $kq;
         } catch (\Exception $e) {
             $kq = new ketqua();

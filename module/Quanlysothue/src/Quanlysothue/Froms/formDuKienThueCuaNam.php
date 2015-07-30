@@ -82,7 +82,7 @@ class formDuKienThueCuaNam extends Form
         
         $this->add(array(
             'name' => 'ThueSuat',
-            'type' => 'Zend\Form\Element\Number',
+            'type' => 'Zend\Form\Element\Text',
             'attributes' => array(
                  
             ),
@@ -292,14 +292,24 @@ class formDuKienThueCuaNam extends Form
                 )
             ),
             'validators' => array(
+             array(
+                    'name' => '\Zend\Validator\Step',
+                    'options' => array(
+                        'baseValue' => 0.000,
+                        'step' => 0.001
+                    )
+                ),
                 array(
-                    'name' => '\Zend\Validator\Digits',
-                    'options' => array()
+                    'name' => '\Zend\I18n\Validator\IsFloat',
+                    'options' => array(
+                        'min' => 0,
+                        'locale' => 'en'
+                    )
                 ),
                 array(
                     'name' => 'GreaterThan',
                     'options' => array(
-                        'min' => 0
+                        'min' => -0.001
                     )
                 )
             )

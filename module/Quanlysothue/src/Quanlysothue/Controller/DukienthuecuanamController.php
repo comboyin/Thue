@@ -248,9 +248,8 @@ class DukienthuecuanamController extends baseController
                         $TenGoi = $post->get('TenGoi');
                         $SanLuong = $post->get('SanLuong');
                         $GiaTinhThue = $post->get('GiaTinhThue');
-                        
-                        if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
-{
+                        // TNCN&GTGT
+                        if ($TieuMuc == '1003' || $TieuMuc == '1701') {
                             if ($DoanhThuChiuThue * 12 > 100000000) {
                                 $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
                             } else
@@ -304,7 +303,7 @@ class DukienthuecuanamController extends baseController
                     }
                 } else {
                     $kq->setKq(false);
-                    $kq->setMessenger('Không tìm được dự kiến truy thu!');
+                    $kq->setMessenger('Không tìm được dự kiến cua nam !');
                 }
             } else {
                 $mss = $this->getErrorMessengerForm($form);
