@@ -20,7 +20,7 @@ class ThuekhoanController extends baseController
         $temp = explode('/', (new \DateTime())->format('d/m/Y'));
         $Thang = $temp[1] . '/' . $temp[2];
         
-        $dsThueKhoan = $thuekhoanModel->dsThueKhoan($Thang, $this->getUser(), 'object')
+        $dsThueKhoan = $thuekhoanModel->dsThueKhoan($Thang, $this->getUser(), 'array')
             ->getObj();
         
         return array(

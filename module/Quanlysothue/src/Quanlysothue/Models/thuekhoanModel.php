@@ -18,6 +18,7 @@ class thuekhoanModel extends baseModel
                 $q->select(array(
                     'thue',
                     'nguoinopthue',
+                    'muclucngansach',
                     'usernnts'
                 )
                 )
@@ -38,14 +39,14 @@ class thuekhoanModel extends baseModel
                     $q->select(array(
                         'thue',
                         'nguoinopthue',
+                        'muclucngansach',
                         'usernnts'
                     )
                     )
                         ->from('Application\Entity\thue', 'thue')
                         ->join('thue.muclucngansach', 'muclucngansach')
                         ->join('thue.nguoinopthue', 'nguoinopthue')
-                        ->
-                    join('nguoinopthue.usernnts', 'usernnts')
+                        ->join('nguoinopthue.usernnts', 'usernnts')
                         ->join('usernnts.user', 'user')
                         ->where('thue.KyThue = ?1')
                         ->andWhere('user.parentUser = ?2')

@@ -8,7 +8,7 @@ use Quanlysothue\Froms\formDuKienTruyThu;
 use Application\Entity\ketqua;
 use Application\Entity\truythu;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
-use Application\Models\nganhModel;
+
 
 class ThuetruythuController extends baseController
 {
@@ -19,7 +19,7 @@ class ThuetruythuController extends baseController
         $temp = explode('/', (new \DateTime())->format('d/m/Y'));
         $Thang = $temp[1] . '/' . $temp[2];
         
-        $dsThueTruyThu = $thuetruythuModel->dsThueTruyThu($Thang, $this->getUser(), 'object')
+        $dsThueTruyThu = $thuetruythuModel->dsThueTruyThu($Thang, $this->getUser(), 'array')
             ->getObj();
         
         return array(
@@ -44,7 +44,7 @@ class ThuetruythuController extends baseController
             ->getPost()
             ->get('Thang');
         $model = new dukientruythuModel($this->getEntityManager());
-        echo json_encode($model->DSDKThueTruyThu($Thang, $this->getUser(), 'array'));
+        echo json_encode($model->dsDKTTJson($Thang, $this->getUser()));
         return $this->response;
     }
 

@@ -329,13 +329,18 @@ var EditableTable = function () {
 			}).on('changeDate', function (ev) {
 
 				_KyThue = $.datepicker.formatDate("yy", ev.date);
+				loadDSThueNam();
 				
+
+			});
+			
+			function loadDSThueNam(){
 				$('img.loading').css('display','inline');
 				
 				/*$("#progess_dpmonths").css('display', 'block');*/
 				deleteAllRows();
 				//post
-				$.get("dsDKTNJson", {KyThue : _KyThue},
+				$.get(baseUrl('quanlysothue/Dukienthuecuanam/dsDKTNJson'), {KyThue : _KyThue},
 					function (json) {
 
 					
@@ -363,15 +368,14 @@ var EditableTable = function () {
 
 					$('img.loading').css('display','none');
 				}, "json");
-
-			});
+			}
 
 			if ($("#kythue").val() == "") {
 				var today = new Date();
 				_KyThue = $.datepicker.formatDate("yy", today)
 				$("#kythue").val(_KyThue);
 				$("#dpYears").datepicker('update', _KyThue);
-
+				
 			}
 			
 			//*******************ONLY PAGE END************************//
@@ -705,10 +709,11 @@ var EditableTable = function () {
 					btnOKClass : 'OK !',
 					callback : function (result) {
 						if (result) {
-
+							$("img.loading").css('display','inline');
 							if (method == "get") {
 
 								$.get(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 										restoreRow(oTable, nEditing);
 										BootstrapDialog.confirm({
@@ -731,6 +736,7 @@ var EditableTable = function () {
 								return nEditing;
 							} else {
 								$.post(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										restoreRow(oTable, nEditing);
@@ -786,6 +792,7 @@ var EditableTable = function () {
 					// dialog type
 					// will be used,
 					callback : function (result) {
+						$("img.loading").css('display','inline');
 						// result will be true if button was click, while it
 						// will be false
 						// if users close the dialog directly.
@@ -793,7 +800,7 @@ var EditableTable = function () {
 
 							if (method == "get") {
 								$.get(url, data, function (json) {
-
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										BootstrapDialog.confirm({
@@ -815,7 +822,7 @@ var EditableTable = function () {
 								}, "json");
 							} else if (method == "post") {
 								$.post(url, data, function (json) {
-
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										BootstrapDialog.confirm({
@@ -873,8 +880,10 @@ var EditableTable = function () {
 					btnOKLabel : 'Xóa !',
 					callback : function (result) {
 						if (result) {
+							$("img.loading").css('display','inline');
 							if (method == "get") {
 								$.get(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 										BootstrapDialog.confirm({
 											title : 'Thông báo',
@@ -892,7 +901,7 @@ var EditableTable = function () {
 							} else 
 							if (method == "post") {
 								$.post(url, data, function (json) {
-
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 										BootstrapDialog
 										.confirm({
@@ -918,7 +927,7 @@ var EditableTable = function () {
 
 			$("#xoa_nhieu").click(function (e) {
 				var checkboxs = $("#editable-sample input.check_item:checked").parents('tr');
-				console.log(checkboxs);
+				
 				if (checkboxs.length > 0) {
 
 					// cansuaxoanhieu
@@ -1078,7 +1087,7 @@ var EditableTable = function () {
 						}
 
 						var url = 'them';
-						console.log(nEditing);
+						
 						SaveNew('post', url, data, oTable, nEditing);
 
 					} else if (nEditing == nRow
@@ -1244,17 +1253,18 @@ var EditableTable = function () {
 				fd.append( 'dukientruythu-file',$('input[name="dukientruythu-file"]')[0].files[0]);
 				DialogTable.showPropressUnlimit();
 				$.ajax({
-				  url: 'uploadForm',
+				  url: baseUrl('quanlysothue/Dukienthuecuanam/uploadForm'),
 				  data: fd,
 				  dataType: 'json',
 				  processData: false,
 				  contentType: false,
 				  type: 'POST',
 				  success: function(json){
-					  
-				    if(json.sucess==false){
-				    	
-				    	$.fileDownload('downloadFile', {
+
+					DialogTable.setHeadAndMess('Thông báo',json.mess);
+					
+				    if(json.sucess==false && typeof(json.fileNameErr) == 'string'){
+				    	$.fileDownload(baseUrl("application/Service/downloadFile"), {
 							successCallback : function(url) {
 							},
 							failCallback : function(responseHtml, url) {
@@ -1262,14 +1272,22 @@ var EditableTable = function () {
 							httpMethod : "GET",
 							data : 'filename='+json.fileNameErr
 						});
-				    }else if(json.sucess==true){
-				    	
 				    }
+				    else if(json.sucess == true){
+				    	nam = json.KyThue; 
+				    	var today = new Date(nam+'-'+'01'+'-01');
+						_KyThue = $.datepicker.formatDate("yy", today)
+						$("#kythue").val(_KyThue);
+						$("#dpYears").datepicker('update', _KyThue);
+						loadDSThueNam();
+				    }
+				    	
 				    
-				    DialogTable.setHeadAndMess('Thông báo',json.mess);
 				    
 				  }
 				});
+				
+				
 			});
 
 		}

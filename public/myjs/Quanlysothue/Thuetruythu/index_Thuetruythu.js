@@ -210,9 +210,9 @@ var EditableTable = function () {
 						oTableGhiSo
 						.fnAddData([
 								'<th><input class="check_item" type="checkbox"></th>',
-								data[i]['nguoinopthue']['MaSoThue'],
-								data[i]['nguoinopthue']['TenHKD'],
-								data[i]['TieuMuc'],
+								data[i]['dukienthue']['nguoinopthue']['MaSoThue'],
+								data[i]['dukienthue']['nguoinopthue']['TenHKD'],
+								data[i]['dukienthue']['muclucngansach']['TieuMuc'],
 								data[i]['DoanhSo'],
 								data[i]['TiLeTinhThue'],
 								data[i]['SoTien'],
@@ -312,9 +312,9 @@ var EditableTable = function () {
 						oTableThueTruyThu
 						.fnAddData([
 								'<th><input class="check_item" type="checkbox"></th>',
-								data[i]['nguoinopthue']['MaSoThue'],
-								data[i]['nguoinopthue']['TenHKD'],
-								data[i]['TieuMuc'],
+								data[i]['thue']['nguoinopthue']['MaSoThue'],
+								data[i]['thue']['nguoinopthue']['TenHKD'],
+								data[i]['thue']['muclucngansach']['TieuMuc'],
 								data[i]['DoanhSo'],
 								data[i]['TiLeTinhThue'],
 								data[i]['SoTien'],

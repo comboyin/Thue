@@ -5,7 +5,8 @@ use Application\base\baseModel;
 use Application\Entity\ketqua;
 use Application\Entity\truythu;
 use Application\Entity\dukientruythu;
-use Application\Unlity\Unlity;
+use Application\Entity\thue;
+
 
 class thuetruythuModel extends baseModel
 {
@@ -16,41 +17,41 @@ class thuetruythuModel extends baseModel
         try {
             if ($user->getLoaiUser() == 4) {
                 $q->select(array(
-                    'truythu',
+                   'truythu',
+                    'thue',
                     'nguoinopthue',
+                    'muclucngansach',
                     'usernnts'
                 )
                 )
                     ->from('Application\Entity\truythu', 'truythu')
-                    ->join('truythu.nguoinopthue', 'nguoinopthue')
-                    ->join('truythu.muclucngansach', 'muclucngansach')
-                    ->
-                join('nguoinopthue.usernnts', 'usernnts')
-                    ->
-                where('truythu.KyThue = ?1')
+                    ->join('truythu.thue', 'thue')
+                    ->join('thue.nguoinopthue', 'nguoinopthue')
+                    ->join('thue.muclucngansach', 'muclucngansach')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->where('thue.KyThue = ?1')
                     ->andWhere('usernnts.user = ?2')
                     ->andWhere('usernnts.ThoiGianKetThuc is null')
-                    ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
                     ->setParameter(2, $user)
                     ->setParameter(1, $thang);
             } else 
                 if ($user->getLoaiUser() == 3) {
-                    $q->select(array(
+                     $q->select(array(
                         'truythu',
+                        'thue',
                         'nguoinopthue',
+                        'muclucngansach',
                         'usernnts'
-                    )
-                    )
+                    ))
                         ->from('Application\Entity\truythu', 'truythu')
-                        ->join('truythu.muclucngansach', 'muclucngansach')
-                        ->join('truythu.nguoinopthue', 'nguoinopthue')
-                        ->
-                    join('nguoinopthue.usernnts', 'usernnts')
-                        ->join('usernnts.user', 'user')
-                        ->where('truythu.KyThue = ?1')
-                        ->andWhere('user.parentUser = ?2')
+                        ->join('truythu.thue', 'thue')
+                        ->join('thue.nguoinopthue', 'nguoinopthue')
+                        ->join('thue.muclucngansach', 'muclucngansach')
+                        ->join('nguoinopthue.usernnts', 'usernnts')
+                        ->join("usernnts.user", "user")
+                        ->where('thue.KyThue = ?1')
                         ->andWhere('usernnts.ThoiGianKetThuc is null')
-                        ->andWhere("muclucngansach.TieuMuc like '1003' or muclucngansach.TieuMuc like '1701'")
+                        ->andWhere("user.parentUser = ?2")
                         ->setParameter(2, $user)
                         ->setParameter(1, $thang);
                 }
@@ -83,23 +84,35 @@ class thuetruythuModel extends baseModel
             $this->em->getConnection()->beginTransaction();
             foreach ($dsMaSoThue as $key => $value) {
                 // tim du kien truy thu
-                $dukientruythu = $this->em->find('Application\Entity\dukientruythu', array(
-                    'nguoinopthue' => $this->em->find('Application\Entity\nguoinopthue', $value),
-                    'muclucngansach' => $this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]),
-                    'KyThue' => $Thang
+                $dukientruythuModel = new dukientruythuModel($this->em);
+                $dukientruythu = $dukientruythuModel->findByID_($Thang, $value, $dsTieuMuc[$key])->getObj();
+                
+                /* @var $thue thue */
+                $thue=new thue();
+                $thue = $this->em->find('Application\Entity\thue', array(
+                    'KyThue'=>$Thang,
+                    'nguoinopthue'=>$this->em->find('Application\Entity\nguoinopthue', $value),
+                    'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key])
                 ));
+                
                 if ($dukientruythu == null) {
                     $this->em->getConnection()->rollBack();
                     $kq->setKq(false);
                     $kq->setMessenger('<span style="color:red">' . "Không tìm thấy dự kiến truy thu " . $value . " - " . $dsTieuMuc[$key] . " - " . $Thang . '</span>');
                     return $kq;
                 }
-                /* @var $dukientruythu dukientruythu */
-                $thuetruythu = new truythu();
-                $thuetruythu->setNguoinopthue($this->em->find('Application\Entity\nguoinopthue', $value));
-                $thuetruythu->setMuclucngansach($this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]));
-                $thuetruythu->setKyThue($Thang);
                 
+                if ($thue == null) {
+                    $this->em->getConnection()->rollBack();
+                    $kq->setKq(false);
+                    $kq->setMessenger('<span style="color:red">' . "Không tìm thấy THUẾ " . $value . " - " . $dsTieuMuc[$key] . " - " . $Thang . '</span>');
+                    return $kq;
+                }
+                /* @var $dukientruythu dukientruythu */
+                
+                $thuetruythu = new truythu();
+                
+                $thuetruythu->setThue($thue);
                 $thuetruythu->setDoanhSo($dukientruythu->getDoanhSo());
                 $thuetruythu->setTiLeTinhThue($dukientruythu->getTiLeTinhThue());
                 $thuetruythu->setLyDo($dukientruythu->getLyDo());
@@ -207,15 +220,16 @@ class thuetruythuModel extends baseModel
             $qb = $this->em->createQueryBuilder();
     
             $qb->select('truythu')
-            ->from('Application\Entity\truythu', 'truythu')
-            ->join('truythu.nguoinopthue', 'nguoinopthue')
-            ->join('truythu.muclucngansach', 'muclucngansach')
-            ->where('nguoinopthue.MaSoThue = ?1')
-            ->andWhere('muclucngansach.TieuMuc = ?2')
-            ->andWhere('truythu.KyThue = ?3')
-            ->setParameter(3, $kythue)
-            ->setParameter(1, $masothue)
-            ->setParameter(2, $tieumuc);
+                ->from('Application\Entity\truythu', 'truythu')
+                ->join('truythu.thue', 'thue')
+                ->join('thue.nguoinopthue', 'nguoinopthue')
+                ->join('thue.muclucngansach', 'muclucngansach')
+                ->where('nguoinopthue.MaSoThue = ?1')
+                ->andWhere('muclucngansach.TieuMuc = ?2')
+                ->andWhere('thue.KyThue = ?3')
+                ->setParameter(3, $kythue)
+                ->setParameter(1, $masothue)
+                ->setParameter(2, $tieumuc);
     
             $kq->setObj($qb->getQuery()
                 ->getSingleResult());

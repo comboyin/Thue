@@ -108,6 +108,7 @@ class DukientruythuController extends baseController
         }
         // trả về json
         echo json_encode($kq->toArray());
+        
         return $this->response;
     }
     

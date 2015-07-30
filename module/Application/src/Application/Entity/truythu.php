@@ -63,6 +63,22 @@ class truythu
     
 
  /**
+     * @return the $thue
+     */
+    public function getThue()
+    {
+        return $this->thue;
+    }
+
+ /**
+     * @param field_type $thue
+     */
+    public function setThue($thue)
+    {
+        $this->thue = $thue;
+    }
+
+ /**
      * @return the $TrangThai
      */
     public function getTrangThai()

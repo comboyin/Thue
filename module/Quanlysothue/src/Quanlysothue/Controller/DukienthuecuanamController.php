@@ -11,6 +11,7 @@ use Quanlysothue\Froms\UploadForm;
 use Application\Models\nganhModel;
 use Application\Entity\dukienthue;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
+use Quanlysothue\Excel\ImportExcelDuKienThueCuaNam;
 
 class DukienthuecuanamController extends baseController
 {
@@ -405,6 +406,81 @@ class DukienthuecuanamController extends baseController
             return $this->response;
         }
     }
+    
+    
+    /**
+     * import dữ liệu bằng file
+     * @return \Zend\Mvc\Controller\Response  */
+    public function uploadFormAction()
+    {
+        $form = new UploadForm('upload-form');
+    
+        $request = $this->getRequest();
+        $tempFile = null;
+        if ($request->isPost()) {
+            $post = array_merge_recursive($request->getPost()->toArray(), $request->getFiles()->toArray());
+    
+            // var_dump($post);
+    
+            $form->setData($post);
+            $array = [];
+    
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $fileName = $data['dukientruythu-file']['tmp_name'];
+                $model = new \Application\Models\dukientruythuModel($this->getEntityManager());
+    
+                $ImportData = new ImportExcelDuKienThueCuaNam();
+    
+                // validation file
+                $fileNameErr = $ImportData->CheckFileImport($fileName, $this->getEntityManager(), $this->getUser());
+    
+                // nếu lỗi
+                if ($fileNameErr->getKq() == false) {
+    
+                    // file sai ràng buộc database
+                    if ($fileNameErr->getObj() != null && file_exists($fileNameErr->getObj())) {
+                        echo json_encode(array(
+                            'sucess' => false,
+                            'mess' => $fileNameErr->getMessenger(),
+                            'fileNameErr' => $fileNameErr->getObj()
+                        ));
+                    } else {
+                        // File sai dinh dang
+                        echo json_encode(array(
+                            'sucess' => false,
+                            'mess' => $fileNameErr->getMessenger()
+                        ));
+                    }
+    
+    
+    
+                } else {
+    
+                    // Form is valid, save the form!
+                    // var_dump($data);
+    
+                    $kq = $ImportData->PersitToArrayCollection($fileName, $this->getUser(),$this->getEntityManager());
+    
+                    $array['sucess'] = $kq->getKq();
+                    $array['mess'] = $kq->getMessenger();
+    
+                    $array['KyThue']  = $kq->getObj();
+    
+                    echo json_encode($array);
+    
+                }
+    
+    
+                 
+            }
+        }
+        if(file_exists($fileName)){
+            unlink($fileName);
+        }
+        return $this->response;
+    }
+    
 
     public function loadTyLeTinhThueAction()
     {
