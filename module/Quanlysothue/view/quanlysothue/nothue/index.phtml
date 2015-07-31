@@ -93,6 +93,7 @@ $user = $this->identity();
 							<tr>
 									<th>Kỳ thuế (*)</th>
 						            <th>Mã số thuế (*)</th>
+						            <th>Tên HKD</th>
 									<th>Tiểu Mục (*)</th>
 									<th>Số tiền (*)</th>									
 							</tr>
@@ -108,6 +109,7 @@ $user = $this->identity();
                             <tr class="odd">
 								<td><?php echo $thue['KyThue']?></td>
 								<td><?php echo $thue['nguoinopthue']['MaSoThue']?></td>
+								<td><?php echo $thue['nguoinopthue']['TenHKD']?></td>
 								<td><?php echo $thue['muclucngansach']['TieuMuc']?></td>
 								<td><?php echo $thue['SoTien']?></td>
 							</tr>                
@@ -130,3 +132,4 @@ $user = $this->identity();
 	<!-- END PAGE -->
 </div>
 <!-- END CONTAINER -->
+
