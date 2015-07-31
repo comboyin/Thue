@@ -8,7 +8,7 @@ use Application\Entity\ketqua;
 use Zend\Http\Request;
 use Zend\Form\Form;
 use Quanlysothue\Froms\UploadForm;
-use Quanlysothue\Excel\ImportExcelDuKienThueCuaNam;
+
 use Application\Entity\dukienmb;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Entity\muclucngansach;
@@ -383,6 +383,15 @@ class DukienthuemonbaiController extends baseController
         echo json_encode(array(
             'SoTien' => $SoTien
         ));
+        return $this->response;
+    }
+    
+    public function ChonNguoiNopThueChuaCoThueMonBaiAction(){
+        $KyThue = $this->getRequest()
+        ->getQuery()
+        ->get('KyThue');
+        $nguoinopthueModel = new nguoinopthueModel($this->getEntityManager());
+        echo $nguoinopthueModel->dsNNTChuaCoThueMonBai($this->getUser(), $KyThue);
         return $this->response;
     }
 }

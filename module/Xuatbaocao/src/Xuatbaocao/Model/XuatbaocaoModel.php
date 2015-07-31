@@ -10,7 +10,7 @@ class XuatbaocaoModel extends baseModel
 {
 
     /**
-     *
+     * danh bạ HKD 
      * @param user $user            
      * @return \Application\Entity\ketqua
      */
@@ -39,9 +39,8 @@ class XuatbaocaoModel extends baseModel
                 
                 // Danh sach ngưng nghĩ
                 $DQL_TTNgungNghi = 'select thongtinngungnghids.MaTTNgungNghi
-                                                            from Application\Entity\thongtinngungnghi thongtinngungnghids 
-                                                            where thongtinngungnghids.nguoinopthue = nguoinopthue';
-                
+                        from Application\Entity\thongtinngungnghi thongtinngungnghids 
+                        where thongtinngungnghids.nguoinopthue = nguoinopthue';
                 $qb->select(array(
                     'nguoinopthue.MaSoThue',
                     'nguoinopthue.TenHKD',
@@ -60,17 +59,20 @@ class XuatbaocaoModel extends baseModel
                 ->leftJoin('nguoinopthue.thongtinngungnghis', 'thongtinngungnghis')
                 ->leftJoin('nguoinopthue.thuemonbais', 'thuemonbais')
                 ->Where('user.parentUser = ?1')
-                ->andWhere("usernnts.ThoiGianKetThuc is null")
-                ->andwhere("thongtinnnt.ThoiGianKetThuc is null  OR thongtinngungnghis.MaTTNgungNghi in ($DQL_HKD_NghiKD)")
-                ->andWhere("thongtinngungnghis.MaTTNgungNghi >= ALL($DQL_TTNgungNghi)")
+                ->andWhere("thongtinngungnghis.MaTTNgungNghi in ($DQL_HKD_NghiKD) OR (usernnts.ThoiGianKetThuc is null and 
+                                    thongtinnnt.ThoiGianKetThuc is null and 
+                                (not exists(select thongtinngungnghi2 from Application\\Entity\\thongtinngungnghi thongtinngungnghi2
+                                            where thongtinngungnghi2.nguoinopthue = nguoinopthue) 
+                                            OR thongtinngungnghis.MaTTNgungNghi >= All($DQL_TTNgungNghi)))")
                 ->andWhere("nguoinopthue.ThoiDiemBDKD < '$Nam-12-30'")
-                ->andWhere("thuemonbais.Nam = $Nam")
+                ->andWhere("thuemonbais.Nam = $Nam and thuemonbais.TrangThai = 1")
                 ->setParameter(1, $user);
                 
                 
 
                 
                 $kqs = $qb->getQuery()->getArrayResult();
+                
                 
                 // create file
                 if (count($kqs) > 0) {

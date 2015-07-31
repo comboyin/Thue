@@ -33,7 +33,7 @@ var EditableTable = function () {
 
 				_KyThue = $.datepicker.formatDate("yy", ev.date);
 				
-				DialogTable.showPropress();
+				$("img.loading").css('display','inline');
 				
 				/*$("#progess_dpmonths").css('display', 'block');*/
 				deleteAllRows();
@@ -55,7 +55,7 @@ var EditableTable = function () {
 								data[i]['DoanhSo'],
 								DateToString(data[i]['NgayPhaiNop']['date']),
 								data[i]['SoTien'],
-								data[i]['TrangThai'],
+								data[i]['TrangThai']==0?'<span style="color:red;">'+'Chờ ghi'+'</span>':'<span style="color:green;">'+'Đã ghi'+'</span>',
 								MaCanBo,
 								(data[i]['TrangThai']==0)?'<a class="edit" href="">Edit</a>':'',
 								(data[i]['TrangThai']==0)?'<a class="Delete" href="">Delete</a>':''
@@ -66,7 +66,7 @@ var EditableTable = function () {
 					/*$("#progess_dpmonths").css(
 						'display',
 						'none');*/
-					DialogTable.hidePropress();
+					$("img.loading").css('display','none');
 				}, "json");
 
 			});
@@ -110,7 +110,7 @@ var EditableTable = function () {
 					
 					
 					
-					"iDisplayLength" : 5,
+					"iDisplayLength" : -1,
 					"sDom" : "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"sPaginationType" : "bootstrap",
 					"oLanguage" : {
@@ -310,10 +310,10 @@ var EditableTable = function () {
 			}*/
 
 			function SaveNew(method, url, data, oTable, nEditing) {
-
+				$("img.loading").css('display','inline');
 				if (method == "get") {
 					$.get(url, data, function (json) {
-
+						$("img.loading").css('display','none');
 						if (json.kq == false) {
 							BootstrapDialog
 							.confirm({
@@ -339,7 +339,7 @@ var EditableTable = function () {
 					return nEditing;
 				} else if (method == "post") {
 					$.post(url, data, function (json) {
-
+						$("img.loading").css('display','none');
 						if (json.kq == false) {
 							BootstrapDialog
 							.confirm({
@@ -380,11 +380,14 @@ var EditableTable = function () {
 					btnOKLabel : 'OK !',
 					btnOKClass : 'OK !',
 					callback : function (result) {
+						$("img.loading").css('display','inline');
+						
 						if (result) {
 
 							if (method == "get") {
 
 								$.get(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 										restoreRow(oTable, nEditing);
 										BootstrapDialog.confirm({
@@ -407,6 +410,7 @@ var EditableTable = function () {
 								return nEditing;
 							} else {
 								$.post(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										restoreRow(oTable, nEditing);
@@ -462,14 +466,15 @@ var EditableTable = function () {
 					// dialog type
 					// will be used,
 					callback : function (result) {
+						$("img.loading").css('display','inline');
 						// result will be true if button was click, while it
 						// will be false
 						// if users close the dialog directly.
 						if (result) {
-
+							
 							if (method == "get") {
 								$.get(url, data, function (json) {
-
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										BootstrapDialog.confirm({
@@ -491,7 +496,7 @@ var EditableTable = function () {
 								}, "json");
 							} else if (method == "post") {
 								$.post(url, data, function (json) {
-
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										BootstrapDialog.confirm({
@@ -548,9 +553,11 @@ var EditableTable = function () {
 					btnCancelLabel : 'Quay lại',
 					btnOKLabel : 'Xóa !',
 					callback : function (result) {
+						$("img.loading").css('display','inline');
 						if (result) {
 							if (method == "get") {
 								$.get(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 										BootstrapDialog.confirm({
 											title : 'Thông báo',
@@ -568,7 +575,7 @@ var EditableTable = function () {
 							} else 
 							if (method == "post") {
 								$.post(url, data, function (json) {
-
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 										BootstrapDialog
 										.confirm({
@@ -684,7 +691,7 @@ var EditableTable = function () {
 				var nRow = $(this).parents('tr')[0];
 				var aData = oTable.fnGetData(nRow);
 				if (nEditing !== null && nEditing != nRow) {
-					if(aData[9] == $("span.MaCB").html()){
+					if(aData[9] == $("span.MaCanBo").html()){
 					var flag = false;
 					var jqTds = $('>td', nEditing);
 					$.each(jqTds, function (i, val) {
@@ -773,7 +780,7 @@ var EditableTable = function () {
 
 				} else {
 					
-					if(aData[9] == $("span.MaCB").html()){
+					if(aData[9] == $("span.MaCanBo").html()){
 						editRow(oTable, nRow);
 						nEditing = nRow;
 					}
@@ -785,9 +792,10 @@ var EditableTable = function () {
 			});
 			
 			function loadSoTien(MaSoThue,TieuMuc){
-				
+				$("img.loading").css('display','inline');
 
 				$.get('loadSoTien',{MaSoThue:MaSoThue,TieuMuc:TieuMuc, flag : _flag},function(json){
+					$("img.loading").css('display','none');
 					$("input[name='SoTien']").val(json.SoTien);
 				},'json');
 
@@ -804,7 +812,7 @@ var EditableTable = function () {
 				TenHKD = $("input[name='TenHKD']", nRow);
 				
 				
-				DialogTable.showFromUrl('get',baseUrl('application/Service/danhsachNNT'),{},function(){
+				DialogTable.showFromUrl('get',baseUrl('quanlysothue/Dukienthuemonbai/ChonNguoiNopThueChuaCoThueMonBai'),{KyThue : _KyThue},function(){
 					checkboxs = $('#DialogTable input.check_item:checked').parents("tr");
 
 					if (checkboxs.length == 1) {

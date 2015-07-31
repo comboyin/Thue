@@ -6,6 +6,7 @@ use Application\Entity\user;
 use Application\Entity\ketqua;
 use Application\Entity\nguoinopthue;
 use Application\Entity\NNTNganh;
+use Application\Entity\dukienmb;
 
 class nguoinopthueModel extends baseModel
 {
@@ -13,6 +14,43 @@ class nguoinopthueModel extends baseModel
     public function findById($id)
     {
         // TODO Auto-generated method stub
+    }
+
+    public function dsNNTChuaCoThueMonBai($user, $nam)
+    {
+        $bq = $this->em->createQueryBuilder();
+        // CBV
+        if ($user->getLoaiUser() == 4) {
+            $bq->select('nguoinopthue')
+                ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+                ->join('nguoinopthue.usernnts', 'usernnts')
+                ->where("usernnts.user = ?1")
+                ->andwhere("usernnts.ThoiGianKetThuc is null")
+                ->andWhere('not exists (select dukienmb from Application\Entity\dukienmb dukienmb
+                                        where dukienmb.Nam = ?2 and dukienmb.nguoinopthue = nguoinopthue)')
+                ->setParameter(2, $nam)
+                ->setParameter(1, $user);
+            return json_encode($bq->getQuery()->getArrayResult());
+        } else 
+            // DT
+            if ($user->getLoaiUser() == 3) {
+                $bq->select('nguoinopthue')
+                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where('user in (' . $this->em->createQueryBuilder()
+                    ->select("canbovien")
+                    ->from('Application\Entity\user', 'canbovien')
+                    ->where('canbovien.parentUser = ?1')
+                    ->getDQL() . ')')
+                    ->andwhere("usernnts.ThoiGianKetThuc is null")
+                    ->andWhere('not exists (select dukienmb from Application\Entity\dukienmb dukienmb
+                                        where dukienmb.Nam = ?2 and dukienmb.nguoinopthue = nguoinopthue)')
+                    ->setParameter(2, $nam)
+                    ->setParameter(1, $user);
+                
+                return json_encode($bq->getQuery()->getArrayResult());
+            }
     }
 
     public function findByIdToArray($masothue, $user)
@@ -68,18 +106,19 @@ class nguoinopthueModel extends baseModel
     /**
      * Trả về danh sách người nộp thuế của cán bộ thuế đang quản lý
      * Bao gồm :
-             * + Người nộp thuế tạm ngừng kinh doanh
-             * + Người nộp thuế đang hoạt động
-             * + Người nộp thuế ngưng kinh doanh
+     * + Người nộp thuế tạm ngừng kinh doanh
+     * + Người nộp thuế đang hoạt động
+     * + Người nộp thuế ngưng kinh doanh
+     *
+     * $type:
+     * + array
+     * + object
      * 
-     * $type: 
-     *          + array
-     *          + object
-     * @param user $user         
-     * @param string $type   
+     * @param user $user            
+     * @param string $type            
      * @return \Application\Entity\ketqua
      */
-    public function DanhSachByIdentity($user,$type)
+    public function DanhSachByIdentity($user, $type)
     {
         $StringArray = "array";
         $StringObject = "object";
@@ -90,20 +129,16 @@ class nguoinopthueModel extends baseModel
         
         try {
             
-
-           
-            
             if ($user->getLoaiUser() == 4) {
                 
                 $DQL_HKD_NghiKD = $this->em->createQueryBuilder()
-                ->select('nguoinopthue1')
-                ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
-                ->join('nguoinopthue1.usernnts', 'usernnts1')
-                ->join('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis')
-                ->where('usernnts1.user = ?1')
-                ->andWhere('thongtinngungnghis.DenNgay is null')
-                ->getDQL();
-                
+                    ->select('nguoinopthue1')
+                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
+                    ->join('nguoinopthue1.usernnts', 'usernnts1')
+                    ->join('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis')
+                    ->where('usernnts1.user = ?1')
+                    ->andWhere('thongtinngungnghis.DenNgay is null')
+                    ->getDQL();
                 
                 $qb->select(array(
                     'nguoinopthue'
@@ -118,23 +153,21 @@ class nguoinopthueModel extends baseModel
                 if ($user->getLoaiUser() == 3) {
                     
                     // Danh sách cán bộ viên của thuộc quản lý của đội trưởng
-                    $DQL_CanBoVien =  $this->em->createQueryBuilder()
-                    ->select("canbovien")
-                    ->from('Application\Entity\user', 'canbovien')
-                    ->where('canbovien.parentUser = ?1')
-                    ->getDQL();
-                    
+                    $DQL_CanBoVien = $this->em->createQueryBuilder()
+                        ->select("canbovien")
+                        ->from('Application\Entity\user', 'canbovien')
+                        ->where('canbovien.parentUser = ?1')
+                        ->getDQL();
                     
                     $DQL_HKD_NghiKD = $this->em->createQueryBuilder()
-                    ->select('nguoinopthue1')
-                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
-                    ->join('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis')
-                    ->join('nguoinopthue1.usernnts', 'usernnts1')
-                    ->join('usernnts1.user', 'user1')
-                    ->andWhere('user1.parentUser = ?1')
-                    ->andWhere('thongtinngungnghis.DenNgay is null')
-                    ->getDQL();
-                    
+                        ->select('nguoinopthue1')
+                        ->from('Application\Entity\nguoinopthue', 'nguoinopthue1')
+                        ->join('nguoinopthue1.thongtinngungnghis', 'thongtinngungnghis')
+                        ->join('nguoinopthue1.usernnts', 'usernnts1')
+                        ->join('usernnts1.user', 'user1')
+                        ->andWhere('user1.parentUser = ?1')
+                        ->andWhere('thongtinngungnghis.DenNgay is null')
+                        ->getDQL();
                     
                     $qb->select(array(
                         'nguoinopthue'
@@ -147,12 +180,12 @@ class nguoinopthueModel extends baseModel
                         ->andwhere("user in ($DQL_CanBoVien)")
                         ->setParameter(1, $user);
                 }
-            if($type==$StringArray){
+            if ($type == $StringArray) {
                 $obj = $qb->getQuery()->getArrayResult();
-            }else if($type==$StringObject){
-                $obj = $qb->getQuery()->getResult();
-            }
-            
+            } else 
+                if ($type == $StringObject) {
+                    $obj = $qb->getQuery()->getResult();
+                }
             
             $kq->setObj($obj);
             $kq->setKq(true);
@@ -283,10 +316,11 @@ class nguoinopthueModel extends baseModel
     /**
      * Câp nhật ngành .
      *
+     *
      * sửa nntnganh cu
      * và thêm mới nntnganh mới
      * nếu xảy ra lỗi sẽ rollback và đọc lại trong csdl cập nhật nguoinopthue
-     * 
+     *
      * @param NNTNganh $nntnganhOld            
      * @param NNTNganh $nntnganhNew            
      * @param nguoinopthue $nguoinopthue            
