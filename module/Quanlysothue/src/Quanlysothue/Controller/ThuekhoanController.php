@@ -137,6 +137,7 @@ class ThuekhoanController extends baseController
             // validation thanh cong
             if ($form->isValid()) {
                 $thuekhoanModel = new thuekhoanModel($this->getEntityManager());
+                
                 /* @var $thuekhoan thue */
                 $thuekhoan = $thuekhoanModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))->getObj();
                 if ($thuekhoan != null && $thuekhoan->getTrangThai() == 0) {

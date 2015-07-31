@@ -9,6 +9,7 @@ use Application\Entity\thue;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Unlity\Unlity;
 use Quanlysothue\Froms\formDuKienThueCuaNam;
+use Quanlysothue\Models\thuekhoanModel;
 
 class ThuetainguyenController extends baseController
 {
@@ -19,7 +20,7 @@ class ThuetainguyenController extends baseController
         $temp = explode('/', (new \DateTime())->format('d/m/Y'));
         $Thang = $temp[1] . '/' . $temp[2];
         
-        $dsThueTaiNguyen = $thuetainguyenModel->dsThueTaiNguyen($Thang, $this->getUser(), 'object')
+        $dsThueTaiNguyen = $thuetainguyenModel->dsThueTaiNguyen($Thang, $this->getUser(), 'array')
             ->getObj();
         
         return array(
@@ -44,7 +45,7 @@ class ThuetainguyenController extends baseController
             ->getPost()
             ->get('Thang');
         $model = new dukienthuecuathangModel($this->getEntityManager());
-        echo json_encode($model->DSDKThueTaiNguyen($Thang, $this->getUser(), 'array'));
+        echo json_encode($model->DSDKThueTaiNguyenChuaGhiSo($Thang, $this->getUser(), 'array'));
         return $this->response;
     }
 
@@ -136,8 +137,10 @@ class ThuetainguyenController extends baseController
             // validation thanh cong
             if ($form->isValid()) {
                 $thuetainguyenModel = new thuetainguyenModel($this->getEntityManager());
+                $thuekhoanModel = new thuekhoanModel($this->getEntityManager());
                 /* @var $thuekhoan thue */
-                $thuetainguyen = $thuetainguyenModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))->getObj();
+                
+                $thuetainguyen = $thuekhoanModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))->getObj();
                 if ($thuetainguyen != null && $thuetainguyen->getTrangThai() == 0) {
     
                     $MaSoThue = $post->get('MaSoThue');

@@ -18,14 +18,14 @@ class thuebaovemoitruongModel extends baseModel
                 $q->select(array(
                     'thue',
                     'nguoinopthue',
+                    'muclucngansach',
                     'usernnts'
                 )
                 )
                     ->from('Application\Entity\thue', 'thue')
                     ->join('thue.muclucngansach', 'muclucngansach')
                     ->join('thue.nguoinopthue', 'nguoinopthue')
-                    ->
-                join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
                     ->
                 where('thue.KyThue = ?1')
                     ->andWhere('usernnts.user = ?2')
@@ -38,6 +38,7 @@ class thuebaovemoitruongModel extends baseModel
                     $q->select(array(
                         'thue',
                         'nguoinopthue',
+                        'muclucngansach',
                         'usernnts'
                     )
                     )

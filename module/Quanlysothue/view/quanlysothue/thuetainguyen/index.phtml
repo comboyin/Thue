@@ -1,5 +1,5 @@
 <?php
-use Application\Entity\dukienthue;
+
 use Quanlysothue\Froms\UploadForm;
 use Application\Entity\thue;
 $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Thuetainguyen/index_Thuetainguyen.js');
@@ -147,17 +147,17 @@ $user = $this->identity();
                             
 								<td><input class="check_item" type="checkbox"></td>
 								
-								<td><?php echo $thue->getNguoinopthue()->getMaSoThue()?></td>
-								<td><?php echo $thue->getNguoinopthue()->getTenHKD()?></td>
-								<td><?php echo $thue->getMuclucngansach()->getTieuMuc()?></td>
-								<td><?php echo $thue->getTenGoi()?></td>
-								<td><?php echo $thue->getThueSuat()?></td>
-								<td><?php echo $thue->getSanLuong()?></td>
-								<td><?php echo $thue->getGiaTinhThue()?></td>
-								<td><?php echo $thue->getSoTien()?></td>
-								<td><?php echo $thue->getNgayPhaiNop()?></td>
+								<td><?php echo $thue['nguoinopthue']['MaSoThue']?></td>
+								<td><?php echo $thue['nguoinopthue']['TenHKD']?></td>
+								<td><?php echo $thue['muclucngansach']['TieuMuc']?></td>
+								<td><?php echo $thue['TenGoi']?></td>
+								<td><?php echo $thue['ThueSuat']?></td>
+								<td><?php echo $thue['SanLuong']?></td>
+								<td><?php echo $thue['GiaTinhThue']?></td>
+								<td><?php echo $thue['SoTien']?></td>
+								<td><?php echo $thue['NgayPhaiNop']->format('d-m-Y')?></td>
 								<td>
-    								<?php if($thue->getTrangThai()==0):?>	
+    								<?php if($thue['TrangThai']==0):?>	
     								<span style="color:red;">Chờ duyệt</span>
     								<?php else:?>
     								<span style="color:green;">Đã duyệt</span>
@@ -165,7 +165,7 @@ $user = $this->identity();
             					</td>
 							    
 							    
-							    <?php if($thue->getTrangThai()==0):?>	
+							    <?php if($thue['TrangThai']==0):?>	
 								<?php echo $user->getLoaiUser()==3?'<td><a class="edit" href="">Edit</a></td>':'<td></td>'?>
 								<?php echo $user->getLoaiUser()==3?'<td><a class="Delete" href="">Delete</a></td>':'<td></td>'?>
 								<?php else:?>

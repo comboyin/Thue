@@ -18,6 +18,7 @@ class thuetainguyenModel extends baseModel
                 $q->select(array(
                     'thue',
                     'nguoinopthue',
+                    'muclucngansach',
                     'usernnts'
                 )
                 )
@@ -38,6 +39,7 @@ class thuetainguyenModel extends baseModel
                     $q->select(array(
                         'thue',
                         'nguoinopthue',
+                        'muclucngansach',
                         'usernnts'
                     )
                     )

@@ -405,7 +405,7 @@ var EditableTable = function () {
 				/*$("#progess_dpmonths").css('display', 'block');*/
 				deleteAllRows();
 				//post
-				$.get('dsThueTaiNguyen', {Thang : _KyThueThueTaiNguyen},
+				$.get(baseUrl('quanlysothue/Thuetainguyen/dsThueTaiNguyen'), {Thang : _KyThueThueTaiNguyen},
 					function (json) {
 
 					deleteAllRows();

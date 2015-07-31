@@ -9,6 +9,7 @@ use Application\Entity\thue;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Unlity\Unlity;
 use Quanlysothue\Froms\formDuKienThueCuaNam;
+use Quanlysothue\Models\thuekhoanModel;
 
 class ThuebaovemoitruongController extends baseController
 {
@@ -19,7 +20,7 @@ class ThuebaovemoitruongController extends baseController
         $temp = explode('/', (new \DateTime())->format('d/m/Y'));
         $Thang = $temp[1] . '/' . $temp[2];
         
-        $dsThueBaoVeMoiTruong = $thuebaovemoitruongModel->dsThueBaoVeMoiTruong($Thang, $this->getUser(), 'object')
+        $dsThueBaoVeMoiTruong = $thuebaovemoitruongModel->dsThueBaoVeMoiTruong($Thang, $this->getUser(), 'array')
             ->getObj();
         
         return array(
@@ -44,7 +45,7 @@ class ThuebaovemoitruongController extends baseController
             ->getPost()
             ->get('Thang');
         $model = new dukienthuecuathangModel($this->getEntityManager());
-        echo json_encode($model->DSDKThueBaoVeMoiTruong($Thang, $this->getUser(), 'array'));
+        echo json_encode($model->DSDKThueBaoVeMoiTruongChuaGhiSo($Thang, $this->getUser(), 'array'));
         return $this->response;
     }
 
@@ -135,9 +136,10 @@ class ThuebaovemoitruongController extends baseController
     
             // validation thanh cong
             if ($form->isValid()) {
+                $thuekhoanModel = new thuekhoanModel($this->getEntityManager());
                 $thuebaovemoitruongModel = new thuebaovemoitruongModel($this->getEntityManager());
                 /* @var $thuekhoan thue */
-                $thuebaovemoitruong = $thuebaovemoitruongModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))->getObj();
+                $thuebaovemoitruong = $thuekhoanModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))->getObj();
                 if ($thuebaovemoitruong != null && $thuebaovemoitruong->getTrangThai() == 0) {
     
                     $MaSoThue = $post->get('MaSoThue');
