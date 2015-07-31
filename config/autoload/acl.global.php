@@ -81,6 +81,10 @@ return array(
                 'Quanlysothue\Controller\Xuatbangke' => array(
                     'all' => 'canbothue'
                 ),
+                
+                'Quanlysothue\Controller\Nothue' => array(
+                    'all' => 'canbothue'
+                ),
 
 				
 				////Module Quanlynguoinopthue

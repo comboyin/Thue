@@ -110,6 +110,14 @@ array(
                         'action' => 'index',
                         'resource' => 'Quanlysothue\Controller\Chungtu'
                     ),
+
+                    array(
+                        'label' => 'Quản lý nợ thuế',
+                        'route' => 'quanlysothue/default',
+                        'controller' => 'Nothue',
+                        'action' => 'index',
+                        'resource' => 'Quanlysothue\Controller\Nothue'
+                    ),
                     
                     array(
                         'label' => 'Xuất bảng kê',
@@ -118,6 +126,7 @@ array(
                         'action' => 'index',
                         'resource' => 'Quanlysothue\Controller\Xuatbangke'
                     )
+
                 )
             ),
             array(

@@ -10,6 +10,7 @@ return array(
             'Quanlysothue\Controller\Dukienthuecuathang' => 'Quanlysothue\Controller\DukienthuecuathangController',
             
             'Quanlysothue\Controller\Xuatbangke' => 'Quanlysothue\Controller\XuatbangkeController',
+            'Quanlysothue\Controller\Nothue' => 'Quanlysothue\Controller\NothueController',
             
             'Quanlysothue\Controller\Thuekhoan' => 'Quanlysothue\Controller\ThuekhoanController',
             'Quanlysothue\Controller\Thuetruythu' => 'Quanlysothue\Controller\ThuetruythuController',

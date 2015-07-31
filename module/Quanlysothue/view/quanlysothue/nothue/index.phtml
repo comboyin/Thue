@@ -1,0 +1,132 @@
+<?php
+use Application\Entity\sono;
+$this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/Quanlysothue/Nothue/index_Nothue.js');
+
+ /* @var $dsNoThue sono */
+
+use Application\Entity\user;
+/* @var $user user */
+$user = $this->identity();
+
+?>
+
+
+
+<div class="container-fluid">
+
+
+
+
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN THEME CUSTOMIZER-->
+			<!-- END THEME CUSTOMIZER-->
+			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+			<h3 class="page-title">QUẢN LÝ NỢ THUẾ</h3>
+			<ul class="breadcrumb">
+				<li class="active">
+                     <a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Nothue','action'=>'index'));?>">Danh sách nợ thuế</a>             
+                </li>
+			</ul>
+			<!-- END PAGE TITLE & BREADCRUMB-->
+		</div>
+	</div>
+<input type="hidden" id="LoaiUser" name="LoaiUser" value=<?php echo $user->getLoaiUser()?>>
+	<!-- BEGIN EDITABLE TABLE widget-->
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN EXAMPLE TABLE widget-->
+
+			<div class="widget red">
+
+				<div class="widget-title">
+					<h4>Danh sách nợ thuế</h4>
+					<span class="tools"> <a href="javascript:;"
+						class="icon-chevron-down"></a>
+					</span>
+				</div>
+				<div class="widget-body">
+					<div>
+						<form action="#" class="form-horizontal">
+							<div class="control-group">
+							<label class="control-label">Kỳ lập bộ: </label>
+							<div class="controls">
+								<div class="input-append date" id="dpNoThue"
+									data-date="102/2012" data-date-format="mm/yyyy"
+									data-date-viewmode="years" data-date-minviewmode="months">
+									
+								<input readonly="readonly" class="m-ctrl-medium" type="text" name="KyLapBo"  id="kylapbo" >
+                                
+                                
+                                
+								 <span class="add-on"> <i class="icon-calendar"> </i></span>
+								
+								
+								 <img class="loading" style="margin-left:10px; display : none;" src="<?php echo $this->basePath() . '/public/' . 'img/ajax-loader.gif'?>">
+								</div>
+								<p class="help-block"></p>
+							</div>
+						</div>
+						</form>
+						<div class="clearfix">
+							<div class="btn-group">
+ 
+							     <button  style="margin-left: 5px;"
+									class="btn btn-success GhiSo">
+									   Ghi sổ nợ
+									<i class="icon-adjust"></i>
+							     </button>
+								
+								     
+                                
+							</div>
+
+							
+						</div>
+						
+	   <span class="MaCB" style="display: none;"><?php echo $user->getMaUser()?></span>
+						
+						<div class="space12"></div>
+					<table cellspacing="0" class="table table-striped table-bordered"
+						width="100%" id="TableNoThue">
+						<thead>
+							<tr>
+									<th>Kỳ thuế (*)</th>
+						            <th>Mã số thuế (*)</th>
+									<th>Tiểu Mục (*)</th>
+									<th>Số tiền (*)</th>									
+							</tr>
+						</thead>
+						<tbody>
+										
+										
+										<?php if($dsNoThue!=null):?>
+										
+        										
+                                       <?php foreach ($dsNoThue as $thue):?>
+                                       
+                            <tr class="odd">
+								<td><?php echo $thue['KyThue']?></td>
+								<td><?php echo $thue['nguoinopthue']['MaSoThue']?></td>
+								<td><?php echo $thue['muclucngansach']['TieuMuc']?></td>
+								<td><?php echo $thue['SoTien']?></td>
+							</tr>                
+                                <?php endforeach;?>
+        										          	
+										<?php endif;?>		
+  
+							</tbody>
+					</table>
+						
+						
+					</div>
+				</div>
+			</div>
+			<!-- END EXAMPLE TABLE widget-->
+		</div>
+	</div>
+
+
+	<!-- END PAGE -->
+</div>
+<!-- END CONTAINER -->
