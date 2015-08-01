@@ -9,4 +9,5 @@ return array(
     'Zend\\' => array($vendorDir . '/zendframework/zendframework/library/Zend'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
+    'DoctrineExtensions\\' => array($vendorDir . '/beberlei/DoctrineExtensions/src'),
 );
