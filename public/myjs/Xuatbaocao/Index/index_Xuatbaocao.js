@@ -8,7 +8,8 @@ var xuatbaocao = function () {
 	return {
 
 		init : function () {
-			$("#Years").datepicker();
+			$("div.Years").datepicker();
+			$("div.months").datepicker();
 			
 			$("button.xuatcaobao").live('click',function(){
 				

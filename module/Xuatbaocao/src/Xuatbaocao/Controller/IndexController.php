@@ -6,7 +6,6 @@
  * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-
 namespace Xuatbaocao\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
@@ -16,32 +15,40 @@ use Application\Entity\ketqua;
 
 class IndexController extends baseController
 {
+
     public function indexAction()
     {
         return array();
     }
 
-    public function xuatbaocaoAction(){
-        $Mau = $this->getRequest()->getPost()->get('Mau');
+    public function xuatbaocaoAction()
+    {
+        $Mau = $this->getRequest()
+            ->getPost()
+            ->get('Mau');
         
-        $KyThue = $this->getRequest()->getPost()->get('KyThue'); 
-        $kq=null;
+        $KyThue = $this->getRequest()
+            ->getPost()
+            ->get('KyThue');
+        $kq = null;
         
         switch ($Mau) {
             case "01/QTr-HKD":
                 $model = new XuatbaocaoModel($this->getEntityManager());
-                $kq = $model->QTrHKD01($this->getUser(),$KyThue);
-                
+                $kq = $model->QTrHKD01($this->getUser(), $KyThue);
+                break;
+            case "10/QTr-HKD":
+                $model = new XuatbaocaoModel($this->getEntityManager());
+                $kq = $model->QTrHKD10($this->getUser(), $KyThue);
                 break;
         }
         
-        if($kq==null){
-            $kq=new ketqua();
+        if ($kq == null) {
+            $kq = new ketqua();
             $kq->setKq(false);
             $kq->setMessenger('Tên mẫu không phù hợp lệ !');
         }
         echo json_encode($kq->toArray());
         return $this->response;
-        
     }
 }
