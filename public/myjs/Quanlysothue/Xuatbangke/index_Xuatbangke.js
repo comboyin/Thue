@@ -50,7 +50,10 @@ var EditableTable = function () {
 				
 				$.post(baseUrl("quanlysothue/Xuatbangke/downloadBangKe"),data,function(json){
 					
+					DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
+					
 					if(json.kq==true){
+						
 				    	$.fileDownload(baseUrl("application/Service/downloadFile"), {
 							successCallback : function(url) {
 							},
@@ -59,8 +62,6 @@ var EditableTable = function () {
 							httpMethod : "GET",
 							data : 'filename='+json.obj
 						});
-				    }else{
-				    	
 				    }
 					
 					$("img.loading").css('display','none');

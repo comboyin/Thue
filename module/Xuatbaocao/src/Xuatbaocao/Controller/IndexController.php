@@ -48,6 +48,15 @@ class IndexController extends baseController
                 
                 $kq = $model->QTrHKD04($this->getUser(), $KyThue);
                 break;
+            case "01/SB-HKD":
+                
+                $kq = $model->SBHKD01($this->getUser(), $KyThue);
+                break;
+            
+            case "03a/SB-HKD":
+                
+                $kq = $model->SBHKD03a($this->getUser(), $KyThue);
+                break;
         }
         
         if ($kq == null) {

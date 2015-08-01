@@ -144,7 +144,7 @@ class XuatbaocaoModel extends baseModel
     }
 
     /**
-     * danh bạ HKD
+     * Danh sách hộ kinh doanh thuộc diện không phải nộp thuế GTGT, thuế TNCN
      *
      * @param user $user            
      * @return \Application\Entity\ketqua
@@ -492,8 +492,6 @@ class XuatbaocaoModel extends baseModel
                 
                 $qb = $this->em->createQueryBuilder();
                 
-               
-                
                 $qb->select(array(
                     'nguoinopthue.MaSoThue',
                     'nguoinopthue.TenHKD',
@@ -503,12 +501,18 @@ class XuatbaocaoModel extends baseModel
                 ))
                     ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.thongtinngungnghis', 'thongtinngungnghis')
-                    ->join('nguoinopthue.thongtinnnt','thongtinnnt')
-                    ->where('thongtinnnt.IDthongtinnnt >= ALL (select thongtinnnt1.IDthongtinnnt from Application\Entity\thongtinnnt
+                    ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->
+                where('thongtinnnt.IDthongtinnnt >= ALL (select thongtinnnt1.IDthongtinnnt from Application\Entity\thongtinnnt
                                         thongtinnnt1 where thongtinnnt1.nguoinopthue = nguoinopthue)')
+                    ->andWhere('user.parentUser = ?1')
                     ->andWhere('thongtinngungnghis.DenNgay is null')
-                ->andWhere('MONTH(thongtinngungnghis.TuNgay) = ? ',$Thang)
-                ->andWhere('YEAR(thongtinngungnghis.TuNgay) = ? ',$Nam);
+                    ->andWhere("MONTH(thongtinngungnghis.TuNgay) = '$Thang'")
+                    ->andWhere("YEAR(thongtinngungnghis.TuNgay) = '$Nam' ")
+                    ->setParameter(1, $user);
+                
                 $kqs = $qb->getQuery()->getArrayResult();
                 
                 // create file
@@ -540,7 +544,6 @@ class XuatbaocaoModel extends baseModel
                         $objPHPExcel->getActiveSheet()->setCellValue($IndexNam, "Tháng $Thang năm $Nam");
                         
                         $baseRow = 12;
-                        
                         
                         foreach ($kqs as $r => $dataRow) {
                             $row = $baseRow + $r;
@@ -575,7 +578,292 @@ class XuatbaocaoModel extends baseModel
                 
                 return $kq;
             } catch (\Exception $e) {
-                var_dump($e->getMessage());
+                
+                $kq->setKq(false);
+                $kq->setMessenger($e->getMessage());
+                return $kq;
+            }
+        } else {
+            
+            $kq->setKq(false);
+            $kq->setMessenger("Bạn không có quyền sử dụng mẫu này !");
+            return $kq;
+        }
+    }
+
+    public function SBHKD01($user, $KyThue)
+    {
+        $kq = new ketqua();
+        
+        if ($user->getLoaiUser() <= 3) {
+            
+            try {
+                
+                $qb = $this->em->createQueryBuilder();
+                
+                $qb->select(array(
+                    'nguoinopthue.MaSoThue',
+                    'nguoinopthue.TenHKD',
+                    'thongtinnnt.DiaChiKD',
+                    'nguoinopthue.NgheKD',
+                    'muclucngansach.TieuMuc',
+                    'thuemonbais.SoTien',
+                    'thuemonbais.DoanhSo',
+                    'thuemonbais.NgayPhaiNop'
+                )
+                )
+                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
+                    ->join('nguoinopthue.thuemonbais', 'thuemonbais')
+                    ->join('thuemonbais.muclucngansach', 'muclucngansach')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where("thuemonbais.Nam = ?2")
+                    ->andWhere('user.parentUser = ?1')
+                    ->andWhere('thuemonbais.TrangThai = 1')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->andWhere('thongtinnnt.ThoiGianKetThuc is null')
+                    ->setParameter(1, $user)
+                    ->setParameter(2, $KyThue);
+                
+                $kqs = $qb->getQuery()->getArrayResult();
+                
+                // create file
+                if (count($kqs) > 0) {
+                    include_once './vendor/phpoffice/PHPExcel-1.8/Classes/PHPExcel.php';
+                    $fileNameCreate = './data/filetmp/01SB-HKD.xls';
+                    $fileTemplate = './data/MauImport/01SB-HKD.xls';
+                    if (file_exists($fileTemplate)) {
+                        
+                        $objReader = \PHPExcel_IOFactory::createReader('Excel5');
+                        $objPHPExcel = $objReader->load($fileTemplate);
+                        
+                        $IndexCucThue = 'A2';
+                        $IndexChiCucThue = 'A3';
+                        $IndexDoiThue = 'A4';
+                        $IndexNam = 'A6';
+                        
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexChiCucThue, "CỤC THUẾ: TP.HỒ CHÍ MINH");
+                        
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexCucThue, 'CHI CỤC THUẾ: ' . $user->getCoquanthue()
+                            ->getChicucthue()
+                            ->getTenGoi());
+                        
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexDoiThue, 'ĐỘI THUẾ: ' . $user->getCoquanthue()
+                            ->getTenGoi());
+                        
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexNam, "năm $KyThue");
+                        
+                        $baseRow = 12;
+                        
+                        foreach ($kqs as $r => $dataRow) {
+                            $row = $baseRow + $r;
+                            $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
+                            
+                            $objPHPExcel->getActiveSheet()
+                                ->setCellValue('A' . $row, $r + 1)
+                                ->setCellValue('B' . $row, $dataRow['MaSoThue'])
+                                ->setCellValue('C' . $row, $dataRow['TenHKD'])
+                                ->setCellValue('D' . $row, $dataRow['DiaChiKD'])
+                                ->setCellValue('E' . $row, $dataRow['NgheKD'])
+                                ->setCellValue('F' . $row, $dataRow['DoanhSo'])
+                                ->setCellValue('G' . $row, substr($dataRow['TieuMuc'], - 1))
+                                ->setCellValue('H' . $row, $dataRow['SoTien'])
+                                ->setCellValue('I' . $row, $dataRow['NgayPhaiNop']->format('d-m-Y'));
+                        }
+                        foreach ($objPHPExcel->getActiveSheet()->getRowDimensions() as $rd) {
+                            $rd->setRowHeight(- 1);
+                        }
+                        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                        $objWriter->save($fileNameCreate);
+                        if (file_exists($fileNameCreate)) {
+                            $kq->setKq(true);
+                            $kq->setMessenger('Tiến trình tạo report thành công !');
+                            $kq->setObj($fileNameCreate);
+                        }
+                    } else {
+                        $kq->setKq(false);
+                        $kq->setMessenger('Không tìm thấy File mẫu !');
+                    }
+                } else {
+                    $kq->setKq(false);
+                    $kq->setMessenger("Không tìm thấy hộ kinh doanh nào trong năm $Nam !");
+                }
+                
+                return $kq;
+            } catch (\Exception $e) {
+                
+                $kq->setKq(false);
+                $kq->setMessenger($e->getMessage());
+                return $kq;
+            }
+        } else {
+            
+            $kq->setKq(false);
+            $kq->setMessenger("Bạn không có quyền sử dụng mẫu này !");
+            return $kq;
+        }
+    }
+
+    public function SBHKD03a($user, $KyThue)
+    {
+        $kq = new ketqua();
+        $Thang = explode('/', $KyThue)[0];
+        $Nam = explode('/', $KyThue)[1];
+        /*
+         * nếu kỳ thuế là 07/2015
+         * => $NgayOnDinh = 30-06-2015
+         *
+         */
+        $NgayDauKyDate = \DateTime::createFromFormat('d-m-Y', "01-$Thang-$Nam");
+        $NgayDauKyString = $NgayDauKyDate->format('Y-m-d');
+        $NgayCuoiKy = $NgayDauKyDate->format('Y-m-t');
+        
+        $NgayOnDinh = \DateTime::createFromFormat('d-m-Y', "01-$Thang-$Nam");
+        date_modify($NgayOnDinh, "-1 days");
+        $NgayOnDinh = date_format($NgayOnDinh, "Y-m-d");
+        
+        if ($user->getLoaiUser() <= 3) {
+            
+            try {
+                
+                $qb_OnDinh = $this->em->createQueryBuilder();
+                $qb_Moi = $this->em->createQueryBuilder();
+                
+                $qb_OnDinh->select(array(
+                    'nguoinopthue.MaSoThue',
+                    'nguoinopthue.TenHKD',
+                    
+                    'thongtinnnt.DiaChiKD',
+                    'nguoinopthue.NgheKD',
+                    'thuemonbais.DoanhSo'
+                )
+                )
+                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
+                    ->join('nguoinopthue.thuemonbais', 'thuemonbais')
+                    ->join('thuemonbais.muclucngansach', 'muclucngansach')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where("thuemonbais.Nam = ?2")
+                    ->andWhere('user.parentUser = ?1')
+                    ->andWhere('thuemonbais.TrangThai = 1')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->andWhere('thongtinnnt.ThoiGianKetThuc is null')
+                    ->andWhere("nguoinopthue.ThoiDiemBDKD <= '$NgayOnDinh'")
+                    ->andWhere("thuemonbais.DoanhSo*12 <= 100000000")
+                    ->setParameter(1, $user)
+                    ->setParameter(2, $Nam);
+                
+                
+                $qb_Moi->select(array(
+                    'nguoinopthue.MaSoThue',
+                    'nguoinopthue.TenHKD',
+                    
+                    'thongtinnnt.DiaChiKD',
+                    'nguoinopthue.NgheKD',
+                    'thuemonbais.DoanhSo'
+                )
+                )
+                    ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
+                    ->join('nguoinopthue.thuemonbais', 'thuemonbais')
+                    ->join('thuemonbais.muclucngansach', 'muclucngansach')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where("thuemonbais.Nam = ?2")
+                    ->andWhere('user.parentUser = ?1')
+                    ->andWhere('thuemonbais.TrangThai = 1')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->andWhere('thongtinnnt.ThoiGianKetThuc is null')
+                    ->andWhere("nguoinopthue.ThoiDiemBDKD >= '$NgayDauKyString'")
+                    ->andWhere("nguoinopthue.ThoiDiemBDKD <= '$NgayCuoiKy'")
+                    ->andWhere("thuemonbais.DoanhSo*12 <= 100000000")
+                    ->setParameter(1, $user)
+                    ->setParameter(2, $Nam);
+                
+                $kqs = $qb_OnDinh->getQuery()->getArrayResult();
+                $kqsMoi = $qb_Moi->getQuery()->getArrayResult();
+                
+                // create file
+                if (count($kqs) > 0) {
+                    include_once './vendor/phpoffice/PHPExcel-1.8/Classes/PHPExcel.php';
+                    $fileNameCreate = './data/filetmp/03aSB-HKD.xls';
+                    $fileTemplate = './data/MauImport/03aSB-HKD.xls';
+                    if (file_exists($fileTemplate)) {
+                        
+                        $objReader = \PHPExcel_IOFactory::createReader('Excel5');
+                        $objPHPExcel = $objReader->load($fileTemplate);
+                        
+                        $IndexCucThue = 'A1';
+                        $IndexChiCucThue = 'A2';
+                        $IndexDoiThue = 'A3';
+                        $IndexNam = 'A7';
+                        
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexChiCucThue, "CỤC THUẾ: TP.HỒ CHÍ MINH");
+                        
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexCucThue, 'CHI CỤC THUẾ: ' . $user->getCoquanthue()
+                            ->getChicucthue()
+                            ->getTenGoi());
+                        
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexDoiThue, 'ĐỘI THUẾ: ' . $user->getCoquanthue()
+                            ->getTenGoi());
+                        
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexNam, "tháng $Thang năm $Nam");
+                        
+                        $baseRowOnDinh = 14;
+                        $baseRowNew = 16 +count($kqs);
+                        
+                        // ổn định
+                        foreach ($kqs as $r => $dataRow) {
+                            $row = $baseRowOnDinh + $r;
+                            $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
+                            
+                            $objPHPExcel->getActiveSheet()
+                                ->setCellValue('A' . $row, $r + 1)
+                                ->setCellValue('B' . $row, $dataRow['MaSoThue'])
+                                ->setCellValue('C' . $row, $dataRow['TenHKD'])
+                                ->setCellValue('D' . $row, $dataRow['DiaChiKD'])
+                                ->setCellValue('E' . $row, $dataRow['NgheKD'])
+                                ->setCellValue('F' . $row, $dataRow['DoanhSo'] * 12);
+                        }
+                        
+                        
+                        // Mới
+                        foreach ($kqsMoi as $r => $dataRow) {
+                            $row = $baseRowNew + $r;
+                            $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
+                        
+                            $objPHPExcel->getActiveSheet()
+                            ->setCellValue('A' . $row, $r + 1)
+                            ->setCellValue('B' . $row, $dataRow['MaSoThue'])
+                            ->setCellValue('C' . $row, $dataRow['TenHKD'])
+                            ->setCellValue('D' . $row, $dataRow['DiaChiKD'])
+                            ->setCellValue('E' . $row, $dataRow['NgheKD'])
+                            ->setCellValue('F' . $row, $dataRow['DoanhSo'] * 12);
+                        }
+                        
+                        
+                        
+                        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                        $objWriter->save($fileNameCreate);
+                        if (file_exists($fileNameCreate)) {
+                            $kq->setKq(true);
+                            $kq->setMessenger('Tiến trình tạo report thành công !');
+                            $kq->setObj($fileNameCreate);
+                        }
+                    } else {
+                        $kq->setKq(false);
+                        $kq->setMessenger('Không tìm thấy File mẫu !');
+                    }
+                } else {
+                    $kq->setKq(false);
+                    $kq->setMessenger("Không tìm thấy hộ kinh doanh nào trong năm $KyThue !");
+                }
+                
+                return $kq;
+            } catch (\Exception $e) {
+                
                 $kq->setKq(false);
                 $kq->setMessenger($e->getMessage());
                 return $kq;

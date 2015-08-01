@@ -86,7 +86,6 @@ class thuemonbaiModel extends baseModel
                 // tim du kien mon bai
                 $dukienthuemonbai = $this->em->find('Application\Entity\dukienmb', array(
                     'nguoinopthue' => $this->em->find('Application\Entity\nguoinopthue', $value),
-                    //'muclucngansach' => $this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]),
                     'Nam' => $Nam
                 ));
                 if ($dukienthuemonbai == null) {
@@ -107,9 +106,10 @@ class thuemonbaiModel extends baseModel
                 $thuemonbai->setTrangThai(0);
                 
                 //set trạng thái cho dự kiến môn bài - đã ghi
-                //$dukienthuethang->setTrangThai(1);
+                
                 $this->em->persist($thuemonbai);
-                //$this->em->merge($dukienthuemonbai);
+                $dukienthuemonbai->setTrangThai(1);
+                $this->em->merge($dukienthuemonbai);
                 $this->em->flush();
                 $dem ++;
             }

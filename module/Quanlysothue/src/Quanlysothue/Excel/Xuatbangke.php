@@ -29,16 +29,28 @@ class Xuatbangke extends baseModel
         $arrayBangKe = new ArrayCollection();
         
         foreach ($dsMaSoThue as $MaSoThue){
-            $arrayBangKe->add($this->phatsinh($MaSoThue, $KyThue));
-            $arrayBangKeSono = $this->sono($MaSoThue, $KyLapBo);
-            foreach ($arrayBangKeSono->getValues() as $array){
-                $arrayBangKe->add($array);
-            } 
+            $phatsinh = $this->phatsinh($MaSoThue, $KyThue);
+            if($phatsinh!=null){
+                $arrayBangKe->add($phatsinh);
+                // nhieu bang ke no cua kỳ trước đó
+                $arrayBangKeSono = $this->sono($MaSoThue, $KyLapBo);
+                foreach ($arrayBangKeSono->getValues() as $array){
+                    $arrayBangKe->add($array);
+                }
+            }
+            
+            
         }
-        
-        $kq=new ketqua();
-        $kq->setKq(true);
-        $kq->setObj($this->TaoZipNhieuBangKe($arrayBangKe));
+        if($arrayBangKe->count()>0){
+            $kq=new ketqua();
+            $kq->setKq(true);
+            $kq->setObj($this->TaoZipNhieuBangKe($arrayBangKe));
+        }else {
+            $kq=new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger('Không tìm thấy bảng kê nào !');
+        }
+       
         
         return $kq->toArray();
         
@@ -93,7 +105,28 @@ class Xuatbangke extends baseModel
     public function phatsinh($MaSoThue, $KyThue)
     {
         $qb = $this->em->createQueryBuilder();
+        
         $qb->select(array(
+            'nguoinopthue.MaSoThue',
+            'nguoinopthue.TenHKD',
+            'thongtinnnt.DiaChiKD'
+        ))
+        ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+        ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
+        ->where('thongtinnnt.ThoiGianKetThuc is null')
+        ->andWhere('nguoinopthue.MaSoThue = ?1')
+        ->setParameter(1, $MaSoThue);
+        $kqs = $qb->getQuery()->getSingleResult();
+        
+        $BangKe = new BangKe();
+        $BangKe->setMaSoThue($kqs['MaSoThue']);
+        $BangKe->setTenHKD($kqs['TenHKD']);
+        $BangKe->setDiaChiKD($kqs['DiaChiKD']);
+        $BangKe->setKyThue($KyThue);
+        
+        
+        $qbThue = $this->em->createQueryBuilder();
+        $qbThue->select(array(
             'nguoinopthue.MaSoThue',
             'nguoinopthue.TenHKD',
             'thongtinnnt.DiaChiKD',
@@ -113,16 +146,12 @@ class Xuatbangke extends baseModel
             ->setParameter(1, $MaSoThue)
             ->setParameter(2, $KyThue);
         
-        $kqs = $qb->getQuery()->getResult();
-        if(count($kqs)>0){
-            $BangKe = new BangKe();
-            $BangKe->setMaSoThue($kqs[0]['MaSoThue']);
-            $BangKe->setTenHKD($kqs[0]['TenHKD']);
-            $BangKe->setDiaChiKD($kqs[0]['DiaChiKD']);
-            $BangKe->setKyThue($KyThue);
-            
+        $kqthue = $qbThue->getQuery()->getArrayResult();
+        
+        if(count($kqthue)>0){
             $chitietbangkes = new ArrayCollection();
-            foreach ($kqs as $kq) {
+            foreach ($kqthue as $kq) {
+                
                 $chitietbangke = new chitietbangke();
                 $chitietbangke->setKyThue($kq['KyThue']);
                 $chitietbangke->setNoiDung($kq['TenGoi']);
@@ -131,11 +160,12 @@ class Xuatbangke extends baseModel
                 $BangKe->getChiTietBangKe()->add($chitietbangke);
             }
             $this->truythu($BangKe);
-            $this->monbai($BangKe);
-            return $BangKe;
         }
         
-        return null;
+        
+        $this->monbai($BangKe);
+        return $BangKe;
+        
        
     }
 
@@ -154,13 +184,14 @@ class Xuatbangke extends baseModel
             'muclucngansach.TieuMuc',
             'muclucngansach.TenGoi',
             'truythu.SoTien',
-            'truythu.KyThue'
+            'thue.KyThue'
         ))
             ->from('Application\Entity\truythu', 'truythu')
-            ->join('truythu.muclucngansach', 'muclucngansach')
-            ->join('truythu.nguoinopthue', 'nguoinopthue')
+            ->join('truythu.thue', 'thue')
+            ->join('thue.muclucngansach', 'muclucngansach')
+            ->join('thue.nguoinopthue', 'nguoinopthue')
             ->andWhere('nguoinopthue.MaSoThue = ?1')
-            ->andWhere('truythu.KyThue = ?2')
+            ->andWhere('thue.KyThue = ?2')
             ->setParameter(1, $MaSoThue)
             ->setParameter(2, $KyThue);
         
