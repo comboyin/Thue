@@ -167,20 +167,24 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fi
                                         <td class="hidden-phone">Danh sách hộ kinh doanh tạm nghỉ kinh doanh được miễn, giảm thuế</td>
                                         <td>12/QTr-HKD</td>
                                                 <td> 
-                                                                                                 							
+                                                           							
                             							
-                    								<div class="input-append date" id="Years_01/QTr-HKD" style="margin-top: 10px"
-                    									data-date="102/2012" data-date-format=" yyyy"
-                    									data-date-viewmode="years" data-date-minviewmode="years">
-                    									
-                    								<input readonly="readonly" class="m-ctrl-medium" type="text">
-                                                     
-                                                     
-                                                    
-                    								 <span class="add-on"> <i class="icon-calendar"> </i></span>
+                    								<div class="input-append date months"
+									data-date="102/2012" data-date-format="mm/yyyy"
+									data-date-viewmode="years" data-date-minviewmode="months">
+									
+								<input readonly="readonly" style="width: 50px" type="text" >
+                                
+                                
+                                
+								 <span class="add-on"> <i class="icon-calendar"> </i></span>
+								
+								
+								 <img class="loading" style="margin-left:10px; display : none;" src="<?php echo $this->basePath() . '/public/' . 'img/ajax-loader.gif'?>">
                     								 
-                    								 <img class="loading" style="margin-left:10px;display:none;" src="<?php echo $this->basePath() . '/public/' . 'img/ajax-loader.gif'?>">
-                                        
+                    									
+                    								</div>
+                    								
                     								 
                     									
                     								</div>
@@ -190,12 +194,12 @@ $this->headscript()->appendFile($this->basePath() . '/public/' . 'myjs/jquery.fi
                                                 
                                                 </td>
                                         <td>
-                                            <button class="btn btn-success"><i class="icon-book"></i></button>      
+                                            <button class="btn btn-success xuatcaobao"><i class="icon-book"></i></button>      
                                         </td>
                                     </tr>
                                     
                                      <tr>
-                                        <td>6</td>
+                                        <td>7</td>
                                         <td class="hidden-phone">Danh sách hộ kinh doanh và mức thuế phải nộp</td>
                                         <td>11/QTr-HKD</td>
                                                 <td> 

@@ -31,15 +31,18 @@ class IndexController extends baseController
             ->getPost()
             ->get('KyThue');
         $kq = null;
-        
+        $model = new XuatbaocaoModel($this->getEntityManager());
         switch ($Mau) {
             case "01/QTr-HKD":
-                $model = new XuatbaocaoModel($this->getEntityManager());
                 $kq = $model->QTrHKD01($this->getUser(), $KyThue);
                 break;
             case "10/QTr-HKD":
-                $model = new XuatbaocaoModel($this->getEntityManager());
+                
                 $kq = $model->QTrHKD10($this->getUser(), $KyThue);
+                break;
+            case "12/QTr-HKD":
+                
+                $kq = $model->QTrHKD12($this->getUser(), $KyThue);
                 break;
         }
         
