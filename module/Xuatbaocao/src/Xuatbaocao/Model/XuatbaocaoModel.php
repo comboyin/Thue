@@ -432,8 +432,34 @@ class XuatbaocaoModel extends baseModel
                                             break;
                                     }
                                 } else {
-                                    $flag = 0;
+                                    $flag = $dataRow['MaSoThue'];
                                     $indexRow ++;
+                                    $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
+                                    $objPHPExcel->getActiveSheet()
+                                    ->setCellValue('A' . $row, $indexRow + 1)
+                                    ->setCellValue('B' . $row, $dataRow['MaSoThue'])
+                                    ->setCellValue('C' . $row, $dataRow['TenHKD'])
+                                    ->setCellValue('D' . $row, $dataRow['DiaChiKD'])
+                                    ->setCellValue('E' . $row, $dataRow['NgheKD'])
+                                    ->setCellValue('F' . $row, $dataRow['TuNgay']->format('d-m-Y'))
+                                    ->setCellValue('G' . $row, $dataRow['DenNgay']->format('d-m-Y'));
+                                    switch ($dataRow['TieuMuc']) {
+                                        case '1701':
+                                            $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $dataRow['SoTienMG']);
+                                            break;
+                                        case '1003':
+                                            $objPHPExcel->getActiveSheet()->setCellValue('J' . $row, $dataRow['SoTienMG']);
+                                            break;
+                                        case '1757':
+                                            $objPHPExcel->getActiveSheet()->setCellValue('K' . $row, $dataRow['SoTienMG']);
+                                            break;
+                                        case '3801':
+                                            $objPHPExcel->getActiveSheet()->setCellValue('L' . $row, $dataRow['SoTienMG']);
+                                            break;
+                                        case '2601':
+                                            $objPHPExcel->getActiveSheet()->setCellValue('M' . $row, $dataRow['SoTienMG']);
+                                            break;
+                                    }
                                 }
                         }
                         foreach ($objPHPExcel->getActiveSheet()->getRowDimensions() as $rd) {

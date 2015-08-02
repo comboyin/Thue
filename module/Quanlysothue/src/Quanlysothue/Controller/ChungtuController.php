@@ -34,11 +34,12 @@ class ChungtuController extends baseController
         if ($request->isPost()) {
             $post = array_merge_recursive($request->getPost()->toArray(), $request->getFiles()->toArray());
             
-            // var_dump($post);
+            
             
             $form->setData($post);
             
             if ($form->isValid()) {
+                
                 $data = $form->getData();
                 $fileName = $data['file-excel']['tmp_name'];
                 
@@ -48,19 +49,16 @@ class ChungtuController extends baseController
                 $fileNameErr = false; /* $ImportData->CheckFileImport($fileName, $this->getEntityManager()); */
                 // nếu lỗi
                 if ($fileNameErr !== false) {
+                    
                     echo json_encode(array(
                         'sucess' => false,
                         'mess' => 'File bạn sử dụng gặp một số vấn đề, chúng tôi gởi cho lại cho bạn file với các đánh dấu lỗi, vui lòng kiểm tra và thử lại !',
                         'fileNameErr' => $fileNameErr
                     ));
-                    unlink($fileName);
-                    return $this->response;
+
                 } else {
                     $kq = $ImportData->PersitToDatabase($fileName, $this->getEntityManager());
-                    // xóa file
-                    unlink($fileName);
-                    // Form is valid, save the form!
-                    // var_dump($data);
+                    
                     if ($kq->getKq() == true) {
                         echo json_encode(array(
                             'sucess' => true,
@@ -72,10 +70,17 @@ class ChungtuController extends baseController
                             'mess' => $kq->getMessenger()
                         ));
                     }
-                    
-                    return $this->response;
                 }
             }
+            else{
+                echo json_encode(array(
+                    'sucess' => false,
+                    'mess' => $this->getErrorMessengerForm($form)
+                ));
+            }
+        }
+        if(file_exists($fileName)){
+            unlink($fileName);
         }
         return $this->response;
     }

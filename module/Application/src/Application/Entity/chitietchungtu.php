@@ -53,6 +53,22 @@ class chitietchungtu
     private $TrangThai;
     
  /**
+     * @return the $TrangThai
+     */
+    public function getTrangThai()
+    {
+        return $this->TrangThai;
+    }
+
+ /**
+     * @param field_type $TrangThai
+     */
+    public function setTrangThai($TrangThai)
+    {
+        $this->TrangThai = $TrangThai;
+    }
+
+ /**
      * @return the $NgayHachToan
      */
     public function getNgayHachToan()

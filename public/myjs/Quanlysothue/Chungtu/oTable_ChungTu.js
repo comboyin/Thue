@@ -851,22 +851,24 @@ var EditableTableChungTu = function () {
 				  contentType: false,
 				  type: 'POST',
 				  success: function(json){
-					  
-				    if(json.sucess==false){
-				    	
-				    	/*$.fileDownload(baseUrl("application/Service/downloadFile"), {
-							successCallback : function(url) {
-							},
-							failCallback : function(responseHtml, url) {
-							},
-							httpMethod : "GET",
-							data : 'filename='+json.fileNameErr
-						});*/
-				    }else if(json.sucess==true){
-				    	
-				    }
-				    
-				    DialogTable.setHeadAndMess('Thông báo',json.mess);
+
+						DialogTable.setHeadAndMess('Thông báo',json.mess);
+						
+					    if(json.sucess==false && typeof(json.fileNameErr) == 'string'){
+					    	/*$.fileDownload(baseUrl("application/Service/downloadFile"), {
+								successCallback : function(url) {
+								},
+								failCallback : function(responseHtml, url) {
+								},
+								httpMethod : "GET",
+								data : 'filename='+json.fileNameErr
+							});*/
+					    }
+					    else if(json.sucess == true){
+					    	
+					    }
+					    	
+					    
 				    
 				  }
 				});

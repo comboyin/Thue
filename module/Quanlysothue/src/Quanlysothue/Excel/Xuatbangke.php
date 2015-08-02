@@ -92,11 +92,17 @@ class Xuatbangke extends baseModel
                         
                         //var_dump($dataRow->getChiTietBangKe()->count());
                         $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
+                        $arrayNgayCTTemp = explode('-', $chitiet->getNgayCT());
+                        $arrayNgayHTTemp = explode('-', $chitiet->getNgayCT());
+                        
+                        $excel_NgayCT   = \PHPExcel_Shared_Date::FormattedPHPToExcel($arrayNgayCTTemp[2], $arrayNgayCTTemp[1], $arrayNgayCTTemp[0]);
+                        $excel_NgayHT= \PHPExcel_Shared_Date::FormattedPHPToExcel($arrayNgayHTTemp[2], $arrayNgayHTTemp[1], $arrayNgayHTTemp[0]);
                         
                         $objPHPExcel->getActiveSheet()
                             ->setCellValue($IndexSoLoChungTu . $row, $dataRow->getSoLoChungTu())
-                            ->setCellValue($IndexNgayCT . $row, $chitiet->getNgayCT())
-                            ->setCellValue($IndexNgayHT . $row, $chitiet->getNgayHT())
+                            
+                            ->setCellValue($IndexNgayCT . $row, $excel_NgayCT)
+                            ->setCellValue($IndexNgayHT . $row, $excel_NgayHT)
                             ->setCellValue($IndexMaSoThue . $row, $dataRow->getMaSoThue())
                             ->setCellValue($IndexTenNNT . $row, $dataRow->getTenHKD())
                             ->setCellValue($IndexChuong . $row, '757')
@@ -106,7 +112,7 @@ class Xuatbangke extends baseModel
                             ->setCellValue($IndexTrangThiaLoChungTu . $row, 'Đã hạch toán')
                             ->setCellValue($IndexHuyChungTu . $row, '')
                             ->setCellValue($IndexNamNganSach . $row, '01')
-                            ->setCellValue($IndexNgayKBHachToan . $row, $chitiet->getNgayHT())
+                            ->setCellValue($IndexNgayKBHachToan . $row, $excel_NgayHT)
                             ->setCellValue($IndexKyHieuGiaoDich . $row, 'C2')
                             ->setCellValue($IndexTaiKhoan . $row, '711')
                             ->setCellValue($IndexCQT . $row, '7906')

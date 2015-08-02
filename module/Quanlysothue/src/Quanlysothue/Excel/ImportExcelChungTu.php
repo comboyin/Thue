@@ -118,6 +118,7 @@ class ImportExcelChungTu extends baseExcel
     public function PersitToDatabase($fileName, $em)
     {
         try {
+            
             $kq = new ketqua();
             // begin transaction
             $em->getConnection()->beginTransaction();
@@ -171,6 +172,7 @@ class ImportExcelChungTu extends baseExcel
                             $chitietchungtuTemp->setNgayHachToan($NgayHachToan);
                             $chitietchungtuTemp->setKyThue($KyThue);
                             $chitietchungtuTemp->setSoTien($SoTien);
+                            $chitietchungtuTemp->setTrangThai(0);
                             $chitietchungtuTemp->setMuclucngansach($muclucngansach);
                             
                             $em->persist($chitietchungtuTemp);
@@ -192,6 +194,7 @@ class ImportExcelChungTu extends baseExcel
                                 $chitietchungtuTemp->setNgayHachToan($NgayHachToan);
                                 $chitietchungtuTemp->setKyThue($KyThue);
                                 $chitietchungtuTemp->setSoTien($SoTien);
+                                $chitietchungtuTemp->setTrangThai(0);
                                 $chitietchungtuTemp->setMuclucngansach($muclucngansach);
                                 $em->persist($chitietchungtuTemp);
                             }
@@ -203,7 +206,7 @@ class ImportExcelChungTu extends baseExcel
             $em->getConnection()->commit();
             $kq->setKq(true);
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
+            
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
             $em->getConnection()->rollBack();
