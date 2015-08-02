@@ -6,9 +6,148 @@ use Application\Entity\BangKe;
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Entity\chitietbangke;
 use Application\Entity\ketqua;
+use Application\Entity\user;
 
 class Xuatbangke extends baseModel
 {
+
+    /**
+     *
+     * @param unknown $dsMaSoThue            
+     * @param unknown $KyThue            
+     * @param user $user            
+     * @return multitype:boolean string Ambigous <NULL, field_type>
+     */
+    public function createChungTu($dsMaSoThue, $KyThue, $user)
+    {
+        $Ngay = explode('/', $KyThue)[0];
+        $Nam = explode('/', $KyThue)[1];
+        $KyLapBo = "";
+        if ($Ngay == "01") {
+            $KyLapBo = "12" . "/" . ($Nam - 1);
+        } else {
+            $Ngay = $Ngay - 1;
+            if (strlen($Ngay) == 1) {
+                $Ngay = "0" . $Ngay;
+            }
+            $KyLapBo = $Ngay . '/' . $Nam;
+        }
+        
+        $arrayBangKe = new ArrayCollection();
+        
+        foreach ($dsMaSoThue as $MaSoThue) {
+            $phatsinh = $this->phatsinh($MaSoThue, $KyThue);
+            if ($phatsinh != null) {
+                $arrayBangKe->add($phatsinh);
+                // nhieu bang ke no cua kỳ trước đó
+                $arrayBangKeSono = $this->sono($MaSoThue, $KyLapBo);
+                foreach ($arrayBangKeSono->getValues() as $array) {
+                    $arrayBangKe->add($array);
+                }
+            }
+        }
+        if ($arrayBangKe->count() > 0) {
+            
+            include_once './vendor/phpoffice/PHPExcel-1.8/Classes/PHPExcel.php';
+            $fileNameCreate = './data/filetmp/ChungTu_MAU.xls';
+            $fileTemplate = './data/MauImport/ChungTu_MAU.xls';
+            if (file_exists($fileTemplate)) {
+                
+                $objReader = \PHPExcel_IOFactory::createReader('Excel5');
+                $objPHPExcel = $objReader->load($fileTemplate);
+                
+                $IndexSoLoChungTu = 'A';
+                $IndexNgayCT = 'B';
+                $IndexNgayHT = 'C';
+                $IndexMaSoThue = 'D';
+                $IndexTenNNT = 'E';
+                $IndexChuong = 'F';
+                $IndexSoChungTu = 'G';
+                $IndexTieuMuc = 'H';
+                $IndexSoTien = 'I';
+                $IndexTrangThiaLoChungTu = 'J';
+                $IndexHuyChungTu = 'K';
+                $IndexNamNganSach = 'L';
+                $IndexNgayKBHachToan = 'M';
+                $IndexKyHieuGiaoDich = 'N';
+                $IndexTaiKhoan = 'O';
+                $IndexCQT = 'P';
+                
+                $IndexCoQuanThue = 'Q';
+                $IndexNguoiNhap = 'R';
+                $IndexKhoBacNN = 'S';
+                $IndexMaPhongQuanLy = 'T';
+                $IndexMaCanBo = 'U';
+                $IndexTinhChatKhoanNop = 'V';
+                
+                $baseRow = 2;
+                $indexRow = 0;
+                /* @var $dataRow BangKe */
+                foreach ($arrayBangKe as $r => $dataRow) {
+                    $chitiets = $dataRow->getChiTietBangKe()->getValues();
+                    foreach ($chitiets as $chitiet) {
+                        $row = $baseRow + $indexRow;
+                        
+                        /* @var $chitiet chitietbangke */
+                        
+                        //var_dump($dataRow->getChiTietBangKe()->count());
+                        $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
+                        
+                        $objPHPExcel->getActiveSheet()
+                            ->setCellValue($IndexSoLoChungTu . $row, $dataRow->getSoLoChungTu())
+                            ->setCellValue($IndexNgayCT . $row, $chitiet->getNgayCT())
+                            ->setCellValue($IndexNgayHT . $row, $chitiet->getNgayHT())
+                            ->setCellValue($IndexMaSoThue . $row, $dataRow->getMaSoThue())
+                            ->setCellValue($IndexTenNNT . $row, $dataRow->getTenHKD())
+                            ->setCellValue($IndexChuong . $row, '757')
+                            ->setCellValue($IndexSoChungTu . $row, $dataRow->getSoChungTu())
+                            ->setCellValue($IndexTieuMuc . $row, $chitiet->getTieuMuc())
+                            ->setCellValue($IndexSoTien . $row, $chitiet->getSoTien())
+                            ->setCellValue($IndexTrangThiaLoChungTu . $row, 'Đã hạch toán')
+                            ->setCellValue($IndexHuyChungTu . $row, '')
+                            ->setCellValue($IndexNamNganSach . $row, '01')
+                            ->setCellValue($IndexNgayKBHachToan . $row, $chitiet->getNgayHT())
+                            ->setCellValue($IndexKyHieuGiaoDich . $row, 'C2')
+                            ->setCellValue($IndexTaiKhoan . $row, '711')
+                            ->setCellValue($IndexCQT . $row, '7906')
+                            ->setCellValue($IndexCoQuanThue . $row, $user->getCoquanthue()
+                            ->getChicucthue()
+                            ->getTenGoi())
+                            ->setCellValue($IndexNguoiNhap . $row, 'PHUONG03.HCM')
+                            ->
+                        setCellValue($IndexKhoBacNN . $row, '0114')
+                            ->setCellValue($IndexMaPhongQuanLy . $row, $user->getCoquanthue()
+                            ->getMaCoQuan())
+                            ->setCellValue($IndexMaCanBo . $row, $user->getMaUser())
+                            ->setCellValue($IndexTinhChatKhoanNop . $row, 'N');
+                        
+                        $indexRow++;
+                    }
+                }
+                foreach ($objPHPExcel->getActiveSheet()->getRowDimensions() as $rd) {
+                    $rd->setRowHeight(- 1);
+                }
+                $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                $objWriter->save($fileNameCreate);
+            }
+            $kq = new ketqua();
+            if (file_exists($fileNameCreate)) {
+                $kq->setKq(true);
+                $kq->setMessenger('Tiến trình tạo report thành công !');
+                $kq->setObj($fileNameCreate);
+            } else {
+                
+                $kq->setKq(false);
+                $kq->setMessenger('Không tìm thấy file !');
+            }
+        } else {
+            $kq = new ketqua();
+            $kq->setKq(false);
+            $kq->setMessenger('Không tìm thấy bảng kê nào !');
+        }
+        
+        return $kq->toArray();
+    }
 
     public function dowloadBangKe($dsMaSoThue, $KyThue)
     {
@@ -25,44 +164,40 @@ class Xuatbangke extends baseModel
             $KyLapBo = $Ngay . '/' . $Nam;
         }
         
-        
         $arrayBangKe = new ArrayCollection();
         
-        foreach ($dsMaSoThue as $MaSoThue){
+        foreach ($dsMaSoThue as $MaSoThue) {
             $phatsinh = $this->phatsinh($MaSoThue, $KyThue);
-            if($phatsinh!=null){
+            if ($phatsinh != null) {
                 $arrayBangKe->add($phatsinh);
                 // nhieu bang ke no cua kỳ trước đó
                 $arrayBangKeSono = $this->sono($MaSoThue, $KyLapBo);
-                foreach ($arrayBangKeSono->getValues() as $array){
+                foreach ($arrayBangKeSono->getValues() as $array) {
                     $arrayBangKe->add($array);
                 }
             }
-            
-            
         }
-        if($arrayBangKe->count()>0){
-            $kq=new ketqua();
+        if ($arrayBangKe->count() > 0) {
+            $kq = new ketqua();
             $kq->setKq(true);
+            $soluong = $arrayBangKe->count();
+            $kq->setMessenger("Đã có $soluong bảng kê được tạo, file đóng gói đang được tạo, vui lòng chờ .............");
             $kq->setObj($this->TaoZipNhieuBangKe($arrayBangKe));
-        }else {
-            $kq=new ketqua();
+        } else {
+            $kq = new ketqua();
             $kq->setKq(false);
             $kq->setMessenger('Không tìm thấy bảng kê nào !');
         }
-       
         
         return $kq->toArray();
-        
-        
     }
-    
-    private function ValidationXuatBanKe($dsMaSoThue, $KyThue){
-        
-    }
-    
-    private function KiemTraSoThue($MaSoThue,$KyThue){
-        $kq=new ketqua();
+
+    private function ValidationXuatBanKe($dsMaSoThue, $KyThue)
+    {}
+
+    private function KiemTraSoThue($MaSoThue, $KyThue)
+    {
+        $kq = new ketqua();
         $qb = $this->em->createQueryBuilder();
         $qb->select(array(
             'nguoinopthue.MaSoThue',
@@ -85,10 +220,10 @@ class Xuatbangke extends baseModel
             ->setParameter(2, $KyThue);
         
         $kqs = $qb->getQuery()->getResult();
-        if(count($kqs)==0){
+        if (count($kqs) == 0) {
             $kq->setKq(false);
             $kq->setMessenger("$MaSoThue trong kỳ thuế $KyThue chưa được lập sổ thuể !");
-        }else{
+        } else {
             $kq->setKq(true);
         }
         
@@ -111,20 +246,21 @@ class Xuatbangke extends baseModel
             'nguoinopthue.TenHKD',
             'thongtinnnt.DiaChiKD'
         ))
-        ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
-        ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
-        ->where('thongtinnnt.ThoiGianKetThuc is null')
-        ->andWhere('nguoinopthue.MaSoThue = ?1')
-        ->setParameter(1, $MaSoThue);
+            ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+            ->join('nguoinopthue.thongtinnnt', 'thongtinnnt')
+            ->where('thongtinnnt.ThoiGianKetThuc is null')
+            ->andWhere('nguoinopthue.MaSoThue = ?1')
+            ->setParameter(1, $MaSoThue);
         $kqs = $qb->getQuery()->getSingleResult();
         
         $BangKe = new BangKe();
+        $BangKe->setSoChungTu();
         $BangKe->setMaSoThue($kqs['MaSoThue']);
         $BangKe->setTenHKD($kqs['TenHKD']);
         $BangKe->setDiaChiKD($kqs['DiaChiKD']);
         $BangKe->setKyThue($KyThue);
         
-        
+        // Thue
         $qbThue = $this->em->createQueryBuilder();
         $qbThue->select(array(
             'nguoinopthue.MaSoThue',
@@ -133,7 +269,8 @@ class Xuatbangke extends baseModel
             'muclucngansach.TieuMuc',
             'muclucngansach.TenGoi',
             'thue.SoTien',
-            'thue.KyThue'
+            'thue.KyThue',
+            'thue.NgayPhaiNop'
         ))
             ->from('Application\Entity\thue', 'thue')
             ->join('thue.muclucngansach', 'muclucngansach')
@@ -143,12 +280,13 @@ class Xuatbangke extends baseModel
             ->andWhere('thue.TrangThai = 1')
             ->andWhere('nguoinopthue.MaSoThue = ?1')
             ->andWhere('thue.KyThue = ?2')
+            ->andWhere('thue.SoChungTu is null')
             ->setParameter(1, $MaSoThue)
             ->setParameter(2, $KyThue);
         
         $kqthue = $qbThue->getQuery()->getArrayResult();
         
-        if(count($kqthue)>0){
+        if (count($kqthue) > 0) {
             $chitietbangkes = new ArrayCollection();
             foreach ($kqthue as $kq) {
                 
@@ -157,16 +295,15 @@ class Xuatbangke extends baseModel
                 $chitietbangke->setNoiDung($kq['TenGoi']);
                 $chitietbangke->setSoTien($kq['SoTien']);
                 $chitietbangke->setTieuMuc($kq['TieuMuc']);
+                $chitietbangke->setNgayHT($kq['NgayPhaiNop']->format('d-m-Y'));
+                $chitietbangke->setNgayCT($BangKe->getKyThue());
                 $BangKe->getChiTietBangKe()->add($chitietbangke);
             }
             $this->truythu($BangKe);
         }
         
-        
         $this->monbai($BangKe);
         return $BangKe;
-        
-       
     }
 
     /**
@@ -236,7 +373,8 @@ class Xuatbangke extends baseModel
             'muclucngansach.TieuMuc',
             'muclucngansach.TenGoi',
             'thuemonbai.SoTien',
-            'thuemonbai.Nam'
+            'thuemonbai.Nam',
+            'thuemonbai.NgayPhaiNop'
         ))
             ->from('Application\Entity\thuemonbai', 'thuemonbai')
             ->join('thuemonbai.nguoinopthue', 'nguoinopthue')
@@ -247,6 +385,7 @@ class Xuatbangke extends baseModel
                             and muclucngansach1.TieuMuc = muclucngansach.TieuMuc)')
             ->andWhere('thuemonbai.Nam = ?1')
             ->andWhere('nguoinopthue.MaSoThue = ?2')
+            ->andWhere('thuemonbai.SoChungTu is null')
             ->setParameter(3, '01/' . $Nam)
             ->setParameter(1, $Nam)
             ->setParameter(2, $MaSoThue);
@@ -261,7 +400,8 @@ class Xuatbangke extends baseModel
                 $ChiTietBangKeNew->setNoiDung($kq['TenGoi']);
                 $ChiTietBangKeNew->setSoTien($kq['SoTien']);
                 $ChiTietBangKeNew->setTieuMuc($kq['TieuMuc']);
-                
+                $ChiTietBangKeNew->setNgayHT($kq['NgayPhaiNop']->format('d-m-Y'));
+                $ChiTietBangKeNew->setNgayCT($BangKe->getKyThue());
                 $BangKe->getChiTietBangKe()->add($ChiTietBangKeNew);
             }
         }
@@ -383,7 +523,7 @@ class Xuatbangke extends baseModel
 
     /**
      * return file name
-     * 
+     *
      * @param BangKe $bangke            
      * @param string $fileMau            
      * @param string $NameDirResults            
@@ -460,33 +600,34 @@ class Xuatbangke extends baseModel
         
         $zip->close();
         
-        /* if (file_exists($zip_name) && $fd = fopen($zip_name, "r")) {
-            
-            $fileSize = filesize($zip_name);
-            // push to download the zip
-            header('Content-type: application/zip');
-            
-            header("Content-disposition: attachment; filename=\"" . $zip_name . "\"");
-            
-            header("Content-length: $fileSize");
-            header("Cache-control: private"); // use this to open files directly
-            
-            ob_clean();
-            // set_time_limit(0);
-            
-            // readfile($zip_name);
-            while (! feof($fd)) {
-                $buffer = fread($fd, 2048);
-                echo $buffer;
-                // remove zip file is exists in temp path
-            }
-            
-            fclose($fd);
-            
-            unlink($zip_name);
-            exit();
-        }
- */
+        /*
+         * if (file_exists($zip_name) && $fd = fopen($zip_name, "r")) {
+         *
+         * $fileSize = filesize($zip_name);
+         * // push to download the zip
+         * header('Content-type: application/zip');
+         *
+         * header("Content-disposition: attachment; filename=\"" . $zip_name . "\"");
+         *
+         * header("Content-length: $fileSize");
+         * header("Cache-control: private"); // use this to open files directly
+         *
+         * ob_clean();
+         * // set_time_limit(0);
+         *
+         * // readfile($zip_name);
+         * while (! feof($fd)) {
+         * $buffer = fread($fd, 2048);
+         * echo $buffer;
+         * // remove zip file is exists in temp path
+         * }
+         *
+         * fclose($fd);
+         *
+         * unlink($zip_name);
+         * exit();
+         * }
+         */
         return $zip_name;
     }
 }

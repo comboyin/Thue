@@ -20,7 +20,9 @@ var EditableTableChiTietChungTu = function () {
 			
 			$("#editable-chitietchungtu input[name='KyThue']").live('focus', function(){
 			    if (false == $(this).hasClass('hasDatepicker')) {
-			    	$(this).datepicker({ 
+			    	$(this).datepicker({
+			    		viewMode: "years",
+			    		minViewMode:"months",
 				    	format: 'mm/yyyy'
 				    });
 			    }

@@ -203,6 +203,7 @@ class ImportExcelChungTu extends baseExcel
             $em->getConnection()->commit();
             $kq->setKq(true);
         } catch (\Exception $e) {
+            var_dump($e->getMessage());
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
             $em->getConnection()->rollBack();

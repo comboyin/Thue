@@ -10,12 +10,47 @@ class BangKe
     private $TongTien;
     private $NgayThang;
     private $KyThue;
-    
-    
+    private $SoLoChungTu;
+    private $SoChungTu;
     
     private $ChiTietBangKe;
     
     
+   
+        
+        
+    
+    /**
+     * @return the $SoLoChungTu
+     */
+    public function getSoLoChungTu()
+    {
+        return $this->SoLoChungTu;
+    }
+
+ /**
+     * @return the $SoChungTu
+     */
+    public function getSoChungTu()
+    {
+        return $this->SoChungTu;
+    }
+
+ /**
+     * @param string $SoLoChungTu
+     */
+    public function setSoLoChungTu($SoLoChungTu)
+    {
+        $this->SoLoChungTu = $SoLoChungTu;
+    }
+
+     public function setSoChungTu(){
+        $randomSoLo = substr(number_format(time() * rand(),0,'',''),0,5);
+        $randomSoChungTu = substr(number_format(time() * rand(),0,'',''),0,4);
+        
+        $this->SoLoChungTu = "150212-$randomSoLo";
+        $this->SoChungTu = "HCM141015003$randomSoChungTu";
+    }
     /**
      * @return the $KyThue
      */

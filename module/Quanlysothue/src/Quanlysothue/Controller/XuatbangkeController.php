@@ -33,6 +33,17 @@ class XuatbangkeController extends baseController
         
         return $this->response;
     }
+    
+    public function createChungTuAction(){
+        $dsMaSoThue = $this->getRequest()->getPost()->get("dsMaSoThue");
+        $KyThue = $this->getRequest()->getPost()->get("KyThue");
+        $model = new Xuatbangke($this->getEntityManager());
+        $kq = $model->createChungTu($dsMaSoThue, $KyThue,$this->getUser());
+        
+        echo json_encode($kq);
+        
+        return $this->response;
+    }
 }
 
 ?>
