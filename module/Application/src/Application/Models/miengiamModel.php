@@ -45,8 +45,8 @@ class miengiamModel extends baseModel
                 ->join('nguoinopthue.usernnts', 'usernnts')
                 ->join('usernnts.user', 'user')
                 ->where('user.parentUser = ?3')
-                ->andWhere('miengiamthue.Ngaymiengiamthue >= ?1')
-                ->andWhere('miengiamthue.Ngaymiengiamthue <= ?2')
+                ->andWhere('miengiamthue.NgayCoHieuLuc >= ?1')
+                ->andWhere('miengiamthue.NgayCoHieuLuc <= ?2')
                 ->setParameter(1, $startDate)
                 ->setParameter(2, $endDate)
                 ->setParameter(3, $user);

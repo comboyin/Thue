@@ -6,12 +6,14 @@ use Quanlynguoinopthue\Form\FormMienGiam;
 use Application\Models\miengiamModel;
 use Application\Entity\miengiamthue;
 use Application\Entity\ketqua;
+use Application\Entity\thue;
 use Quanlynguoinopthue\Form\FormCTMienGiam;
 use Application\Entity\kythuemg;
 use Application\Forms\UploadForm;
 use Quanlynguoinopthue\Excel\ImportExcelMienGiam;
 use Application\Unlity\Unlity;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
+use Application\Entity\dukienthue;
 
 class MiengiamController extends baseController
 {
@@ -93,21 +95,60 @@ class MiengiamController extends baseController
         
         // validation thanh cong
         if ($form->isValid()) {
-            $miengiamModel = new miengiamModel($this->getEntityManager());
-            $post = $request->getPost();
             
             // them
+            $post = $request->getPost();
             $KyThue = $post->get('KyThue');
             $TieuMuc = $post->get('TieuMuc');
             $SoTien = $post->get('SoTien');
             $SoQDMG = $post->get('SoQDMG');
             
+            //kttontaithue
+            /* @var  $mg miengiamthue */
+            $mg = $this->getEntityManager()->find('Application\Entity\miengiamthue', $SoQDMG);
+            $nnt = $mg->getNguoinopthue();
+            /* @var $thue thue */
+            $thue = $this->getEntityManager()->find('Application\Entity\thue', array(
+                'nguoinopthue'=>$nnt,
+                'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
+                'KyThue' => $KyThue
+            ));
+            if($thue!=null && $thue->getTrangThai()==1){
+                $kq->setKq(false);
+                $kq->setMessenger("Sổ thuế này đã được duyệt không thể thêm miễn giảm được !");
+                echo json_encode($kq->toArray());
+                return $this->response;
+            }
+            //endkttontai
             
+            //ktsotien
+            $times = explode('/', $KyThue);
+            /* @var $dkthuenam dukienthue */
+            $dkthuenam = $this->getEntityManager()->find('Application\Entity\dukienthue', array(
+                'nguoinopthue'=>$nnt,
+                'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
+                'KyThue' => $times[1] 
+            ));
+            if($thue!=null && $SoTien > $thue->getSoTien()){
+                $kq->setKq(false);
+                $kq->setMessenger("Số tiền miễn giảm phải nhỏ hơn hoặc bằng số tiền phải nộp !");
+                echo json_encode($kq->toArray());
+                return $this->response;
+            }
+            elseif ($thue==null && $dkthuenam!=null && $SoTien > $dkthuenam->getSoTien() && $dkthuenam->getTrangThai() == 1){
+                $kq->setKq(false);
+                $kq->setMessenger("Số tiền miễn giảm phải nhỏ hơn hoặc bằng số tiền khoán !");
+                echo json_encode($kq->toArray());
+                return $this->response;
+            }
+            //endktsotien
+            
+            $miengiamModel = new miengiamModel($this->getEntityManager());
+
             if($this->checkSoQD($SoQDMG, $kq)==false){
                 echo json_encode($kq->toArray());
                 return $this->response;
             }
-            //$NgayHachToan = $post->get('NgayHachToan');
             
             $ChiTietMg = new kythuemg();
             $ChiTietMg->setKyThue($KyThue);
@@ -354,13 +395,55 @@ class MiengiamController extends baseController
                 
                 $KyThue = $post->get('KyThue');
                 $SoQDMG = $post->get('SoQDMG');
+                $TieuMuc = $post->get('TieuMuc');
+                $SoTien = $post->get('SoTien');
+                //kttontaithue
+                /* @var  $mg miengiamthue */
+                $mg = $this->getEntityManager()->find('Application\Entity\miengiamthue', $SoQDMG);
+                $nnt = $mg->getNguoinopthue();
+                /* @var $thue thue */
+                $thue = $this->getEntityManager()->find('Application\Entity\thue', array(
+                    'nguoinopthue'=>$nnt,
+                    'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
+                    'KyThue' => $KyThue
+                ));
+                if($thue!=null && $thue->getTrangThai()==1){
+                    $kq->setKq(false);
+                    $kq->setMessenger("Sổ thuế này đã được duyệt không thể thêm miễn giảm được !");
+                    echo json_encode($kq->toArray());
+                    return $this->response;
+                }
+                //endkttontai
+                
+                //ktsotien
+                $times = explode('/', $KyThue);
+                /* @var $dkthuenam dukienthue */
+                $dkthuenam = $this->getEntityManager()->find('Application\Entity\dukienthue', array(
+                    'nguoinopthue'=>$nnt,
+                    'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
+                    'KyThue' => $times[1] 
+                ));
+                if($thue!=null && $SoTien > $thue->getSoTien()){
+                    $kq->setKq(false);
+                    $kq->setMessenger("Số tiền miễn giảm phải nhỏ hơn hoặc bằng số tiền phải nộp !");
+                    echo json_encode($kq->toArray());
+                    return $this->response;
+                }
+                elseif ($thue==null && $dkthuenam!=null && $SoTien > $dkthuenam->getSoTien() && $dkthuenam->getTrangThai() == 1){
+                    $kq->setKq(false);
+                    $kq->setMessenger("Số tiền miễn giảm phải nhỏ hơn hoặc bằng số tiền khoán !");
+                    echo json_encode($kq->toArray());
+                    return $this->response;
+                }
+                //endktsotien
+                
                 if($this->checkSoQD($SoQDMG, $kq)==false){
                     echo json_encode($kq->toArray());
                     return $this->response;
                 }
-                $TieuMuc = $post->get('TieuMuc');
+                
                 //$NgayHachToan = Unlity::ConverDate('d-m-Y', $post->get('NgayHachToan'), 'Y-m-d');
-                $SoTien = $post->get('SoTien');
+                
                 $MienGiam = $this->getEntityManager()->find('Application\Entity\miengiamthue', $SoQDMG);
                 $MucLuc = $this->getEntityManager()->find('Application\Entity\muclucngansach', $_TieuMuc);
                 /* @var $CTMienGiam kythuemg */
@@ -368,9 +451,7 @@ class MiengiamController extends baseController
                     'miengiamthue' => $MienGiam,
                     'muclucngansach' => $MucLuc,
                     'KyThue' => $_KyThue
-                ))
-
-                ;
+                ));
                 
                 if ($CTMienGiam != null) {
                     

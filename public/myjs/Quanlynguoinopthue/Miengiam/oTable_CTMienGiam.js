@@ -21,6 +21,8 @@ var EditableTableChiTietMienGiam = function () {
 			$("#editable-chitietmiengiam input[name='KyThue']").live('focus', function(){
 			    if (false == $(this).hasClass('hasDatepicker')) {
 			    	$(this).datepicker({ 
+					    viewMode: "years", 
+					    minViewMode: "months",
 				    	format: 'mm/yyyy'
 				    });
 			    }
@@ -56,8 +58,9 @@ var EditableTableChiTietMienGiam = function () {
     			    		oTable.fnAddData([
     			    		         value.KyThue,
     			    		         value.TieuMuc,
-    			    		         value.SoTien,
-    			    		         '<a class="edit" href="">Edit</a>', '<a class="Delete" href="">Delete</a>'
+    			    		         value.SoTienMG,
+    			    		         '<a class="edit" href="">Edit</a>',
+    			    		         '<a class="Delete" href="">Delete</a>'
     				                  ]);
 	        			    		
 	        			    	
@@ -235,6 +238,7 @@ var EditableTableChiTietMienGiam = function () {
 					// cansua
 					var aiNew = oTable
 						.fnAddData([
+						        '',
 								'',
 								'',
 								'',
