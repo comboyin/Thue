@@ -118,7 +118,7 @@ class thuetieuthudacbietModel extends baseModel
                 $thue->setTrangThai(0);
                 
                 //set trạng thái cho dự kiến tháng - đã ghi
-                //$dukienthuethang->setTrangThai(1);
+                $dukienthuethang->setTrangThai(1);
                 $this->em->persist($thue);
                 $this->em->merge($dukienthuethang);
                 $this->em->flush();
