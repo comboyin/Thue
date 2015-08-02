@@ -10,7 +10,7 @@ use Application\Unlity\Unlity;
 class thuetieuthudacbietModel extends baseModel
 {
 
-    public function dsThueTaiNguyen($thang, $user, $type)
+    public function dsThueTieuThuDacBiet($thang, $user, $type)
     {
         $q = $this->em->createQueryBuilder();
         try {
@@ -31,7 +31,7 @@ class thuetieuthudacbietModel extends baseModel
                 where('thue.KyThue = ?1')
                     ->andWhere('usernnts.user = ?2')
                     ->andWhere('usernnts.ThoiGianKetThuc is null')
-                    ->andWhere("muclucngansach.TieuMuc like '3801'")
+                    ->andWhere("muclucngansach.TieuMuc like '1757'")
                     ->setParameter(2, $user)
                     ->setParameter(1, $thang);
             } else 
@@ -52,7 +52,7 @@ class thuetieuthudacbietModel extends baseModel
                         ->where('thue.KyThue = ?1')
                         ->andWhere('user.parentUser = ?2')
                         ->andWhere('usernnts.ThoiGianKetThuc is null')
-                        ->andWhere("muclucngansach.TieuMuc like '3801'")
+                        ->andWhere("muclucngansach.TieuMuc like '1757'")
                         ->setParameter(2, $user)
                         ->setParameter(1, $thang);
                 }
@@ -66,7 +66,7 @@ class thuetieuthudacbietModel extends baseModel
                         ->getResult());
                 }
             
-            $this->kq->setMessenger('Lấy danh sách thuế tài nguyên ' . $thang . ' thành công !');
+            $this->kq->setMessenger('Lấy danh sách thuế tiêu thụ đặc biệt ' . $thang . ' thành công !');
             return $this->kq;
         } catch (\Exception $e) {
             var_dump($e->getMessage());
@@ -97,37 +97,37 @@ class thuetieuthudacbietModel extends baseModel
                     return $kq;
                 }
                 /* @var $dukienthuethang dukienthue */
-                $thuetainguyen = new thue();
-                $thuetainguyen->setNguoinopthue($this->em->find('Application\Entity\nguoinopthue', $value));
-                $thuetainguyen->setMuclucngansach($this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]));
-                $thuetainguyen->setKyThue($Thang);
-                $thuetainguyen->setTenGoi($dukienthuethang->getTenGoi());
-                $thuetainguyen->setSanLuong($dukienthuethang->getSanLuong());
+                $thue = new thue();
+                $thue->setNguoinopthue($this->em->find('Application\Entity\nguoinopthue', $value));
+                $thue->setMuclucngansach($this->em->find('Application\Entity\muclucngansach', $dsTieuMuc[$key]));
+                $thue->setKyThue($Thang);
+                $thue->setTenGoi($dukienthuethang->getTenGoi());
+                $thue->setSanLuong($dukienthuethang->getSanLuong());
                 
-                $thuetainguyen->setDoanhThuChiuThue($dukienthuethang->getDoanhThuChiuThue());
+                $thue->setDoanhThuChiuThue($dukienthuethang->getDoanhThuChiuThue());
                 
-                $thuetainguyen->setGiaTinhThue($dukienthuethang->getGiaTinhThue());
+                $thue->setGiaTinhThue($dukienthuethang->getGiaTinhThue());
                 
-                $thuetainguyen->setTiLeTinhThue($dukienthuethang->getTiLeTinhThue());
+                $thue->setTiLeTinhThue($dukienthuethang->getTiLeTinhThue());
                 
-                $thuetainguyen->setThueSuat($dukienthuethang->getThueSuat());
+                $thue->setThueSuat($dukienthuethang->getThueSuat());
                 
-                $thuetainguyen->setSoTien($dukienthuethang->getSoTien());
+                $thue->setSoTien($dukienthuethang->getSoTien());
                 
-                $thuetainguyen->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $dukienthuethang->getNgayPhaiNop(), 'Y-m-d')); // 2015-07-28
-                $thuetainguyen->setTrangThai(0);
+                $thue->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $dukienthuethang->getNgayPhaiNop(), 'Y-m-d')); // 2015-07-28
+                $thue->setTrangThai(0);
                 
                 //set trạng thái cho dự kiến tháng - đã ghi
-                //$dukienthuethang->setTrangThai(1);
-                $this->em->persist($thuetainguyen);
+                $dukienthuethang->setTrangThai(1);
+                $this->em->persist($thue);
                 $this->em->merge($dukienthuethang);
                 $this->em->flush();
                 $dem ++;
             }
             
             $kq->setKq(true);
-            $kq->setMessenger('<span style="color:green">' . 'Tẩt cả dự kiến tài nguyên ' . $Thang . ' được chọn đã ghi sổ thành công <br/>
-                                Tổng cộng có ' . $dem . ' dự kiến tài nguyên được ghi sổ !' . '</span>');
+            $kq->setMessenger('<span style="color:green">' . 'Tẩt cả dự kiến tiêu thụ đặc biệt ' . $Thang . ' được chọn đã ghi sổ thành công <br/>
+                                Tổng cộng có ' . $dem . ' dự kiến tiêu thụ đặc biệt được ghi sổ !' . '</span>');
             
             $this->em->getConnection()->commit();
             
@@ -168,7 +168,7 @@ class thuetieuthudacbietModel extends baseModel
                 //thue da duoc duyet
                 if($thue->getTrangThai()==1){
                     $kq->setKq(false);
-                    $kq->setMessenger('<span style="color:red;" >'."Thuế tài nguyên ".$MaSoThue.'-'.$TieuMuc."-".$Thang . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
+                    $kq->setMessenger('<span style="color:red;" >'."Thuế tiêu thụ đặc biệt ".$MaSoThue.'-'.$TieuMuc."-".$Thang . " Đã được duyệt ! Vui lòng kiểm tra và thử lại !".'<br/></span>');
         
                     $this->em->getConnection()->rollBack();
                     return $kq;
@@ -187,8 +187,8 @@ class thuetieuthudacbietModel extends baseModel
         
             //thanh cong - thong bao bao nhieu du kien da dc duyet
             $kq->setKq(true);
-            $kq->setMessenger('<span style="color:green;" >Tất cả thuế tài nguyên được chọn đã được duyệt hoàn tất<br/>
-                                Tổng số '.$dem . 'thuế tài nguyên đã được duyệt </span>');
+            $kq->setMessenger('<span style="color:green;" >Tất cả thuế tiêu thụ đặc biệt được chọn đã được duyệt hoàn tất<br/>
+                                Tổng số '.$dem . 'thuế tiêu thụ đặc biệt đã được duyệt </span>');
         
             return $kq;
         

@@ -121,9 +121,10 @@ class thuetruythuModel extends baseModel
                 //$thuetruythu->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $dukientruythu->getNgayPhaiNop(), 'Y-m-d')); // 2015-07-28
                 $thuetruythu->setTrangThai(0);
                 
-
+                //set trạng thái cho dự kiến tháng - đã ghi
+                $dukientruythu->setTrangThai(1);
                 $this->em->persist($thuetruythu);
-                //$this->em->merge($dukientruythu);
+                $this->em->merge($dukientruythu);
                 $this->em->flush();
                 $dem ++;
             }

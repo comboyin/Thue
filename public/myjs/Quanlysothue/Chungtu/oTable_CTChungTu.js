@@ -68,7 +68,8 @@ var EditableTableChiTietChungTu = function () {
     			    		         value.TieuMuc,
     			    		         $.datepicker.formatDate('dd-mm-yy',new Date(value.NgayHachToan.date)),
     			    		         value.SoTien,
-    			    		         '<a class="edit" href="">Edit</a>', '<a class="Delete" href="">Delete</a>'
+    			    		         '<a class="edit" href="">Edit</a>',
+    			    		         '<a class="Delete" href="">Delete</a>'
     				                  ]);
 	        			    		
 	        			    	

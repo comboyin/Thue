@@ -4,6 +4,7 @@ namespace Application\Controller;
 use Application\base\baseController;
 use Application\Models\chungtuModel;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
+use Application\Models\miengiamModel;
 
 class ServiceController extends baseController
 {
@@ -148,7 +149,7 @@ class ServiceController extends baseController
     
     
          
-        echo json_encode($miengiamModel->DanhSachChiTietChungTu($SoQDMG)->toArray());
+        echo json_encode($miengiamModel->DanhSachChiTietMienGiam($SoQDMG)->toArray());
     
         return $this->response;
     }
