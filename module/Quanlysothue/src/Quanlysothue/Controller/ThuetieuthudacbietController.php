@@ -152,9 +152,10 @@ class ThuetieuthudacbietController extends baseController
     
                         $KyThue = $post->get('_KyThue');
                         $TieuMuc = $post->get('TieuMuc');
+                        $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
                         $ThueSuat = $post->get('ThueSuat');
                         $TenGoi = $post->get('TenGoi');
-                        $SanLuong = $post->get('SanLuong');
+                        //$SanLuong = $post->get('SanLuong');
                         $GiaTinhThue = $post->get('GiaTinhThue');
                         $NgayPhaiNop = $post->get('NgayPhaiNop');
 
@@ -169,11 +170,11 @@ class ThuetieuthudacbietController extends baseController
                         $thue->setKyThue($KyThue);
                         $thue->setNguoinopthue($nguoinopthue);
                         $thue->setMuclucngansach($muclucngansach);
-                        $thue->setDoanhThuChiuThue(0);
+                        $thue->setDoanhThuChiuThue($DoanhThuChiuThue);
                         $thue->setTiLeTinhThue(0);
                         $thue->setThueSuat($ThueSuat);
                         $thue->setTenGoi($TenGoi);
-                        $thue->setSanLuong($SanLuong);
+                        $thue->setSanLuong(null);
                         $thue->setGiaTinhThue($GiaTinhThue);
                         $thue->setSoTien($SoTien);
                         $thue->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $NgayPhaiNop, 'Y-m-d'));
@@ -186,7 +187,7 @@ class ThuetieuthudacbietController extends baseController
                     }
                 } else {
                     $kq->setKq(false);
-                    $kq->setMessenger('Không tìm được thuế tài nguyên!');
+                    $kq->setMessenger('Không tìm được thuế tiêu thụ đặc biệt!');
                 }
             } else {
                 $mss = $this->getErrorMessengerForm($form);
