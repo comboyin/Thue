@@ -343,7 +343,9 @@ class XuatbaocaoModel extends baseModel
                     ->andWhere('kythuemgs.KyThue = ?2')
                     ->andWhere("not exists ($DQL_HKD_NghiKD) and usernnts.ThoiGianKetThuc is null and
                     thongtinnnt.ThoiGianKetThuc is null and
-                    thongtinngungnghis.MaTTNgungNghi >= All($DQL_TTNgungNghi)")
+                    (not exists(select thongtinngungnghi2 from Application\\Entity\\thongtinngungnghi thongtinngungnghi2
+                            where thongtinngungnghi2.nguoinopthue = nguoinopthue) 
+                            OR thongtinngungnghis.MaTTNgungNghi >= All($DQL_TTNgungNghi))")
                     ->andWhere("thuemonbais.Nam = $Nam and thuemonbais.TrangThai = 1 ")
                     ->setParameter(1, $user)
                     ->setParameter(2, $KyThue);
@@ -393,7 +395,8 @@ class XuatbaocaoModel extends baseModel
                                     ->setCellValue('D' . $row, $dataRow['DiaChiKD'])
                                     ->setCellValue('E' . $row, $dataRow['NgheKD'])
                                     ->setCellValue('F' . $row, $dataRow['TuNgay']->format('d-m-Y'))
-                                    ->setCellValue('G' . $row, $dataRow['DenNgay']->format('d-m-Y'));
+                                    ->setCellValue('G' . $row, $dataRow['DenNgay']->format('d-m-Y'))
+                                    ->setCellValue('H' . $row, $dataRow['DoanhSo']);
                                 switch ($dataRow['TieuMuc']) {
                                     case '1701':
                                         $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $dataRow['SoTienMG']);
@@ -434,6 +437,7 @@ class XuatbaocaoModel extends baseModel
                                 } else {
                                     $flag = $dataRow['MaSoThue'];
                                     $indexRow ++;
+                                    $row = $baseRow + $indexRow;
                                     $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
                                     $objPHPExcel->getActiveSheet()
                                     ->setCellValue('A' . $row, $indexRow + 1)
@@ -442,7 +446,8 @@ class XuatbaocaoModel extends baseModel
                                     ->setCellValue('D' . $row, $dataRow['DiaChiKD'])
                                     ->setCellValue('E' . $row, $dataRow['NgheKD'])
                                     ->setCellValue('F' . $row, $dataRow['TuNgay']->format('d-m-Y'))
-                                    ->setCellValue('G' . $row, $dataRow['DenNgay']->format('d-m-Y'));
+                                    ->setCellValue('G' . $row, $dataRow['DenNgay']->format('d-m-Y'))
+                                    ->setCellValue('H' . $row, $dataRow['DoanhSo']);
                                     switch ($dataRow['TieuMuc']) {
                                         case '1701':
                                             $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $dataRow['SoTienMG']);
@@ -896,6 +901,238 @@ class XuatbaocaoModel extends baseModel
             }
         } else {
             
+            $kq->setKq(false);
+            $kq->setMessenger("Bạn không có quyền sử dụng mẫu này !");
+            return $kq;
+        }
+    }
+    
+    /**
+     * danh bạ HKD và tiền thuế
+     *
+     * @param user $user
+     * @return \Application\Entity\ketqua
+     */
+    public function QTrHKD11($user, $KyThue)
+    {
+        $kq = new ketqua();
+        $Thang = explode("/", $KyThue)[0];
+        $Nam = explode("/", $KyThue)[1];
+    
+        if ($user->getLoaiUser() <= 3) {
+    
+            try {
+    
+                $qb = $this->em->createQueryBuilder();
+    
+                // HKD nghĩ kinh doanh
+                $DQL_HKD_NghiKD = $this->em->createQueryBuilder()
+                ->select('thongtinngungnghi1')
+                ->from('Application\Entity\thongtinngungnghi', 'thongtinngungnghi1')
+                ->join('thongtinngungnghi1.nguoinopthue', 'nguoinopthue1')
+                ->join('nguoinopthue1.usernnts', 'usernnts1')
+                ->join('usernnts1.user', 'user1')
+                ->Where('user1.parentUser = ?1')
+                ->andWhere('thongtinngungnghi1.DenNgay is null')
+                ->andWhere('nguoinopthue1 = nguoinopthue')
+                ->getDQL();
+    
+                // Danh sach ngưng nghĩ
+                $DQL_TTNgungNghi = 'select thongtinngungnghids.MaTTNgungNghi
+                        from Application\Entity\thongtinngungnghi thongtinngungnghids
+                        where thongtinngungnghids.nguoinopthue = nguoinopthue';
+    
+                $qb->select(array(
+                    'nguoinopthue.MaSoThue',
+                    'nguoinopthue.TenHKD',
+                    'thongtinnnt.DiaChiKD',
+                    'nguoinopthue.NgheKD',
+                    'thuemonbais.DoanhSo',
+                    'muclucngansach.TieuMuc',
+                    'thues.SoTien'
+                    
+                ))
+                ->from('Application\Entity\nguoinopthue', 'nguoinopthue')
+                ->join('nguoinopthue.usernnts', 'usernnts')
+                ->join('usernnts.user', 'user')
+                ->leftJoin('nguoinopthue.thongtinnnt', 'thongtinnnt')
+                ->leftJoin('nguoinopthue.thongtinngungnghis', 'thongtinngungnghis')
+                ->join('nguoinopthue.thues', 'thues')
+                ->join('thues.muclucngansach', 'muclucngansach')
+                ->leftJoin('nguoinopthue.thuemonbais', 'thuemonbais')
+                ->Where('user.parentUser = ?1')
+                ->andWhere('thues.KyThue = ?2')
+                ->andWhere("not exists ($DQL_HKD_NghiKD) and usernnts.ThoiGianKetThuc is null and
+                    thongtinnnt.ThoiGianKetThuc is null and
+                    (not exists(select thongtinngungnghi2 from Application\\Entity\\thongtinngungnghi thongtinngungnghi2
+                            where thongtinngungnghi2.nguoinopthue = nguoinopthue) 
+                            OR thongtinngungnghis.MaTTNgungNghi >= All($DQL_TTNgungNghi))")
+                    ->andWhere("thuemonbais.Nam = $Nam and thuemonbais.TrangThai = 1 ")
+                    ->andWhere("thues.TrangThai = 1")
+                    ->setParameter(1, $user)
+                    ->setParameter(2, $KyThue);
+    
+                $kqs = $qb->getQuery()->getArrayResult();
+                //var_dump($kqs);
+                // create file
+                if (count($kqs) > 0) {
+                    include_once './vendor/phpoffice/PHPExcel-1.8/Classes/PHPExcel.php';
+                    $fileNameCreate = './data/filetmp/11QTr-HKD.xls';
+                    $fileTemplate = './data/MauImport/11QTr-HKD.xls';
+                    if (file_exists($fileTemplate)) {
+    
+                        $objReader = \PHPExcel_IOFactory::createReader('Excel5');
+                        $objPHPExcel = $objReader->load($fileTemplate);
+    
+                        $IndexCucThue = 'A3';
+                        $IndexChiCucThue = 'A4';
+                        $IndexDoiThue = 'A5';
+                        $IndexNam = 'A7';
+    
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexChiCucThue, "CỤC THUẾ: TP.HỒ CHÍ MINH");
+    
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexCucThue, 'CHI CỤC THUẾ: ' . $user->getCoquanthue()
+                            ->getChicucthue()
+                            ->getTenGoi());
+    
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexDoiThue, 'ĐỘI THUẾ: ' . $user->getCoquanthue()
+                            ->getTenGoi());
+    
+                        $Thang = explode("/", $KyThue)[0];
+                        $Nam = explode("/", $KyThue)[1];
+                        $objPHPExcel->getActiveSheet()->setCellValue($IndexNam, "Tháng $Thang năm $Nam");
+    
+                        $baseRow = 12;
+                        $indexRow = 0;
+                        $flag = 0;
+                        foreach ($kqs as $r => $dataRow) {
+                            $row = $baseRow + $indexRow;
+    
+                            
+                            if ($flag == 0) {
+                                $tt = 0;
+                                $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
+                                $objPHPExcel->getActiveSheet()
+                                ->setCellValue('A' . $row, $indexRow + 1)
+                                ->setCellValue('B' . $row, $dataRow['MaSoThue'])
+                                ->setCellValue('C' . $row, $dataRow['TenHKD'])
+                                ->setCellValue('D' . $row, $dataRow['DiaChiKD'])
+                                ->setCellValue('E' . $row, $dataRow['NgheKD'])
+                                ->setCellValue('F' . $row, $dataRow['DoanhSo']*12)
+                                ->setCellValue('G' . $row, $tt);
+                                switch ($dataRow['TieuMuc']) {
+                                    case '1701':
+                                        $tt += $dataRow['SoTien'];
+                                        $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                        break;
+                                    case '1003':
+                                        $tt += $dataRow['SoTien'];
+                                        $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                        break;
+                                    case '1757':
+                                        $tt += $dataRow['SoTien'];
+                                        $objPHPExcel->getActiveSheet()->setCellValue('J' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                        break;
+                                    case '3801':
+                                        $tt += $dataRow['SoTien'];
+                                        $objPHPExcel->getActiveSheet()->setCellValue('K' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                        break;
+                                    case '2601':
+                                        $tt += $dataRow['SoTien'];
+                                        $objPHPExcel->getActiveSheet()->setCellValue('L' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                        break;
+                                }
+                                $flag = $dataRow['MaSoThue'];
+                            } else
+                                if ($flag == $dataRow['MaSoThue']) {
+                                    switch ($dataRow['TieuMuc']) {
+                                        case '1701':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                        case '1003':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                        case '1757':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('J' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                        case '3801':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('K' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                        case '2601':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('L' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                    }
+                                } else {
+                                    $tt = 0;
+                                    $flag = $dataRow['MaSoThue'];
+                                    $indexRow ++;
+                                    $row = $baseRow + $indexRow;
+                                    $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
+                                    $objPHPExcel->getActiveSheet()
+                                    ->setCellValue('A' . $row, $indexRow + 1)
+                                    ->setCellValue('B' . $row, $dataRow['MaSoThue'])
+                                    ->setCellValue('C' . $row, $dataRow['TenHKD'])
+                                    ->setCellValue('D' . $row, $dataRow['DiaChiKD'])
+                                    ->setCellValue('E' . $row, $dataRow['NgheKD'])
+                                    ->setCellValue('F' . $row, $dataRow['DoanhSo']*12)
+                                    ->setCellValue('G' . $row, $tt);
+                                    switch ($dataRow['TieuMuc']) {
+                                        case '1701':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('H' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                        case '1003':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('I' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                        case '1757':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('J' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                        case '3801':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('K' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                        case '2601':
+                                            $tt += $dataRow['SoTien'];
+                                            $objPHPExcel->getActiveSheet()->setCellValue('L' . $row, $dataRow['SoTien'])->setCellValue('G' . $row, $tt);
+                                            break;
+                                    }
+                                }
+                        }
+                        foreach ($objPHPExcel->getActiveSheet()->getRowDimensions() as $rd) {
+                            $rd->setRowHeight(- 1);
+                        }
+                        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+                        $objWriter->save($fileNameCreate);
+                        if (file_exists($fileNameCreate)) {
+                            $kq->setKq(true);
+                            $kq->setMessenger('Tiến trình tạo report thành công !');
+                            $kq->setObj($fileNameCreate);
+                        }
+                    } else {
+                        $kq->setKq(false);
+                        $kq->setMessenger('Không tìm thấy File mẫu !');
+                    }
+                } else {
+                    $kq->setKq(false);
+                    $kq->setMessenger("Không tìm thấy hộ kinh doanh nào trong năm $Nam !");
+                }
+    
+                return $kq;
+            } catch (\Exception $e) {
+                var_dump($e->getMessage());
+                $kq->setKq(false);
+                $kq->setMessenger($e->getMessage());
+                return $kq;
+            }
+        } else {
+    
             $kq->setKq(false);
             $kq->setMessenger("Bạn không có quyền sử dụng mẫu này !");
             return $kq;
