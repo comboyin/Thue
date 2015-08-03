@@ -93,7 +93,7 @@ class Xuatbangke extends baseModel
                         //var_dump($dataRow->getChiTietBangKe()->count());
                         $objPHPExcel->getActiveSheet()->insertNewRowBefore($row, 1);
                         $arrayNgayCTTemp = explode('-', $chitiet->getNgayCT());
-                        $arrayNgayHTTemp = explode('-', $chitiet->getNgayCT());
+                        $arrayNgayHTTemp = explode('-', $chitiet->getNgayHT());
                         
                         $excel_NgayCT   = \PHPExcel_Shared_Date::FormattedPHPToExcel($arrayNgayCTTemp[2], $arrayNgayCTTemp[1], $arrayNgayCTTemp[0]);
                         $excel_NgayHT= \PHPExcel_Shared_Date::FormattedPHPToExcel($arrayNgayHTTemp[2], $arrayNgayHTTemp[1], $arrayNgayHTTemp[0]);
@@ -306,6 +306,7 @@ class Xuatbangke extends baseModel
                 $BangKe->getChiTietBangKe()->add($chitietbangke);
             }
             $this->truythu($BangKe);
+            $this->miengiam($BangKe);
         }
         
         $this->monbai($BangKe);
@@ -340,35 +341,64 @@ class Xuatbangke extends baseModel
         
         $kqs = $qb->getQuery()->getResult();
         
-        $temp = [];
+       
         foreach ($kqs as $key => $kq) {
             for ($i = 0; $i < $BangKe->getChiTietBangKe()->count(); $i ++) {
                 /* @var $ChiTietBangKe chitietbangke */
                 $ChiTietBangKe = $BangKe->getChiTietBangKe()->get($i);
                 if ($ChiTietBangKe->getKyThue() == $kq['KyThue'] && $ChiTietBangKe->getTieuMuc() == $kq['TieuMuc']) {
                     $ChiTietBangKe->setSoTien($kq['SoTien'] + $ChiTietBangKe->getSoTien());
-                    array_push($temp, $key);
+                   
                 }
             }
         }
+
+    }
+    
+    
+    /**
+     *
+     * @param BangKe $BangKe
+     *
+     */
+    private function miengiam(&$BangKe)
+    {
+        $MaSoThue = $BangKe->getMaSoThue();
+        $KyThue = $BangKe->getKyThue();
+    
+        $qb = $this->em->createQueryBuilder();
+        $qb->select(array(
+            'muclucngansach.TieuMuc',
+            'muclucngansach.TenGoi',
+            'kythuemg.SoTienMG',
+            'kythuemg.KyThue'
+        ))
+        ->from('Application\Entity\kythuemg', 'kythuemg')
+        ->join('kythuemg.miengiamthue', 'miengiamthue')
+        ->join('miengiamthue.nguoinopthue', 'nguoinopthue')
+        ->join('kythuemg.muclucngansach', 'muclucngansach')
+        ->Where('nguoinopthue.MaSoThue = ?1')
+        ->andWhere('kythuemg.KyThue = ?2')
+        ->setParameter(1, $MaSoThue)
+        ->setParameter(2, $KyThue);
+    
+        $kqs = $qb->getQuery()->getResult();
+    
         
-        // Xóa những truy thu trùng với phát sinh
-        foreach ($temp as $value) {
-            unset($kqs[$value]);
-        }
-        
-        // add chitietbangke vao bang ke
         foreach ($kqs as $key => $kq) {
             
-            $ChiTietBangKeNew = new chitietbangke();
-            $ChiTietBangKeNew->setKyThue($kq['KyThue']);
-            $ChiTietBangKeNew->setNoiDung($kq['TenGoi']);
-            $ChiTietBangKeNew->setSoTien($kq['SoTien']);
-            $ChiTietBangKeNew->setTieuMuc($kq['TieuMuc']);
-            
-            $BangKe->getChiTietBangKe()->add($ChiTietBangKeNew);
+            foreach ($BangKe->getChiTietBangKe()->getValues() as $ChiTietBangKe){
+                
+                if ($ChiTietBangKe->getKyThue() == $kq['KyThue'] && $ChiTietBangKe->getTieuMuc() == $kq['TieuMuc']) {
+                    $ChiTietBangKe->setSoTien($ChiTietBangKe->getSoTien() - $kq['SoTienMG']  );
+                   
+                }
+                
+                
+            }
         }
     }
+    
 
     private function monbai(&$BangKe)
     {
@@ -445,6 +475,7 @@ class Xuatbangke extends baseModel
         while ($i < count($kqs)) {
             $KyThue = $kqs[$i]['KyThue'];
             $j = 0;
+            $BK_MaSoThue = $kqs[0]['MaSoThue'];
             $BangKe = new BangKe();
             $BangKe->setMaSoThue($kqs[0]['MaSoThue']);
             $BangKe->setTenHKD($kqs[0]['TenHKD']);
@@ -453,13 +484,30 @@ class Xuatbangke extends baseModel
             
             while ($j < count($kqs)) {
                 if ($kqs[$j]['KyThue'] == $KyThue) {
-                    
+                    $ct_KyThue = $kqs[$j]['KyThue'];
+                    $ct_TenGoi = $kqs[$j]['TenGoi'];
+                    $ct_SoTien = $kqs[$j]['SoTien'];
+                    $ct_TieuMuc = $kqs[$j]['TieuMuc'];
                     // them chi tiet bang ke
                     $chitietbangke = new chitietbangke();
-                    $chitietbangke->setKyThue($kqs[$j]['KyThue']);
-                    $chitietbangke->setNoiDung($kqs[$j]['TenGoi']);
-                    $chitietbangke->setSoTien($kqs[$j]['SoTien']);
-                    $chitietbangke->setTieuMuc($kqs[$j]['TieuMuc']);
+                    $chitietbangke->setKyThue($ct_KyThue);
+                    $chitietbangke->setNoiDung($ct_TenGoi);
+                    $chitietbangke->setSoTien($ct_SoTien);
+                    $chitietbangke->setTieuMuc($ct_TieuMuc);
+                    $qb_ct = $this->em->createQueryBuilder()->select('thue.NgayPhaiNop')
+                        ->from('Application\Entity\thue', 'thue')
+                        ->join('thue.nguoinopthue', 'nguoinopthue')
+                        ->join('thue.muclucngansach', 'muclucngansach')
+                        ->where('muclucngansach.TieuMuc = ?1')
+                        ->andWhere('nguoinopthue.MaSoThue = ?2')
+                        ->andWhere('thue.KyThue = ?3')
+                        ->setParameter(1, $ct_TieuMuc)
+                        ->setParameter(2, $BK_MaSoThue)
+                        ->setParameter(3, $ct_KyThue);
+                    $qb_ct->getQuery()->getSingleResult();
+                    $NgayHT = $qb_ct['NgayPhaiNop']->format('d-m-Y');
+                    $chitietbangke->setNgayHT($NgayHT);
+                    $chitietbangke->setNgayCT($BangKe->getKyThue());
                     $BangKe->getChiTietBangKe()->add($chitietbangke);
                     unset($kqs[$j]);
                     $kqs = array_values($kqs);

@@ -222,6 +222,7 @@ var EditableTableMienGiam = function () {
 					false);
 				oTable.fnUpdate('<a class="Delete" href="">Delete</a>', nRow,
 					8, false);
+				oTable.fnAdjustColumnSizing();
 				oTable.fnDraw();
 			}
 			
@@ -256,10 +257,10 @@ var EditableTableMienGiam = function () {
 			
 
 			function SaveNew(method, url, data, oTable, nEditing) {
-
+				$("img.loading").css('display','inline');
 				if (method == "get") {
 					$.get(url, data, function (json) {
-
+						$("img.loading").css('display','none');
 						if (json.kq == false) {
 							BootstrapDialog
 							.confirm({
@@ -285,7 +286,7 @@ var EditableTableMienGiam = function () {
 					return nEditing;
 				} else if (method == "post") {
 					$.post(url, data, function (json) {
-
+						$("img.loading").css('display','none');
 						if (json.kq == false) {
 							BootstrapDialog
 							.confirm({
@@ -326,11 +327,13 @@ var EditableTableMienGiam = function () {
 					btnOKLabel : 'OK !',
 					btnOKClass : 'OK !',
 					callback : function (result) {
+						
+						$("img.loading").css('display','inline');
 						if (result) {
 
 							if (method == "get") {
-
 								$.get(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 										restoreRow(oTable, nEditing);
 										BootstrapDialog.confirm({
@@ -353,6 +356,7 @@ var EditableTableMienGiam = function () {
 								return nEditing;
 							} else {
 								$.post(url, data, function (json) {
+									$("img.loading").css('display','none');
 									if (json.kq == false) {
 
 										restoreRow(oTable, nEditing);
@@ -393,11 +397,11 @@ var EditableTableMienGiam = function () {
 			// param: nRow
 			function Xoa(method, url, data, oTable, nRow) {
 				// xoa trong csdl
-
 				
+				$("img.loading").css('display','inline');
 					if (method == "get") {
 						$.get(url, data, function (json) {
-
+							$("img.loading").css('display','none');
 							if (json.kq == false) {
 
 								BootstrapDialog.confirm({
@@ -419,7 +423,7 @@ var EditableTableMienGiam = function () {
 						}, "json");
 					} else if (method == "post") {
 						$.post(url, data, function (json) {
-
+							$("img.loading").css('display','none');
 							if (json.kq == false) {
 
 								BootstrapDialog.confirm({

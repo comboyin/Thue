@@ -12,12 +12,14 @@ use Application\Entity\ketqua;
 class ImportExcelChungTu extends baseExcel
 {
 
+    
     /**
-     * Validation file import vào
+     * return:
+     * + $kq->getKq() : true|false
+     * + $kq->getMessenger(): nội dung kết quả
      *
-     * @param string $fileName            
-     * @param EntityManager $EntityManager            
-     * @return string|boolean
+     * @param EntityManager $EntityManager
+     * @param string $fileName
      */
     public function CheckFileImport($fileName, $EntityManager, $user)
     {
@@ -36,48 +38,60 @@ class ImportExcelChungTu extends baseExcel
         $_TieuMuc = 7;
         $_SoTien = 8;
         $_ColLast = 23;
-        
+    
         $objPHPExcel = \PHPExcel_IOFactory::load($fileName);
         foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
             $worksheetTitle = $worksheet->getTitle();
             $highestRow = $worksheet->getHighestRow(); // e.g. 10
             $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
             $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-            
+    
             $tempStr = $worksheet->getCellByColumnAndRow(0, 1)->getValue();
             $KyThue = trim(substr($tempStr, strripos($tempStr, '-') + 1));
-            if ($highestRow >= 1) {
+            if ($highestRow >= 2) {
+                
                 for ($row = 2; $row <= $highestRow; ++ $row) {
                     if ($worksheet->getCellByColumnAndRow(0, $row)->getValue() != '') {
                         // mm/dd/yy
-                        
+                        $arrayMessErro = array();
                         $SoChungTu = $worksheet->getCellByColumnAndRow($_SoChungTu, $row)->getValue() . '';
-                        
+                
                         // d-m-Y
                         $NgayHachToan = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayHachToan, $row));
-                        
+                
                         $NgayChungTu = Unlity::ConverPhpExcelToDateTimeObject($worksheet->getCellByColumnAndRow($_NgayChungTu, $row));
                         $MaSoThue = $worksheet->getCellByColumnAndRow($_MaSoThue, $row)->getValue() . '';
                         $KyThue = Unlity::ConverDate('Y-m-d', $NgayHachToan, 'm/Y');
                         $TieuMuc = $worksheet->getCellByColumnAndRow($_TieuMuc, $row)->getValue() . '';
                         $SoTien = $worksheet->getCellByColumnAndRow($_SoTien, $row)->getValue();
-                        $muclucngansach = $em->find('Application\Entity\muclucngansach', $TieuMuc);
+
                         
-                        // **************begin check********************//
                         
-                        // **************end check********************//
+                        
+                
+                      
+                        
+                        //**************begin check********************//
+                        
+                        // check key
+                        $ChungTu = $EntityManager->find('Application\Entity\chungtu', $SoChungTu);
+                        if($ChungTu!=null){
+                            $arrayMessErro[]=$messKeyExist;
+                        }
+                        
+                        
+                        //**************end check********************//
+                        
                         if (count($arrayMessErro) > 0) {
                             $boolErr = 1;
                             // fill color row
                             $colFist = \PHPExcel_Cell::stringFromColumnIndex(0);
-                            $colLast = \PHPExcel_Cell::stringFromColumnIndex($ColLyDo);
+                            $colLast = \PHPExcel_Cell::stringFromColumnIndex(21);
                             $strCellsFill = $colFist . $row . ':' . $colLast . $row;
                             $this->cellColor($strCellsFill, 'F28A8C', $objPHPExcel);
-                            
-                            $LastCol = $ColCuoi;
-                            
+                            $LastCol = 22;
                             foreach ($arrayMessErro as $messerr) {
-                                
+                        
                                 // add values
                                 $worksheet->setCellValueByColumnAndRow($LastCol, $row, $messerr);
                                 $LastCol ++;
@@ -85,12 +99,20 @@ class ImportExcelChungTu extends baseExcel
                         }
                     }
                 }
+                
+                
+                
+                
+                
+                
+                
+                
                 // Thônng báo import thành công
                 $kq->setKq(true);
                 if ($boolErr == 1) {
-                    
+    
                     // create file and save file excel
-                    
+    
                     $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
                     $fileName = './data/filetmp/' . 'error-' . (new \DateTime())->format("d-m-Y") . '-' . mt_rand() . '.xlsx';
                     $objWriter->save($fileName);
@@ -104,9 +126,11 @@ class ImportExcelChungTu extends baseExcel
                 $kq->setMessenger('File không đúng định dạng !');
             }
         }
-        
+    
         return $kq;
     }
+    
+    
 
     /**
      * Đọc dữ liệu từ file excel và thêm vào csdl
@@ -205,6 +229,8 @@ class ImportExcelChungTu extends baseExcel
             $em->flush();
             $em->getConnection()->commit();
             $kq->setKq(true);
+            $kq->setMessenger('Tất cả chứng từ đã được import thành công !');
+            
         } catch (\Exception $e) {
             
             $kq->setKq(false);

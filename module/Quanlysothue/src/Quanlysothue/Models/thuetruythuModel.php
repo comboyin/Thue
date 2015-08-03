@@ -152,14 +152,10 @@ class thuetruythuModel extends baseModel
             foreach ($dsMaSoThue as $key=>$value){
                 $MaSoThue = $value;
                 $TieuMuc = $dsTieuMuc[$key];
-                
                 /* @var $truythu truythu */
-                $truythu = $this->em->find('Application\Entity\truythu', array(
-                    'nguoinopthue'=>$this->em->find('Application\Entity\nguoinopthue', $MaSoThue),
-                    'muclucngansach'=>$this->em->find('Application\Entity\muclucngansach', $TieuMuc),
-                    'KyThue' => $Thang
-                ));
-        
+                
+                $truythu = $this->findByID_($Thang, $MaSoThue, $TieuMuc)->getObj();
+                
                 // khong tim thay
                 if($truythu==null){
                     $kq->setKq(false);
@@ -179,6 +175,7 @@ class thuetruythuModel extends baseModel
                 }
         
                 $truythu->setTrangThai(1);
+                $this->em->merge($truythu);
                 $this->em->flush();
                 $dem++;
         

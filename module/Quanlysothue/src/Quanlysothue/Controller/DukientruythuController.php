@@ -396,7 +396,7 @@ class DukientruythuController extends baseController
             ->getPost()
             ->get('KyThue');
         $model = new dukienthuecuathangModel($this->getEntityManager());
-        $kq = $model->DSDuKienThueNotTruyThu('07/2015', $this->getUser(), 'array');
+        $kq = $model->DSDuKienThueNotTruyThu($KyThue, $this->getUser(), 'array');
         echo json_encode($kq['obj']);
         return $this->response;
     }

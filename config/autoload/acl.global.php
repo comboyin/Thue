@@ -46,6 +46,10 @@ return array(
                 ),
                 'Quanlysothue\Controller\Chungtu' => array(
                     'all' => 'canbothue'
+                )
+                ,
+                'Quanlysothue\Controller\Chambo' => array(
+                    'all' => 'canbothue'
                 ),
                 'Quanlysothue\Controller\Dukienthuecuanam' => array(
                     'all' => 'canbothue'

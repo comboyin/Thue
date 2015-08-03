@@ -39,37 +39,52 @@ class ChungtuController extends baseController
             $form->setData($post);
             
             if ($form->isValid()) {
-                
                 $data = $form->getData();
                 $fileName = $data['file-excel']['tmp_name'];
+                $model = new \Application\Models\dukientruythuModel($this->getEntityManager());
                 
                 $ImportData = new ImportExcelChungTu();
                 
                 // validation file
-                $fileNameErr = false; /* $ImportData->CheckFileImport($fileName, $this->getEntityManager()); */
+                $fileNameErr = $ImportData->CheckFileImport($fileName, $this->getEntityManager(), $this->getUser());
+                
                 // nếu lỗi
-                if ($fileNameErr !== false) {
+                if ($fileNameErr->getKq() == false) {
                     
-                    echo json_encode(array(
-                        'sucess' => false,
-                        'mess' => 'File bạn sử dụng gặp một số vấn đề, chúng tôi gởi cho lại cho bạn file với các đánh dấu lỗi, vui lòng kiểm tra và thử lại !',
-                        'fileNameErr' => $fileNameErr
-                    ));
-
-                } else {
-                    $kq = $ImportData->PersitToDatabase($fileName, $this->getEntityManager());
-                    
-                    if ($kq->getKq() == true) {
-                        echo json_encode(array(
-                            'sucess' => true,
-                            'mess' => 'Import thành công !'
-                        ));
-                    } else {
+                        // file sai ràng buộc database
+                    if ($fileNameErr->getObj() != null && file_exists($fileNameErr->getObj())) {
                         echo json_encode(array(
                             'sucess' => false,
-                            'mess' => $kq->getMessenger()
+                            'mess' => $fileNameErr->getMessenger(),
+                            'fileNameErr' => $fileNameErr->getObj()
+                        ));
+                    } else {
+                        // File sai dinh dang
+                        echo json_encode(array(
+                            'sucess' => false,
+                            'mess' => $fileNameErr->getMessenger()
                         ));
                     }
+                    
+                    
+                    
+                } else {
+
+                    // Form is valid, save the form!
+                    // var_dump($data);
+                    
+                    $kq = $ImportData->PersitToDatabase($fileName,$this->getEntityManager());
+                    
+                    $array['sucess'] = $kq->getKq();
+                    $array['mess'] = $kq->getMessenger();
+                    $array['KyThue']  = $kq->getObj();
+                
+                    echo json_encode($array);
+                    
+                }
+                
+                if(file_exists($fileName)){
+                    unlink($fileName);
                 }
             }
             else{
@@ -79,9 +94,7 @@ class ChungtuController extends baseController
                 ));
             }
         }
-        if(file_exists($fileName)){
-            unlink($fileName);
-        }
+       
         return $this->response;
     }
 

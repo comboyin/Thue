@@ -23,7 +23,7 @@ class ImportExcelDuKienThueCuaNam extends baseExcel
      * @param EntityManager $EntityManager            
      * @return string|boolean
      */
-    public function CheckFileImport($fileName, $EntityManager)
+    public function CheckFileImport($fileName, $EntityManager,$user)
     {
         $kq = new ketqua();
         $boolErr = 0;
@@ -103,10 +103,10 @@ class ImportExcelDuKienThueCuaNam extends baseExcel
                         $boolErr = 1;
                         // fill color row
                         $colFist = \PHPExcel_Cell::stringFromColumnIndex(0);
-                        $colLast = \PHPExcel_Cell::stringFromColumnIndex($ColLyDo);
+                        $colLast = \PHPExcel_Cell::stringFromColumnIndex(12);
                         $strCellsFill = $colFist . $row . ':' . $colLast . $row;
                         $this->cellColor($strCellsFill, 'F28A8C', $objPHPExcel);
-                        $LastCol = $ColCuoi;
+                        $LastCol = 13;
                         foreach ($arrayMessErro as $messerr) {
                             
                             // add values

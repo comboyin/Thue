@@ -41,10 +41,12 @@ class chitietbangke
     public function setNgayCT($KyThue)
     {
         $NgayPhaiNop = explode('-',$this->NgayHT)[0];
+        
         $random = rand(4, $NgayPhaiNop-1);
         if(strlen($random)==1){
             $random = '0'.$random;
         }
+        
         $Thang = explode('/', $KyThue)[0];
         $Nam =explode('/', $KyThue)[1];
         
