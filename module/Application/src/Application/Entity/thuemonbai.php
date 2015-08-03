@@ -67,6 +67,22 @@ class thuemonbai
     
     
  /**
+     * @return the $SoChungTu
+     */
+    public function getSoChungTu()
+    {
+        return $this->SoChungTu;
+    }
+
+ /**
+     * @param field_type $SoChungTu
+     */
+    public function setSoChungTu($SoChungTu)
+    {
+        $this->SoChungTu = $SoChungTu;
+    }
+
+ /**
      * @return the $Nam
      */
     public function getNam()

@@ -93,6 +93,38 @@ class thue
      */
     private $SoChungTu;
     /**
+     * @return the $truythu
+     */
+    public function getTruythu()
+    {
+        return $this->truythu;
+    }
+
+ /**
+     * @param field_type $truythu
+     */
+    public function setTruythu($truythu)
+    {
+        $this->truythu = $truythu;
+    }
+
+ /**
+     * @return the $SoChungTu
+     */
+    public function getSoChungTu()
+    {
+        return $this->SoChungTu;
+    }
+
+ /**
+     * @param field_type $SoChungTu
+     */
+    public function setSoChungTu($SoChungTu)
+    {
+        $this->SoChungTu = $SoChungTu;
+    }
+
+ /**
      * @return the $TrangThai
      */
     public function getTrangThai()

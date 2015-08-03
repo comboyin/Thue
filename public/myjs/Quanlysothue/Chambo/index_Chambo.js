@@ -3,7 +3,8 @@
 
 var EditableTable = function () {
 
-	
+	var _KyThue = '';
+	var _check = 0;
 
 	return {
 
@@ -12,7 +13,125 @@ var EditableTable = function () {
 			//*******************ONLY PAGE BEGIN************************//
 			
 			$('div.dpMonths').datepicker();
+			$('button.ChamBo').click(function(){
+				$("img.loading").css('display','inline');
+				dsSoChungTu = [];
+				
+				
+				$.each($("#editable-chambo td.group"),function(key,value){
+					
+					
+					
+					if($('input',value).attr('checked')=='checked'){
+						
+						var SoChungTu  = $('span.SoChuongTu',value).html();
+						
+						dsSoChungTu.push(SoChungTu);
+					}
+				});
+				
+				//post
+				var data = {
+						dsSoChungTu : dsSoChungTu,
+						KyThue : _KyThue
+				};
+				
+				$.post(baseUrl("quanlysothue/Chambo/Chambo"),data,function(json){
+					$("img.loading").css('display','none');
+					
+					DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
+					
+					if(json.kq==true){
+						
+				    	KyThue = json.obj;
+				    	Thang = KyThue.split('/')[0];
+				    	Nam = KyThue.split('/')[1];
+				    	var today = new Date(Nam+'-'+Thang+'-01');
+						_KyThue = $.datepicker.formatDate("mm/yy", today);
+						$("div.dpMonths input").val(_KyThue);
+						$("div.dpMonths").datepicker('update', _KyThue);
+						loadDSChungTu();
+				    }
+					
+					
+				},'json');
+			});
+			$('div.dpMonths').datepicker().on('changeDate', function (ev) {
+
+				_KyThue = $.datepicker.formatDate("mm/yy", ev.date);
+				loadDSChungTu();
+				
+
+			});
+			//chon chờ duyệt
+			function chonChungTu(){
+				
+				
+				
+				// uncheck to checked
+				if (_check==0) {
+					$("#editable-chambo input.check_item").each(function () {
+						$(this).attr('checked', true);
+						
+					});
+					_check=1;
+				} else {
+					$("#editable-chambo input.check_item").each(function () {
+						$(this).attr('checked', false);
+					});
+					_check=0;
+				}
+				
+			}
+			$('button.ChonChungTu').click(function(){
+				
+				chonChungTu();
+			});
+
+			if ($("div.dpMonths input").val() == "") {
+				var today = new Date();
+				_KyThue = $.datepicker.formatDate("mm/yy", today)
+				$("div.dpMonths input").val(_KyThue);
+				$("div.dpMonths").datepicker('update', _KyThue);
+
+			}
 			
+			function loadDSChungTu(){
+				$("img.loading").css('display','inline');
+
+				deleteAllRows();
+				url = baseUrl('quanlysothue/Chambo/loadChungTu');
+				//post
+				$.get( url, {KyThue : _KyThue},
+					function (json) {
+					data = json.obj;
+					
+					for (i = 0; i < data.length; i++) {
+						//console.log(data[i]['NgayChungTu']);
+						$.each(data[i]['chitietchungtus'],function(key,value){
+							oTable
+							.fnAddData([
+									'<td><input class="check_item" type="checkbox"><span class="SoChuongTu">'+data[i]['SoChungTu']+'</span></td>',
+									
+									$.datepicker.formatDate("dd-mm-yy",new Date(data[i]['NgayChungTu'].date)) ,
+									$.datepicker.formatDate("dd-mm-yy",new Date(value['NgayHachToan'].date)),
+									data[i]['nguoinopthue']['MaSoThue'],
+									data[i]['nguoinopthue']['TenHKD'],
+									value['KyThue'],
+									
+									value['muclucngansach']['TieuMuc'],
+									value['muclucngansach']['SoTien']
+									
+									]);
+						});
+						
+						
+						
+					}
+
+					$("img.loading").css('display','none');
+				}, "json");
+			}
 			
 			//*******************ONLY PAGE END************************//
 
@@ -46,7 +165,7 @@ var EditableTable = function () {
 					
 					
 					"iDisplayLength" : -1,
-					"sDom" : "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+					"sDom" : 'lfr<"giveHeight"t>ip',
 					"sPaginationType" : "bootstrap",
 					"oLanguage" : {
 						"sLengthMenu" : "_MENU_",
@@ -55,11 +174,39 @@ var EditableTable = function () {
 							"sNext" : "Next"
 						}
 					},
+					"fnDrawCallback": function( oSettings ) {
+			            if ( oSettings.aiDisplay.length == 0 )
+			            {
+			                return;
+			            }
+			             
+			            var nTrs = $('#editable-chambo tbody tr');
+			            var iColspan = nTrs[0].getElementsByTagName('td').length;
+			            var sLastGroup = "";
+			            for ( var i=0 ; i<nTrs.length ; i++ )
+			            {
+			                var iDisplayIndex = oSettings._iDisplayStart + i;
+			                var sGroup = oSettings.aoData[ oSettings.aiDisplay[iDisplayIndex] ]._aData[0];
+			                if ( sGroup != sLastGroup )
+			                {
+			                    var nGroup = document.createElement( 'tr' );
+			                    var nCell = document.createElement( 'td' );
+			                    nCell.colSpan = iColspan;
+			                    nCell.className = "group";
+			                    nCell.innerHTML = sGroup;
+			                    nGroup.appendChild( nCell );
+			                    nTrs[i].parentNode.insertBefore( nGroup, nTrs[i] );
+			                    sLastGroup = sGroup;
+			                }
+			            }
+			            },
 					"aoColumnDefs" : [{
-							'bSortable' : false,
+							'bVisible' : false,
 							'aTargets' : [0]
 						}
-					]
+					],
+					"aaSortingFixed": [[ 0, 'asc' ]],
+			        "aaSorting": [[ 1, 'asc' ]]
 				});
 
 			function XoaNhieuDong(oTable, Rows) {

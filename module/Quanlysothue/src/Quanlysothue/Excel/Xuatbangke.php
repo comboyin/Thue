@@ -174,7 +174,7 @@ class Xuatbangke extends baseModel
         
         foreach ($dsMaSoThue as $MaSoThue) {
             $phatsinh = $this->phatsinh($MaSoThue, $KyThue);
-            if ($phatsinh != null) {
+            if ($phatsinh != null && $phatsinh->getTongTien()>0) {
                 $arrayBangKe->add($phatsinh);
                 // nhieu bang ke no cua kỳ trước đó
                 $arrayBangKeSono = $this->sono($MaSoThue, $KyLapBo);

@@ -101,7 +101,7 @@ class chitietchungtu
     }
 
  /**
-     * @return the $muclucngansach
+     * @return muclucngansach
      */
     public function getMuclucngansach()
     {

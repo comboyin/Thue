@@ -4,8 +4,6 @@ namespace Xuatbaocao\Model;
 use Application\Entity\ketqua;
 use Application\base\baseModel;
 use Application\Entity\user;
-use Application\Entity\thongtinngungnghi;
-use Application\Entity\thongtinnnt;
 
 class XuatbaocaoModel extends baseModel
 {
