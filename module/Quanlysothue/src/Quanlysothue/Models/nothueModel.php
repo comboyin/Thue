@@ -4,7 +4,8 @@ namespace Quanlysothue\Models;
 use Application\base\baseModel;
 use Application\Entity\ketqua;
 use Application\Entity\sono;
-use Application\Unlity\Unlity;
+use Application\Models\chungtuModel;
+
 
 class nothueModel extends baseModel
 {
@@ -96,6 +97,244 @@ class nothueModel extends baseModel
             $kq = new ketqua();
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
+            return $kq;
+        }
+    }
+    
+    public function dsNoDauKi($thang, $user, $type)
+    {
+        $q = $this->em->createQueryBuilder();
+        try {
+            if ($user->getLoaiUser() == 4) {
+                $q->select(array(
+                    'sono.KyThue',
+                    'nguoinopthue.MaSoThue',
+                    'muclucngansach.TieuMuc',
+                    'sono.SoTien'
+                )
+                )
+                ->from('Application\Entity\sono', 'sono')
+                ->join('sono.muclucngansach', 'muclucngansach')
+                ->join('sono.nguoinopthue', 'nguoinopthue')
+                ->join('nguoinopthue.usernnts', 'usernnts')
+                ->where('sono.KyLapBo = ?1')
+                ->andWhere('usernnts.user = ?2')
+                ->andWhere('usernnts.ThoiGianKetThuc is null')
+                ->setParameter(2, $user)
+                ->setParameter(1, $thang);
+            } else
+                if ($user->getLoaiUser() == 3) {
+                    $q->select(array(
+                        'sono.KyThue',
+                        'nguoinopthue.MaSoThue',
+                        'muclucngansach.TieuMuc',
+                        'sono.SoTien'
+                    )
+                    )
+                    ->from('Application\Entity\sono', 'sono')
+                    ->join('sono.muclucngansach', 'muclucngansach')
+                    ->join('sono.nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where('sono.KyLapBo = ?1')
+                    ->andWhere('user.parentUser = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->setParameter(2, $user)
+                    ->setParameter(1, $thang);
+                }
+            $this->kq->setKq(true);
+            if ($type == 'array') {
+                $this->kq->setObj($q->getQuery()
+                    ->getArrayResult());
+            } else
+                if ($type == 'object') {
+                    $this->kq->setObj($q->getQuery()
+                        ->getResult());
+                }
+    
+            $this->kq->setMessenger('Lấy danh sách nợ đầu kì ' . $thang . ' thành công !');
+            return $this->kq;
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            $this->kq->setKq(false);
+            $this->kq->setMessenger($e->getMessage());
+            return $this->kq;
+        }
+    }
+    
+    public function dsNoPhatSinh($thang, $user, $type)
+    {
+        $q = $this->em->createQueryBuilder();
+        try {
+            if ($user->getLoaiUser() == 4) {
+                $q->select(array(
+                    'thue.KyThue',
+                    'nguoinopthue.MaSoThue',
+                    'muclucngansach.TieuMuc',
+                    'thue.SoTien'
+                )
+                )
+                ->from('Application\Entity\thue', 'thue')
+                ->join('thue.muclucngansach', 'muclucngansach')
+                ->join('thue.nguoinopthue', 'nguoinopthue')
+                ->join('nguoinopthue.usernnts', 'usernnts')
+                ->where('thue.KyThue = ?1')
+                ->andWhere('usernnts.user = ?2')
+                ->andWhere('usernnts.ThoiGianKetThuc is null')
+                ->setParameter(2, $user)
+                ->setParameter(1, $thang);
+            } else
+                if ($user->getLoaiUser() == 3) {
+                    $q->select(array(
+                        'thue.KyThue',
+                        'nguoinopthue.MaSoThue',
+                        'muclucngansach.TieuMuc',
+                        'thue.SoTien'
+                    )
+                    )
+                    ->from('Application\Entity\thue', 'thue')
+                    ->join('thue.muclucngansach', 'muclucngansach')
+                    ->join('thue.nguoinopthue', 'nguoinopthue')
+                    ->join('nguoinopthue.usernnts', 'usernnts')
+                    ->join('usernnts.user', 'user')
+                    ->where('thue.KyThue = ?1')
+                    ->andWhere('user.parentUser = ?2')
+                    ->andWhere('usernnts.ThoiGianKetThuc is null')
+                    ->setParameter(2, $user)
+                    ->setParameter(1, $thang);
+                }
+            $this->kq->setKq(true);
+            if ($type == 'array') {
+                $this->kq->setObj($q->getQuery()
+                    ->getArrayResult());
+            } else
+                if ($type == 'object') {
+                    $this->kq->setObj($q->getQuery()
+                        ->getResult());
+                }
+    
+            $this->kq->setMessenger('Lấy danh sách nợ phát sinh trong tháng ' . $thang . ' thành công !');
+            return $this->kq;
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            $this->kq->setKq(false);
+            $this->kq->setMessenger($e->getMessage());
+            return $this->kq;
+        }
+    }
+    
+    public function ktnothue($kythue, $mst, $tm)
+    {
+        $q = $this->em->createQueryBuilder();
+        $q->select('thue')
+        ->from('Application\Entity\thue', 'thue')
+        ->join('thue.nguoinopthue', 'nguoinopthue')
+        ->join('thue.muclucngansach', 'muclucngansach')
+        
+        ->where('thue.KyThue = ?1')
+        ->andWhere('nguoinopthue.MaSoThue = ?2')
+        ->andWhere('muclucngansach.TieuMuc = ?3')
+        ->andWhere('thue.SoChungTu is not null')
+        ->setParameter(3, $tm)
+        ->setParameter(2, $mst)
+        ->setParameter(1, $kythue);
+        
+        $kq = $q->getQuery()->getArrayResult();
+/*             $this->kq->setKq(true);
+            if ($type == 'array') {
+                $this->kq->setObj($q->getQuery()
+                    ->getArrayResult());
+            } else
+                if ($type == 'object') {
+                    $this->kq->setObj($q->getQuery()
+                        ->getResult());
+                }
+    
+            $this->kq->setMessenger('Lấy danh sách nợ phát sinh trong tháng ' . $thang . ' thành công !'); */
+        if($kq==null)
+            return true; //nothue
+        else
+            return false; //danopthue
+    }
+    
+    public function LapSoNo($thang, $user)
+    {
+        $kq = new ketqua();
+        $dem = 0;
+        try {
+            $this->em->getConnection()->beginTransaction();
+            //dsnodauki - KyLapBo
+            $dsnodauki = $this->dsNoDauKi($thang, $user, 'array')->toArray()['obj'];
+            //var_dump($dsnodauki);
+        
+            //dsnophatsinh - KyThue
+            $dsnophatsinh = $this->dsNoPhatSinh($thang, $user, 'array')->toArray()['obj'];
+            //var_dump($thang);
+            
+            //cong 2 mang
+            $ds = [];
+            foreach ($dsnodauki as $key=>$no)
+            {
+                array_push($ds, $no);
+            }
+            foreach ($dsnophatsinh as $key=>$no)
+            {
+                array_push($ds, $no);
+            }
+            
+            
+            if ($ds == null) {
+                $this->em->getConnection()->rollBack();
+                $kq->setKq(false);
+                $kq->setMessenger('<span style="color:red">' . 'Không tìm thấy nợ đầu kì và thuế phát sinh!' . '</span>');
+                return $kq;
+            }
+            
+            
+            //duyetmang
+            foreach ($ds as $key=>$no)
+            {
+                $KyThue = $no['KyThue'];
+                $MaSoThue = $no['MaSoThue'];
+                $TieuMuc = $no['TieuMuc'];
+                $SoTien = $no['SoTien'];
+                
+                //kiem tra xem no co dong tien chua? no = true
+                if($this->ktnothue($KyThue, $MaSoThue, $TieuMuc)==true)
+                {
+                   
+                    /* @var $nguoinopthue nguoinopthue */
+                    /* @var $muclucngansach muclucngansach */
+                    $nguoinopthue = $this->em->find('Application\Entity\nguoinopthue', $MaSoThue);
+                    $muclucngansach = $this->em->find('Application\Entity\muclucngansach', $TieuMuc);
+        
+                    $sono = new sono();
+                    $sono->setKyLapBo($thang);
+                    $sono->setKyThue($KyThue);
+                    $sono->setNguoinopthue($nguoinopthue);
+                    $sono->setMuclucngansach($muclucngansach);
+                    $mo = new chungtuModel($this->em);
+                    $SoTien = $mo->getSoTienThue($KyThue, $MaSoThue, $TieuMuc);
+                    $sono->setSoTien($SoTien);
+                    $this->em->persist($sono);
+                    $this->em->flush();
+                    $dem ++;
+        
+                }
+        
+            }
+            $kq->setKq(true);
+            $kq->setMessenger('<span style="color:green">' . 'Lập sổ nợ của kỳ lập bộ '.$thang.' thành công <br/>
+                                Tổng cộng có ' . $dem . ' dòng được lập !' . '</span>');
+            
+            $this->em->getConnection()->commit();
+            $kq->setObj($this->dsNoThue($thang, $user, 'array')
+            ->getObj());
+            return $kq;
+        } catch (\Exception $e) {
+            $this->em->getConnection()->rollBack();
+            $kq->setKq(false);
+            $kq->setMessenger('<span style="color:red">' . $e->getMessage() . '</span>');
             return $kq;
         }
     }

@@ -213,12 +213,48 @@ var EditableTable = function () {
 
 			}
 			
+			function LapSoNo(){
+				$('img.loading').css('display','inline');
+				
+				$.post('LapSoNo', {Thang : _KyLapBo},
+					function (json) {
+						$('img.loading').css('display','none');
+						DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
+						if(json.obj != null){
+							deleteAllRows();
+							data = json.obj; 
+							LoaiUser = $("input:hidden[name='LoaiUser']").val();
+							for (i = 0; i < data.length; i++) {
+								oTableNoThue
+								.fnAddData([
+								        data[i]['KyThue'],
+								        data[i]['nguoinopthue']['MaSoThue'],
+										data[i]['nguoinopthue']['TenHKD'],
+										data[i]['TieuMuc'],
+										data[i]['SoTien']
+								        ]);
+							}
+						}
+						
+						
+					}, "json");
+				
+			}
+			
+			
 			$('#dpNoThue').datepicker().on('changeDate', function (ev) {
 
 				_KyLapBo = $.datepicker.formatDate("mm/yy", ev.date);
 				LoadDSNoThue();
 				
 			});
+			
+			$("button.LapSoNo").click(function(e){
+				e.preventDefault();
+				//goiactionLapSoNo
+				LapSoNo();
+			});
+			
 
 /*			if ($("#kylapbo").val() == "") {
 				var today = new Date();
