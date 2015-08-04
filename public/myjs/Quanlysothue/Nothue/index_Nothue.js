@@ -241,6 +241,34 @@ var EditableTable = function () {
 				
 			}
 			
+			function XoaSoNo(){
+				$('img.loading').css('display','inline');
+				
+				$.post('XoaSoNo', {Thang : _KyLapBo},
+					function (json) {
+						$('img.loading').css('display','none');
+						DialogTable.showThongBaoUnlimit('Thông báo',json.messenger);
+						if(json.obj != null){
+							deleteAllRows();
+							data = json.obj; 
+							LoaiUser = $("input:hidden[name='LoaiUser']").val();
+							for (i = 0; i < data.length; i++) {
+								oTableNoThue
+								.fnAddData([
+								        data[i]['KyThue'],
+								        data[i]['nguoinopthue']['MaSoThue'],
+										data[i]['nguoinopthue']['TenHKD'],
+										data[i]['TieuMuc'],
+										data[i]['SoTien']
+								        ]);
+							}
+						}
+						
+						
+					}, "json");
+				
+			}
+			
 			
 			$('#dpNoThue').datepicker().on('changeDate', function (ev) {
 
@@ -253,6 +281,12 @@ var EditableTable = function () {
 				e.preventDefault();
 				//goiactionLapSoNo
 				LapSoNo();
+			});
+			
+			$("button.XoaSoNo").click(function(e){
+				e.preventDefault();
+				//goiactionLapSoNo
+				XoaSoNo();
 			});
 			
 

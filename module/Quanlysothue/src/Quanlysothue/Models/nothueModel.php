@@ -5,6 +5,7 @@ use Application\base\baseModel;
 use Application\Entity\ketqua;
 use Application\Entity\sono;
 use Application\Models\chungtuModel;
+use Quanlynguoinopthue\Models\nguoinopthueModel;
 
 
 class nothueModel extends baseModel
@@ -234,7 +235,7 @@ class nothueModel extends baseModel
         ->where('thue.KyThue = ?1')
         ->andWhere('nguoinopthue.MaSoThue = ?2')
         ->andWhere('muclucngansach.TieuMuc = ?3')
-        ->andWhere('thue.SoChungTu is not null')
+        ->andWhere('thue.SoChungTu is null')
         ->setParameter(3, $tm)
         ->setParameter(2, $mst)
         ->setParameter(1, $kythue);
@@ -252,9 +253,9 @@ class nothueModel extends baseModel
     
             $this->kq->setMessenger('Lấy danh sách nợ phát sinh trong tháng ' . $thang . ' thành công !'); */
         if($kq==null)
-            return true; //nothue
+            return false; //danophoackcothue
         else
-            return false; //danopthue
+            return true; //nothue
     }
     
     public function LapSoNo($thang, $user)
@@ -263,8 +264,24 @@ class nothueModel extends baseModel
         $dem = 0;
         try {
             $this->em->getConnection()->beginTransaction();
+            
+            
+            //lay ky lap bo lien truoc
+            $Ngay = explode('/', $thang)[0];
+            $Nam = explode('/', $thang)[1];
+            $KyLapBoTr = "";
+            if ($Ngay == "01") {
+                $KyLapBoTr = "12" . "/" . ($Nam - 1);
+            } else {
+                $Ngay = $Ngay - 1;
+                if (strlen($Ngay) == 1) {
+                    $Ngay = "0" . $Ngay;
+                }
+                $KyLapBoTr = $Ngay . '/' . $Nam;
+            }
+            
             //dsnodauki - KyLapBo
-            $dsnodauki = $this->dsNoDauKi($thang, $user, 'array')->toArray()['obj'];
+            $dsnodauki = $this->dsNoDauKi($KyLapBoTr, $user, 'array')->toArray()['obj'];
             //var_dump($dsnodauki);
         
             //dsnophatsinh - KyThue
@@ -330,6 +347,69 @@ class nothueModel extends baseModel
             $this->em->getConnection()->commit();
             $kq->setObj($this->dsNoThue($thang, $user, 'array')
             ->getObj());
+            return $kq;
+        } catch (\Exception $e) {
+            $this->em->getConnection()->rollBack();
+            $kq->setKq(false);
+            $kq->setMessenger('<span style="color:red">' . $e->getMessage() . '</span>');
+            return $kq;
+        }
+    }
+    
+    
+    public function XoaSoNo($thang, $user)
+    {
+        $kq = new ketqua();
+        $dem = 0;
+        try {
+            $this->em->getConnection()->beginTransaction();
+            //dsnodauki - KyLapBo
+            $ds = $this->dsNoDauKi($thang, $user, 'array')->toArray()['obj'];
+    
+            if ($ds == null) {
+                $this->em->getConnection()->rollBack();
+                $kq->setKq(false);
+                $kq->setMessenger('<span style="color:red">' . 'Không tìm thấy nợ thuế trong kỳ lập bộ '.$thang.'!' . '</span>');
+                return $kq;
+            }
+    
+    
+            //duyetmang
+            foreach ($ds as $key=>$no)
+            {
+                $KyLapBo = $thang;
+                $KyThue = $no['KyThue'];
+                $MaSoThue = $no['MaSoThue'];
+                $TieuMuc = $no['TieuMuc'];
+    
+                $sono = $this->findByID_($KyLapBo, $KyThue, $MaSoThue, $TieuMuc)->getObj();
+                if ($sono == null) {
+                    $this->em->getConnection()->rollBack();
+                    $kq->setKq(false);
+                    $kq->setMessenger('<span style="color:red">' . 'Không tìm thấy nợ thuế '.$KyLapBo." - ".$KyThue." - ".$MaSoThue." - ".$TieuMuc.'</span>');
+                    return $kq;
+                }
+                $kt = new nguoinopthueModel($this->em);
+                if($kt->ktNNT($MaSoThue, $user) == true)
+                {
+                     $this->remove($sono);
+                     $dem++;
+                }else {
+                        $mss = "Người nộp thuế có mã " . $MaSoThue . " không thuộc quyền quản lý của bạn.";
+                        $kq->setKq(false);
+                        $kq->setMessenger('<span style="color:red">' .$mss.'</span>');
+                       $this->em->getConnection()->rollBack();
+                        return $kq;
+                    }
+    
+            }
+            $kq->setKq(true);
+            $kq->setMessenger('<span style="color:green">' . 'Xóa sổ nợ của kỳ lập bộ '.$thang.' thành công <br/>
+                                Tổng cộng có ' . $dem . ' dòng được xóa !' . '</span>');
+    
+            $this->em->getConnection()->commit();
+            $kq->setObj($this->dsNoThue($thang, $user, 'array')
+                ->getObj());
             return $kq;
         } catch (\Exception $e) {
             $this->em->getConnection()->rollBack();

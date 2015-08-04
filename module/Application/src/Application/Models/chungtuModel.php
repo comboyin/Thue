@@ -328,7 +328,7 @@ class chungtuModel extends baseModel
                 ->from('Application\Entity\thuemonbai', 'thuemonbai')
                 ->join('thuemonbai.nguoinopthue', 'nguoinopthue')
                 ->join('thuemonbai.muclucngansach', 'muclucngansach')
-                ->where('thuemonbai.KyThue = ?1')
+                ->where('thuemonbai.Nam = ?1')
                 ->andWhere('nguoinopthue.MaSoThue = ?2')
                 ->setParameter(1, $Nam)
                 ->setParameter(2, $MaSoThue);
@@ -351,7 +351,8 @@ class chungtuModel extends baseModel
             ->setParameter(2, $TieuMuc)
             ->setParameter(3, $MaSoThue);
             $Thue = $qb_Thue->getQuery()->getArrayResult();
-            if(count($SoTienThue)>0 ){
+            
+            if(count($Thue)>0 ){
                 $SoTienThue += $Thue[0]['SoTien'];
             }
             
@@ -390,7 +391,7 @@ class chungtuModel extends baseModel
             ->setParameter(3, $MaSoThue);
             $MienGiam = $qb_MienGiam->getQuery()->getArrayResult();
             if (count($MienGiam)>0) {
-                $SoTienThue -= $MienGiam['SoTienMG'];
+                $SoTienThue -= $MienGiam[0]['SoTienMG'];
             }
         }
         

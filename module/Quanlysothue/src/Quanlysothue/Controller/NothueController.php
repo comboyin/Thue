@@ -47,9 +47,12 @@ class NothueController extends baseController
     
     public function XoaSoNoAction()
     {
+        $thang = $this->getRequest()
+        ->getPost()
+        ->get('Thang');
         $model = new nothueModel($this->getEntityManager());
-        $kq = $model->dsNoPhatSinh('08/2015', $this->getUser(), 'array')->getObj();
-        var_dump($kq);
+        $kq = $model->XoaSoNo($thang, $this->getUser());
+        echo json_encode($kq->toArray());
         return $this->response;
     }
 }
