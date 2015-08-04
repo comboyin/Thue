@@ -92,20 +92,19 @@ $this->headLink()->appendStylesheet($this->basePath() . '/public/' . 'assets/boo
                             						class="btn btn-file">
                             						Import <i class="icon-file"></i>
 								                    </button>
+								                    <button style="margin-left: 20px" class="btn dropdown-toggle" data-toggle="dropdown">
+									Tùy chọn <i class="icon-angle-down"></i>
+								</button>
+								<ul style="margin-top: -27px" class="dropdown-menu pull-right">
+									<li><a href="<?php echo $this->url('quanlysothue/default',array('controller'=>'Chambo','action'=>'index'))?>">Chấm bộ</a></li>
+								</ul>
                                                 
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 							
-								<!-- <button class="btn dropdown-toggle" data-toggle="dropdown">
-									Tùy chọn <i class="icon-angle-down"></i>
-								</button>
-								<ul class="dropdown-menu pull-right">
-									<li><a href="#">Print</a></li>
-									<li><a href="#">Save as PDF</a></li>
-									<li><a href="#">Export to Excel</a></li>
-								</ul> -->
+								
 							</div>
                                         
                                         

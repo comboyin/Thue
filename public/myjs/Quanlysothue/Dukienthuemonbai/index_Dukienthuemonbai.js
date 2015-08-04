@@ -33,6 +33,11 @@ var EditableTable = function () {
 
 				_KyThue = $.datepicker.formatDate("yy", ev.date);
 				
+				loadDKMB();
+
+			});
+			
+			function loadDKMB(){
 				$("img.loading").css('display','inline');
 				
 				/*$("#progess_dpmonths").css('display', 'block');*/
@@ -68,8 +73,7 @@ var EditableTable = function () {
 						'none');*/
 					$("img.loading").css('display','none');
 				}, "json");
-
-			});
+			}
 
 			if ($("#kythue").val() == "") {
 				var today = new Date();
@@ -870,7 +874,6 @@ var EditableTable = function () {
 			
 			
 			//upload
-			
 			$("#Import").click(function(){
 				var fd = new FormData();    
 				fd.append( 'dukientruythu-file',$('input[name="dukientruythu-file"]')[0].files[0]);
@@ -883,10 +886,11 @@ var EditableTable = function () {
 				  contentType: false,
 				  type: 'POST',
 				  success: function(json){
-					  
-				    if(json.sucess==false){
-				    	
-				    	$.fileDownload('downloadFile', {
+
+					DialogTable.setHeadAndMess('Thông báo',json.mess);
+					
+				    if(json.sucess==false && typeof(json.fileNameErr) == 'string'){
+				    	$.fileDownload(baseUrl("application/Service/downloadFile"), {
 							successCallback : function(url) {
 							},
 							failCallback : function(responseHtml, url) {
@@ -894,14 +898,23 @@ var EditableTable = function () {
 							httpMethod : "GET",
 							data : 'filename='+json.fileNameErr
 						});
-				    }else if(json.sucess==true){
-				    	
 				    }
+				    else if(json.sucess == true){
+				    	KyThue = json.KyThue;
+				    	
+				    	var today = new Date(KyThue+'-'+'01'+'-01');
+						_KyThue = $.datepicker.formatDate("yy", today)
+						$("#kythue").val(_KyThue);
+						$("#dpYears").datepicker('update', _KyThue);
+						loadDKMB();
+				    }
+				    	
 				    
-				    DialogTable.setHeadAndMess('Thông báo',json.mess);
 				    
 				  }
 				});
+				
+				
 			});
 
 		}

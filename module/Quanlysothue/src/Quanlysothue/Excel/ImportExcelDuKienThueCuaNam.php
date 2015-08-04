@@ -2,13 +2,10 @@
 namespace Quanlysothue\Excel;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Application\Entity\dukientruythu;
-use Application\Entity\nguoinopthue;
-use Application\Entity\muclucngansach;
 use Doctrine\ORM\EntityManager;
 use Application\base\baseExcel;
 use Application\Models\nganhModel;
-use Quanlysothue\Models\dukienthuecuanamModel;
+
 use Application\Entity\dukienthue;
 use Application\Entity\ketqua;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
@@ -56,6 +53,7 @@ class ImportExcelDuKienThueCuaNam extends baseExcel
             
             $tempStr = $worksheet->getCellByColumnAndRow(0, 1)->getValue();
             $KyThue = trim(substr($tempStr, strripos($tempStr, '-') + 1));
+            
             if ($highestRow >= 5) {
                 for ($row = 5; $row <= $highestRow; ++ $row) {
                     
@@ -94,8 +92,9 @@ class ImportExcelDuKienThueCuaNam extends baseExcel
                         'nguoinopthue'=>$EntityManager->find('Application\Entity\nguoinopthue', $MaSoThue),
                         'muclucngansach'=>$EntityManager->find('Application\Entity\muclucngansach', $TieuMuc) 
                     ));       
-                    if($checkKey==null){
+                    if($checkKey!=null){
                         $arrayMessErro[] = $messKeyExist;
+                        
                     }       
                     // ************* END CHECK ********************
                     
