@@ -118,9 +118,9 @@ var EditableTable = function () {
 									data[i]['nguoinopthue']['MaSoThue'],
 									data[i]['nguoinopthue']['TenHKD'],
 									value['KyThue'],
+									value['SoTien'],
+									value['muclucngansach']['TieuMuc']
 									
-									value['muclucngansach']['TieuMuc'],
-									value['muclucngansach']['SoTien']
 									
 									]);
 						});
