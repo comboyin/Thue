@@ -332,7 +332,10 @@ class chungtuModel extends baseModel
                 ->andWhere('nguoinopthue.MaSoThue = ?2')
                 ->setParameter(1, $Nam)
                 ->setParameter(2, $MaSoThue);
-            $SoTienThue = $qb_monbai->getQuery()->getSingleResult()['SoTien'];
+            $monbai = $qb_monbai->getQuery()->getArrayResult();
+            if(count($monbai)>0 ){
+                $SoTienThue += $monbai[0]['SoTien'];
+            }
             return $SoTienThue;
         }
         else{
@@ -369,8 +372,8 @@ class chungtuModel extends baseModel
             
             $TruyThu = $qb_TruyThu->getQuery()->getArrayResult();
            
-            if ($TruyThu != null) {
-                $SoTienThue += $TruyThu['SoTien'];
+            if (count($TruyThu) > 0) {
+                $SoTienThue += $TruyThu[0]['SoTien'];
             }
             
             $qb_MienGiam = $this->em->createQueryBuilder();
@@ -385,8 +388,8 @@ class chungtuModel extends baseModel
             ->setParameter(1, $KyThue)
             ->setParameter(2, $TieuMuc)
             ->setParameter(3, $MaSoThue);
-            $MienGiam = $qb_MienGiam->getQuery()->getArrayResult()[0];
-            if ($MienGiam != null) {
+            $MienGiam = $qb_MienGiam->getQuery()->getArrayResult();
+            if (count($MienGiam)>0) {
                 $SoTienThue -= $MienGiam['SoTienMG'];
             }
         }

@@ -117,8 +117,11 @@ elseif (isset($config['layouts'][$NameSpace]['default'])) {
         
         $controller = $routeMatch->getParam('controller');
         
-        $action = $routeMatch->getParam('action');
         
+        $action = $routeMatch->getParam('action');
+        if($controller=='Application\Controller\Index'){
+            return;
+        }
         if ($auth->hasIdentity()) {
             
             $usr = $auth->getIdentity();

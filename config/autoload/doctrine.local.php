@@ -34,7 +34,7 @@ return array(
                     'port' => '3306',
                     'user' => 'root',
                     'password' => '',
-                    'dbname' => 'comboyin1_thue',
+                    'dbname' => 'baocaolv',      //comboyin1_thue
                     'charset' => 'utf8', // extra
                     'driverOptions' => array(
                         1002=>'SET NAMES utf8'

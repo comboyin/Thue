@@ -117,6 +117,12 @@ return array(
                     'all' => 'canbothue'
                 ),
                 //end
+            ),
+            'deny'=>array(
+                //Module Quanlycanbothue
+                'Quanlycanbothue\Controller\Canbothue' => array(
+                    'index' => 'canbothue'
+                )
             )
         )
     )

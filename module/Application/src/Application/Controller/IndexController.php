@@ -31,21 +31,33 @@ class IndexController extends baseController
 
     public function createschemaAction()
     {
-        $em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-        $tool = new SchemaTool($em);
-        $tool->createSchema($em->getMetadataFactory()
-            ->getAllMetadata());
-        var_dump($tool);
+        try {
+            $em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+            $tool = new SchemaTool($em);
+            $tool->createSchema($em->getMetadataFactory()
+                ->getAllMetadata());
+            
+            echo '<h1 style="color:green">Tạo CSDL thành công !</h1>';
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+        }
+       
+        
         return $this->response;
     }
 
     public function updateschemaAction()
     {
-        $em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-        $tool = new SchemaTool($em);
-        $tool->updateSchema($em->getMetadataFactory()
-            ->getAllMetadata());
-        var_dump($tool);
+        try {
+            $em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+            $tool = new SchemaTool($em);
+            $tool->updateSchema($em->getMetadataFactory()
+                ->getAllMetadata());
+            echo '<h1 style="color:green">Update CSDL thành công !</h1>';
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+        }
+       
         return $this->response;
     }
     
