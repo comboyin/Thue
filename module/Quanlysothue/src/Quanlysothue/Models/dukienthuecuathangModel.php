@@ -5,7 +5,7 @@ use Application\base\baseModel;
 use Application\Entity\ketqua;
 use Application\Entity\dukienthue;
 use Application\Entity\user;
-use Application\Entity\thue;
+
 
 class dukienthuecuathangModel extends baseModel
 {
@@ -27,6 +27,7 @@ class dukienthuecuathangModel extends baseModel
                     ->join('dukienthue.nguoinopthue', 'nguoinopthue')
                     ->join('nguoinopthue.usernnts', 'usernnts')
                     ->where('dukienthue.KyThue = ?1')
+                    
                     ->andWhere('dukienthue.TrangThai = ?3')
                     ->andWhere('usernnts.user = ?2')
                     ->andWhere('usernnts.ThoiGianKetThuc is null')

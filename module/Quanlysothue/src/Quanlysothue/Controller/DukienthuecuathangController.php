@@ -12,7 +12,6 @@ use Quanlysothue\Froms\formDuKienThueCuaNam;
 use Quanlynguoinopthue\Models\nguoinopthueModel;
 use Application\Unlity\Unlity;
 
-
 class DukienthuecuathangController extends baseController
 {
 
@@ -32,31 +31,38 @@ class DukienthuecuathangController extends baseController
             'formUp' => $formUp,
             'dsDuKienThueCuaThang' => $dsdkthuecuanam->getObj()
         );
-        
-        
-        
     }
     
-    
-    //ajax
-    public function dsdkcuanamDaDuyetAction(){
-        
-        $kythueNam = $this->getRequest()->getQuery()->get("KyThueSangSo");
-        $kythueThang= $this->getRequest()->getQuery()->get("KyThueThang");
+    // ajax
+    public function dsdkcuanamDaDuyetAction()
+    {
+        $kythueNam = $this->getRequest()
+            ->getQuery()
+            ->get("KyThueSangSo");
+        $kythueThang = $this->getRequest()
+            ->getQuery()
+            ->get("KyThueThang");
         $model = new dukienthuecuathangModel($this->getEntityManager());
-        echo json_encode($model->dsDKthuecuanamDaDuyet($kythueNam,$kythueThang,$this->getUser()));
+        echo json_encode($model->dsDKthuecuanamDaDuyet($kythueNam, $kythueThang, $this->getUser()));
         
         return $this->response;
-        
-        
     }
     
-    //ajax sang so
-    public function sangsoAction(){
-        $dsMaSoThue = $this->getRequest()->getPost()->get('dsMaSoThue');
-        $dsTieuMuc = $this->getRequest()->getPost()->get('dsTieuMuc');
-        $Nam = $this->getRequest()->getPost()->get('Nam');
-        $Thang = $this->getRequest()->getPost()->get('Thang');
+    // ajax sang so
+    public function sangsoAction()
+    {
+        $dsMaSoThue = $this->getRequest()
+            ->getPost()
+            ->get('dsMaSoThue');
+        $dsTieuMuc = $this->getRequest()
+            ->getPost()
+            ->get('dsTieuMuc');
+        $Nam = $this->getRequest()
+            ->getPost()
+            ->get('Nam');
+        $Thang = $this->getRequest()
+            ->getPost()
+            ->get('Thang');
         
         $model = new dukienthuecuathangModel($this->getEntityManager());
         $kq = $model->SangSo($dsMaSoThue, $dsTieuMuc, $Nam, $Thang, $this->getUser());
@@ -64,12 +70,10 @@ class DukienthuecuathangController extends baseController
         echo json_encode($kq->toArray());
         
         return $this->response;
-        
-        
     }
-    
-    public function suaAction(){
 
+    public function suaAction()
+    {
         error_reporting(E_ERROR | E_PARSE);
         
         $kq = new ketqua();
@@ -81,22 +85,23 @@ class DukienthuecuathangController extends baseController
             $dukienthuenam = new dukienthue();
             $form = new formDuKienThueCuaNam();
             $form->setData($post);
-        
+            
             // validation thanh cong
             if ($form->isValid()) {
                 $dukienthuenamModel = new dukienthuecuanamModel($this->getEntityManager());
                 /* @var $dukienthuenam dukienthue */
-                $dukienthuenam = $dukienthuenamModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))->getObj();
+                $dukienthuenam = $dukienthuenamModel->findByID_($post->get('_KyThue'), $post->get('_MaSoThue'), $post->get('_TieuMuc'))
+                    ->getObj();
                 if ($dukienthuenam != null) {
-        
+                    
                     $MaSoThue = $post->get('MaSoThue');
                     $kt = new nguoinopthueModel($this->getEntityManager());
                     if ($kt->ktNNT($MaSoThue, $this->getUser()) == true) {
                         // sua
-        
+                        
                         // tim dukienthue
                         $nganhModel = new nganhModel($this->getEntityManager());
-        
+                        
                         $KyThue = $post->get('_KyThue');
                         $TieuMuc = $post->get('TieuMuc');
                         $DoanhThuChiuThue = $post->get('DoanhThuChiuThue');
@@ -106,50 +111,50 @@ class DukienthuecuathangController extends baseController
                         $SanLuong = $post->get('SanLuong');
                         $GiaTinhThue = $post->get('GiaTinhThue');
                         $NgayPhaiNop = $post->get('NgayPhaiNop');
-        
+                        
                         if ($TieuMuc == '1003' || $TieuMuc == '1701') // TNCN&GTGT
-                        {
+{
                             if ($DoanhThuChiuThue * 12 > 100000000) {
                                 $SoTien = intval($DoanhThuChiuThue * $TiLeTinhThue);
                             } else
                                 $SoTien = 0;
-                        } else
+                        } else 
                             if ($TieuMuc == '2601') // BVMT
-                            $SoTien = intval($SanLuong * $GiaTinhThue);
-                        else
-                            if ($TieuMuc == '3801') // TN
-                            $SoTien = intval($SanLuong * $GiaTinhThue * $ThueSuat);
-                        else
-                            if ($TieuMuc == '1757') // TTDB
-                            $SoTien = intval($GiaTinhThue * $ThueSuat);
-                        else
-                            $SoTien = $post->get('SoTien');
-        
+                                $SoTien = intval($SanLuong * $GiaTinhThue);
+                            else 
+                                if ($TieuMuc == '3801') // TN
+                                    $SoTien = intval($SanLuong * $GiaTinhThue * $ThueSuat);
+                                else 
+                                    if ($TieuMuc == '1757') // TTDB
+                                        $SoTien = intval($GiaTinhThue * $ThueSuat);
+                                    else
+                                        $SoTien = $post->get('SoTien');
+                        
                         $nguoinopthue = $this->getEntityManager()->find('Application\Entity\nguoinopthue', $MaSoThue);
                         $muclucngansach = $this->getEntityManager()->find('Application\Entity\muclucngansach', $TieuMuc);
-        
+                        
                         $dukienthuenam->setKyThue($KyThue);
                         $dukienthuenam->setNguoinopthue($nguoinopthue);
                         $dukienthuenam->setMuclucngansach($muclucngansach);
                         $dukienthuenam->setDoanhThuChiuThue($DoanhThuChiuThue);
                         $dukienthuenam->setTiLeTinhThue($TiLeTinhThue);
                         $dukienthuenam->setThueSuat($ThueSuat);
-        
+                        
                         if ($TenGoi == "" && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
                             $dukienthuenam->setTenGoi(null);
                         else
                             $dukienthuenam->setTenGoi($TenGoi);
-        
+                        
                         if ($SanLuong == 0 && $TieuMuc != '2601' && $TieuMuc != '3801')
                             $dukienthuenam->setSanLuong(null);
                         else
                             $dukienthuenam->setSanLuong($SanLuong);
-        
+                        
                         if ($GiaTinhThue == 0 && $TieuMuc != '2601' && $TieuMuc != '3801' && $TieuMuc != '1757')
                             $dukienthuenam->setGiaTinhThue(null);
                         else
                             $dukienthuenam->setGiaTinhThue($GiaTinhThue);
-        
+                        
                         $dukienthuenam->setSoTien($SoTien);
                         
                         $dukienthuenam->setNgayPhaiNop(Unlity::ConverDate('d-m-Y', $NgayPhaiNop, 'Y-m-d'));
@@ -171,23 +176,23 @@ class DukienthuecuathangController extends baseController
                 $kq->setMessenger($mss);
             }
         } catch (\Exception $e) {
-        
+            
             $kq->setKq(false);
             $kq->setMessenger($e->getMessage());
         }
         echo json_encode($kq->toArray());
         return $this->response;
     }
-    
+
     public function loadTyLeTinhThueAction()
     {
         $MaSoThue = $this->getRequest()
-        ->getQuery()
-        ->get('MaSoThue');
+            ->getQuery()
+            ->get('MaSoThue');
         $TieuMuc = $this->getRequest()
-        ->getQuery()
-        ->get('TieuMuc');
-    
+            ->getQuery()
+            ->get('TieuMuc');
+        
         $nganhModel = new nganhModel($this->getEntityManager());
         $TyLeTinhThue = $nganhModel->getTyLeTinhThueMaSoThue_TieuMuc($MaSoThue, $TieuMuc);
         echo json_encode(array(

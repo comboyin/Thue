@@ -29,17 +29,17 @@ return array(
             'orm_default' => array(
                 'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
 
-                /* 'params' => array(
+                'params' => array(
                     'host' => 'localhost',
                     'port' => '3306',
                     'user' => 'root',
                     'password' => '',
-                    'dbname' => 'baocaolv',      //comboyin1_thue
+                    'dbname' => 'comboyin1_thue',      //comboyin1_thue
                     'charset' => 'utf8', // extra
                     'driverOptions' => array(
                         1002=>'SET NAMES utf8'
                     )
-                ) */
+                )/* 
                 'params' => array(
                     'host' => 'lethithanhmy.com',
                     'port' => '3306',
@@ -50,7 +50,7 @@ return array(
                     'driverOptions' => array(
                         1002=>'SET NAMES utf8'
                     )
-                )
+                ) */
             )
         ),
         'driver' => array(
